@@ -1,0 +1,7 @@
+{
+  "name": "StartedIn_CapstoneProject_FE",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
