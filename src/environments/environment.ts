@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  backendUrl: 'https://startedin-api-1300b23c0f01.herokuapp.com/swagger/index.html',
 };
 
 /*
