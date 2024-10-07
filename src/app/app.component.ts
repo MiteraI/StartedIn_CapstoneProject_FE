@@ -20,18 +20,18 @@ export class AppComponent {
   constructor(
     private router: Router,
     private authJwt: AuthJwtService,
-    // private stateStorage: StateStorageService,
-    // private accountService: AccountService
+    private stateStorage: StateStorageService,
+    private accountService: AccountService
   ) {
-    // if (stateStorage.getRefreshToken()) {
-    //   authJwt
-    //     .refreshAccess()
-    //     .pipe(
-    //       tap(() => accountService.identity().subscribe()),
-    //       catchError(() => of(null))
-    //     )
-    //     .subscribe();
-    // }
+    if (stateStorage.getRefreshToken()) {
+      authJwt
+        .refreshAccess()
+        .pipe(
+          tap(() => accountService.identity().subscribe()),
+          catchError(() => of(null))
+        )
+        .subscribe();
+    }
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
