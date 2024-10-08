@@ -5,12 +5,13 @@ import { AuthJwtService } from './core/auth/auth-jwt.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { StateStorageService } from './core/auth/state-storage.service';
 import { AccountService } from './core/auth/account.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet],
+  imports: [IonApp, IonRouterOutlet, ReactiveFormsModule],
 })
 export class AppComponent {
   title = 'StartedIn';

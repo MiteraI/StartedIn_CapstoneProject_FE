@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="flex flex-col justify-center items-center h-screen">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="w-full max-w-md p-6 bg-white rounded-md shadow-lg"
+    >
+      <h1 class="text-center border-b mb-10 pb-5">Đăng nhập</h1>
+      <div
+        class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
+      >
+        <ion-input
+          formControlName="email"
+          class="border-0"
+          label="Email"
+          labelPlacement="floating"
+          placeholder="Nhập email"
+          type="email"
+          [maxlength]="35"
+          email
+        ></ion-input>
+      </div>
+      <div
+        class="mb-2 border pl-4 rounded-lg transition-all flex items-center hover:border-slate-400"
+      >
+        <ion-input
+          formControlName="password"
+          class="border-0"
+          label="Mật khẩu"
+          labelPlacement="floating"
+          placeholder="Nhập mật khẩu"
+          [type]="showPassword ? 'text' : 'password'"
+        ></ion-input>
+        <ion-icon
+          name="{{ showPassword ? 'eye-outline' : 'eye-off-outline' }}"
+          slot="end"
+          (click)="togglePasswordVisibility()"
+          class="cursor-pointer size-6 hover:scale-105 mr-2"
+        ></ion-icon>
+      </div>
+
+      @if (failedValidation) {
+      <p class="text-red-500 text-sm mt-2">Vui lòng nhập email và mật khẩu</p>
+      } @if(authenticationError){
+      <p class="text-red-500 text-sm mt-2">Email hoặc mật khẩu không đúng</p>
+      }
+      <ion-button
+        expand="full"
+        fill="clear"
+        type="submit"
+        class="mt-4 rounded-md text-white bg-blue-700 hover:bg-blue-800"
+      >
+        Đăng nhập
+      </ion-button>
+
+      <p class="text-center text-gray-500 mt-10 pb-5 border-b">
+        Hoặc tiếp tục với
+      </p>
+      <ion-button
+        expand="full"
+        fill="clear"
+        class="rounded-md text-white mt-5 bg-red-600 hover:bg-red-700"
+      >
+        <img
+          src="../../../../assets/icon/mail.png"
+          class="size-5 mr-2"
+          alt="mail"
+        />
+        Đăng nhập bằng mail
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
