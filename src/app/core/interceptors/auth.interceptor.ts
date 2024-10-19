@@ -1,36 +1,27 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+} from '@angular/common/http';
 import { StateStorageService } from '../auth/state-storage.service';
-import { ApplicationConfigService } from '../config/application-config.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  constructor(
-    private stateStorageService: StateStorageService,
-    private applicationConfigService: ApplicationConfigService
-  ) {}
+export const authInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+) => {
+  const stateStorageService = inject(StateStorageService);
+  const token = stateStorageService.getAccessToken();
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const serverApiUrl = this.applicationConfigService.getEndpointFor('');
-    // Check if the url simply go to root, no api here then simply pass the request
-    if (
-      !request.url ||
-      (request.url.startsWith('http') && !(serverApiUrl && request.url.startsWith(serverApiUrl)))
-    ) {
-      return next.handle(request);
-    }
-
-    const token: string | null = this.stateStorageService.getAccessToken();
-    console.log(token);
-    
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    }
-    return next.handle(request);
+  if (token) {
+    const clonedReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    return next(clonedReq);
   }
-}
+
+  return next(req);
+};

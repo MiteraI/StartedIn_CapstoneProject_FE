@@ -1,84 +1,90 @@
-import { Injectable } from '@angular/core';
 import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
   HttpErrorResponse,
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpHandlerFn,
+  HttpEvent,
 } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, filter, flatMap, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
-
 import { AccountService } from '../auth/account.service';
 
-@Injectable()
-export class AuthExpiredInterceptor implements HttpInterceptor {
-  private isRefreshingToken = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+// Create a closure to maintain state across requests
+const createAuthExpiredInterceptor = () => {
+  let isRefreshingToken = false;
+  const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-  constructor(
-    private router: Router,
-    private accountService: AccountService
-  ) {}
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      catchError(error => {
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 401) {
-            const isTokenExpired = error.headers.get('is-token-expired') === 'true';
-            if (isTokenExpired || this.accountService.isAuthenticated$) {
-              return this.handleTokenExpiredError(request, next);
-            }
-          }
-        }
-        return throwError(error);
-      })
-    );
-  }
-
-  private handleTokenExpiredError(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (!this.isRefreshingToken) {
-      this.isRefreshingToken = true;
-      this.refreshTokenSubject.next(null);
-
-      return this.accountService.authJwt.refreshAccess().pipe(
-        switchMap(response => {
-          this.isRefreshingToken = false;
-          this.refreshTokenSubject.next(response.accessToken);
-          return this.retryRequest(request, next, response.accessToken);
-        }),
-        catchError(error => {
-          if (this.isRefreshingToken === true) {
-            this.isRefreshingToken = false;
-            this.accountService.logout();
-            this.router.navigate(['/login']);
-          }
-          return throwError(error);
-        })
-      );
-    }
-
-    return this.refreshTokenSubject.pipe(
-      filter(accessToken => accessToken !== null),
-      flatMap(accessToken => this.retryRequest(request, next, accessToken))
-    );
-  }
-
-  private retryRequest(
-    request: HttpRequest<any>,
-    next: HttpHandler,
+  const retryRequest = (
+    request: HttpRequest<unknown>,
+    next: HttpHandlerFn,
     accessToken: string
-  ): Observable<HttpEvent<any>> {
-    request = request.clone({
+  ): Observable<HttpEvent<unknown>> => {
+    const clonedRequest = request.clone({
       setHeaders: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return next.handle(request);
-  }
-}
+    return next(clonedRequest);
+  };
+
+  const handleTokenExpiredError = (
+    request: HttpRequest<unknown>,
+    next: HttpHandlerFn,
+    accountService: AccountService,
+    router: Router
+  ): Observable<HttpEvent<unknown>> => {
+    if (!isRefreshingToken) {
+      isRefreshingToken = true;
+      refreshTokenSubject.next(null);
+
+      return accountService.authJwt.refreshAccess().pipe(
+        switchMap((response) => {
+          isRefreshingToken = false;
+          refreshTokenSubject.next(response.accessToken);
+          return retryRequest(request, next, response.accessToken);
+        }),
+        catchError((error) => {
+          isRefreshingToken = false;
+          accountService.logout();
+          router.navigate(['/login']);
+          return throwError(() => error);
+        })
+      );
+    }
+
+    return refreshTokenSubject.pipe(
+      filter((token) => token !== null),
+      take(1),
+      switchMap((token) => retryRequest(request, next, token!))
+    );
+  };
+
+  return (request: HttpRequest<unknown>, next: HttpHandlerFn) => {
+    const router = inject(Router);
+    const accountService = inject(AccountService);
+
+    return next(request).pipe(
+      catchError((error) => {
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          const isTokenExpired =
+            error.headers.get('is-token-expired') === 'true';
+          if (isTokenExpired || accountService.isAuthenticated$) {
+            return handleTokenExpiredError(
+              request,
+              next,
+              accountService,
+              router
+            );
+          }
+        }
+        return throwError(() => error);
+      })
+    );
+  };
+};
+
+// Export the interceptor function
+export const authExpiredInterceptor: HttpInterceptorFn =
+  createAuthExpiredInterceptor();
