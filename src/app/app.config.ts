@@ -29,7 +29,6 @@ export const appConfig: ApplicationConfig = {
         authExpiredInterceptor,
       ])
     ),
-    provideRouter(routes),
     provideAnimations(),
     provideAnimationsAsync(),
   ],

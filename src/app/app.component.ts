@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { catchError, of, tap } from 'rxjs';
 import { AuthJwtService } from './core/auth/auth-jwt.service';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { StateStorageService } from './core/auth/state-storage.service';
 import { AccountService } from './core/auth/account.service';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, HeaderComponent, FooterComponent, CommonModule],
+  imports: [IonApp, IonRouterOutlet, HeaderComponent, FooterComponent, CommonModule, RouterOutlet],
 })
 export class AppComponent {
   title = 'StartedIn';
@@ -42,6 +42,8 @@ export class AppComponent {
         const currentUrl = event.url;
         this.hideHeader =
           currentUrl.includes('/login') || currentUrl.includes('/register');
+          console.log(this.hideHeader);
+          
        }
     });
   }

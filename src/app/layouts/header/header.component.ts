@@ -13,6 +13,7 @@ import { AccountService } from '../../core/auth/account.service';
 })
 export class HeaderComponent {
   constructor(private accountService: AccountService) {
+    console.log('got header');
     
   }
 }
