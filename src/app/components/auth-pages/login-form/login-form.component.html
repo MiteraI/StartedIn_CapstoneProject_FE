@@ -32,12 +32,6 @@
         placeholder="Nhập mật khẩu"
         [type]="showPassword ? 'text' : 'password'"
       ></ion-input>
-      <ion-icon
-        name="{{ showPassword ? 'eye-outline' : 'eye-off-outline' }}"
-        slot="end"
-        (click)="togglePasswordVisibility()"
-        class="cursor-pointer size-6 hover:scale-105 mr-2"
-      ></ion-icon>
     </div>
 
     @if (failedValidation) {
@@ -69,20 +63,5 @@
       </p>
     </div>
 
-    <p class="text-center text-gray-500 mt-10 pb-5 border-b">
-      Hoặc tiếp tục với
-    </p>
-    <ion-button
-      expand="full"
-      fill="clear"
-      class="rounded-md text-white mt-5 bg-red-600 hover:bg-red-700 transition duration-75"
-    >
-      <img
-        src="../../../../assets/icon/mail.png"
-        class="size-5 mr-2"
-        alt="mail"
-      />
-      Đăng nhập bằng mail
-    </ion-button>
   </form>
 </div>

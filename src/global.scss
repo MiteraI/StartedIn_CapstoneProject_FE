@@ -1,8 +1,6 @@
-@import 'tailwindcss/base';
-
-@import 'tailwindcss/components';
-
-@import 'tailwindcss/utilities';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -24,11 +22,11 @@
 @import "@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+// @import "@ionic/angular/css/padding.css";
+// @import "@ionic/angular/css/float-elements.css";
+// @import "@ionic/angular/css/text-alignment.css";
+// @import "@ionic/angular/css/text-transformation.css";
+// @import "@ionic/angular/css/flex-utils.css";
 
 /**
  * Ionic Dark Mode
@@ -40,3 +38,21 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 // @import '@ionic/angular/css/palettes/dark.system.css';
+
+html,
+body {
+  height: 100%;
+  background-color: #f5f5f0;
+  font-family: "Inter", Roboto, "Helvetica Neue", sans-serif;
+  margin: 0;
+}
+
+.border-padding {
+  padding-left: 13%;
+  padding-right: 13%;
+}
+
+.border-margin {
+  margin-left: 13%;
+  margin-right: 13%;
+}
