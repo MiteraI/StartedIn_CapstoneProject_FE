@@ -1,0 +1,3 @@
+.active-link {
+  @apply bg-slate-200;
+}

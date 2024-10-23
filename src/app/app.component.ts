@@ -2,16 +2,19 @@ import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { catchError, of, tap } from 'rxjs';
 import { AuthJwtService } from './core/auth/auth-jwt.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { StateStorageService } from './core/auth/state-storage.service';
 import { AccountService } from './core/auth/account.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from './layouts/header/header.component';
+import { FooterComponent } from './layouts/footer/footer.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, ReactiveFormsModule],
+  imports: [IonApp, IonRouterOutlet, HeaderComponent, FooterComponent, CommonModule, RouterOutlet],
 })
 export class AppComponent {
   title = 'StartedIn';
@@ -35,23 +38,13 @@ export class AppComponent {
     }
 
     this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if (event.url.includes('/login') || event.url.includes('/register')) {
-          this.hideHeader = true;
-        } else {
-          this.hideHeader = false;
-        }
-        if (
-          event.url.includes('/login') ||
-          event.url.includes('/register') ||
-          event.url.includes('/project') ||
-          event.url.includes('/phase')
-        ) {
-          this.hideFooter = true;
-        } else {
-          this.hideFooter = false;
-        }
-      }
+      if (event instanceof NavigationStart) {
+        const currentUrl = event.url;
+        this.hideHeader =
+          currentUrl.includes('/login') || currentUrl.includes('/register');
+          console.log(this.hideHeader);
+          
+       }
     });
   }
 }

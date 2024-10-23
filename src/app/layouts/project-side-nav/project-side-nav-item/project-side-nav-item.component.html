@@ -1,0 +1,7 @@
+<div
+  class="w-full cursor-pointer py-3 pl-10 font-semibold hover:bg-slate-200"
+  [routerLink]="['/teams', teamId, 'projects', project?.id]"
+  routerLinkActive="active-link"
+>
+  {{ project?.projectName }}
+</div>

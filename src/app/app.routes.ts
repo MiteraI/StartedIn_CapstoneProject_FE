@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
+import { AuthenticatedGuard } from './shared/guards/authenticated.guard';
 
 export const routes: Routes = [
   {
     path: 'home',
+    canActivate: [AuthenticatedGuard],
     loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
   },
   {
@@ -21,7 +23,8 @@ export const routes: Routes = [
       import('./pages/auth-pages/register/register.page').then(
         (m) => m.RegisterPage
       ),
-  },  {
+  },
+  {
     path: 'payment-fail',
     loadComponent: () => import('./pages/payment-pages/payment-fail/payment-fail.page').then( m => m.PaymentFailPage)
   },
@@ -29,5 +32,4 @@ export const routes: Routes = [
     path: 'payment-success',
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then( m => m.PaymentSuccessPage)
   },
-
 ];

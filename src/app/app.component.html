@@ -1,3 +1,9 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <div class="flex flex-col min-h-screen">
+    <app-header *ngIf="!hideHeader"></app-header>
+    aasldkfasjhflkjhdsf
+    <main class="flex-1">
+      <ion-router-outlet></ion-router-outlet>
+    </main>
+  </div>
 </ion-app>
