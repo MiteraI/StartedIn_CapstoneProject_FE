@@ -24,4 +24,12 @@ export const routes: Routes = [
         (m) => m.RegisterPage
       ),
   },
+  {
+    path: 'payment-fail',
+    loadComponent: () => import('./pages/payment-pages/payment-fail/payment-fail.page').then( m => m.PaymentFailPage)
+  },
+  {
+    path: 'payment-success',
+    loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then( m => m.PaymentSuccessPage)
+  },
 ];
