@@ -51,10 +51,8 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit() {
     this.authenticationError = false;
-    console.log('Form submitted');
     this.failedValidation = this.loginForm.invalid;
     if (this.failedValidation) {
-      console.log('Form is invalid');
       return;
     }
     this.authService
@@ -62,7 +60,6 @@ export class LoginFormComponent implements OnInit {
       .pipe(
         tap((response: any) => {
           this.authenticationError = false;
-          console.log(response);
           if (!this.router.getCurrentNavigation()) {
             this.router.navigate(['/']);
           }

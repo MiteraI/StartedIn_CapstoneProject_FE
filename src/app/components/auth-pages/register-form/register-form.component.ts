@@ -66,7 +66,6 @@ export class RegisterFormComponent implements OnInit {
   onSubmit() {
     //return if form invalid
     if (this.registerForm.invalid) {
-      console.log('Form is invalid');
       return;
     }
     const phoneNumber = this.registerForm.value.phoneNumber?.replace(/-/g, '');
@@ -77,14 +76,12 @@ export class RegisterFormComponent implements OnInit {
       .register(registerData)
       .pipe(
         tap((response: string) => {
-          console.log(response);
           this.router.navigate(['login']);
           this.snackBar.open(response, 'Đóng', {
             duration: 5000,
           });
         }),
         catchError((error) => {
-          console.log(error.error);
           return throwError(error);
         })
       )
