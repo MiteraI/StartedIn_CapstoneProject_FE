@@ -32,4 +32,8 @@ export const routes: Routes = [
     path: 'payment-success',
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then( m => m.PaymentSuccessPage)
   },
+  {
+    path: 'test',
+    loadComponent: () => import('./pages/test/test.page').then( m => m.TestPage)
+  },
 ];
