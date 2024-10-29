@@ -1,12 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,ts}'],
+  presets: [require('@spartan-ng/ui-core/hlm-tailwind-preset')],
+  content: [
+    './src/**/*.{html,ts}',
+    './libs/**/*.{html,ts}',
+  ],
   theme: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/aspect-ratio')
-,require('@tailwindcss/forms')
-,require('@tailwindcss/line-clamp')
-,require('@tailwindcss/typography')
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography')
 ],
 };

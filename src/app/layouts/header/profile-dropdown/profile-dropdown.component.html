@@ -1,8 +1,10 @@
 <div *ngIf="account; then profileDropdown; else loginRegister"></div>
-
 <ng-template #loginRegister>
   <div class="flex items-center space-x-4">
-    <div routerLink="/login" class="cursor-pointer rounded-lg bg-purple-400 px-3 py-1">
+    <div
+      routerLink="/login"
+      class="cursor-pointer rounded-lg bg-purple-400 px-3 py-1"
+    >
       <p class="text-white">Đăng nhập</p>
     </div>
     <div
@@ -15,14 +17,23 @@
 </ng-template>
 
 <ng-template #profileDropdown>
-  <img [matMenuTriggerFor]="profileMenu" class="max-w-9 max-h-9 rounded-full cursor-pointer" [src]="account?.profilePicture" />
+  <img
+    [matMenuTriggerFor]="profileMenu"
+    class="max-w-9 max-h-9 rounded-full cursor-pointer"
+    src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar.png"
+  />
   <mat-menu #profileMenu="matMenu">
     <div class="flex w-full px-3">
       <div class="w-1/5">
-        <img class="max-w-12 max-h-12 mt-2 rounded-full cursor-pointer" [src]="account?.profilePicture" />
+        <img
+          class="max-w-12 max-h-12 mt-2 rounded-full cursor-pointer"
+          src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar.png"
+        />
       </div>
       <div class="ml-3 w-auto">
-        <p class="mb-1 font-['Inter'] text-lg font-semibold">{{ account?.fullName }}</p>
+        <p class="mb-1 font-['Inter'] text-lg font-semibold">
+          {{ account?.fullName }}
+        </p>
         <p class="font-['Inter'] text-sm">{{ account?.bio }}</p>
       </div>
     </div>
@@ -35,7 +46,9 @@
     <div class="mt-3 flex h-0 w-full justify-center">
       <hr class="w-11/12" />
     </div>
-    <div class="m-3 w-auto cursor-pointer rounded-lg px-2 font-['Inter'] text-sm hover:bg-gray-200">
+    <div
+      class="m-3 w-auto cursor-pointer rounded-lg px-2 font-['Inter'] text-sm hover:bg-gray-200"
+    >
       Các gói đăng ký
     </div>
     <div
