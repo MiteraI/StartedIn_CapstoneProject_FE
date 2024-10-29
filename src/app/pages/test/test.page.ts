@@ -8,9 +8,6 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar, IonButtons, IonFooter, IonSegment, IonSegmentButton, IonLabel } from '@ionic/angular/standalone';
-import { DataTablePreviewComponent } from 'src/app/components/table/table.component';
-import { ButtonPreviewComponent } from 'src/app/components/button/button.component';
-import { HlmCheckboxComponent } from '@spartan-ng/ui-checkbox-helm';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -25,9 +22,6 @@ import { RouterModule } from '@angular/router';
     IonToolbar,
     CommonModule,
     FormsModule,
-    DataTablePreviewComponent,
-    ButtonPreviewComponent,
-    HlmCheckboxComponent,
     IonMenu,
     IonMenuButton,
     IonSegmentButton,
