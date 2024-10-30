@@ -1,4 +1,4 @@
-<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="contract-form">
+<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="max-w-[800px] mx-auto my-4 px-0 md:px-4 py-0">
   <ion-card>
     <ion-card-header>
       <ion-card-title>Contract Details</ion-card-title>
@@ -16,10 +16,12 @@
         <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Share Quantity</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Please input a valid quantity!">
           <nz-input-number
-            formControlName="amount"
-            [nzMin]="1"
+            formControlName="shareQuantity"
+            [nzMin]="0"
+            [nzMax]="project.remainingShares"
             [nzStep]="1"
-            [nzPrecision]="0">
+            (nzBlur)="updateSharePercentage()"
+            class="w-full">
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
@@ -28,11 +30,12 @@
         <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Percentage</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Please input a valid percentage!">
           <nz-input-number
-            formControlName="amount"
-            [nzMin]="0.01"
-            [nzMax]="100"
+            formControlName="percentage"
+            [nzMin]="0"
+            [nzMax]="project.remainingPercentOfShares"
             [nzStep]="0.01"
-            [nzPrecision]="0">
+            (nzBlur)="updateShareQuantity()"
+            class="w-full">
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
@@ -44,9 +47,9 @@
         </nz-form-control>
       </nz-form-item>
 
-      <div class="disbursements-section">
-        <div class="section-header">
-          <h3>Disbursements</h3>
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="m-0">Disbursements</h3>
           <button nz-button nzType="primary" (click)="openDisbursementModal()">
             <i nz-icon nzType="plus"></i>
           </button>
@@ -55,9 +58,9 @@
         <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
           <ng-template #disbursementItem let-item let-index="index">
             <nz-list-item>
-              <div class="item-content">
+              <div class="flex w-full items-center justify-between">
                 <span>{{ item.title }}</span>
-                <div class="item-actions">
+                <div class="flex gap-2">
                   <button nz-button nzType="link" (click)="openDisbursementModal(item, index)">
                     <i nz-icon nzType="edit"></i>
                   </button>
@@ -71,7 +74,7 @@
         </nz-list>
       </div>
 
-      <div class="form-actions">
+      <div class="mt-6 text-right">
         <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid">
           Submit
         </button>
