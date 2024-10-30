@@ -29,9 +29,15 @@
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
               }
             ],
             "styles": [
+              "src/theme.less",
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/global.scss",
               "src/theme/variables.scss"

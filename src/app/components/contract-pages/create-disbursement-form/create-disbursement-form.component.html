@@ -1,0 +1,54 @@
+<!-- disbursement-form.component.html -->
+<form [formGroup]="disbursementForm" class="p-6">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Title</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Please input the title!">
+      <input nz-input formControlName="title" placeholder="Enter disbursement title" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Period</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Please select the period!">
+      <div class="flex gap-2">
+        <nz-date-picker
+          formControlName="startDate"
+          nzPlaceHolder="Start Date"
+          [nzDisabledDate]="disableStartDate"
+          class="w-full">
+        </nz-date-picker>
+        <nz-date-picker
+          formControlName="endDate"
+          nzPlaceHolder="End Date"
+          [nzDisabledDate]="disableEndDate"
+          class="w-full">
+        </nz-date-picker>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Amount</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Please input a valid amount!">
+      <nz-input-number
+        formControlName="amount"
+        [nzMin]="1"
+        [nzStep]="1"
+        [nzPrecision]="0"
+        class="w-full">
+      </nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Condition</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Please input the conditions!">
+      <textarea
+        nz-input
+        formControlName="condition"
+        rows="4"
+        placeholder="Enter disbursement conditions">
+      </textarea>
+    </nz-form-control>
+  </nz-form-item>
+</form>
