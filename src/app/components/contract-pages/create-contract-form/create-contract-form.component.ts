@@ -12,6 +12,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { IonicModule } from '@ionic/angular';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { InvestmentContractCreateModel } from 'src/app/shared/models/contract/investment-contract-create.model';
+import { ProjectModel } from 'src/app/shared/models/project/project.model';
+import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.directive';
 
 @Component({
   selector: 'app-create-contract-form',
@@ -29,13 +31,25 @@ import { InvestmentContractCreateModel } from 'src/app/shared/models/contract/in
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
-    IonicModule
+    IonicModule,
+    ClickOutsideDirective
   ]
 })
 export class CreateContractFormComponent implements OnInit {
   @Input({required: true}) projectId!: string;
   @Input({required: true}) investorId!: string;
-  totalShare = 1000;
+  project: ProjectModel = {
+    id: "1",
+    projectName: "name",
+    description: "desc",
+    projectStatus: "status",
+    logoUrl: "logourl",
+    totalShares: 1000,
+    remainingPercentOfShares: 50,
+    remainingShares: 500,
+    startDate: "2024-10-30", // Date?
+    endDate: "2024-10-31"
+  }
   contractForm!: FormGroup;
   disbursements: DisbursementCreateModel[] = [];
 
@@ -47,17 +61,25 @@ export class CreateContractFormComponent implements OnInit {
   ngOnInit() {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
-      contractPolicy: ['', [Validators.required]],
+      contractPolicy: [''],
       shareQuantity: [0, [Validators.required]],
       percentage: [0, [Validators.required]]
     });
+  }
+
+  updateShareQuantity() {
+    this.contractForm.patchValue({shareQuantity: Math.round(this.project.totalShares * this.contractForm.value.percentage / 100)});
+  }
+
+  updateSharePercentage() {
+    this.contractForm.patchValue({percentage: (this.contractForm.value.shareQuantity / this.project.totalShares * 100).toFixed(2)});
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
     const isEdit = disbursement !== undefined;
 
     this.modalService.create({
-      nzTitle: isEdit ? 'Edit Disbursement' : 'Add Disbursement',
+      nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
       nzContent: CreateDisbursementFormComponent,
       nzData: isEdit ? {...disbursement} : {
         title: '',
@@ -66,6 +88,7 @@ export class CreateContractFormComponent implements OnInit {
         amount: null,
         condition: ''
       },
+      nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {
         const formValue = componentInstance.disbursementForm.value;
 

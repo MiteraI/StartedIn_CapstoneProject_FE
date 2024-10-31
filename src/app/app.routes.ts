@@ -40,5 +40,10 @@ export const routes: Routes = [
     path: 'create-investment-contract',
     loadComponent: () => import('./pages/contract-pages/create-investment-contract/create-investment-contract.page').then( m => m.CreateInvestmentContractPage)
   },
+  {
+    path: 'contract-list',
+    loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then( m => m.ContractListPage)
+  },
+
 
 ];
