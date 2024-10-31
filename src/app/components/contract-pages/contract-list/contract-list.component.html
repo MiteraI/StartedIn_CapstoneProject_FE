@@ -55,7 +55,7 @@
       <ng-container *ngFor="let group of contractGroups; index as i">
         <!-- Date Header Row -->
         <tr class="bg-gray-100">
-          <td colspan="6" class="p-3 font-medium">
+          <td colspan="6" class="px-3 py-1 font-medium">
             {{ formatGroupHeader(keys[i]) }}
           </td>
         </tr>
@@ -101,7 +101,7 @@
   <!-- Mobile View -->
   <div class="md:hidden space-y-4">
     <ng-container *ngFor="let group of contractGroups; index as i">
-      <div class="bg-gray-100 p-3 font-medium">
+      <div class="bg-gray-100 px-3 py-1 font-medium">
         {{ formatGroupHeader(keys[i]) }}
       </div>
       <div class="space-y-4">

@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { format, isToday, isYesterday } from 'date-fns';
 import { addIcons } from 'ionicons';
 import { addOutline, filterOutline, trashOutline } from 'ionicons/icons';
+import { ContractFilterModalComponent } from '../contract-filter-modal/contract-filter-modal.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 interface Contract {
   id: string;
@@ -27,7 +29,7 @@ export class ContractListComponent implements OnInit {
   keys: string[] = [];
   contractGroups: Contract[][] = [];
 
-  constructor(private modalController: ModalController) {
+  constructor(private modalService: NzModalService) {
     addIcons({
       addOutline,
       filterOutline,
@@ -42,7 +44,7 @@ export class ContractListComponent implements OnInit {
         id: '1',
         name: 'Contract for stock purchase',
         type: 'Internal',
-        parties: ['Minh Pham'],
+        parties: ['Minh Pham', 'Kiet Huynh Anh'],
         lastUpdated: new Date("2024-10-31"),
         status: 'completed'
       },
@@ -123,7 +125,7 @@ export class ContractListComponent implements OnInit {
     }
   }
 
-  async deleteSelected() {
+  deleteSelected() {
     // Implement delete functionality
     this.contracts = this.contracts.filter(
       contract => !this.selectedContracts.some(c => c.id === contract.id)
@@ -138,11 +140,17 @@ export class ContractListComponent implements OnInit {
     this.groupContracts();
   }
 
-  async openAddModal() {
+  openAddModal() {
     // Implement modal opening logic
   }
 
-  async openFilterModal() {
+  openFilterModal() {
     // Implement modal opening logic
+    this.modalService.create({
+      nzTitle: 'Filter Contracts',
+      nzContent: ContractFilterModalComponent,
+      nzFooter: null,
+      nzWidth: 520
+    });
   }
 }
