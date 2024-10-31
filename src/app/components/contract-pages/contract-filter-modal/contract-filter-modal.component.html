@@ -22,11 +22,11 @@
         formControlName="contractType"
         nzPlaceHolder="Select contract type"
       >
-        <nz-option nzValue="" nzLabel="All Types"></nz-option>
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
         <nz-option
-          *ngFor="let type of contractTypes"
-          [nzValue]="type"
-          [nzLabel]="type"
+          *ngFor="let option of contractTypeOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
         ></nz-option>
       </nz-select>
     </nz-form-control>
@@ -86,10 +86,10 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Status</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-radio-group formControlName="status">
-        <label nz-radio-button value="all">All</label>
-        <label nz-radio-button value="completed">Completed</label>
-        <label nz-radio-button value="pending">Pending</label>
+      <nz-radio-group formControlName="status" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="all">All</label>
+        <label nz-radio-button nzValue="completed">Completed</label>
+        <label nz-radio-button nzValue="pending">Pending</label>
       </nz-radio-group>
     </nz-form-control>
   </nz-form-item>

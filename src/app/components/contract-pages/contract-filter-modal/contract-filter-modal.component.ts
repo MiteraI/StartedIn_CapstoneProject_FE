@@ -10,10 +10,11 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { CommonModule } from '@angular/common';
+import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 
 interface FilterOptions {
   contractName: string;
-  contractType: string;
+  contractType: ContractType;
   parties: string[];
   dateRange: {
     start: Date | null;
@@ -43,7 +44,12 @@ interface FilterOptions {
 })
 export class ContractFilterModalComponent implements OnInit {
   filterForm: FormGroup;
-  contractTypes = ['Stock Purchase', 'Service Agreement', 'Employment', 'NDA', 'Other'];
+  contractTypeOptions = Object.values(ContractType)
+    .filter(value => typeof value === 'number')
+    .map(value => ({
+      value: value as ContractType,
+      label: ContractTypeLabels[value as ContractType]
+    }));
 
   constructor(
     private modal: NzModalRef,
@@ -88,25 +94,25 @@ export class ContractFilterModalComponent implements OnInit {
   }
 
   applyFilters() {
-    const formValue = this.filterForm.value;
+    // const formValue = this.filterForm.value;
 
-    // Clean up empty parties
-    const parties = formValue.parties.filter((party: string) => party.trim());
+    // // Clean up empty parties
+    // const parties = formValue.parties.filter((party: string) => party.trim());
 
-    const dateRange = formValue.dateRange || [null, null];
+    // const dateRange = formValue.dateRange || [null, null];
 
-    const filters: FilterOptions = {
-      contractName: formValue.contractName,
-      contractType: formValue.contractType,
-      parties: parties,
-      dateRange: {
-        start: dateRange[0],
-        end: dateRange[1]
-      },
-      status: formValue.status
-    };
+    // const filters: FilterOptions = {
+    //   contractName: formValue.contractName,
+    //   contractType: formValue.contractType,
+    //   parties: parties,
+    //   dateRange: {
+    //     start: dateRange[0],
+    //     end: dateRange[1]
+    //   },
+    //   status: formValue.status
+    // };
 
-    this.modal.close(filters);
+    // this.modal.close(filters);
   }
 
   dismiss() {
