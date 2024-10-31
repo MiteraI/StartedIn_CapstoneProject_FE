@@ -61,7 +61,7 @@ export class CreateContractFormComponent implements OnInit {
   ngOnInit() {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
-      contractPolicy: ['', [Validators.required]],
+      contractPolicy: [''],
       shareQuantity: [0, [Validators.required]],
       percentage: [0, [Validators.required]]
     });
@@ -79,7 +79,7 @@ export class CreateContractFormComponent implements OnInit {
     const isEdit = disbursement !== undefined;
 
     this.modalService.create({
-      nzTitle: isEdit ? 'Edit Disbursement' : 'Add Disbursement',
+      nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
       nzContent: CreateDisbursementFormComponent,
       nzData: isEdit ? {...disbursement} : {
         title: '',
@@ -88,6 +88,7 @@ export class CreateContractFormComponent implements OnInit {
         amount: null,
         condition: ''
       },
+      nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {
         const formValue = componentInstance.disbursementForm.value;
 
