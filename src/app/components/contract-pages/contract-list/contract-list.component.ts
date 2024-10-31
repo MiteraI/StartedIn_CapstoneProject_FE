@@ -1,14 +1,14 @@
-// contract-list.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { format, isToday, isYesterday } from 'date-fns';
 import { addIcons } from 'ionicons';
-import { addOutline, filterOutline } from 'ionicons/icons';
+import { addOutline, filterOutline, trashOutline } from 'ionicons/icons';
 
 interface Contract {
   id: string;
   name: string;
+  type: string;
   parties: string[];
   lastUpdated: Date;
   status: 'completed' | 'pending';
@@ -28,7 +28,11 @@ export class ContractListComponent implements OnInit {
   contractGroups: Contract[][] = [];
 
   constructor(private modalController: ModalController) {
-    addIcons({ addOutline, filterOutline });
+    addIcons({
+      addOutline,
+      filterOutline,
+      trashOutline
+    });
   }
 
   ngOnInit() {
@@ -37,6 +41,7 @@ export class ContractListComponent implements OnInit {
       {
         id: '1',
         name: 'Contract for stock purchase',
+        type: 'Internal',
         parties: ['Minh Pham'],
         lastUpdated: new Date("2024-10-31"),
         status: 'completed'
@@ -44,6 +49,7 @@ export class ContractListComponent implements OnInit {
       {
         id: '2',
         name: 'Contract for stock purchase',
+        type: 'Internal',
         parties: ['Minh Pham'],
         lastUpdated: new Date("2024-10-30"),
         status: 'completed'
@@ -51,6 +57,7 @@ export class ContractListComponent implements OnInit {
       {
         id: '3',
         name: 'Contract for stock purchase',
+        type: 'Internal',
         parties: ['Minh Pham'],
         lastUpdated: new Date("2024-10-29"),
         status: 'completed'
@@ -63,6 +70,8 @@ export class ContractListComponent implements OnInit {
 
   groupContracts() {
     var groupCount = 0;
+    this.contractGroups = [];
+    this.keys = [];
     this.contracts.forEach((contract) => {
       const date = format(contract.lastUpdated, 'yyyy-MM-dd');
       if (!this.keys.includes(date)) {
@@ -73,14 +82,6 @@ export class ContractListComponent implements OnInit {
         this.contractGroups[this.keys.indexOf(date)].push(contract);
       }
     })
-    // this.groupedContracts = this.contracts.reduce((groups: { [key: string]: Contract[] }, contract) => {
-    //   const date = format(contract.lastUpdated, 'yyyy-MM-dd');
-    //   if (!groups[date]) {
-    //     groups[date] = [];
-    //   }
-    //   groups[date].push(contract);
-    //   return groups;
-    // }, {});
   }
 
   formatGroupHeader(dateStr: string): string {
@@ -105,24 +106,20 @@ export class ContractListComponent implements OnInit {
     } else {
       this.selectedContracts.splice(index, 1);
     }
+    console.log(this.selectedContracts);
+
   }
 
-  isAllSelected(contracts: Contract[]): boolean {
-    return contracts.every(contract => this.isSelected(contract));
+  isAllSelected(): boolean {
+    return this.contracts.length > 0 &&
+           this.contracts.every(contract => this.isSelected(contract));
   }
 
-  toggleGroupSelection(contracts: Contract[]) {
-    const allSelected = this.isAllSelected(contracts);
-    if (allSelected) {
-      this.selectedContracts = this.selectedContracts.filter(
-        selected => !contracts.some(c => c.id === selected.id)
-      );
+  toggleAllSelection() {
+    if (this.isAllSelected()) {
+      this.selectedContracts = [];
     } else {
-      contracts.forEach(contract => {
-        if (!this.isSelected(contract)) {
-          this.selectedContracts.push(contract);
-        }
-      });
+      this.selectedContracts = [...this.contracts];
     }
   }
 
@@ -132,6 +129,12 @@ export class ContractListComponent implements OnInit {
       contract => !this.selectedContracts.some(c => c.id === contract.id)
     );
     this.selectedContracts = [];
+    this.groupContracts();
+  }
+
+  deleteContract(contract: Contract) {
+    // Delete single contract (mobile view)
+    this.contracts = this.contracts.filter(c => c.id !== contract.id);
     this.groupContracts();
   }
 
