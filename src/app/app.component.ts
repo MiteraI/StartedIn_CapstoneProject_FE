@@ -41,9 +41,7 @@ export class AppComponent {
       if (event instanceof NavigationStart) {
         const currentUrl = event.url;
         this.hideHeader =
-          currentUrl.includes('/login') || currentUrl.includes('/register');
-          console.log(this.hideHeader);
-          
+          currentUrl.includes('/login') || currentUrl.includes('/register');          
        }
     });
   }

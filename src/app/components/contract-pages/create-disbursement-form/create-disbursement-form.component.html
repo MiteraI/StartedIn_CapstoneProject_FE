@@ -1,0 +1,54 @@
+<!-- disbursement-form.component.html -->
+<form [formGroup]="disbursementForm" class="md:p-6">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tiêu đề</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tiêu đề giải ngân!">
+      <input nz-input formControlName="title" placeholder="Nhập tiêu đề giải ngân" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Thời gian</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập thời gian giải ngân!">
+      <div class="flex gap-2">
+        <nz-date-picker
+          formControlName="startDate"
+          nzPlaceHolder="Start Date"
+          [nzDisabledDate]="disableStartDate"
+          class="w-full">
+        </nz-date-picker>
+        <nz-date-picker
+          formControlName="endDate"
+          nzPlaceHolder="End Date"
+          [nzDisabledDate]="disableEndDate"
+          class="w-full">
+        </nz-date-picker>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Số tiền</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền giải ngân!">
+      <nz-input-number
+        formControlName="amount"
+        [nzMin]="1"
+        [nzStep]="1"
+        [nzPrecision]="0"
+        class="w-full">
+      </nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều kiện</nz-form-label>
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập điều kiện giải ngân!">
+      <textarea
+        nz-input
+        formControlName="condition"
+        rows="4"
+        placeholder="Nhập điều kiện giải ngân">
+      </textarea>
+    </nz-form-control>
+  </nz-form-item>
+</form>

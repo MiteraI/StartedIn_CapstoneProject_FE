@@ -1,0 +1,109 @@
+<form [formGroup]="filterForm" class="ant-modal-body">
+  <!-- Contract Name -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Contract Name</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-input-group>
+        <input
+          nz-input
+          formControlName="contractName"
+          placeholder="Search by contract name"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Contract Type -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Contract Type</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select
+        class="w-full"
+        formControlName="contractType"
+        nzPlaceHolder="Select contract type"
+      >
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option
+          *ngFor="let option of contractTypeOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Parties -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Parties</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <div formArrayName="parties">
+        <div *ngFor="let control of partiesFormArray.controls; let i = index" class="mb-2">
+          <div class="flex gap-2">
+            <nz-input-group class="flex-grow">
+              <input
+                nz-input
+                [formControlName]="i"
+                placeholder="Enter party name"
+              />
+            </nz-input-group>
+            <button
+              *ngIf="i > 0"
+              nz-button
+              nzType="text"
+              nzDanger
+              (click)="removeParty(i)"
+            >
+              <i nz-icon nzType="delete" nzTheme="outline"></i>
+            </button>
+          </div>
+        </div>
+        <button
+          nz-button
+          nzType="link"
+          class="p-0"
+          (click)="addParty()"
+        >
+          <i nz-icon nzType="plus" nzTheme="outline"></i>
+          Add Party
+        </button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Date Range -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Last Updated Date Range</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-range-picker
+        class="w-full"
+        [formControlName]="'dateRange'"
+        nzFormat="yyyy-MM-dd"
+      ></nz-range-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Status -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Status</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-radio-group formControlName="status" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="all">All</label>
+        <label nz-radio-button nzValue="completed">Completed</label>
+        <label nz-radio-button nzValue="pending">Pending</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<div class="ant-modal-footer">
+  <button nz-button (click)="resetFilters()">
+    Reset
+  </button>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="applyFilters()"
+  >
+    Apply Filters
+  </button>
+</div>
