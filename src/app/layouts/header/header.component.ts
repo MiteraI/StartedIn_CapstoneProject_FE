@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component';
@@ -9,7 +9,6 @@ import { AccountService } from '../../core/auth/account.service';
   standalone: true,
   imports: [
     MatIconModule,
-    RouterOutlet,
     RouterModule,
     ProfileDropdownComponent,
   ],
@@ -17,5 +16,6 @@ import { AccountService } from '../../core/auth/account.service';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  @Input({required: true}) isDesktopView: boolean = false
   constructor(private accountService: AccountService) {}
 }
