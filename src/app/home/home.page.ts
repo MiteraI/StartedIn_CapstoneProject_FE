@@ -29,4 +29,7 @@ export class HomePage {
   navigateToLogin() {
     this.router.navigate(['/login']); // Navigate to the login page
   }
+  navigateToCreateCharter() {
+    this.router.navigate(['/create-project-charter']);
+  }
 }

@@ -26,10 +26,23 @@ export const routes: Routes = [
   },
   {
     path: 'payment-fail',
-    loadComponent: () => import('./pages/payment-pages/payment-fail/payment-fail.page').then( m => m.PaymentFailPage)
+    loadComponent: () =>
+      import('./pages/payment-pages/payment-fail/payment-fail.page').then(
+        (m) => m.PaymentFailPage
+      ),
   },
   {
     path: 'payment-success',
-    loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then( m => m.PaymentSuccessPage)
+    loadComponent: () =>
+      import('./pages/payment-pages/payment-success/payment-success.page').then(
+        (m) => m.PaymentSuccessPage
+      ),
+  },
+  {
+    path: 'create-project-charter',
+    loadComponent: () =>
+      import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then(
+        (m) => m.CreateProjectCharterPage
+      ),
   },
 ];

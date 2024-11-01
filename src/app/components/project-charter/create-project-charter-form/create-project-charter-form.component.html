@@ -1,0 +1,194 @@
+<mat-card class="p-6 max-w-4xl mx-auto">
+  <p class="text-2xl font-semibold mb-4 text-gray-600">BẢNG ĐIỀU LỆ DỰ ÁN</p>
+
+  <!------------------------------>
+  <!-- Project Detail ------------>
+  <!------------------------------>
+
+  <div>
+    <div class="border-b border-gray-300 pb-4 mb-4"></div>
+    <p class="font-semibold text-xl text-gray-600">THÔNG TIN DỰ ÁN</p>
+    <div class="space-y-4 mt-2">
+      <div class="sm:grid sm:grid-cols-3 gap-4 items-center">
+        <label class="text-gray-600">PROJECT NAME</label>
+        <input
+          disabled
+          type="text"
+          class="col-span-2 border border-gray-300 rounded p-2 w-full"
+        />
+      </div>
+      <div class="sm:grid sm:grid-cols-3 gap-4 items-center">
+        <label class="text-gray-600">DESCRIPTION</label>
+        <input
+          disabled
+          type="text"
+          class="col-span-2 border border-gray-300 rounded p-2 w-full"
+        />
+      </div>
+      <div class="sm:flex sm:justify-between sm:gap-4">
+        <div class="sm:flex-1 sm:grid sm:grid-cols-3 gap-4 items-center">
+          <label class="text-gray-600">START DATE</label>
+          <input
+            disabled
+            type="text"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          />
+        </div>
+        <div class="sm:flex-1 sm:mt-0 sm:grid sm:grid-cols-3 gap-4 items-center mt-4">
+          <label class="text-gray-600">END DATE</label>
+          <input
+            disabled
+            type="text"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--------------------------------->
+  <!-- Create Project Charter Form -->
+  <!--------------------------------->
+
+  <form
+    [formGroup]="projectCharterForm"
+    (ngSubmit)="onSubmit()"
+    class="mt-5 space-y-4"
+  >
+    <div class="border-b border-gray-300 pb-4 mb-4"></div>
+
+    <p class="text-xl font-semibold text-gray-600 mb-2">ĐIỀU LỆ DỰ ÁN</p>
+    <div class="sm:flex w-full sm:justify-between">
+      <div class="space-y-4">
+        <div class="sm:grid sm:grid-cols-3 gap-4">
+          <label class="text-gray-600">BUSINESS CASE</label>
+          <textarea
+            formControlName="businessCase"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+          <label class="text-gray-600">GOAL</label>
+          <textarea
+            formControlName="goal"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+          <label class="text-gray-600">OBJECTIVE</label>
+          <textarea
+            formControlName="objective"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+      </div>
+      <div class="space-y-4">
+        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+          <label class="text-gray-600">SCOPE</label>
+          <textarea
+            formControlName="scope"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+          <label class="text-gray-600">CONSTRAINTS</label>
+          <textarea
+            formControlName="constraints"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+          <label class="font text-gray-600">ASSUMPTIONS</label>
+          <textarea
+            formControlName="assumptions"
+            class="col-span-2 border border-gray-300 rounded p-2 w-full"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
+      <label class="text-gray-600">DELIVERABLES</label>
+      <textarea
+        formControlName="deliverables"
+        class="col-span-2 border border-gray-300 rounded p-2 w-full"
+      ></textarea>
+    </div>
+    <div class="space-y-4 mt-5">
+      <div class="border-b border-gray-300 pb-4 mb-4"></div>
+
+      <!------------------------------------------------->
+      <!-- Create Many Milestones ----------------------->
+      <!------------------------------------------------->
+
+      <p class="font-semibold text-xl text-gray-600 mb-2">MILESTONES</p>
+      <div formArrayName="listMilestoneCreateDto">
+        @for (milestone of listMilestoneCreateDto.controls; track $index; let i
+        = $index) {
+        <div class="space-y-4 my-4" [formGroupName]="i">
+          <div class="flex justify-end">
+            <mat-icon
+              (click)="removeMilestone(i)"
+              class="text-right cursor-pointer text-red-500"
+              >delete</mat-icon
+            >
+          </div>
+          <div class="sm:grid sm:grid-cols-3 items-center">
+            <label class="text-gray-600">TITLE</label>
+            <input
+              formControlName="milstoneTitle"
+              type="text"
+              class="col-span-2 border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+          <div class="sm:grid sm:grid-cols-3 items-center">
+            <label class="text-gray-600">DESCRIPTION</label>
+            <input
+              formControlName="description"
+              type="text"
+              class="col-span-2 border border-gray-300 rounded p-2 w-full"
+            />
+          </div>
+          <div class="sm:flex sm:justify-between w-full gap-4">
+            <div class="flex-1 sm:grid sm:grid-cols-3 items-center">
+              <label class="text-gray-600">DUE DATE</label>
+              <input
+                formControlName="dueDate"
+                [min]="minDate"
+                type="date"
+                class="col-span-2 border border-gray-300 rounded p-2 w-full"
+              />
+            </div>
+            <div
+              class="flex-1 sm:grid sm:grid-cols-3 items-center mt-4 sm:mt-0"
+            >
+              <label class="text-gray-600">PHASE STATE</label>
+              <select
+                formControlName="phaseEnum"
+                class="col-span-2 border border-gray-300 rounded p-2 w-full"
+              >
+                <option value="" disabled selected>Select Phase State</option>
+                @for (state of phaseStates; track $index) {
+                <option [value]="state.value">{{ state.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+      <div class="flex justify-end items-center gap-4">
+        <button
+          type="submit"
+          class="bg-orange-500 text-white p-2 rounded-md shadow-md"
+        >
+          Submit
+        </button>
+        <mat-icon
+          (click)="addMilestone()"
+          class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md"
+          >add</mat-icon
+        >
+      </div>
+    </div>
+  </form>
+</mat-card>
