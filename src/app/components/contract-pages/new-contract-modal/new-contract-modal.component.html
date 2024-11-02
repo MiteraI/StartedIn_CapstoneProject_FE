@@ -1,24 +1,8 @@
-<form [formGroup]="filterForm" class="ant-modal-body">
-  <!-- Contract Name -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Contract Name</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-input-group>
-        <input
-          nz-input
-          formControlName="contractName"
-          placeholder="Search by contract name"
-        />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
-
-  <!-- Contract Type -->
+<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="p-4">
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Contract Type</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-radio-group formControlName="contractType" nzButtonStyle="solid">
-        <label nz-radio-button nzValue="">Tất cả</label>
         <label
           *ngFor="let option of contractTypeOptions"
           nz-radio-button
@@ -97,47 +81,20 @@
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Date Range -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Last Updated Date Range</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-range-picker
-        class="w-full"
-        [formControlName]="'dateRange'"
-        nzFormat="yyyy-MM-dd"
-      ></nz-range-picker>
-    </nz-form-control>
-  </nz-form-item>
+  <!-- Form Errors -->
+  <div *ngIf="contractForm.get('parties')?.errors?.['required'] && contractForm.touched"
+       class="text-red-500 text-sm mb-4">
+    At least one party is required
+  </div>
 
-  <!-- Status -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Contract Status</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="status"
-        nzPlaceHolder="Select contract status"
-      >
-        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of contractStatusOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
+  <!-- Submit Button -->
+  <div class="flex justify-end mt-6">
+    <button nz-button
+            nzType="primary"
+            class="px-6"
+            [disabled]="!contractForm.valid"
+            type="submit">
+      Create Contract
+    </button>
+  </div>
 </form>
-
-<div class="ant-modal-footer">
-  <button nz-button (click)="resetFilters()">
-    Reset
-  </button>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="applyFilters()"
-  >
-    Apply Filters
-  </button>
-</div>

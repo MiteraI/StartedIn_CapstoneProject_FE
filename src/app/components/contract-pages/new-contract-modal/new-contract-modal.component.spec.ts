@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CreateContractFormComponent } from './create-contract-form.component';
+import { NewContractModalComponent } from './new-contract-modal.component';
 
-describe('CreateContractFormComponent', () => {
-  let component: CreateContractFormComponent;
-  let fixture: ComponentFixture<CreateContractFormComponent>;
+describe('NewContractModalComponent', () => {
+  let component: NewContractModalComponent;
+  let fixture: ComponentFixture<NewContractModalComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateContractFormComponent ],
+      declarations: [ NewContractModalComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateContractFormComponent);
+    fixture = TestBed.createComponent(NewContractModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

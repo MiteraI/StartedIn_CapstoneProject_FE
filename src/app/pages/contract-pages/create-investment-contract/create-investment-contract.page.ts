@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
-import { CreateContractFormComponent } from 'src/app/components/contract-pages/create-contract-form/create-contract-form.component';
+import { CreateInvestmentContractFormComponent } from 'src/app/components/contract-pages/create-investment-contract-form/create-investment-contract-form.component';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @Component({
@@ -10,7 +10,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
   templateUrl: './create-investment-contract.page.html',
   styleUrls: ['./create-investment-contract.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, NzModalModule, CreateContractFormComponent]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, NzModalModule, CreateInvestmentContractFormComponent]
 })
 export class CreateInvestmentContractPage implements OnInit {
 
