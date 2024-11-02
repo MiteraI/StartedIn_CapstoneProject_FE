@@ -16,9 +16,9 @@ import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.directive';
 
 @Component({
-  selector: 'app-create-contract-form',
-  templateUrl: './create-contract-form.component.html',
-  styleUrls: ['./create-contract-form.component.scss'],
+  selector: 'app-create-investment-contract-form',
+  templateUrl: './create-investment-contract-form.component.html',
+  styleUrls: ['./create-investment-contract-form.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -35,7 +35,7 @@ import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.d
     ClickOutsideDirective
   ]
 })
-export class CreateContractFormComponent implements OnInit {
+export class CreateInvestmentContractFormComponent implements OnInit {
   @Input({required: true}) projectId!: string;
   @Input({required: true}) investorId!: string;
   project: ProjectModel = {
