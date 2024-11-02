@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router'
 import { AuthenticatedGuard } from './shared/guards/authenticated.guard'
+import { mobileViewGuard } from './shared/guards/mobile-view.guard'
 
 export const routes: Routes = [
   {
@@ -44,6 +45,11 @@ export const routes: Routes = [
       {
         path: 'tasks',
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
+      },
+      {
+        path: 'others',
+        canActivate: [mobileViewGuard],
+        loadComponent: () => import('./layouts/mobile-project-details-navbar/mobile-project-details-navbar.component').then((m) => m.MobileProjectDetailsNavbarComponent),
       },
       {
         path: '',

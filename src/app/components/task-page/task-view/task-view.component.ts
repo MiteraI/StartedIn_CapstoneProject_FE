@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-task-view',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core'
   standalone: true,
 })
 export class TaskViewComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
+
+  navigateToHome() {
+    this.router.navigate([''])
+  }
 }

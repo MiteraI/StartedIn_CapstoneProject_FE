@@ -19,6 +19,7 @@ export class AppComponent {
   title = 'StartedIn'
   hideHeader = false
   hideFooter = false
+  inProjectDetails = false
   isDesktopView = false
 
   constructor(
@@ -26,7 +27,7 @@ export class AppComponent {
     private authJwt: AuthJwtService,
     private stateStorage: StateStorageService,
     private accountService: AccountService,
-    viewMode: ViewModeConfigService
+    private viewMode: ViewModeConfigService,
   ) {
     if (stateStorage.getRefreshToken()) {
       authJwt
@@ -42,6 +43,8 @@ export class AppComponent {
       if (event instanceof NavigationStart) {
         const currentUrl = event.url
         this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register')
+        this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register')
+        this.inProjectDetails = /\/project-list\/\d+/.test(currentUrl)
       }
     })
 
