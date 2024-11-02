@@ -5,15 +5,15 @@ import { AuthJwtService } from './core/auth/auth-jwt.service'
 import { NavigationStart, Router, RouterOutlet } from '@angular/router'
 import { StateStorageService } from './core/auth/state-storage.service'
 import { AccountService } from './core/auth/account.service'
-import { Platform } from '@ionic/angular'
 import { HeaderComponent } from './layouts/header/header.component'
 import { FooterComponent } from './layouts/footer/footer.component'
+import { ViewModeConfigService } from './core/config/view-mode-config.service'
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   standalone: true,
-  imports: [IonApp, IonRouterOutlet, HeaderComponent, FooterComponent],
+  imports: [IonApp, RouterOutlet, HeaderComponent, FooterComponent],
 })
 export class AppComponent {
   title = 'StartedIn'
@@ -26,7 +26,7 @@ export class AppComponent {
     private authJwt: AuthJwtService,
     private stateStorage: StateStorageService,
     private accountService: AccountService,
-    private platform: Platform
+    viewMode: ViewModeConfigService
   ) {
     if (stateStorage.getRefreshToken()) {
       authJwt
@@ -45,6 +45,8 @@ export class AppComponent {
       }
     })
 
-    this.isDesktopView = this.platform.is('desktop')
+    viewMode.isDesktopView$.subscribe((val) => {
+      this.isDesktopView = val
+    })
   }
 }

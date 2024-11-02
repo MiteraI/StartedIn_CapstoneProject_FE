@@ -3,7 +3,7 @@
     @if (!hideHeader) {<app-header [isDesktopView]="isDesktopView"></app-header
     >}
     <main class="flex-1 relative">
-      <ion-router-outlet></ion-router-outlet>
+      <router-outlet></router-outlet>
     </main>
     @if (!hideFooter) {<app-footer [isDesktopView]="isDesktopView"></app-footer
     >}
