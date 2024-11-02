@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
-import { RouterModule, RouterOutlet } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component'
 import { AccountService } from '../../core/auth/account.service'
 

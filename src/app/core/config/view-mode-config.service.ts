@@ -12,7 +12,7 @@ export class ViewModeConfigService implements OnDestroy {
   private desktopBreakpoint = 768
 
   constructor(private platform: Platform) {
-    if (environment.viewCalculation) {
+    if (environment.production) {
       this.isDesktopViewSubject$.next(this.platform.is('desktop'))
     } else {
       this.updateViewMode()

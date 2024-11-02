@@ -1,5 +1,5 @@
 import { Component } from '@angular/core'
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone'
+import { IonApp } from '@ionic/angular/standalone'
 import { catchError, of, tap } from 'rxjs'
 import { AuthJwtService } from './core/auth/auth-jwt.service'
 import { NavigationStart, Router, RouterOutlet } from '@angular/router'
