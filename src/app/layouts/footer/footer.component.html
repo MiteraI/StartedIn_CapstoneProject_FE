@@ -1,10 +1,10 @@
-<div class="flex flex-wrap justify-center min-h-[52px] bg-orange-400">
+<div class="flex flex-wrap justify-center min-h-[7vh] bg-orange-400">
   @if (isDesktopView) {
   <p>This is destktop</p>
   } @else { @if (inProjectDetails) {
   <div class="flex justify-around items-center w-full">
     <span [routerLink]="['/project-list']" class="text-white cursor-pointer text-lg">Chi tiêu</span>
-    <span [routerLink]="['/project-list']" class="text-white cursor-pointer text-lg">Hợp Đồng</span>
+    <span [routerLink]="['/project-list', currentId, 'contracts']" class="text-white cursor-pointer text-lg">Hợp Đồng</span>
     <span [routerLink]="['/project-list', currentId, 'tasks']" class="text-white cursor-pointer text-lg">Tác Vụ</span>
     <span [routerLink]="['/project-list', currentId, 'others']" class="text-white cursor-pointer text-lg">Extra Links</span>
   </div>
