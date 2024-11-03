@@ -1,8 +1,9 @@
 <ion-app>
   <div class="flex flex-col min-h-screen">
-    <app-header *ngIf="!hideHeader"></app-header>
-    <main class="flex-1">
-      <ion-router-outlet></ion-router-outlet>
+    @if (!hideHeader) {<app-header [isDesktopView]="isDesktopView" [inProjectDetails]="inProjectDetails"></app-header>}
+    <main class="flex-1 relative">
+      <router-outlet></router-outlet>
     </main>
+    @if (!hideFooter) {<app-footer [isDesktopView]="isDesktopView" [inProjectDetails]="inProjectDetails"></app-footer>}
   </div>
 </ion-app>
