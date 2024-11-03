@@ -44,8 +44,17 @@
   </mat-drawer>
 
   <mat-drawer-content>
-    <div class="max-h-[84vh]">
-      <ng-content></ng-content>
+    <div class="flex">
+      @if (!opened) {
+      <div>
+        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-200 hover:bg-slate-200" (click)="toggle()">
+          <mat-icon fontIcon="chevron_right"></mat-icon>
+        </button>
+      </div>
+      }
+      <div class="max-h-[84vh] w-full">
+        <ng-content></ng-content>
+      </div>
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
