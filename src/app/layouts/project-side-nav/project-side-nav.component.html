@@ -1,45 +1,29 @@
 <mat-drawer-container class="h-full">
-  <mat-drawer [opened]="opened" mode="side">
+  <mat-drawer [opened]="opened" mode="side" [style.width]="'200px'">
     <div class="w-full h-full bg-white">
-      <div *ngIf="opened" class="absolute right-0">
-        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="toggle()">
+      @if (opened) {
+      <div class="absolute right-0">
+        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
           <mat-icon fontIcon="chevron_left"></mat-icon>
         </button>
       </div>
-      <div class="mb-6 flex items-center">
-        <img class="m-2 h-10 w-10 cursor-pointer" src="../../../assets/img/android-chrome-192x192.png" alt="app-icon" routerLink="" />
-        <div class="m-2 text-2xl font-black">StartedIn</div>
+      }
+      <div class="mb-2 flex items-center">
+        <div class="m-2 text-2xl font-black">Menu</div>
       </div>
-
-      <div>
-        <div class="m-2 flex items-center">
-          <div class="ml-2 text-lg font-bold">Thành viên nhóm</div>
-          <button class="ml-auto flex items-center">
-            <mat-icon *ngIf="!isTeamMemberOpened" class="scale-125 cursor-pointer rounded-full hover:bg-slate-200" fontIcon="expand_more"></mat-icon>
-            <mat-icon *ngIf="isTeamMemberOpened" class="scale-125 cursor-pointer rounded-full hover:bg-slate-200" fontIcon="expand_less"></mat-icon>
-          </button>
+      <hr class="mx-4" />
+      <div class="flex flex-col items-center my-2">
+        @for (link of sideNavLinks; track link.linkText) {
+        <div [routerLink]="['/project-list', currentId, link.linkName]" class="flex items-center my-1 cursor-pointer">
+          <mat-icon [fontIcon]="link.iconName"></mat-icon>
+          <span class="text-lg mx-2">{{ link.linkText }}</span>
         </div>
-        <div class="flex flex-col" *ngIf="isTeamMemberOpened">
-          <div class="flex flex-col">
-            <p class="my-2 text-center"></p>
-          </div>
-          <div class="mt-2 flex items-center justify-center">
-            <p class="text-purple-700">Mời thành viên&nbsp;</p>
-            <button class="flex items-center">
-              <mat-icon class="scale-25 cursor-pointer rounded-full hover:bg-slate-200" fontIcon="add"></mat-icon>
-            </button>
-          </div>
+        } @empty { }
+        <div class="flex items-center my-1 cursor-pointer">
+          <mat-icon fontIcon="group_icon"></mat-icon>
+          <span class="text-lg mx-2">Thành Viên</span>
         </div>
       </div>
-
-      <div>
-        <div class="m-2 flex items-center">
-          <div class="ml-2 text-lg font-bold">Dự án của bạn</div>
-          <mat-icon class="ml-auto scale-125 cursor-pointer rounded-full hover:bg-slate-200" fontIcon="add"></mat-icon>
-        </div>
-      </div>
-
-      <div></div>
     </div>
   </mat-drawer>
 
@@ -47,7 +31,7 @@
     <div class="flex">
       @if (!opened) {
       <div>
-        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-200 hover:bg-slate-200" (click)="toggle()">
+        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-200 hover:bg-slate-200" (click)="sideNavToggle()">
           <mat-icon fontIcon="chevron_right"></mat-icon>
         </button>
       </div>
