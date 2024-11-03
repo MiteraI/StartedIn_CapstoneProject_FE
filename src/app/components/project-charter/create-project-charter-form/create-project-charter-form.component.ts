@@ -10,6 +10,10 @@ import { ProjectCharterFormModel } from 'src/app/shared/models/project-charter/p
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import {
+  PhaseState,
+  PhaseStateLabels,
+} from 'src/app/shared/enums/phase-status.enum';
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
@@ -22,12 +26,18 @@ export class CreateProjectCharterFormComponent implements OnInit {
   minDate = new Date().toISOString().split('T')[0];
   projectCharterForm: FormGroup;
 
-  phaseStates = [
-    { label: 'Initializing', value: 0 },
-    { label: 'Planning', value: 1 },
-    { label: 'Executing', value: 2 },
-    { label: 'Closing', value: 3 },
-  ];
+  // phaseStates = [
+  //   { label: 'Initializing', value: 0 },
+  //   { label: 'Planning', value: 1 },
+  //   { label: 'Executing', value: 2 },
+  //   { label: 'Closing', value: 3 },
+  // ];
+  phaseStates = Object.keys(PhaseState)
+    .filter((key) => !isNaN(Number(PhaseState[key as any]))) // Filters out non-numeric keys
+    .map((key) => ({
+      value: PhaseState[key as keyof typeof PhaseState],
+      label: PhaseStateLabels[PhaseState[key as keyof typeof PhaseState]],
+    }));
 
   constructor(private formBuilder: FormBuilder) {
     this.projectCharterForm = this.formBuilder.group({
@@ -71,11 +81,12 @@ export class CreateProjectCharterFormComponent implements OnInit {
   onSubmit() {
     if (this.projectCharterForm.invalid) {
       console.log('Form is invalid');
+      return;
     }
-    // Send the form data to the server or process it as needed.
     const projectCharterRequest: ProjectCharterFormModel =
       this.projectCharterForm.getRawValue();
-      projectCharterRequest.projectId = this.projectId!;
+    projectCharterRequest.projectId = this.projectId!;
+
     console.log(projectCharterRequest);
   }
 }
