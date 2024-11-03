@@ -1,3 +1,22 @@
-<p>
-  filter-bar works!
-</p>
+@if (isDesktopView) {
+<div></div>
+} @else {
+<div class="flex items-center w-full justify-between min-h-[7vh] fixed top-0 border-2 bg-white">
+  <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
+  @if (!isSearching) {
+  <span>{{ viewName }}</span>
+  } @else {
+  <div>
+    <input type="text" />
+  </div>
+  }
+  <div class="flex items-center space-x-3 mr-2">
+    <mat-icon (click)="openSearchBar()" fontIcon="search_icon"></mat-icon>
+    <mat-icon [matMenuTriggerFor]="filterMenu" fontIcon="more_horiz_icon"></mat-icon>
+    <mat-menu #filterMenu="matMenu">
+      <ng-content></ng-content>
+    </mat-menu>
+    <app-profile-dropdown></app-profile-dropdown>
+  </div>
+</div>
+}

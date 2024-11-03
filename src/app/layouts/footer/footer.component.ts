@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
+import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { filter, Subject, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, MatIconModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })

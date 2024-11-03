@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatSnackBar } from '@angular/material/snack-bar'
@@ -15,7 +15,7 @@ import { filter, Subject, takeUntil } from 'rxjs'
   templateUrl: './project-side-nav.component.html',
   styleUrl: './project-side-nav.component.css',
 })
-export class ProjectSideNavComponent implements OnInit {
+export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true
   @Input() teamId: string | null = ''
 
@@ -36,6 +36,11 @@ export class ProjectSideNavComponent implements OnInit {
           this.currentId = +parentRoute.params['id']
         }
       })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
   sideNavToggle() {
