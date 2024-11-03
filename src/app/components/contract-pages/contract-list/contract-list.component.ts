@@ -6,6 +6,7 @@ import { addIcons } from 'ionicons';
 import { addOutline, filterOutline, trashOutline } from 'ionicons/icons';
 import { ContractFilterModalComponent } from '../contract-filter-modal/contract-filter-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NewContractModalComponent } from '../new-contract-modal/new-contract-modal.component';
 
 interface Contract {
   id: string;
@@ -142,6 +143,12 @@ export class ContractListComponent implements OnInit {
 
   openAddModal() {
     // Implement modal opening logic
+    this.modalService.create({
+      nzTitle: 'New Contract',
+      nzContent: NewContractModalComponent,
+      nzFooter: null,
+      nzWidth: 520
+    });
   }
 
   openFilterModal() {

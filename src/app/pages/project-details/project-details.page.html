@@ -1,0 +1,9 @@
+@if (isDesktopView) {
+<project-side-nav class="h-full">
+  <router-outlet></router-outlet>
+</project-side-nav>
+} @else {
+<div class="overflow-y-scroll max-h-[93vh]">
+  <router-outlet></router-outlet>
+</div>
+}

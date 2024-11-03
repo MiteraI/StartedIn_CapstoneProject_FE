@@ -1,60 +1,25 @@
-<div class="border-padding flex min-h-[52px] items-center justify-between bg-white">
-  <!-- App icon section -->
-  <div class="flex items-center space-x-2">
-    <img
-      class="app-icon cursor-pointer"
-      src="../../../assets/img/android-chrome-192x192.png"
-      alt="app-icon"
-      routerLink=""
-    />
-    <div class="flex min-h-[35px] min-w-[300px] items-center rounded-md bg-slate-200 px-4">
-      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="search"></mat-icon>
-      <input
-        class="remove-highlight w-full bg-slate-200 px-4"
-        type="text"
-        placeholder="Tìm kiếm..."
-      />
-    </div>
+@if (isDesktopView) {
+<div class="border-padding flex min-h-[7vh] flex-1 items-center justify-between bg-orange-400">
+  <div class="flex items-center border-purple-400 bg-white rounded-sm">
+    <img src="../../../assets/img/android-chrome-192x192.png" class="h-[40px]" />
+    <span class="text-purple-400 text-3xl ml-1 pr-2">tartedIn</span>
   </div>
-  <!-- Icon section -->
-  <div class="flex cursor-pointer space-x-12 align-middle">
-    <div
-      class="flex flex-col items-center justify-center opacity-70 hover:opacity-100"
-      routerLink="/feed"
-      routerLinkActive="active-link"
-    >
-      <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="home"></mat-icon>
-      <span>Trang chủ</span>
-    </div>
-    <div
-      class="flex cursor-pointer flex-col items-center justify-center opacity-70 hover:opacity-100"
-      routerLink="/teams"
-      routerLinkActive="active-link"
-    >
-      <mat-icon
-        aria-hidden="false"
-        aria-label="Example dashboard icon"
-        fontIcon="dashboard"
-      ></mat-icon>
-      <span>Dashboard</span>
-    </div>
-    <div
-      class="flex cursor-pointer flex-col items-center justify-center opacity-70 hover:opacity-100"
-      routerLink="/network"
-      routerLinkActive="active-link"
-    >
-      <mat-icon aria-hidden="false" aria-label="Example social icon" fontIcon="group"></mat-icon>
-      <span>Kết nối</span>
-    </div>
-    <div
-      class="flex cursor-pointer flex-col items-center justify-center opacity-70 hover:opacity-100"
-      routerLinkActive="active-link"
-    >
-      <mat-icon aria-hidden="false" aria-label="Example work icon" fontIcon="work"></mat-icon>
-      <span>Công việc</span>
-    </div>
+  <div class="flex justify-between w-72">
+    <span [routerLink]="['/project-list']" class="text-white cursor-pointer text-xl">Dự Án</span>
+    <span [routerLink]="['/recruitment']" class="text-white cursor-pointer text-xl">Tìm Nhóm</span>
   </div>
-
-  <!-- Auth section -->
-  <app-profile-dropdown></app-profile-dropdown>
+  <div>
+    <app-profile-dropdown></app-profile-dropdown>
+  </div>
 </div>
+} @else { @if (inProjectDetails) {} @else {
+<div class="border-padding flex min-h-[7vh] flex-1 items-center justify-between bg-orange-400">
+  <div class="flex items-center border-purple-400 bg-white rounded-sm">
+    <img src="../../../assets/img/android-chrome-192x192.png" class="h-[40px]" />
+    <span class="text-purple-400 text-3xl ml-1 pr-2">tartedIn</span>
+  </div>
+  <div>
+    <app-profile-dropdown></app-profile-dropdown>
+  </div>
+</div>
+} }
