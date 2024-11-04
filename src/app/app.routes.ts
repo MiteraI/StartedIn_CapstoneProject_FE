@@ -60,8 +60,8 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'investor-project-list',
-    loadComponent: () => import('./pages/investor-project-list/investor-project-list.page').then( m => m.InvestorProjectListPage)
+    path: 'explore',
+    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then( m => m.InvestorExploreProjectsPage)
   },
 
 ]
