@@ -13,4 +13,8 @@ export class TaskViewComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  printSearchString = (searchString: string) => {
+    console.log(searchString);
+  }
 }
