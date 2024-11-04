@@ -59,4 +59,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'investor-project-list',
+    loadComponent: () => import('./pages/investor-project-list/investor-project-list.page').then( m => m.InvestorProjectListPage)
+  },
+
 ]
