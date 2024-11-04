@@ -4,13 +4,13 @@ import { mobileViewGuard } from './shared/guards/mobile-view.guard'
 
 export const routes: Routes = [
   {
-    path: 'project-list',
+    path: 'projects',
     canActivate: [AuthenticatedGuard],
     loadComponent: () => import('./pages/project-list/project-list.page').then((m) => m.ProjectListPage),
   },
   {
     path: '',
-    redirectTo: 'project-list',
+    redirectTo: 'projects',
     pathMatch: 'full',
   },
   {
@@ -39,7 +39,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'project-list/:id',
+    path: 'projects/:id',
     loadComponent: () => import('./pages/project-details/project-details.page').then((m) => m.ProjectDetailsPage),
     canActivate: [AuthenticatedGuard],
     children: [
@@ -63,4 +63,9 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'investor-project-list',
+    loadComponent: () => import('./pages/investor-project-list/investor-project-list.page').then( m => m.InvestorProjectListPage)
+  },
+
 ]

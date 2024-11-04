@@ -51,7 +51,10 @@ export class CreateInvestmentContractFormComponent implements OnInit {
     endDate: "2024-10-31"
   }
   contractForm!: FormGroup;
+  vndFormatter = (value: number) => value.toLocaleString() + '₫';
+  vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
   disbursements: DisbursementCreateModel[] = [];
+  disbursementTotalAmount: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -62,8 +65,10 @@ export class CreateInvestmentContractFormComponent implements OnInit {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
+      contractIdNumber: ['', [Validators.required]],
       shareQuantity: [0, [Validators.required]],
-      percentage: [0, [Validators.required]]
+      percentage: [0, [Validators.required]],
+      buyPrice: [0, [Validators.required, Validators.min(this.disbursementTotalAmount)]]
     });
   }
 
@@ -93,6 +98,8 @@ export class CreateInvestmentContractFormComponent implements OnInit {
         const formValue = componentInstance.disbursementForm.value;
 
         if (isEdit) {
+          // Update total amount
+          this.disbursementTotalAmount += formValue.amount - this.disbursements[index!].amount;
           // Create new array with the updated item
           this.disbursements = [
             ...this.disbursements.slice(0, index),
@@ -100,6 +107,8 @@ export class CreateInvestmentContractFormComponent implements OnInit {
             ...this.disbursements.slice(index! + 1)
           ];
         } else {
+          // Update total amount
+          this.disbursementTotalAmount += formValue.amount;
           // Create new array with the added item
           this.disbursements = [...this.disbursements, formValue];
         }

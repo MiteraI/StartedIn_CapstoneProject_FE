@@ -30,7 +30,7 @@ export class ProjectService {
     const query = contractName ? `contractName=${contractName}&` : ''
       + contractName ? `contractName=${contractName}&` : ''
       + contractType ? `contractType=${contractType}&` : ''
-      + parties ? `parties=${parties?.join(";")}&` : ''
+      + parties ? `parties=${parties?.join("&parties=")}&` : ''
       + lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate}&` : ''
       + lastUpdatedEndDate ? `lastUpdatedEndDate=${lastUpdatedEndDate}&` : ''
       + status ? `status=${status}&` : ''

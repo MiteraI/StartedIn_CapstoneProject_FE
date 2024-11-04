@@ -1,11 +1,11 @@
 @if (isDesktopView) {
 <div class="border-padding flex min-h-[7vh] flex-1 items-center justify-between bg-orange-400">
-  <div class="flex items-center border-purple-400 bg-white rounded-sm">
+  <div [routerLink]="['']" class="flex items-center border-purple-400 bg-white rounded-sm cursor-pointer">
     <img src="../../../assets/img/android-chrome-192x192.png" class="h-[40px]" />
     <span class="text-purple-400 text-3xl ml-1 pr-2">tartedIn</span>
   </div>
   <div class="flex justify-between w-72">
-    <span [routerLink]="['/project-list']" class="text-white cursor-pointer text-xl">Dự Án</span>
+    <span [routerLink]="['/projects']" class="text-white cursor-pointer text-xl">Dự Án</span>
     <span [routerLink]="['/recruitment']" class="text-white cursor-pointer text-xl">Tìm Nhóm</span>
   </div>
   <div>

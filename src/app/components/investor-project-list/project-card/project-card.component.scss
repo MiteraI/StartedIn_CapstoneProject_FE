@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+:host:hover {
+  z-index: 10;
+}
+
+:host ::ng-deep .ant-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

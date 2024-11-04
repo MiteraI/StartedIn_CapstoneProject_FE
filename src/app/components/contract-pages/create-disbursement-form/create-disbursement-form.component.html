@@ -32,9 +32,10 @@
     <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền giải ngân!">
       <nz-input-number
         formControlName="amount"
-        [nzMin]="1"
-        [nzStep]="1"
-        [nzPrecision]="0"
+        [nzMin]="1000"
+        [nzStep]="1000"
+        [nzFormatter]="vndFormatter"
+        [nzParser]="vndParser"
         class="w-full">
       </nz-input-number>
     </nz-form-control>

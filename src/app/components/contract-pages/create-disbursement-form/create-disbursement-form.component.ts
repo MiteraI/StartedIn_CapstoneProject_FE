@@ -26,6 +26,8 @@ import { NZ_MODAL_DATA } from "ng-zorro-antd/modal";
 export class CreateDisbursementFormComponent implements OnInit {
   disbursementForm!: FormGroup;
   disbursement!: DisbursementCreateModel;
+  vndFormatter = (value: number) => value.toLocaleString() + '₫';
+  vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
   constructor(
     private fb: FormBuilder,
