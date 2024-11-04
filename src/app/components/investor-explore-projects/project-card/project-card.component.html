@@ -1,6 +1,6 @@
 <div class="relative group/card">
   <!-- Main Card -->
-  <div class="bg-white rounded-2xl hover:rounded-b-none overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
+  <div class="bg-white rounded-2xl group-hover/card:rounded-b-none overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200">
     <!-- Project Image -->
     <div class="relative w-full aspect-[16/9]">
       <img
@@ -30,7 +30,7 @@
   <!-- Sliding Description -->
   <div
     *ngIf="project.description"
-    class="absolute left-0 right-0 bottom-px z-10 opacity-0 group-hover/card:opacity-100 translate-y-0 group-hover/card:translate-y-full transition-all duration-200 ease-in-out"
+    class="absolute left-0 right-0 bottom-px -z-10 group-hover/card:z-10 opacity-0 group-hover/card:opacity-100 translate-y-full transition-all duration-200 ease-in-out"
   >
     <div class="bg-white rounded-b-2xl shadow-md border border-gray-100 p-4">
       <p class="text-sm text-gray-600">{{ project.description }}</p>

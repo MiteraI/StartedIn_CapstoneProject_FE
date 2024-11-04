@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { catchError, throwError } from 'rxjs';
 import { ProjectCardComponent } from 'src/app/components/investor-explore-projects/project-card/project-card.component';
+import { ProjectService } from 'src/app/services/project.service';
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model';
-import sampleInvestorProjects from 'src/app/shared/sampledata/sample-investor-project-list-item';
+import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 
 @Component({
   selector: 'app-investor-explore-projects',
@@ -11,7 +13,23 @@ import sampleInvestorProjects from 'src/app/shared/sampledata/sample-investor-pr
   templateUrl: 'investor-explore-projects.page.html',
   styleUrls: ['investor-explore-projects.page.scss']
 })
-export class InvestorExploreProjectsPage {
-  projects: ExploreProjectsListItemModel[] = sampleInvestorProjects;
-  totalProjects: number = this.projects.length;
+
+export class InvestorExploreProjectsPage implements OnInit {
+  projects: SearchResponseModel<ExploreProjectsListItemModel> = {responseList: [], pageIndex: 1, pageSize: 15, totalPage: 0, totalRecord: 0};
+
+  constructor(private projectService: ProjectService) {}
+
+  ngOnInit() {
+    this.projectService
+      .getProjectsToExplore(1, 15)
+      .pipe(
+        catchError(error => {
+          //TODO noti stuff
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(response => this.projects = response);
+  }
+
+  //TODO filter stuff
 }

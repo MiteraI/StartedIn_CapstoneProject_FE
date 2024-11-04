@@ -1,11 +1,11 @@
 <div class="w-full max-w-7xl mx-auto p-6 md:p-12">
   <div class="text-2xl font-medium mb-8">
-    Explore <span class="text-emerald-500">{{ totalProjects }} projects</span>
+    Explore <span class="text-emerald-500">{{ projects.totalRecord }} projects</span>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
     <app-project-card
-      *ngFor="let project of projects"
+      *ngFor="let project of projects.responseList"
       [project]="project"
     />
   </div>
