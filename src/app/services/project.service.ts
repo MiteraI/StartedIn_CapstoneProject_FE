@@ -6,6 +6,7 @@ import { ContractListItemModel } from "../shared/models/contract/contract-list-i
 import { ContractType } from "../shared/enums/contract-type.enum";
 import { ContractStatus } from "../shared/enums/contract-status.enum";
 import { ContractPartyModel } from "../shared/models/contract/contract-party.model";
+import { UserProjectsModel } from "../shared/models/project/user-projects.model";
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,9 @@ export class ProjectService {
     return this.http.get<ContractPartyModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${id}/contract-parties`)
     );
+  }
+
+  getUserProjects(): Observable<any> {
+    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects/user-projects'))
   }
 }
