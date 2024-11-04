@@ -11,7 +11,7 @@
       <hr class="mx-4" />
       <div class="flex flex-col items-center my-2">
         @for (link of sideNavLinks; track link.linkText) {
-        <div [routerLink]="['/project-list', currentId, link.linkName]" class="flex items-center my-1 cursor-pointer">
+        <div [routerLink]="['/projects', currentId, link.linkName]" class="flex items-center my-1 cursor-pointer">
           <mat-icon [fontIcon]="link.iconName"></mat-icon>
           <span class="text-lg mx-2">{{ link.linkText }}</span>
         </div>
@@ -32,8 +32,9 @@
           <mat-icon fontIcon="chevron_right"></mat-icon>
         </button>
         @for (link of sideNavLinks; track link.linkName) {
-        <mat-icon [routerLink]="['/project-list', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-2 cursor-pointer"></mat-icon>
+        <mat-icon [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
         } @empty { }
+        <mat-icon fontIcon="group_icon" class="my-[6px]"></mat-icon>
       </div>
       }
       <div class="max-h-[86vh] w-full overflow-y-scroll">

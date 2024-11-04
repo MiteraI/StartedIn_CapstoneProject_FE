@@ -5,7 +5,7 @@ import { MatSidenavModule } from '@angular/material/sidenav'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { ProjectSideNavItemComponent } from './project-side-nav-item/project-side-nav-item.component'
 import { MatDialog } from '@angular/material/dialog'
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router'
 import { filter, Subject, takeUntil } from 'rxjs'
 
 @Component({
@@ -17,7 +17,6 @@ import { filter, Subject, takeUntil } from 'rxjs'
 })
 export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true
-  @Input() teamId: string | null = ''
 
   currentId = 0
   private destroy$ = new Subject<void>()
@@ -25,22 +24,27 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+    const currentProjectIdInit = this.getNumberFromRoute(this.router.url)
+    this.currentId = currentProjectIdInit === null ? 0 : currentProjectIdInit
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        const parentRoute = this.activatedRoute.snapshot.firstChild
-        if (parentRoute && parentRoute.params) {
-          this.currentId = +parentRoute.params['id']
-        }
+        const currentProjectIdInit = this.getNumberFromRoute(this.router.url)
+        this.currentId = currentProjectIdInit === null ? 0 : currentProjectIdInit
       })
   }
 
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
+  }
+
+  private getNumberFromRoute = (route: string): number | null => {
+    const match = route.match(/\/projects\/(\d+)\//)
+    return match ? +match[1] : null
   }
 
   sideNavToggle() {
