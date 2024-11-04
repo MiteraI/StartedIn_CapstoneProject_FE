@@ -18,7 +18,7 @@ export class ProjectService {
 
   getContractListForProject(
     id: string,
-    pageNum: number,
+    pageIndex: number,
     pageSize: number,
     contractName?: string,
     contractType?: ContractType,
@@ -34,7 +34,7 @@ export class ProjectService {
       + lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate}&` : ''
       + lastUpdatedEndDate ? `lastUpdatedEndDate=${lastUpdatedEndDate}&` : ''
       + status ? `status=${status}&` : ''
-      + `pageNum=${pageNum}&pageSize=${pageSize}`;
+      + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
     return this.http.get<ContractListItemModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${id}/contracts?${query}`),
     );

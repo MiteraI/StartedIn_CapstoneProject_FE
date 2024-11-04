@@ -1,4 +1,4 @@
-export interface InvestorProjectListItemModel {
+export interface ExploreProjectsListItemModel {
   id: string;
   projectName: string;
   description: string;

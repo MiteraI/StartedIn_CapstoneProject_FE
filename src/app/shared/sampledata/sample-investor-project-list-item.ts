@@ -1,6 +1,6 @@
-import { InvestorProjectListItemModel } from "../models/project/investor-project-list-item.model";
+import { ExploreProjectsListItemModel } from "../models/project/explore-projects-list-item.model";
 
-const sampleInvestorProjects: InvestorProjectListItemModel[] = [
+const sampleInvestorProjects: ExploreProjectsListItemModel[] = [
   {
     id: "proj-001",
     projectName: "EcoSmart Solutions",
