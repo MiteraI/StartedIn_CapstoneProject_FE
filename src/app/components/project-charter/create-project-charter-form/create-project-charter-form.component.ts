@@ -7,6 +7,9 @@ import { MatIcon } from '@angular/material/icon'
 import { PhaseState, PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { CommonModule } from '@angular/common'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
+import { catchError, tap } from 'rxjs'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
@@ -26,7 +29,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
       label: PhaseStateLabels[PhaseState[key as keyof typeof PhaseState]],
     }))
 
-  constructor(private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService) {
+  constructor(private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService, private snackBar: MatSnackBar, private router: Router) {
     this.projectCharterForm = this.formBuilder.group({
       projectId: [''],
       businessCase: ['', Validators.required],
@@ -74,9 +77,24 @@ export class CreateProjectCharterFormComponent implements OnInit {
       milestone.phaseEnum = Number(milestone.phaseEnum)
     })
 
-    this.projectCharterService.create(projectCharterRequest).subscribe((response) => {
-      console.log("AAAA",response)
-    })
-    console.log(projectCharterRequest)
+    this.projectCharterService
+      .create(projectCharterRequest)
+      .pipe(
+        tap((response) => {
+          this.snackBar.open('Tạo điều lệ dự án thành công', 'Đóng', {
+            duration: 2000,
+          })
+          // add later when the route is available
+          // this.router.navigate(['/project-charter', projectCharterRequest.projectId])
+        }),
+        catchError((error) => {
+          this.snackBar.open('Tạo điều lệ dự án thất bại', 'Đóng', {
+            duration: 2000,
+          })
+          console.error(error)
+          throw error
+        })
+      )
+      .subscribe()
   }
 }
