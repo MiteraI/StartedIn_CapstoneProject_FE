@@ -8,5 +8,5 @@ export type ContractListItemModel = {
   contractType: ContractType;
   parties: ContractPartyModel[];
   lastUpdatedTime: string;
-  status: ContractStatus;
+  contractStatus: ContractStatus;
 }

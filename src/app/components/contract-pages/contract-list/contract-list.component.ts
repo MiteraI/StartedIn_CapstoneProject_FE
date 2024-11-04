@@ -7,14 +7,24 @@ import { addOutline, filterOutline, trashOutline } from 'ionicons/icons';
 import { ContractFilterModalComponent } from '../contract-filter-modal/contract-filter-modal.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NewContractModalComponent } from '../new-contract-modal/new-contract-modal.component';
+import { ProjectService } from 'src/app/services/project.service';
+import { ContractService } from 'src/app/services/contract.service';
+import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
+import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
+import { ActivatedRoute } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
+import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 
-interface Contract {
-  id: string;
-  name: string;
-  type: string;
-  parties: string[];
-  lastUpdated: Date;
-  status: 'completed' | 'pending';
+interface FilterOptions {
+  contractName?: string;
+  contractType?: ContractType;
+  parties?: string[];
+  lastUpdatedStartDate?: Date;
+  lastUpdatedEndDate?: Date;
+  contractStatus?: ContractStatus;
 }
 
 @Component({
@@ -22,15 +32,30 @@ interface Contract {
   templateUrl: './contract-list.component.html',
   styleUrls: ['./contract-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, NzAvatarModule, InitialsOnlyPipe]
 })
 export class ContractListComponent implements OnInit {
-  contracts: Contract[] = [];
-  selectedContracts: Contract[] = [];
-  keys: string[] = [];
-  contractGroups: Contract[][] = [];
+  searchResult: SearchResponseModel<ContractListItemModel> = {responseList: [], pageIndex: 1, pageSize: 10, totalPage: 0, totalRecord: 0};
 
-  constructor(private modalService: NzModalService) {
+  contracts: ContractListItemModel[] = [];
+  selectedContracts: ContractListItemModel[] = [];
+  keys: string[] = [];
+  contractGroups: ContractListItemModel[][] = [];
+
+  filter: FilterOptions = {};
+  pageIndex: number = 1;
+  pageSize: number = 10;
+
+  contractTypes = ContractType;
+  contractStatuses = ContractStatus;
+  typeLabels = ContractTypeLabels;
+  statusLabels = ContractStatusLabels;
+
+  constructor(
+    private route: ActivatedRoute,
+    private modalService: NzModalService,
+    private contractService: ContractService
+  ) {
     addIcons({
       addOutline,
       filterOutline,
@@ -39,36 +64,35 @@ export class ContractListComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Sample data - replace with actual data service
-    this.contracts = [
-      {
-        id: '1',
-        name: 'Contract for stock purchase',
-        type: 'Internal',
-        parties: ['Minh Pham', 'Kiet Huynh Anh'],
-        lastUpdated: new Date("2024-10-31"),
-        status: 'completed'
-      },
-      {
-        id: '2',
-        name: 'Contract for stock purchase',
-        type: 'Internal',
-        parties: ['Minh Pham'],
-        lastUpdated: new Date("2024-10-30"),
-        status: 'completed'
-      },
-      {
-        id: '3',
-        name: 'Contract for stock purchase',
-        type: 'Internal',
-        parties: ['Minh Pham'],
-        lastUpdated: new Date("2024-10-29"),
-        status: 'completed'
-      },
-      // Add more sample contracts...
-    ];
+    this.filterContracts();
+  }
 
-    this.groupContracts();
+  filterContracts() {
+    const sd = this.filter.lastUpdatedStartDate;
+    const ed = this.filter.lastUpdatedEndDate;
+    this.contractService
+      .getContractListForProject(
+        this.route.parent?.snapshot.paramMap.get('id')!,
+        this.pageIndex,
+        this.pageSize,
+        this.filter.contractName,
+        this.filter.contractType,
+        this.filter.parties,
+        sd ? `${sd.getFullYear()}-${sd.getMonth() + 1}-${sd.getDate()}` : undefined,
+        ed ? `${ed.getFullYear()}-${ed.getMonth() + 1}-${ed.getDate()}` : undefined,
+        this.filter.contractStatus
+      )
+      .pipe(
+        catchError(error => {
+          //TODO noti stuff
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(result => {
+        this.searchResult = result;
+        this.contracts = result.responseList;
+        this.groupContracts();
+      });
   }
 
   groupContracts() {
@@ -76,7 +100,7 @@ export class ContractListComponent implements OnInit {
     this.contractGroups = [];
     this.keys = [];
     this.contracts.forEach((contract) => {
-      const date = format(contract.lastUpdated, 'yyyy-MM-dd');
+      const date = format(new Date(contract.lastUpdatedTime), 'yyyy-MM-dd');
       if (!this.keys.includes(date)) {
         this.keys.push(date);
         this.contractGroups.push([contract]);
@@ -94,23 +118,21 @@ export class ContractListComponent implements OnInit {
     return format(date, 'yyyy/MM/dd');
   }
 
-  formatDate(date: Date): string {
-    return format(date, 'HH:mm dd/MM/yyyy');
+  formatDate(dateStr: string): string {
+    return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
   }
 
-  isSelected(contract: Contract): boolean {
+  isSelected(contract: ContractListItemModel): boolean {
     return this.selectedContracts.some(c => c.id === contract.id);
   }
 
-  toggleSelection(contract: Contract) {
+  toggleSelection(contract: ContractListItemModel) {
     const index = this.selectedContracts.findIndex(c => c.id === contract.id);
     if (index === -1) {
       this.selectedContracts.push(contract);
     } else {
       this.selectedContracts.splice(index, 1);
     }
-    console.log(this.selectedContracts);
-
   }
 
   isAllSelected(): boolean {
@@ -135,7 +157,7 @@ export class ContractListComponent implements OnInit {
     this.groupContracts();
   }
 
-  deleteContract(contract: Contract) {
+  deleteContract(contract: ContractListItemModel) {
     // Delete single contract (mobile view)
     this.contracts = this.contracts.filter(c => c.id !== contract.id);
     this.groupContracts();
@@ -143,21 +165,30 @@ export class ContractListComponent implements OnInit {
 
   openAddModal() {
     // Implement modal opening logic
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'New Contract',
       nzContent: NewContractModalComponent,
-      nzFooter: null,
-      nzWidth: 520
+      nzFooter: null
     });
   }
 
   openFilterModal() {
     // Implement modal opening logic
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'Filter Contracts',
       nzContent: ContractFilterModalComponent,
+      nzData: {
+        ...this.filter,
+        id: this.route.parent?.snapshot.paramMap.get('id')!
+      },
       nzFooter: null,
-      nzWidth: 520
+    });
+    modalRef.afterClose.subscribe((result) => {
+      if (result) {
+        this.filter = {...result};
+        this.filterContracts();
+        console.log('Filter results:', result);
+      }
     });
   }
 }
