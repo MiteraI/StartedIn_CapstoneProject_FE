@@ -6,7 +6,10 @@
     <span [routerLink]="['/project-list']" class="text-white cursor-pointer text-lg">Chi tiêu</span>
     <span [routerLink]="['/project-list', currentId, 'contracts']" class="text-white cursor-pointer text-lg">Hợp Đồng</span>
     <span [routerLink]="['/project-list', currentId, 'tasks']" class="text-white cursor-pointer text-lg">Tác Vụ</span>
-    <span [routerLink]="['/project-list', currentId, 'others']" class="text-white cursor-pointer text-lg">Extra Links</span>
+    <div [routerLink]="['/project-list', currentId, 'others']" class="flex items-center space-x-1">
+      <span class="text-white cursor-pointer text-lg">Thêm</span>
+      <mat-icon fontIcon="keyboard_arrow_up_icon" class="text-white"></mat-icon>
+    </div>
   </div>
   } @else {
   <div class="flex justify-around items-center w-full">
