@@ -1,4 +1,4 @@
-export interface ShareEquityCreateModel {
+export type ShareEquityCreateModel = {
   userId: string;
   shareQuantity: number;
   percentage: number;

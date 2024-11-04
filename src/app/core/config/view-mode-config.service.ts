@@ -7,7 +7,7 @@ import { OnDestroy } from '@angular/core'
 @Injectable({
   providedIn: 'root',
 })
-export class ViewModeConfigService implements OnDestroy {
+export class ViewModeConfigService {
   private isDesktopViewSubject$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   private desktopBreakpoint = 768
 
@@ -27,9 +27,5 @@ export class ViewModeConfigService implements OnDestroy {
 
   get isDesktopView$(): Observable<boolean> {
     return this.isDesktopViewSubject$.asObservable()
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('resize', this.updateViewMode.bind(this))
   }
 }

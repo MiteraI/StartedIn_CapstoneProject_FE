@@ -1,4 +1,18 @@
-<app-filter-bar viewName="Tác Vụ" (searchString)="printSearchString($event)">Put things in here to appear</app-filter-bar>
+<app-filter-bar viewName="Tác Vụ" (searchString)="printSearchString($event)">
+  <div desktop>This should be rendered in header selection of ng-content</div>
+  <div mobile>This should be rendered in body selection of ng-content</div>
+</app-filter-bar>
+@if (isDesktopView) {
+<div class="flex flex-col w-full px-3 mt-4">
+  <div class="flex justify-end">
+    <button nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+      <mat-icon fontIcon="add_icon"></mat-icon>
+      Thêm Tác Vụ
+    </button>
+  </div>
+  <app-task-table></app-task-table>
+</div>
+} @else {
 <div class="pt-[7vh]">
   <p>task-view works!</p>
   <p>task-view works!</p>
@@ -27,3 +41,4 @@
   <p>task-view works!</p>
   <p>task-view works! End</p>
 </div>
+}

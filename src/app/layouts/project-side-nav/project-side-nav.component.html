@@ -28,7 +28,7 @@
     <div class="flex h-full">
       @if (!opened) {
       <div class="flex flex-col bg-white border items-center">
-        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-200 hover:bg-slate-200" (click)="sideNavToggle()">
+        <button class="mt-2 mb-5 mx-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-200 hover:bg-slate-200" (click)="sideNavToggle()">
           <mat-icon fontIcon="chevron_right"></mat-icon>
         </button>
         @for (link of sideNavLinks; track link.linkName) {

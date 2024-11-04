@@ -1,5 +1,5 @@
 @if (isDesktopView) {
-<div class="flex items-center justify-between border-b-[1px] min-h-[57px] px-8 bg-white sticky top-0">
+<div class="flex items-center justify-between border-b-[1px] min-h-[57px] px-3 bg-white sticky top-0">
   <div>
     <span class="text-xl">Màn Hình {{ viewName }}</span>
   </div>
@@ -13,7 +13,7 @@
       Filter
     </button>
     <mat-menu #filterMenu="matMenu">
-      <ng-content></ng-content>
+      <ng-content select="[desktop]"></ng-content>
     </mat-menu>
   </div>
 </div>
@@ -35,7 +35,7 @@
     }
     <mat-icon [matMenuTriggerFor]="filterMenu" fontIcon="more_horiz_icon"></mat-icon>
     <mat-menu #filterMenu="matMenu">
-      <ng-content></ng-content>
+      <ng-content select="[mobile]"></ng-content>
     </mat-menu>
     <app-profile-dropdown></app-profile-dropdown>
   </div>

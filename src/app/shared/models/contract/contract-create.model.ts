@@ -1,4 +1,4 @@
-export interface ContractCreateModel {
+export type ContractCreateModel = {
   projectId: string;
   contractName: string;
   contractPolicy: string;
