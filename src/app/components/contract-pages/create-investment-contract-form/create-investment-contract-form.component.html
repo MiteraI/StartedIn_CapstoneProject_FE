@@ -6,6 +6,13 @@
 
     <ion-card-content>
       <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Mã số hợp đồng</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
+          <input nz-input formControlName="contractIdNumber" placeholder="Nhập tên hợp đồng" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tên hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
           <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
@@ -35,6 +42,20 @@
             [nzMax]="project.remainingPercentOfShares"
             [nzStep]="0.01"
             (nzBlur)="updateShareQuantity()"
+            class="w-full">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Giá mua</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
+          <nz-input-number
+            formControlName="buyPrice"
+            [nzMin]="disbursementTotalAmount"
+            [nzStep]="1000"
+            [nzFormatter]="vndFormatter"
+            [nzParser]="vndParser"
             class="w-full">
           </nz-input-number>
         </nz-form-control>
