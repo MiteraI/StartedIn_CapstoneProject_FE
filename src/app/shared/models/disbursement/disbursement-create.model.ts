@@ -1,4 +1,4 @@
-export interface DisbursementCreateModel {
+export type DisbursementCreateModel = {
   title: string;
   startDate: Date;
   endDate: Date;

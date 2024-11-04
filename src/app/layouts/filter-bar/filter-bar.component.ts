@@ -5,7 +5,6 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
 import { ProfileDropdownComponent } from '../header/profile-dropdown/profile-dropdown.component'
 import { Router } from '@angular/router'
 import { MatMenuModule } from '@angular/material/menu'
-import { CommonModule } from '@angular/common'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
