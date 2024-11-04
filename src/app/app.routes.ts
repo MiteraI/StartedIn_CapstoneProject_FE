@@ -30,6 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then((m) => m.PaymentSuccessPage),
   },
   {
+    path: 'create-project-charter',
+    loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
+  },
+  {
     path: 'create-investment-contract',
     loadComponent: () => import('./pages/contract-pages/create-investment-contract/create-investment-contract.page').then((m) => m.CreateInvestmentContractPage),
   },
