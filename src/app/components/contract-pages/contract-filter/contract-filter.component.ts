@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { CommonModule } from '@angular/common';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -15,28 +13,20 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { ContractPartyModel } from 'src/app/shared/models/contract/contract-party.model';
-
-interface FilterOptions {
-  contractName: string;
-  contractType: ContractType;
-  parties: string[];
-  dateRange: {
-    start: Date | null;
-    end: Date | null;
-  };
-  status: ContractStatus;
-}
+import { ProjectService } from 'src/app/services/project.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({
-  selector: 'app-contract-filter-modal',
-  templateUrl: './contract-filter-modal.component.html',
-  styleUrls: ['./contract-filter-modal.component.scss'],
+  selector: 'app-contract-filter',
+  templateUrl: './contract-filter.component.html',
+  styleUrls: ['./contract-filter.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NzModalModule,
     NzFormModule,
     NzInputModule,
     NzSelectModule,
@@ -48,7 +38,10 @@ interface FilterOptions {
     InitialsOnlyPipe
   ]
 })
-export class ContractFilterModalComponent implements OnInit {
+export class ContractFilterComponent implements OnInit {
+  @Input() data: any;
+  @Output() filterApplied = new EventEmitter<any>();
+
   filterForm!: FormGroup;
   contractTypeOptions = Object.values(ContractType)
     .filter(value => typeof value === 'number')
@@ -63,32 +56,32 @@ export class ContractFilterModalComponent implements OnInit {
       label: ContractStatusLabels[value as ContractStatus]
     }));
 
+  users: ContractPartyModel[] = [];
+  filteredUsers: ContractPartyModel[] = [];
   selectedPartyId: string | null = null;
 
-  // Sample user data - replace with your actual user data
-  users: ContractPartyModel[] = [
-    { id: '1', fullName: 'John Smith', email: 'john.smith@company.com' },
-    { id: '2', fullName: 'Sarah Johnson', email: 'sarah.j@company.com' },
-    { id: '3', fullName: 'Michael Brown', email: 'm.brown@company.com' },
-    { id: '4', fullName: 'Emily Davis', email: 'e.davis@company.com' },
-    { id: '5', fullName: 'David Wilson', email: 'd.wilson@company.com' },
-    { id: '6', fullName: 'Lisa Anderson', email: 'l.anderson@company.com' }
-  ];
-
-  filteredUsers: ContractPartyModel[] = [];
-
   constructor(
-    private modal: NzModalRef,
-    private fb: FormBuilder
+    private projectService: ProjectService,
+    private fb: FormBuilder,
+    private menuState: MenuStateService
   ) {}
 
   ngOnInit() {
+    this.projectService
+      .getContractPartiesForProject(this.data.id)
+      .pipe(
+        catchError(error => {
+          //TODO noti stuff
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(result => this.users = result);
     this.filterForm = this.fb.group({
-      contractName: [''],
-      contractType: [''],
-      parties: [[]],
-      dateRange: [[]],
-      status: ['']
+      contractName: [this.data.contractName || ''],
+      contractType: [this.data.contractType || ''],
+      parties: [this.data.parties || []],
+      dateRange: [this.data.dateRange || []],
+      contractStatus: [this.data.status || '']
     });
   }
 
@@ -130,33 +123,34 @@ export class ContractFilterModalComponent implements OnInit {
       contractType: '',
       parties: [],
       dateRange: [],
-      status: ''
+      contractStatus: ''
     });
+    this.filterApplied.emit({
+      ...this.filterForm.value,
+      lastUpdatedStartDate: this.filterForm.get('dateRange')?.value[0],
+      lastUpdatedEndDate: this.filterForm.get('dateRange')?.value[1],
+    });
+    this.menuState.closeMenu();
   }
 
   applyFilters() {
-    // const formValue = this.filterForm.value;
-
-    // // Clean up empty parties
-    // const parties = formValue.parties.filter((party: string) => party.trim());
-
-    // const dateRange = formValue.dateRange || [null, null];
-
-    // const filters: FilterOptions = {
-    //   contractName: formValue.contractName,
-    //   contractType: formValue.contractType,
-    //   parties: parties,
-    //   dateRange: {
-    //     start: dateRange[0],
-    //     end: dateRange[1]
-    //   },
-    //   status: formValue.status
-    // };
-
-    // this.modal.close(filters);
+    this.filterApplied.emit({
+      ...this.filterForm.value,
+      lastUpdatedStartDate: this.filterForm.get('dateRange')?.value[0],
+      lastUpdatedEndDate: this.filterForm.get('dateRange')?.value[1],
+    });
+    this.menuState.closeMenu();
   }
 
-  dismiss() {
-    this.modal.close();
+  updateForm(filterData: any) {
+    if (this.filterForm) {
+      this.filterForm.patchValue({
+        contractName: filterData.contractName || '',
+        contractType: filterData.contractType || '',
+        parties: filterData.parties || [],
+        dateRange: [filterData.lastUpdatedStartDate, filterData.lastUpdatedEndDate] || [],
+        contractStatus: filterData.contractStatus || ''
+      });
+    }
   }
 }

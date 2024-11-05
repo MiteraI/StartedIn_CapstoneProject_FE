@@ -2,7 +2,7 @@ import { DisbursementCreateModel } from "../disbursement/disbursement-create.mod
 import { ShareEquityCreateModel } from "../share-equity/share-equity-create.model";
 import { ContractCreateModel } from "./contract-create.model";
 
-export interface InvestmentContractCreateModel {
+export type InvestmentContractCreateModel = {
   contract: ContractCreateModel;
   investorInfo: ShareEquityCreateModel;
   disbursements: DisbursementCreateModel[];

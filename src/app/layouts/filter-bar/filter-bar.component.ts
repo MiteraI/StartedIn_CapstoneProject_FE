@@ -5,26 +5,47 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
 import { ProfileDropdownComponent } from '../header/profile-dropdown/profile-dropdown.component'
 import { Router } from '@angular/router'
 import { MatMenuModule } from '@angular/material/menu'
-import { CommonModule } from '@angular/common'
+import { MatMenuTrigger } from '@angular/material/menu'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { MenuStateService } from 'src/app/services/menu-state.service'
+import { FormsModule } from '@angular/forms'
 
 @Component({
   selector: 'app-filter-bar',
   standalone: true,
-  imports: [MatIconModule, ProfileDropdownComponent, MatMenuModule, NzButtonModule],
+  imports: [
+    MatIconModule,
+    ProfileDropdownComponent,
+    MatMenuModule,
+    MatMenuTrigger,
+    NzButtonModule,
+    FormsModule
+  ],
   templateUrl: './filter-bar.component.html',
   styleUrls: ['./filter-bar.component.scss'],
 })
 export class FilterBarComponent implements OnInit, OnDestroy {
-  @Input({ required: true }) viewName: string = ''
-  @Output() searchString = new EventEmitter<string>()
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>
+  @Input({ required: true }) viewName: string = '';
+  @Input() searchValue: string = '';
+  @Output() searchString = new EventEmitter<string>();
+  @Output() filterMenuOpened = new EventEmitter<void>();
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   isDesktopView: boolean = false
   isSearching: boolean = false
   private destroy$ = new Subject<void>()
 
-  constructor(private viewMode: ViewModeConfigService, private router: Router) {}
+  constructor(
+    private viewMode: ViewModeConfigService,
+    private router: Router,
+    private menuState: MenuStateService
+  ) {}
+
+  @ViewChild(MatMenuTrigger) set menuTrigger(trigger: MatMenuTrigger) {
+    if (trigger) {
+      this.menuState.setMenuTrigger(trigger);
+    }
+  }
 
   ngOnInit() {
     this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
@@ -36,8 +57,7 @@ export class FilterBarComponent implements OnInit, OnDestroy {
   }
 
   onSearchClick() {
-    const searchValue = this.searchInput.nativeElement.value
-    this.searchString.emit(searchValue)
+    this.searchString.emit(this.searchInput.nativeElement.value);
   }
 
   navigateToHome() {
@@ -54,5 +74,9 @@ export class FilterBarComponent implements OnInit, OnDestroy {
 
   closeSearchBarMobile() {
     this.isSearching = false
+  }
+
+  onMenuOpened() {
+    this.filterMenuOpened.emit();
   }
 }
