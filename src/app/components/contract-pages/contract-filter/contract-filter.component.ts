@@ -1,10 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { CommonModule } from '@angular/common';
-import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
-import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -18,17 +16,17 @@ import { ContractPartyModel } from 'src/app/shared/models/contract/contract-part
 import { ProjectService } from 'src/app/services/project.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({
-  selector: 'app-contract-filter-modal',
-  templateUrl: './contract-filter-modal.component.html',
-  styleUrls: ['./contract-filter-modal.component.scss'],
+  selector: 'app-contract-filter',
+  templateUrl: './contract-filter.component.html',
+  styleUrls: ['./contract-filter.component.scss'],
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NzModalModule,
     NzFormModule,
     NzInputModule,
     NzSelectModule,
@@ -40,7 +38,10 @@ import { throwError } from 'rxjs';
     InitialsOnlyPipe
   ]
 })
-export class ContractFilterModalComponent implements OnInit {
+export class ContractFilterComponent implements OnInit {
+  @Input() data: any;
+  @Output() filterApplied = new EventEmitter<any>();
+
   filterForm!: FormGroup;
   contractTypeOptions = Object.values(ContractType)
     .filter(value => typeof value === 'number')
@@ -61,9 +62,8 @@ export class ContractFilterModalComponent implements OnInit {
 
   constructor(
     private projectService: ProjectService,
-    private modal: NzModalRef,
     private fb: FormBuilder,
-    @Inject(NZ_MODAL_DATA) public data: any
+    private menuState: MenuStateService
   ) {}
 
   ngOnInit() {
@@ -125,17 +125,32 @@ export class ContractFilterModalComponent implements OnInit {
       dateRange: [],
       contractStatus: ''
     });
-  }
-
-  applyFilters() {
-    this.modal.close({
+    this.filterApplied.emit({
       ...this.filterForm.value,
       lastUpdatedStartDate: this.filterForm.get('dateRange')?.value[0],
       lastUpdatedEndDate: this.filterForm.get('dateRange')?.value[1],
     });
+    this.menuState.closeMenu();
   }
 
-  dismiss() {
-    this.modal.close();
+  applyFilters() {
+    this.filterApplied.emit({
+      ...this.filterForm.value,
+      lastUpdatedStartDate: this.filterForm.get('dateRange')?.value[0],
+      lastUpdatedEndDate: this.filterForm.get('dateRange')?.value[1],
+    });
+    this.menuState.closeMenu();
+  }
+
+  updateForm(filterData: any) {
+    if (this.filterForm) {
+      this.filterForm.patchValue({
+        contractName: filterData.contractName || '',
+        contractType: filterData.contractType || '',
+        parties: filterData.parties || [],
+        dateRange: [filterData.lastUpdatedStartDate, filterData.lastUpdatedEndDate] || [],
+        contractStatus: filterData.contractStatus || ''
+      });
+    }
   }
 }

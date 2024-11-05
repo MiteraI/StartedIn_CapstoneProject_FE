@@ -42,6 +42,7 @@ export class CreateDealOfferPage implements OnInit {
       equityShareOffer: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       termCondition: ['', [Validators.required]]
     });
+    // TODO get and display basic project info
   }
 
   onSubmit(): void {

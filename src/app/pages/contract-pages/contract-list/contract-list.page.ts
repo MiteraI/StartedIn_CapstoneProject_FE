@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { format, isToday, isYesterday } from 'date-fns';
 import { addIcons } from 'ionicons';
@@ -15,8 +15,10 @@ import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contr
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
-import { ContractFilterModalComponent } from 'src/app/components/contract-pages/contract-filter-modal/contract-filter-modal.component';
 import { NewContractModalComponent } from 'src/app/components/contract-pages/new-contract-modal/new-contract-modal.component';
+import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component';
 
 interface FilterOptions {
   contractName?: string;
@@ -32,7 +34,16 @@ interface FilterOptions {
   templateUrl: './contract-list.page.html',
   styleUrls: ['./contract-list.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, NzAvatarModule, NzModalModule, InitialsOnlyPipe]
+  imports: [
+    IonicModule,
+    CommonModule,
+    NzAvatarModule,
+    NzModalModule,
+    InitialsOnlyPipe,
+    FilterBarComponent,
+    MatMenuModule,
+    ContractFilterComponent
+  ]
 })
 export class ContractListPage implements OnInit {
   searchResult: SearchResponseModel<ContractListItemModel> = {responseList: [], pageIndex: 1, pageSize: 10, totalPage: 0, totalRecord: 0};
@@ -50,6 +61,8 @@ export class ContractListPage implements OnInit {
   contractStatuses = ContractStatus;
   typeLabels = ContractTypeLabels;
   statusLabels = ContractStatusLabels;
+
+  @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -136,8 +149,8 @@ export class ContractListPage implements OnInit {
   }
 
   isAllSelected(): boolean {
-    return this.contracts.length > 0 &&
-           this.contracts.every(contract => this.isSelected(contract));
+    return this.contracts.length > 0
+      && this.contracts.every(contract => this.isSelected(contract));
   }
 
   toggleAllSelection() {
@@ -172,23 +185,27 @@ export class ContractListPage implements OnInit {
     });
   }
 
-  openFilterModal() {
-    // Implement modal opening logic
-    const modalRef = this.modalService.create({
-      nzTitle: 'Filter Contracts',
-      nzContent: ContractFilterModalComponent,
-      nzData: {
-        ...this.filter,
-        id: this.route.parent?.snapshot.paramMap.get('id')!
-      },
-      nzFooter: null,
-    });
-    modalRef.afterClose.subscribe((result) => {
-      if (result) {
-        this.filter = {...result};
-        this.filterContracts();
-        console.log('Filter results:', result);
-      }
-    });
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      contractName: searchText
+    };
+    this.filterContracts();
+  }
+
+  get filterData() {
+    return {
+      ...this.filter,
+      id: this.route.parent?.snapshot.paramMap.get('id')!
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.filterContracts();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
   }
 }
