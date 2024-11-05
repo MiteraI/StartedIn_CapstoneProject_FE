@@ -6,6 +6,7 @@ import { ContractPartyModel } from "../shared/models/contract/contract-party.mod
 import { ExploreProjectsListItemModel } from "../shared/models/project/explore-projects-list-item.model";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { ProjectModel } from "../shared/models/project/project.model";
+import { UserProjectsModel } from "../shared/models/project/user-projects.model";
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,9 @@ export class ProjectService {
     return this.http.get<SearchResponseModel<ExploreProjectsListItemModel>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/explore?${query}`),
     );
+  }
+
+  getUserProjects(): Observable<any> {
+    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects/user-projects'))
   }
 }

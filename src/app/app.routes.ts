@@ -44,12 +44,16 @@ export const routes: Routes = [
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
       },
       {
+        path: 'charter',
+        loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
+      },
+      {
         path: 'contracts',
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
         path: 'create-deal-offer',
-        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then( m => m.CreateDealOfferPage)
+        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
       },
       {
         path: 'project-deal-list',
@@ -74,7 +78,7 @@ export const routes: Routes = [
   },
   {
     path: 'explore',
-    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then( m => m.InvestorExploreProjectsPage)
+    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then((m) => m.InvestorExploreProjectsPage),
   },
   {
     path: 'investor-deal-list',
