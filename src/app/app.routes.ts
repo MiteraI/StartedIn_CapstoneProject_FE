@@ -30,10 +30,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then((m) => m.PaymentSuccessPage),
   },
   {
-    path: 'create-project-charter',
-    loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
-  },
-  {
     path: 'create-investment-contract',
     loadComponent: () => import('./pages/contract-pages/create-investment-contract/create-investment-contract.page').then((m) => m.CreateInvestmentContractPage),
   },
@@ -48,12 +44,16 @@ export const routes: Routes = [
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
       },
       {
+        path: 'charter',
+        loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
+      },
+      {
         path: 'contracts',
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
         path: 'create-deal-offer',
-        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then( m => m.CreateDealOfferPage)
+        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
       },
       {
         path: 'others',
@@ -69,10 +69,10 @@ export const routes: Routes = [
   },
   {
     path: 'explore',
-    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then( m => m.InvestorExploreProjectsPage)
+    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then((m) => m.InvestorExploreProjectsPage),
   },
   {
     path: 'investor-deal-offer-list',
-    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-offer-list/investor-deal-offer-list.page').then( m => m.InvestorDealOfferListPage)
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-offer-list/investor-deal-offer-list.page').then((m) => m.InvestorDealOfferListPage),
   },
 ]
