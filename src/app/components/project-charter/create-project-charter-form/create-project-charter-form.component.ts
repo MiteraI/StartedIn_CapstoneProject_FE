@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { catchError, tap } from 'rxjs'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
@@ -18,7 +18,7 @@ import { Router } from '@angular/router'
   imports: [MatCardModule, MatFormFieldModule, MatIcon, ReactiveFormsModule, CommonModule],
 })
 export class CreateProjectCharterFormComponent implements OnInit {
-  @Input() projectId: string | undefined
+  projectId = ''
   minDate = new Date().toISOString().split('T')[0]
   projectCharterForm: FormGroup
 
@@ -29,7 +29,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
       label: PhaseStateLabels[PhaseState[key as keyof typeof PhaseState]],
     }))
 
-  constructor(private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService, private snackBar: MatSnackBar, private route: ActivatedRoute) {
     this.projectCharterForm = this.formBuilder.group({
       projectId: [''],
       businessCase: ['', Validators.required],
@@ -61,7 +61,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
     this.projectCharterForm.setControl('listMilestoneCreateDto', this.formBuilder.array(this.listMilestoneCreateDto.controls))
   }
   ngOnInit() {
-    console.log(this.projectId)
+    this.projectId = this.route.parent?.snapshot.paramMap.get('id')!
     this.addMilestone()
   }
 
@@ -84,8 +84,6 @@ export class CreateProjectCharterFormComponent implements OnInit {
           this.snackBar.open('Tạo điều lệ dự án thành công', 'Đóng', {
             duration: 2000,
           })
-          // add later when the route is available
-          // this.router.navigate(['/project-charter', projectCharterRequest.projectId])
         }),
         catchError((error) => {
           this.snackBar.open('Tạo điều lệ dự án thất bại', 'Đóng', {
