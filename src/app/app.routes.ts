@@ -52,6 +52,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
+        path: 'create-deal-offer',
+        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then( m => m.CreateDealOfferPage)
+      },
+      {
         path: 'others',
         canActivate: [mobileViewGuard],
         loadComponent: () => import('./layouts/mobile-project-details-navbar/mobile-project-details-navbar.component').then((m) => m.MobileProjectDetailsNavbarComponent),
@@ -67,5 +71,8 @@ export const routes: Routes = [
     path: 'explore',
     loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then( m => m.InvestorExploreProjectsPage)
   },
-
+  {
+    path: 'investor-deal-offer-list',
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-offer-list/investor-deal-offer-list.page').then( m => m.InvestorDealOfferListPage)
+  },
 ]

@@ -1,7 +1,7 @@
-<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="max-w-[800px] mx-auto my-4 px-0 md:px-4 py-0">
-  <ion-card>
+<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
+  <ion-card class="p-4">
     <ion-card-header>
-      <ion-card-title>Chi tiết hợp đồng đầu tư</ion-card-title>
+      <h3>Chi tiết hợp đồng</h3>
     </ion-card-header>
 
     <ion-card-content>
@@ -70,7 +70,7 @@
 
       <div class="mt-6">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="m-0">Đợt giải ngân</h3>
+          <h3>Đợt giải ngân</h3>
           <button nz-button nzType="primary" (click)="openDisbursementModal()">
             <i nz-icon nzType="plus"></i>
           </button>

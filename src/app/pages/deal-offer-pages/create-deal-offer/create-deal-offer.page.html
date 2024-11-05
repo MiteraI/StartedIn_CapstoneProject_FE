@@ -1,0 +1,58 @@
+<form [formGroup]="dealOfferForm" (ngSubmit)="onSubmit()" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
+  <ion-card class="p-4">
+    <ion-card-header>
+      <h3>Tạo deal</h3>
+    </ion-card-header>
+    <ion-card-content>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Amount</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Please enter a valid amount">
+          <nz-input-number
+            class="w-full"
+            formControlName="amount"
+            [nzMin]="0"
+            [nzStep]="1000"
+            [nzPlaceHolder]="'Enter amount'"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Equity Share Offer (%)</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Please enter a valid equity share percentage">
+          <nz-input-number
+            class="w-full"
+            formControlName="equityShareOffer"
+            [nzMin]="0"
+            [nzMax]="100"
+            [nzStep]="0.1"
+            [nzPlaceHolder]="'Enter equity share percentage'"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">Terms & Conditions</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Please enter term conditions">
+          <textarea
+            nz-input
+            formControlName="termCondition"
+            placeholder="Enter term conditions"
+            [nzAutosize]="{ minRows: 8, maxRows: 12 }"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="flex justify-end mt-6 space-x-4">
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [disabled]="!dealOfferForm.valid"
+        >
+          Submit
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</form>

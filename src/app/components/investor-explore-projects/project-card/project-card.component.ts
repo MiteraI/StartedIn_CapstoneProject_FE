@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { IonIcon } from '@ionic/angular/standalone'
@@ -17,7 +18,14 @@ import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/expl
 export class ProjectCardComponent implements OnInit {
   @Input({ required: true }) project!: ExploreProjectsListItemModel;
 
+  constructor(private router: Router) {
+      addIcons({cashOutline});}
+
   ngOnInit() {
     addIcons({cashOutline});
+  }
+
+  navigateToCreateDealOffer() {
+    this.router.navigate(['/projects', this.project.id, 'create-deal-offer']);
   }
 }
