@@ -1,0 +1,12 @@
+::ng-deep .mat-menu-panel {
+  max-width: none !important;
+  max-height: 80vh !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  max-width: none !important;
+}
+
+::ng-deep .mat-menu-content {
+  padding: 0 !important;
+}
