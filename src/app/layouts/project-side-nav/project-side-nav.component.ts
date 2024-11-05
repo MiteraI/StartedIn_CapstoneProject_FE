@@ -24,27 +24,11 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    // const currentProjectIdInit = this.getNumberFromRoute(this.router.url)
-    // this.currentId = currentProjectIdInit === null ? 0 : currentProjectIdInit
-    // this.router.events
-    //   .pipe(
-    //     filter((event) => event instanceof NavigationEnd),
-    //     takeUntil(this.destroy$)
-    //   )
-    //   .subscribe(() => {
-    //     const currentProjectIdInit = this.getNumberFromRoute(this.router.url)
-    //     this.currentId = currentProjectIdInit === null ? 0 : currentProjectIdInit
-    //   })
   }
 
   ngOnDestroy() {
     this.destroy$.next()
     this.destroy$.complete()
-  }
-
-  private getNumberFromRoute = (route: string): number | null => {
-    const match = route.match(/\/projects\/(\d+)\//)
-    return match ? +match[1] : null
   }
 
   sideNavToggle() {
