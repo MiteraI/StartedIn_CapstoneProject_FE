@@ -49,7 +49,7 @@
         </td>
         <td class="p-4">
           <div class="font-medium">{{offer.projectName}}</div>
-          <div class="text-sm text-gray-500">{{offer.leaderFullName}}</div>
+          <div class="text-sm text-gray-500">{{offer.leaderName}}</div>
         </td>
         <td class="p-4">
           <div class="text-gray-600">{{offer.amount.toLocaleString()}}₫</div>
@@ -78,7 +78,7 @@
         <div class="flex items-start justify-between">
           <div class="flex-1">
             <h3 class="text-sm font-medium">{{offer.projectName}}</h3>
-            <div class="text-xs text-gray-500 mt-1">{{offer.leaderFullName}}</div>
+            <div class="text-xs text-gray-500 mt-1">{{offer.leaderName}}</div>
           </div>
           <button
             (click)="deleteOffer(offer)"

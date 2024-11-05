@@ -5,7 +5,7 @@ export type InvestorDealItem = {
   projectId: string;
   projectName: string;
   leaderId: string;
-  leaderFullName: string;
+  leaderName: string;
   amount: number;
   equityShareOffer: number;
   termCondition: string;
