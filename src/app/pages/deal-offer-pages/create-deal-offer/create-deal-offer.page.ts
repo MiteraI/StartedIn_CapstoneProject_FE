@@ -57,7 +57,7 @@ export class CreateDealOfferPage implements OnInit {
         })
       )
       .subscribe(result => {
-        this.router.navigate(['investor-deal-offer-list']);
+        this.router.navigate(['investor-deal-list']);
       });
     }
   }

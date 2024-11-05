@@ -7,6 +7,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { DisbursementCreateModel } from "src/app/shared/models/disbursement/disbursement-create.model";
 import { NZ_MODAL_DATA } from "ng-zorro-antd/modal";
+import { VndCurrencyPipe } from "src/app/shared/pipes/vnd-currency.pipe";
 
 @Component({
   selector: 'app-create-disbursement-form',
@@ -26,7 +27,8 @@ import { NZ_MODAL_DATA } from "ng-zorro-antd/modal";
 export class CreateDisbursementFormComponent implements OnInit {
   disbursementForm!: FormGroup;
   disbursement!: DisbursementCreateModel;
-  vndFormatter = (value: number) => value.toLocaleString() + '₫';
+  vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
+  vndFormatter = (value: number) => (!!value ? this.vndCurrencyPipe.transform(value) : value);
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
   constructor(

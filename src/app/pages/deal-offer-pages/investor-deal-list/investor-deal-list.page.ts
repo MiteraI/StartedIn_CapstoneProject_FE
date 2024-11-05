@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { format } from 'date-fns';
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
@@ -13,6 +12,7 @@ import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.e
 import { InvestorDealItem } from 'src/app/shared/models/deal-offer/investor-deal-item.model';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { DealOfferService } from 'src/app/services/deal-offer.service';
+import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 
 interface FilterOptions {
   projectName?: string;
@@ -34,7 +34,8 @@ interface FilterOptions {
     NzAvatarModule,
     NzModalModule,
     FilterBarComponent,
-    MatMenuModule
+    MatMenuModule,
+    VndCurrencyPipe
   ]
 })
 export class InvestorDealListPage implements OnInit {
@@ -94,10 +95,6 @@ export class InvestorDealListPage implements OnInit {
       });
   }
 
-  formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
-  }
-
   isSelected(offer: InvestorDealItem): boolean {
     return this.selectedOffers.some(o => o.id === offer.id);
   }
@@ -143,13 +140,6 @@ export class InvestorDealListPage implements OnInit {
       projectName: searchText
     };
     this.filterOffers();
-  }
-
-  get filterData() {
-    return {
-      ...this.filter,
-      //id: this.route.parent?.snapshot.paramMap.get('id')!
-    };
   }
 
   onFilterApplied(filterResult: any) {

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { ProjectCardComponent } from 'src/app/components/investor-explore-projects/project-card/project-card.component';
+import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { ProjectService } from 'src/app/services/project.service';
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
@@ -9,13 +10,19 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 @Component({
   selector: 'app-investor-explore-projects',
   standalone: true,
-  imports: [ProjectCardComponent, CommonModule],
+  imports: [ProjectCardComponent, CommonModule, FilterBarComponent],
   templateUrl: 'investor-explore-projects.page.html',
   styleUrls: ['investor-explore-projects.page.scss']
 })
 
 export class InvestorExploreProjectsPage implements OnInit {
-  projects: SearchResponseModel<ExploreProjectsListItemModel> = {responseList: [], pageIndex: 1, pageSize: 15, totalPage: 0, totalRecord: 0};
+  projects: SearchResponseModel<ExploreProjectsListItemModel> = {
+    responseList: [],
+    pageIndex: 1,
+    pageSize: 15,
+    totalPage: 0,
+    totalRecord: 0
+  };
 
   constructor(private projectService: ProjectService) {}
 

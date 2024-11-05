@@ -1,0 +1,167 @@
+<app-filter-bar
+  viewName="Deal List"
+  [searchValue]="filter.investorName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+></app-filter-bar>
+
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Desktop Selection Actions -->
+  <div
+    class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md"
+    [ngClass]="{ 'opacity-0': selectedDeals.length <= 0 }"
+  >
+    <span>{{selectedDeals.length}} items selected</span>
+    <div class="space-x-4">
+      <button
+        (click)="acceptSelected()"
+        class="text-green-500 hover:text-green-700"
+      >
+        Accept Selected
+      </button>
+      <button
+        (click)="rejectSelected()"
+        class="text-red-500 hover:text-red-700"
+      >
+        Reject Selected
+      </button>
+    </div>
+  </div>
+
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left w-12">
+          <input
+            type="checkbox"
+            [checked]="isAllSelected()"
+            (change)="toggleAllSelection()"
+            class="rounded"
+          >
+        </th>
+        <th class="p-4 text-left w-1/4">Investor</th>
+        <th class="p-4 text-left w-1/6">Amount</th>
+        <th class="p-4 text-left">Equity Share</th>
+        <th class="p-4 text-left">Status</th>
+        <th class="p-4 text-left">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let deal of deals" class="border-b hover:bg-gray-50">
+        <td class="p-4">
+          <input
+            type="checkbox"
+            [checked]="isSelected(deal)"
+            (change)="toggleSelection(deal)"
+            class="rounded"
+            [disabled]="deal.dealStatus !== dealStatuses.WAITING"
+          >
+        </td>
+        <td class="p-4">
+          <div class="font-medium">{{deal.investorName}}</div>
+        </td>
+        <td class="p-4">
+          <div class="text-gray-600">{{deal.amount | vndCurrency}}</div>
+        </td>
+        <td class="p-4">
+          <div class="text-gray-600">{{deal.equityShareOffer}}%</div>
+        </td>
+        <td class="p-4">
+          <span [ngClass]="{
+            'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
+            'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
+            'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+          }">
+            ● {{ statusLabels[deal.dealStatus] }}
+          </span>
+        </td>
+        <td class="p-4">
+          <div *ngIf="deal.dealStatus === dealStatuses.WAITING" class="space-x-2">
+            <button
+              (click)="acceptDeal(deal)"
+              class="text-green-500 hover:text-green-700"
+            >
+              <ion-icon name="checkmark-outline" class="scale-150"></ion-icon>
+            </button>
+            <button
+              (click)="rejectDeal(deal)"
+              class="text-red-500 hover:text-red-700"
+            >
+              <ion-icon name="close-outline" class="scale-150"></ion-icon>
+            </button>
+          </div>
+          <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED">
+            <button
+              (click)="navigateToCreateContract(deal)"
+              class="text-blue-500 hover:text-blue-700 px-3 py-1 border border-blue-500 rounded-md text-sm"
+            >
+              Create Contract
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <div *ngFor="let deal of deals"
+          class="bg-white rounded-lg shadow p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <h3 class="text-sm font-medium">{{deal.investorName}}</h3>
+        </div>
+        <div *ngIf="deal.dealStatus === dealStatuses.WAITING" class="space-x-2">
+          <button
+            (click)="acceptDeal(deal)"
+            class="text-green-500 p-2"
+          >
+            <ion-icon name="checkmark-outline" class="scale-150"></ion-icon>
+          </button>
+          <button
+            (click)="rejectDeal(deal)"
+            class="text-red-500 p-2"
+          >
+            <ion-icon name="close-outline" class="scale-150"></ion-icon>
+          </button>
+        </div>
+        <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED" class="mt-3">
+          <button
+            (click)="navigateToCreateContract(deal)"
+            class="w-full text-blue-500 border border-blue-500 rounded-md py-2 text-sm"
+          >
+            Create Contract
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-3 grid grid-cols-2 gap-2">
+        <div class="text-sm">
+          <div class="text-gray-500">Amount</div>
+          <div>{{deal.amount | vndCurrency}}</div>
+        </div>
+        <div class="text-sm">
+          <div class="text-gray-500">Equity Share</div>
+          <div>{{deal.equityShareOffer}}%</div>
+        </div>
+      </div>
+
+      <div class="mt-3">
+        <div class="text-sm">
+          <div class="text-gray-500">Terms & Conditions</div>
+          <div class="mt-1">{{deal.termCondition.length > 30 ? deal.termCondition.substring(0, 30) + '...' : deal.termCondition}}</div>
+        </div>
+        <div class="mt-2">
+          <span [ngClass]="{
+            'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
+            'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
+            'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+          }">
+            ● {{ statusLabels[deal.dealStatus] }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

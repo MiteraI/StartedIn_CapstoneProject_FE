@@ -1,14 +1,16 @@
 <app-filter-bar
   viewName="Deal List"
-  [searchValue]="filter.projectName??''"
+  [searchValue]="filter.projectName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
 ></app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto">
   <!-- Desktop Selection Actions -->
-  <div *ngIf="selectedOffers.length > 0"
-       class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md">
+  <div
+    class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md"
+    [ngClass]="{ 'opacity-0': selectedOffers.length <= 0 }"
+  >
     <span>{{selectedOffers.length}} items selected</span>
     <button
       (click)="deleteSelected()"
@@ -52,7 +54,7 @@
           <div class="text-sm text-gray-500">{{offer.leaderName}}</div>
         </td>
         <td class="p-4">
-          <div class="text-gray-600">{{offer.amount.toLocaleString()}}₫</div>
+          <div class="text-gray-600">{{offer.amount | vndCurrency}}</div>
         </td>
         <td class="p-4">
           <div class="text-gray-600">{{offer.equityShareOffer}}%</div>

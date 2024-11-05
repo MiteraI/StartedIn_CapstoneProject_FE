@@ -1,6 +1,6 @@
 <app-filter-bar
   viewName="Contract List"
-  [searchValue]="filter.contractName??''"
+  [searchValue]="filter.contractName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
 >
@@ -34,8 +34,10 @@
   </div>
 
   <!-- Desktop Selection Actions -->
-  <div *ngIf="selectedContracts.length > 0"
-       class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md">
+  <div
+    class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md"
+    [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
+  >
     <span>{{selectedContracts.length}} items selected</span>
     <button
       (click)="deleteSelected()"
