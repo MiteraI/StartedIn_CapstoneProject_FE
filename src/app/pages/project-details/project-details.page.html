@@ -1,5 +1,5 @@
 @if (isDesktopView) {
-<project-side-nav class="h-full">
+<project-side-nav [currentId]="projectId" class="h-full">
   <router-outlet></router-outlet>
 </project-side-nav>
 } @else {
