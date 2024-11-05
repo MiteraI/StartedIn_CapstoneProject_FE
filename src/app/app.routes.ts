@@ -72,7 +72,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then( m => m.InvestorExploreProjectsPage)
   },
   {
-    path: 'investor-deal-offer-list',
-    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-offer-list/investor-deal-offer-list.page').then( m => m.InvestorDealOfferListPage)
+    path: 'investor-deal-list',
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then( m => m.InvestorDealListPage)
   },
 ]

@@ -46,7 +46,13 @@ interface FilterOptions {
   ]
 })
 export class ContractListPage implements OnInit {
-  searchResult: SearchResponseModel<ContractListItemModel> = {responseList: [], pageIndex: 1, pageSize: 10, totalPage: 0, totalRecord: 0};
+  searchResult: SearchResponseModel<ContractListItemModel> = {
+    responseList: [],
+    pageIndex: 1,
+    pageSize: 10,
+    totalPage: 0,
+    totalRecord: 0
+  };
 
   contracts: ContractListItemModel[] = [];
   selectedContracts: ContractListItemModel[] = [];
@@ -71,7 +77,6 @@ export class ContractListPage implements OnInit {
   ) {
     addIcons({
       addOutline,
-      filterOutline,
       trashOutline
     });
   }
