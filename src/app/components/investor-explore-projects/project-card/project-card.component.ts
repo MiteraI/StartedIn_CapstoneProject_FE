@@ -18,8 +18,7 @@ import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/expl
 export class ProjectCardComponent implements OnInit {
   @Input({ required: true }) project!: ExploreProjectsListItemModel;
 
-  constructor(private router: Router) {
-      addIcons({cashOutline});}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     addIcons({cashOutline});
