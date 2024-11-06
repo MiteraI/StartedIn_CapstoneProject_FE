@@ -1,9 +1,108 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>CreateInvestmentContract</ion-title>
-  </ion-toolbar>
-</ion-header>
+<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
+  <ion-card class="p-4">
+    <ion-card-header>
+      <h3>Chi tiết hợp đồng</h3>
+    </ion-card-header>
 
-<ion-content [fullscreen]="true">
-  <app-create-investment-contract-form [investorId]="'1'" [projectId]="'1'"></app-create-investment-contract-form>
-</ion-content>
+    <ion-card-content>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Mã số hợp đồng</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
+          <input nz-input formControlName="contractIdNumber" placeholder="Nhập tên hợp đồng" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tên hợp đồng</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
+          <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Số cổ phần</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số cổ phần!">
+          <nz-input-number
+            formControlName="shareQuantity"
+            [nzMin]="0"
+            [nzMax]="project.remainingShares"
+            [nzStep]="1"
+            (nzBlur)="updateSharePercentage()"
+            class="w-full">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">% cổ phần</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập phần trăm cổ phần!">
+          <nz-input-number
+            formControlName="percentage"
+            [nzMin]="0"
+            [nzMax]="project.remainingPercentOfShares"
+            [nzStep]="0.01"
+            (nzBlur)="updateShareQuantity()"
+            class="w-full">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Giá mua</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
+          <nz-input-number
+            formControlName="buyPrice"
+            [nzMin]="disbursementTotalAmount"
+            [nzStep]="1000"
+            [nzFormatter]="vndFormatter"
+            [nzParser]="vndParser"
+            class="w-full">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều khoản khác</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3>Đợt giải ngân</h3>
+          <button nz-button nzType="primary" (click)="openDisbursementModal()">
+            <i nz-icon nzType="plus"></i>
+          </button>
+        </div>
+
+        <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
+          <ng-template #disbursementItem let-item let-index="index">
+            <nz-list-item>
+              <div class="flex w-full items-center justify-between">
+                <span>{{ item.title }}</span>
+                <div class="flex gap-2">
+                  <button nz-button nzType="link" (click)="openDisbursementModal(item, index)">
+                    <i nz-icon nzType="edit"></i>
+                  </button>
+                  <button nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
+                    <i nz-icon nzType="delete"></i>
+                  </button>
+                </div>
+              </div>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </div>
+
+      <div class="mt-6 text-right">
+        <button nz-button nzType="link" [disabled]="!contractForm.valid">
+          Bản xem trước
+        </button>
+        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid">
+          Gửi
+        </button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</form>
