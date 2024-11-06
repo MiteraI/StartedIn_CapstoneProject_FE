@@ -8,5 +8,5 @@ export type Task = {
   status: TaskStatus
   isLate: boolean
   createdBy: string
-  createdAt: string
+  createdTime: string
 }

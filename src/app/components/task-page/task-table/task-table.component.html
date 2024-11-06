@@ -5,15 +5,21 @@
       <th>Trạng Thái</th>
       <th>Hạn Chót</th>
       <th>Người Tạo</th>
+      <th>Hành Động</th>
     </tr>
   </thead>
   <tbody>
     @for (data of basicTable.data; track data.id) {
     <tr>
       <td>{{ data.title }}</td>
-      <td>{{ data.status }}</td>
-      <td>{{ data.deadline }}</td>
+      <td>{{ labels[data.status] }}</td>
+      <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : data.deadline }}</td>
       <td>{{ data.createdBy }}</td>
+      <td>
+        <button nz-button nzType="primary">Chỉnh Sửa</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button nz-button nzType="primary">Xóa</button>
+      </td>
     </tr>
     }
   </tbody>

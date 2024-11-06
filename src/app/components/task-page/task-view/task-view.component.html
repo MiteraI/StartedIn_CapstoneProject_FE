@@ -10,35 +10,13 @@
       Thêm Tác Vụ
     </button>
   </div>
-  <app-task-table></app-task-table>
+  <app-task-table [taskList]="taskList"></app-task-table>
 </div>
 } @else {
-<div class="pt-[7vh]">
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works!</p>
-  <p>task-view works! End</p>
+<div>
+  <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+    <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
+  </div>
+  <app-task-list [taskList]="taskList"></app-task-list>
 </div>
 }

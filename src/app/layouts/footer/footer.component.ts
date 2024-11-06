@@ -14,7 +14,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Input({ required: true }) isDesktopView: boolean = false
   @Input({ required: true }) inProjectDetails: boolean = false
 
-  currentId = 0
+  projectId = ''
   private destroy$ = new Subject<void>()
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
@@ -28,7 +28,7 @@ export class FooterComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         const parentRoute = this.activatedRoute.snapshot.firstChild
         if (parentRoute && parentRoute.params) {
-          this.currentId = +parentRoute.params['id']
+          this.projectId = parentRoute.params['id']
         }
       })
   }
