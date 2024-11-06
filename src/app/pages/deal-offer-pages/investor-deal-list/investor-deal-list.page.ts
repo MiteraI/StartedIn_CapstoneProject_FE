@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { trashOutline } from 'ionicons/icons';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { catchError, throwError } from 'rxjs';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
-import { MatMenuModule } from '@angular/material/menu';
 import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.enum';
 import { InvestorDealItem } from 'src/app/shared/models/deal-offer/investor-deal-item.model';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
+import { MatIconModule } from '@angular/material/icon';
+import { IonIcon } from "@ionic/angular/standalone";
 
 interface FilterOptions {
   projectName?: string;
@@ -28,14 +26,13 @@ interface FilterOptions {
   templateUrl: './investor-deal-list.page.html',
   styleUrls: ['./investor-deal-list.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
+  imports: [IonIcon,
     CommonModule,
     NzAvatarModule,
     NzModalModule,
     FilterBarComponent,
-    MatMenuModule,
-    VndCurrencyPipe
+    VndCurrencyPipe,
+    MatIconModule
   ]
 })
 export class InvestorDealListPage implements OnInit {
@@ -62,11 +59,7 @@ export class InvestorDealListPage implements OnInit {
   constructor(
     private modalService: NzModalService,
     private dealOfferService: DealOfferService
-  ) {
-    addIcons({
-      trashOutline
-    });
-  }
+  ) {}
 
   ngOnInit() {
     this.filterOffers();

@@ -82,21 +82,21 @@
               (click)="acceptDeal(deal)"
               class="text-green-500 hover:text-green-700"
             >
-              <ion-icon name="checkmark-outline" class="scale-150"></ion-icon>
+              <mat-icon fontIcon="check"></mat-icon>
             </button>
             <button
               (click)="rejectDeal(deal)"
               class="text-red-500 hover:text-red-700"
             >
-              <ion-icon name="close-outline" class="scale-150"></ion-icon>
+              <mat-icon fontIcon="close"></mat-icon>
             </button>
           </div>
-          <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED">
+          <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED" class="space-x-2">
             <button
               (click)="navigateToCreateContract(deal)"
-              class="text-blue-500 hover:text-blue-700 px-3 py-1 border border-blue-500 rounded-md text-sm"
+              class="text-blue-500 hover:text-blue-700"
             >
-              Create Contract
+              <mat-icon fontIcon="history_edu_icon"></mat-icon>
             </button>
           </div>
         </td>
@@ -110,28 +110,28 @@
           class="bg-white rounded-lg shadow p-4">
       <div class="flex items-start justify-between">
         <div class="flex-1">
-          <h3 class="text-sm font-medium">{{deal.investorName}}</h3>
+          <span class="text-2xl font-medium">{{deal.investorName}}</span>
         </div>
         <div *ngIf="deal.dealStatus === dealStatuses.WAITING" class="space-x-2">
           <button
             (click)="acceptDeal(deal)"
-            class="text-green-500 p-2"
+            class="text-green-500 px-2"
           >
-            <ion-icon name="checkmark-outline" class="scale-150"></ion-icon>
+            <mat-icon fontIcon="check" class=""></mat-icon>
           </button>
           <button
             (click)="rejectDeal(deal)"
-            class="text-red-500 p-2"
+            class="text-red-500 px-2"
           >
-            <ion-icon name="close-outline" class="scale-150"></ion-icon>
+            <mat-icon fontIcon="close"></mat-icon>
           </button>
         </div>
-        <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED" class="mt-3">
+        <div *ngIf="deal.dealStatus === dealStatuses.ACCEPTED" class="space-x-2">
           <button
             (click)="navigateToCreateContract(deal)"
-            class="w-full text-blue-500 border border-blue-500 rounded-md py-2 text-sm"
+            class=" text-blue-500 px-2"
           >
-            Create Contract
+            <mat-icon fontIcon="history_edu_icon"></mat-icon>
           </button>
         </div>
       </div>

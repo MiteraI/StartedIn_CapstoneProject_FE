@@ -16,10 +16,9 @@ import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.d
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProjectService } from 'src/app/services/project.service';
-import { catchError, throwError } from 'rxjs';
-import { ProjectStatus } from 'src/app/shared/enums/project-status.enum';
 import { Location } from '@angular/common';
+import { ContractService } from 'src/app/services/contract.service';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-create-investment-contract',
@@ -42,12 +41,13 @@ import { Location } from '@angular/common';
   ]
 })
 export class CreateInvestmentContractPage implements OnInit {
-  projectId!: string;
-  investorId!: string;
   project!: ProjectModel;
+  investorId!: string;
 
   contractForm!: FormGroup;
 
+  percentFormatter = (value: number) => `${value}%`;
+  percentParser = (value: string) => value.replace('%', '');
   vndCurrencyPipe!: VndCurrencyPipe;
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
@@ -58,13 +58,14 @@ export class CreateInvestmentContractPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private projectService: ProjectService,
+    private location: Location,
     private fb: FormBuilder,
     private modalService: NzModalService,
-    private location: Location
+    private contractService: ContractService
   ) {}
 
   ngOnInit() {
+    this.vndCurrencyPipe = new VndCurrencyPipe();
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
@@ -77,10 +78,6 @@ export class CreateInvestmentContractPage implements OnInit {
     this.route.data.subscribe(data => {
       this.project = data['project'];
     });
-
-    this.route.parent?.paramMap.subscribe(value => {
-      this.projectId = value.get('id')!;
-    })
 
     this.route.queryParamMap.subscribe(value => {
       if (!value.get('investorId')) {
@@ -96,19 +93,6 @@ export class CreateInvestmentContractPage implements OnInit {
         buyPrice: buyPrice
       })
     });
-
-    this.vndCurrencyPipe = new VndCurrencyPipe();
-  }
-
-  getProjectInfo() {
-    this.projectService
-      .getProject(this.projectId)
-      .pipe(
-        catchError(error => {
-          return throwError(() => new Error(error.error));
-        })
-      )
-      .subscribe(result => this.project = result);
   }
 
   updateShareQuantity() {
@@ -120,9 +104,6 @@ export class CreateInvestmentContractPage implements OnInit {
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
-    this.getProjectInfo();
-    console.log(this.project);
-
     const isEdit = disbursement !== undefined;
 
     this.modalService.create({
@@ -138,6 +119,8 @@ export class CreateInvestmentContractPage implements OnInit {
       nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {
         const formValue = componentInstance.disbursementForm.value;
+        formValue.startDate = formValue.startDate.toISOString().substring(0, 10);
+        formValue.endDate = formValue.endDate.toISOString().substring(0, 10);
 
         if (isEdit) {
           // Update total amount
@@ -169,17 +152,28 @@ export class CreateInvestmentContractPage implements OnInit {
     if (this.contractForm.valid) {
       const contract: InvestmentContractCreateModel = {
         contract: {
-          ...this.contractForm.value,
-          projectId: this.project.id
+          contractName: this.contractForm.value.contractName,
+          contractPolicy: this.contractForm.value.contractPolicy,
+          contractIdNumber: this.contractForm.value.contractIdNumber
         },
         investorInfo: {
-          ...this.contractForm.value,
-          userId: this.investorId
+          userId: this.investorId,
+          shareQuantity: this.contractForm.value.shareQuantity,
+          percentage: this.contractForm.value.percentage,
+          buyPrice: this.contractForm.value.buyPrice,
         },
         disbursements: this.disbursements
       };
       console.log(contract);
-      this.router.navigate(['/projects', this.route.parent?.snapshot.paramMap.get('id'), '/project-deal-list']);
+      this.contractService
+        .createInvestmentContract(this.project.id, contract)
+        .pipe(
+          catchError(error => {
+            //TODO noti stuff
+            return throwError(() => new Error(error.error));
+          })
+        )
+        .subscribe(response => this.router.navigate(['projects', this.project.id, 'contracts']));
     }
   }
 
