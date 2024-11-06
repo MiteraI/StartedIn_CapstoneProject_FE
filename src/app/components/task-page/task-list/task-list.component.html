@@ -1,3 +1,7 @@
-<p>
-  task-list works!
-</p>
+@if (taskList.length !== 0) { @for (task of taskList; track task.id) {
+<app-task-list-item [task]="task"></app-task-list-item>
+} } @else {
+<div class="flex justify-center items-center h-full w-full">
+  <span>There is no task</span>
+</div>
+}

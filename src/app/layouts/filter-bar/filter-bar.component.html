@@ -33,7 +33,7 @@
     <span>{{ viewName }}</span>
   } @else {
     <div>
-      <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" />
+      <input class="rounded-lg " #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" />
     </div>
   }
   <div class="flex items-center space-x-3 mr-2">

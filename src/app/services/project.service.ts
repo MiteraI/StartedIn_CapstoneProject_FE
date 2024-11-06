@@ -37,6 +37,6 @@ export class ProjectService {
   }
 
   getUserProjects(): Observable<any> {
-    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects/user-projects'))
+    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'))
   }
 }
