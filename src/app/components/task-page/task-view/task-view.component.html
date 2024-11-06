@@ -5,7 +5,7 @@
 @if (isDesktopView) {
 <div class="flex flex-col w-full px-3 mt-4">
   <div class="flex justify-end">
-    <button nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+    <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
       <mat-icon fontIcon="add_icon"></mat-icon>
       Thêm Tác Vụ
     </button>

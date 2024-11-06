@@ -1,12 +1,9 @@
-import { CommonModule } from '@angular/common'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
-import { MatSnackBar } from '@angular/material/snack-bar'
 import { ProjectSideNavItemComponent } from './project-side-nav-item/project-side-nav-item.component'
-import { MatDialog } from '@angular/material/dialog'
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router'
-import { filter, Subject, takeUntil } from 'rxjs'
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'project-side-nav',
@@ -21,7 +18,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>()
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {
   }

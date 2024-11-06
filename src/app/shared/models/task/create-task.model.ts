@@ -1,6 +1,5 @@
-export type Task = {
+export type CreateTask = {
   title: string
   description: string
   deadline: string
-  milestoneId: string
 }

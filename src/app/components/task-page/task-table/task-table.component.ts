@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
+import { Task } from 'src/app/shared/models/task/task.model'
 
 @Component({
   selector: 'app-task-table',
@@ -10,28 +11,9 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
   styleUrls: ['./task-table.component.scss'],
 })
 export class TaskTableComponent implements OnInit {
+  @Input() taskList: Task[] = []
+
   constructor() {}
 
   ngOnInit() {}
-
-  listOfData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ]
 }
