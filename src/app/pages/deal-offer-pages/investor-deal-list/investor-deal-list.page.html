@@ -79,21 +79,21 @@
             class="bg-white rounded-lg shadow p-4">
         <div class="flex items-start justify-between">
           <div class="flex-1">
-            <h3 class="text-sm font-medium">{{offer.projectName}}</h3>
-            <div class="text-xs text-gray-500 mt-1">{{offer.leaderName}}</div>
+            <div class="text-2xl font-medium">{{offer.projectName}}</div>
+            <span class="text-xs text-gray-500 mt-1">{{offer.leaderName}}</span>
           </div>
           <button
             (click)="deleteOffer(offer)"
-            class="text-red-500 p-2"
+            class="text-red-500 px-2"
           >
-            <ion-icon name="trash-outline"></ion-icon>
+            <mat-icon fontIcon="delete_outline"></mat-icon>
           </button>
         </div>
 
         <div class="mt-3 grid grid-cols-2 gap-2">
           <div class="text-sm">
             <div class="text-gray-500">Amount</div>
-            <div>{{offer.amount | currency}}</div>
+            <div>{{offer.amount | vndCurrency}}</div>
           </div>
           <div class="text-sm">
             <div class="text-gray-500">Equity Share</div>

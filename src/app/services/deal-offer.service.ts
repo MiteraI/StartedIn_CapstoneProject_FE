@@ -81,17 +81,23 @@ export class DealOfferService {
       + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
 
     return this.http.get<SearchResponseModel<ProjectDealItem>>(
-      this.applicationConfigService.getEndpointFor(`/api/deal-offers/project-deals/${projectId}/search?${query}`)
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers?${query}`)
     ).pipe(
       map(response => this.parseSearchResponse(response))
     );
   }
 
-  rejectDeal(id: string): Observable<any> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/deal-offers/accept`), id);
+  acceptDeal(id: string, projectId: string): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers/${id}/accept`),
+      null
+    );
   }
 
-  acceptDeal(id: string): Observable<any> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/deal-offers/reject`), id);
+  rejectDeal(id: string, projectId: string): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers/${id}/reject`),
+      null
+    );
   }
 }
