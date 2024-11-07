@@ -10,6 +10,7 @@ import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { DealOfferCreateModel } from 'src/app/shared/models/deal-offer/deal-offer-create.model';
 import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 
 @Component({
   selector: 'app-create-deal-offer',
@@ -29,6 +30,12 @@ import { Router } from '@angular/router';
 export class CreateDealOfferPage implements OnInit {
   dealOfferForm!: FormGroup;
 
+  percentFormatter = (value: number) => `${value}%`;
+  percentParser = (value: string) => value.replace('%', '');
+  vndCurrencyPipe!: VndCurrencyPipe;
+  vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
+  vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -37,6 +44,7 @@ export class CreateDealOfferPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.vndCurrencyPipe = new VndCurrencyPipe();
     this.dealOfferForm = this.fb.group({
       amount: [0, [Validators.required, Validators.min(0)]],
       equityShareOffer: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
