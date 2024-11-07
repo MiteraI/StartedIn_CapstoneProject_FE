@@ -37,7 +37,7 @@ export class CreateTaskModalComponent {
 
   onSubmit() {
     if (this.taskForm.valid) {
-      const formattedDeadline = this.datePipe.transform(this.taskForm.value.deadline, 'yyyy-MM-dd HH:00:00')
+      const formattedDeadline = this.taskForm.value.deadline.toISOString()
       const taskData = {
         ...this.taskForm.value,
         deadline: formattedDeadline,
