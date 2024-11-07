@@ -1,10 +1,10 @@
 <div class="border-padding">
   <div class="flex flex-col">
-    <div class="text-2xl font-medium mb-8">Dự án của tôi</div>
+    <div *ngIf="ownProjects.length > 0" class="text-2xl font-medium mb-8">Dự án của tôi</div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
       <app-project-card class="cursor-pointer" [routerLink]="['/projects',project.id]" *ngFor="let project of ownProjects" [project]="project" />
     </div>
-    <div class="text-2xl font-medium mb-8 mt-8">Dự án đang tham gia</div>
+    <div *ngIf="participatedProjects.length > 0" class="text-2xl font-medium mb-8 mt-8">Dự án đang tham gia</div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
       <app-project-card class="cursor-pointer" [routerLink]="['/projects',project.id]" *ngFor="let project of participatedProjects" [project]="project" />
     </div>
