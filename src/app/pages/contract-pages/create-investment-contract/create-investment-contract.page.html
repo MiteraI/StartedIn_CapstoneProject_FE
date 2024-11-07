@@ -34,13 +34,14 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">% cổ phần</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập phần trăm cổ phần!">
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tỉ lệ cổ phần (%)</nz-form-label>
+        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
           <nz-input-number
             formControlName="percentage"
             [nzMin]="0"
             [nzMax]="project.remainingPercentOfShares"
             [nzStep]="0.01"
+            nzPlaceHolder="Nhập tỉ lệ cổ phần"
             [nzFormatter]="percentFormatter"
             [nzParser]="percentParser"
             (nzBlur)="updateShareQuantity()"
@@ -56,6 +57,7 @@
             formControlName="buyPrice"
             [nzMin]="disbursementTotalAmount"
             [nzStep]="1000"
+            nzPlaceHolder="Nhập giá mua"
             [nzFormatter]="vndFormatter"
             [nzParser]="vndParser"
             class="w-full">
@@ -64,7 +66,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều khoản khác</nz-form-label>
+        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều khoản hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18">
           <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
         </nz-form-control>
