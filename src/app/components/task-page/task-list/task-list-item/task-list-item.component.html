@@ -1,10 +1,10 @@
 <div class="flex justify-between w-full min-h-[8vh] bg-white border p-1">
   <div class="flex flex-col justify-between">
     <span>{{ task?.title }}</span>
-    <span>{{ task?.deadline === null ? 'Không Hạn Chót' : task?.deadline }}</span>
+    <span>{{ task?.deadline === null ? 'Không Hạn Chót' : 'Hạn: ' + (task?.deadline | date : "d 'tháng' M, h:mm a") }}</span>
   </div>
   <div class="flex flex-col justify-between items-end">
-    <span>{{ task!.createdTime | dateDisplay}}</span>
+    <span>{{ task!.createdTime | dateDisplay }}</span>
     <span>{{ task?.createdBy }}</span>
   </div>
 </div>
