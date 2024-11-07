@@ -1,5 +1,5 @@
 <app-filter-bar
-  viewName="Contract List"
+  viewName="Danh mục hợp đồng"
   [searchValue]="filter.contractName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
@@ -18,37 +18,31 @@
   </div>
 </app-filter-bar>
 
+<!-- Desktop Selection Actions -->
 <div class="p-4 max-w-7xl mx-auto">
-  <!-- Header -->
-  <div class="md:flex md:justify-between md:items-center mb-6">
-    <h1 class="text-2xl font-bold mb-4 md:mb-0">Contract List</h1>
+  <div class="flex flex-col md:flex-row mb-4">
+    <div
+      class="mr-2 hidden md:flex flex-grow justify-between items-center bg-gray-200 p-3 rounded-md"
+      [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
+    >
+      <span>Đã chọn {{selectedContracts.length}} hợp đồng</span>
+      <button (click)="deleteSelected()" class="text-red-500 hover:text-red-700">
+        Xóa
+      </button>
+    </div>
     <div class="flex flex-col md:flex-row gap-3">
       <button
         (click)="openAddModal()"
         class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
       >
-        <ion-icon name="add-outline" class="mr-2"></ion-icon>
-        Add Contract
+        <mat-icon fontIcon="add" class="mr-2"></mat-icon>
+        Tạo hợp đồng
       </button>
     </div>
   </div>
 
-  <!-- Desktop Selection Actions -->
-  <div
-    class="mb-4 hidden md:flex justify-between items-center bg-gray-50 p-3 rounded-md"
-    [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
-  >
-    <span>{{selectedContracts.length}} items selected</span>
-    <button
-      (click)="deleteSelected()"
-      class="text-red-500 hover:text-red-700"
-    >
-      Delete Selected
-    </button>
-  </div>
-
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table">
+  <table class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left w-12">
@@ -59,18 +53,19 @@
             class="rounded"
           >
         </th>
-        <th class="p-4 text-left w-1/4">Contract Name</th>
-        <th class="p-4 text-left w-1/6">Contract Type</th>
-        <th class="p-4 text-left">Parties</th>
-        <th class="p-4 text-left">Last Updated</th>
-        <th class="p-4 text-left">Status</th>
+        <th class="p-4 text-left w-1/4">Tên hợp đồng</th>
+        <th class="p-4 text-left w-1/6">Loại hợp đồng</th>
+        <th class="p-4 text-left">Các bên liên quan</th>
+        <th class="p-4 text-left">Lần cập nhật cuối</th>
+        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-left"></th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let group of contractGroups; index as i">
         <!-- Date Header Row -->
         <tr class="bg-gray-100">
-          <td colspan="6" class="px-3 py-1 font-medium">
+          <td colspan="7" class="px-3 py-1 font-medium">
             {{ formatGroupHeader(keys[i]) }}
           </td>
         </tr>
@@ -78,12 +73,7 @@
         <tr *ngFor="let contract of group"
             class="border-b hover:bg-gray-50">
           <td class="p-4">
-            <input
-              type="checkbox"
-              [checked]="isSelected(contract)"
-              (change)="toggleSelection(contract)"
-              class="rounded"
-            >
+            <input type="checkbox" [checked]="isSelected(contract)" (change)="toggleSelection(contract)" class="rounded">
           </td>
           <td class="p-4">
             <div class="font-medium">{{contract.contractName}}</div>
@@ -113,6 +103,16 @@
               ● {{ statusLabels[contract.contractStatus] }}
             </span>
           </td>
+          <td class="p-4">
+            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2">
+              <button (click)="sendContract(contract)" class="text-blue-500 hover:text-blue-700">
+                <mat-icon fontIcon="send"></mat-icon>
+              </button>
+              <button (click)="deleteContract(contract)" class="text-red-500 hover:text-red-700">
+                <mat-icon fontIcon="delete_outline"></mat-icon>
+              </button>
+            </div>
+          </td>
         </tr>
       </ng-container>
     </tbody>
@@ -125,19 +125,20 @@
         {{ formatGroupHeader(keys[i]) }}
       </div>
       <div class="space-y-4">
-        <div *ngFor="let contract of group"
-             class="bg-white rounded-lg shadow p-4">
+        <div *ngFor="let contract of group" class="bg-white rounded-lg shadow p-4">
           <div class="flex items-start justify-between">
             <div class="flex-1">
-              <h3 class="text-sm font-medium">{{contract.contractName}}</h3>
+              <div class="text-2xl font-medium">{{contract.contractName}}</div>
               <div class="text-xs text-gray-500 mt-1">{{typeLabels[contract.contractType]}}</div>
             </div>
-            <button
-              (click)="deleteContract(contract)"
-              class="text-red-500 p-2"
-            >
-              <ion-icon name="trash-outline"></ion-icon>
-            </button>
+            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2">
+              <button (click)="sendContract(contract)" class="text-blue-500">
+                <mat-icon fontIcon="send"></mat-icon>
+              </button>
+              <button (click)="deleteContract(contract)" class="text-red-500">
+                <mat-icon fontIcon="delete_outline"></mat-icon>
+              </button>
+            </div>
           </div>
 
           <div class="mt-3 flex justify-between items-end">

@@ -1,37 +1,21 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
+import { Task } from 'src/app/shared/models/task/task.model'
+import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 
 @Component({
   selector: 'app-task-table',
   standalone: true,
-  imports: [NzTableModule, NzDividerModule],
+  imports: [NzTableModule, NzDividerModule, NzButtonModule],
   templateUrl: './task-table.component.html',
   styleUrls: ['./task-table.component.scss'],
 })
 export class TaskTableComponent implements OnInit {
+  @Input({ required: true }) taskList: Task[] = []
+  labels = TaskStatusLabels
   constructor() {}
 
   ngOnInit() {}
-
-  listOfData = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ]
 }

@@ -1,11 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { format, isToday, isYesterday } from 'date-fns';
-import { addIcons } from 'ionicons';
-import { addOutline, filterOutline, trashOutline } from 'ionicons/icons';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { ProjectService } from 'src/app/services/project.service';
 import { ContractService } from 'src/app/services/contract.service';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
@@ -17,8 +13,9 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { NewContractModalComponent } from 'src/app/components/contract-pages/new-contract-modal/new-contract-modal.component';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
-import { MatMenuModule } from '@angular/material/menu';
 import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component';
+import { MatIconModule } from '@angular/material/icon';
+import { IonIcon } from "@ionic/angular/standalone";
 
 interface FilterOptions {
   contractName?: string;
@@ -34,18 +31,18 @@ interface FilterOptions {
   templateUrl: './contract-list.page.html',
   styleUrls: ['./contract-list.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
+  imports: [IonIcon,
     CommonModule,
     NzAvatarModule,
     NzModalModule,
     InitialsOnlyPipe,
     FilterBarComponent,
-    MatMenuModule,
-    ContractFilterComponent
+    ContractFilterComponent,
+    MatIconModule
   ]
 })
 export class ContractListPage implements OnInit {
+  projectId!: string;
   searchResult: SearchResponseModel<ContractListItemModel> = {
     responseList: [],
     pageIndex: 1,
@@ -74,23 +71,25 @@ export class ContractListPage implements OnInit {
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private contractService: ContractService
-  ) {
-    addIcons({
-      addOutline,
-      trashOutline
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    this.filterContracts();
+    this.route.parent?.paramMap.subscribe(map => {
+      if (!map.get('id')) {
+        return;
+      }
+      this.projectId = map.get('id')!;
+      this.filterContracts();
+    })
   }
 
+  // filter stuff
   filterContracts() {
     const sd = this.filter.lastUpdatedStartDate;
     const ed = this.filter.lastUpdatedEndDate;
     this.contractService
       .getContractListForProject(
-        this.route.parent?.snapshot.paramMap.get('id')!,
+        this.projectId,
         this.pageIndex,
         this.pageSize,
         this.filter.contractName,
@@ -113,6 +112,31 @@ export class ContractListPage implements OnInit {
       });
   }
 
+  get filterData() {
+    return {
+      ...this.filter,
+      id: this.projectId
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.filterContracts();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      contractName: searchText
+    };
+    this.filterContracts();
+  }
+
+  // render stuff
   groupContracts() {
     var groupCount = 0;
     this.contractGroups = [];
@@ -166,6 +190,22 @@ export class ContractListPage implements OnInit {
     }
   }
 
+  // send stuff
+  sendSelected() {}
+
+  sendContract(contract: ContractListItemModel) {
+    this.contractService
+      .sendContract(contract.id, this.projectId)
+      .pipe(
+        catchError(error => {
+          //TODO noti stuff
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(result => contract.contractStatus = this.contractStatuses.SENT);
+  }
+
+  // delete stuff
   deleteSelected() {
     // Implement delete functionality
     this.contracts = this.contracts.filter(
@@ -181,6 +221,7 @@ export class ContractListPage implements OnInit {
     this.groupContracts();
   }
 
+  // add stuff
   openAddModal() {
     // Implement modal opening logic
     const modalRef = this.modalService.create({
@@ -188,29 +229,5 @@ export class ContractListPage implements OnInit {
       nzContent: NewContractModalComponent,
       nzFooter: null
     });
-  }
-
-  onSearch(searchText: string) {
-    this.filter = {
-      ...this.filter,
-      contractName: searchText
-    };
-    this.filterContracts();
-  }
-
-  get filterData() {
-    return {
-      ...this.filter,
-      id: this.route.parent?.snapshot.paramMap.get('id')!
-    };
-  }
-
-  onFilterApplied(filterResult: any) {
-    this.filter = {...filterResult};
-    this.filterContracts();
-  }
-
-  onFilterMenuOpened() {
-    this.filterComponent.updateForm(this.filter);
   }
 }

@@ -2,14 +2,14 @@
 <form [formGroup]="disbursementForm" class="md:p-6">
   <nz-form-item>
     <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tiêu đề</nz-form-label>
-    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tiêu đề giải ngân!">
-      <input nz-input formControlName="title" placeholder="Nhập tiêu đề giải ngân" />
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tiêu đề!">
+      <input nz-input formControlName="title" placeholder="Nhập tiêu đề lần giải ngân" />
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Thời gian</nz-form-label>
-    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập thời gian giải ngân!">
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập thời gian!">
       <div class="flex gap-2">
         <nz-date-picker
           formControlName="startDate"
@@ -29,7 +29,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Số tiền</nz-form-label>
-    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền giải ngân!">
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền!">
       <nz-input-number
         formControlName="amount"
         [nzMin]="1000"
@@ -43,7 +43,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều kiện</nz-form-label>
-    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập điều kiện giải ngân!">
+    <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập điều kiện!">
       <textarea
         nz-input
         formControlName="condition"

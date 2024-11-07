@@ -19,12 +19,16 @@ export class ProjectService {
   }
 
   getContractPartiesForProject(id: string): Observable<any> {
-    return this.http.get<ContractPartyModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${id}/contract-parties`))
+    return this.http.get<ContractPartyModel[]>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${id}/parties`)
+    );
   }
 
   getProjectsToExplore(pageIndex: number, pageSize: number): Observable<any> {
-    const query = `pageIndex=${pageIndex}&pageSize=${pageSize}`
-    return this.http.get<SearchResponseModel<ExploreProjectsListItemModel>>(this.applicationConfigService.getEndpointFor(`/api/projects/explore?${query}`))
+    const query = `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    return this.http.get<SearchResponseModel<ExploreProjectsListItemModel>>(
+      this.applicationConfigService.getEndpointFor(`/api/startups?${query}`),
+    );
   }
 
   getUserProjects(): Observable<any> {

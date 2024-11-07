@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { checkmarkOutline, closeOutline } from 'ionicons/icons';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { catchError, throwError } from 'rxjs';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
-import { MatMenuModule } from '@angular/material/menu';
 import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.enum';
 import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-item.model';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
+import { MatIconModule } from '@angular/material/icon';
+import { IonIcon } from "@ionic/angular/standalone";
 
 interface FilterOptions {
   investorName?: string;
@@ -29,17 +27,18 @@ interface FilterOptions {
   templateUrl: './project-deal-list.page.html',
   styleUrls: ['./project-deal-list.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
+  imports: [IonIcon,
     CommonModule,
     NzAvatarModule,
     NzModalModule,
     FilterBarComponent,
-    MatMenuModule,
-    VndCurrencyPipe
+    VndCurrencyPipe,
+    MatIconModule
   ]
 })
 export class ProjectDealListPage implements OnInit {
+  projectId!: string;
+
   searchResult: SearchResponseModel<ProjectDealItem> = {
     responseList: [],
     pageIndex: 1,
@@ -65,21 +64,22 @@ export class ProjectDealListPage implements OnInit {
     private router: Router,
     private modalService: NzModalService,
     private dealOfferService: DealOfferService
-  ) {
-    addIcons({
-      checkmarkOutline,
-      closeOutline
-    });
-  }
+  ) {}
 
   ngOnInit() {
-    this.filterDeals();
+    this.route.parent?.paramMap.subscribe(map => {
+      if (!map.get('id')) {
+        return;
+      }
+      this.projectId = map.get('id')!
+      this.filterDeals();
+    });
   }
 
   filterDeals() {
     this.dealOfferService
       .getProjectDealList(
-        this.route.parent?.snapshot.paramMap.get('id')!,
+        this.projectId,
         this.pageIndex,
         this.pageSize,
         this.filter.investorName,
@@ -161,7 +161,7 @@ export class ProjectDealListPage implements OnInit {
 
   acceptDeal(deal: ProjectDealItem, showConfirm: boolean = true) {
     const accept = () => {
-      this.dealOfferService.acceptDeal(deal.id).subscribe(() => {
+      this.dealOfferService.acceptDeal(deal.id, this.projectId).subscribe(() => {
         const index = this.deals.findIndex(d => d.id === deal.id);
         if (index !== -1) {
           this.deals[index] = { ...deal, dealStatus: DealStatus.ACCEPTED };
@@ -184,7 +184,7 @@ export class ProjectDealListPage implements OnInit {
 
   rejectDeal(deal: ProjectDealItem, showConfirm: boolean = true) {
     const reject = () => {
-      this.dealOfferService.rejectDeal(deal.id).subscribe(() => {
+      this.dealOfferService.rejectDeal(deal.id, this.projectId).subscribe(() => {
         const index = this.deals.findIndex(d => d.id === deal.id);
         if (index !== -1) {
           this.deals[index] = { ...deal, dealStatus: DealStatus.REJECTED };
@@ -230,7 +230,7 @@ export class ProjectDealListPage implements OnInit {
   }
 
   navigateToCreateContract(deal: ProjectDealItem) {
-    this.router.navigate(['/projects', this.route.parent?.snapshot.paramMap.get('id'), '/create-investment-contract', ], {
+    this.router.navigate(['projects', this.projectId, 'create-investment-contract', ], {
       queryParams: {
         investorId: deal.investorId,
         equityShare: deal.equityShareOffer,
