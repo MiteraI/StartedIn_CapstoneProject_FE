@@ -10,4 +10,4 @@ export const PhaseStateLabels: Record<PhaseState, string> = {
   [PhaseState.PLANNING]: 'Lên Kế Hoạch',
   [PhaseState.EXECUTING]: 'Thực Thi',
   [PhaseState.CLOSING]: 'Kết Thúc',
-};
+}
