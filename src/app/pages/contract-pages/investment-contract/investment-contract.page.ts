@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { DisbursementCreateModel } from 'src/app/shared/models/disbursement/disbursement-create.model';
 import { CommonModule } from '@angular/common';
+import { IonicModule } from '@ionic/angular';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { IonicModule } from '@ionic/angular';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contract/investment-contract-create-update.model';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
@@ -68,7 +69,8 @@ export class InvestmentContractPage implements OnInit {
     private location: Location,
     private fb: FormBuilder,
     private modalService: NzModalService,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -198,7 +200,7 @@ export class InvestmentContractPage implements OnInit {
           .sendContract(this.contractId!, this.project.id)
           .pipe(
             catchError(error => {
-              //TODO noti stuff
+              this.notification.error("Lỗi", "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
@@ -226,7 +228,7 @@ export class InvestmentContractPage implements OnInit {
     }
     return o.pipe(
       catchError(error => {
-        //TODO noti stuff
+        this.notification.error("Lỗi", "Lưu dữ liệu thỏa thuận thất bại!", { nzDuration: 2000 });
         return throwError(() => new Error(error.error));
       })
     );

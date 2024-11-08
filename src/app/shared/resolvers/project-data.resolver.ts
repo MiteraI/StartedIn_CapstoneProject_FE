@@ -6,8 +6,12 @@ import { ProjectService } from 'src/app/services/project.service';
 
 export const ProjectDataResolver: ResolveFn<ProjectModel | null> = (route, state) => {
   const projectService = inject(ProjectService);
+  const projectId = route.parent?.paramMap.get('id');
+  if (!projectId) {
+    return of(null);
+  }
   return projectService
-    .getProject(route.parent?.paramMap.get('id')!)
+    .getProject(projectId)
     .pipe(
       first(),
       catchError(error => {
@@ -15,8 +19,8 @@ export const ProjectDataResolver: ResolveFn<ProjectModel | null> = (route, state
       }),
       map(result => {
         return {
-          ...result,
-          remainingShares: result.totalShares * result.remainingPercentOfShares / 100
+          ...result!,
+          remainingShares: result!.totalShares * result!.remainingPercentOfShares / 100
         }
       })
     )

@@ -15,6 +15,7 @@ import { NewContractModalComponent } from 'src/app/components/contract-pages/new
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component';
 import { MatIconModule } from '@angular/material/icon';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 interface FilterOptions {
   contractName?: string;
@@ -70,7 +71,8 @@ export class ContractListPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private modalService: NzModalService,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -101,7 +103,7 @@ export class ContractListPage implements OnInit {
       )
       .pipe(
         catchError(error => {
-          //TODO noti stuff
+          this.notification.error("Lỗi", "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -198,7 +200,7 @@ export class ContractListPage implements OnInit {
       .sendContract(contract.id, this.projectId)
       .pipe(
         catchError(error => {
-          //TODO noti stuff
+          this.notification.error("Lỗi", "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -227,7 +229,8 @@ export class ContractListPage implements OnInit {
     const modalRef = this.modalService.create({
       nzTitle: 'New Contract',
       nzContent: NewContractModalComponent,
-      nzFooter: null
+      nzFooter: null,
+      nzData: this.projectId
     });
   }
 }
