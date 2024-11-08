@@ -6,7 +6,7 @@ import { ContractType } from "../shared/enums/contract-type.enum";
 import { ContractListItemModel } from "../shared/models/contract/contract-list-item.model";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { Injectable } from "@angular/core";
-import { InvestmentContractCreateModel } from "../shared/models/contract/investment-contract-create.model";
+import { InvestmentContractCreateUpdateModel } from "../shared/models/contract/investment-contract-create-update.model";
 
 @Injectable({
   providedIn: 'root',
@@ -40,9 +40,16 @@ export class ContractService {
     );
   }
 
-  createInvestmentContract(projectId: string, contract: InvestmentContractCreateModel): Observable<any> {
+  createInvestmentContract(projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts`),
+      contract
+    );
+  }
+
+  updateInvestmentContract(id: string, projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`),
       contract
     );
   }

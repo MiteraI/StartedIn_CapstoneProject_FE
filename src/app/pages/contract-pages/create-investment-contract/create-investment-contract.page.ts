@@ -10,15 +10,14 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { IonicModule } from '@ionic/angular';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-import { InvestmentContractCreateModel } from 'src/app/shared/models/contract/investment-contract-create.model';
+import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contract/investment-contract-create-update.model';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
-import { ClickOutsideDirective } from 'src/app/shared/directives/click-outside.directive';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-create-investment-contract',
@@ -36,8 +35,7 @@ import { catchError, throwError } from 'rxjs';
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
-    IonicModule,
-    ClickOutsideDirective
+    IonicModule
   ]
 })
 export class CreateInvestmentContractPage implements OnInit {
@@ -45,6 +43,7 @@ export class CreateInvestmentContractPage implements OnInit {
   investorId!: string;
 
   contractForm!: FormGroup;
+  contractId: string | null = null;
 
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
@@ -81,7 +80,7 @@ export class CreateInvestmentContractPage implements OnInit {
 
     this.route.queryParamMap.subscribe(value => {
       if (!value.get('investorId')) {
-        this.navigateBack()
+        this.location.back(); // navigate back
       }
       this.investorId = value.get('investorId')!;
       const percentage = parseInt(value.get('equityShare') ?? '0');
@@ -148,36 +147,64 @@ export class CreateInvestmentContractPage implements OnInit {
     ];
   }
 
-  onSubmit() {
-    if (this.contractForm.valid) {
-      const contract: InvestmentContractCreateModel = {
-        contract: {
-          contractName: this.contractForm.value.contractName,
-          contractPolicy: this.contractForm.value.contractPolicy,
-          contractIdNumber: this.contractForm.value.contractIdNumber
-        },
-        investorInfo: {
-          userId: this.investorId,
-          shareQuantity: this.contractForm.value.shareQuantity,
-          percentage: this.contractForm.value.percentage,
-          buyPrice: this.contractForm.value.buyPrice,
-        },
-        disbursements: this.disbursements
-      };
-      console.log(contract);
-      this.contractService
-        .createInvestmentContract(this.project.id, contract)
-        .pipe(
-          catchError(error => {
-            //TODO noti stuff
-            return throwError(() => new Error(error.error));
-          })
-        )
-        .subscribe(response => this.router.navigate(['projects', this.project.id, 'contracts']));
-    }
+  save() {
+    this.createOrUpdateContract().subscribe(response => this.contractId = response.id);
   }
 
-  navigateBack() {
-    this.location.back();
+  saveAndSend() {
+    if (!this.contractForm.valid) {
+      return;
+    }
+    this.createOrUpdateContract()
+      .subscribe(response => {
+        this.contractId = response.id;
+        this.contractService
+          .sendContract(this.contractId!, this.project.id)
+          .pipe(
+            catchError(error => {
+              //TODO noti stuff
+              return throwError(() => new Error(error.error));
+            })
+          )
+          .subscribe(response => this.router.navigate(['projects', this.project.id, 'contracts']))
+      })
+  }
+
+  createOrUpdateContract(): Observable<any> {
+    var o: Observable<any>;
+    if (!this.contractId) {
+      o = this.contractService
+        .createInvestmentContract(this.project.id, this.contractModel)
+    } else {
+      o = this.contractService
+        .updateInvestmentContract(this.contractId, this.project.id, this.contractModel)
+    }
+    return o.pipe(
+      catchError(error => {
+        //TODO noti stuff
+        return throwError(() => new Error(error.error));
+      })
+    );
+  }
+
+  get contractModel(): InvestmentContractCreateUpdateModel {
+    return {
+      contract: {
+        contractName: this.contractForm.value.contractName.length || 'Hợp đồng chưa có tên',
+        contractPolicy: this.contractForm.value.contractPolicy || '',
+        contractIdNumber: this.contractForm.value.contractIdNumber || ''
+      },
+      investorInfo: {
+        userId: this.investorId,
+        shareQuantity: this.contractForm.value.shareQuantity,
+        percentage: this.contractForm.value.percentage,
+        buyPrice: this.contractForm.value.buyPrice,
+      },
+      disbursements: this.disbursements
+    };
+  }
+
+  showPreview() {
+    alert('not implemented');
   }
 }
