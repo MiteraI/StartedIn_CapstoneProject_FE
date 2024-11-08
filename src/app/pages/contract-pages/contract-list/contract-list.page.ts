@@ -5,7 +5,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
@@ -15,7 +15,6 @@ import { NewContractModalComponent } from 'src/app/components/contract-pages/new
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component';
 import { MatIconModule } from '@angular/material/icon';
-import { IonIcon } from "@ionic/angular/standalone";
 
 interface FilterOptions {
   contractName?: string;
@@ -31,14 +30,15 @@ interface FilterOptions {
   templateUrl: './contract-list.page.html',
   styleUrls: ['./contract-list.page.scss'],
   standalone: true,
-  imports: [IonIcon,
+  imports: [
     CommonModule,
     NzAvatarModule,
     NzModalModule,
     InitialsOnlyPipe,
     FilterBarComponent,
     ContractFilterComponent,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ]
 })
 export class ContractListPage implements OnInit {

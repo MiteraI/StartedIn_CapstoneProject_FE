@@ -232,9 +232,7 @@ export class ProjectDealListPage implements OnInit {
   navigateToCreateContract(deal: ProjectDealItem) {
     this.router.navigate(['projects', this.projectId, 'create-investment-contract', ], {
       queryParams: {
-        investorId: deal.investorId,
-        equityShare: deal.equityShareOffer,
-        buyPrice: deal.amount
+        dealId: deal.id
       }
     });
   }

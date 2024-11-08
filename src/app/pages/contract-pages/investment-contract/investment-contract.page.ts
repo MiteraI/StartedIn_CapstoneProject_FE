@@ -18,11 +18,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
 import { catchError, Observable, throwError } from 'rxjs';
+import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-item.model';
+import { ContractCreateFromDealModel } from 'src/app/shared/models/contract/contract-create-from-deal.model';
+import { InvestmentContractDetailModel } from 'src/app/shared/models/contract/investment-contract-detail.model';
+import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 
 @Component({
-  selector: 'app-create-investment-contract',
-  templateUrl: './create-investment-contract.page.html',
-  styleUrls: ['./create-investment-contract.page.scss'],
+  selector: 'app-investment-contract',
+  templateUrl: './investment-contract.page.html',
+  styleUrls: ['./investment-contract.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -38,13 +42,17 @@ import { catchError, Observable, throwError } from 'rxjs';
     IonicModule
   ]
 })
-export class CreateInvestmentContractPage implements OnInit {
+export class InvestmentContractPage implements OnInit {
+  isReadOnly = false;
+  isFromDeal = false;
+
   project!: ProjectModel;
+  contract: InvestmentContractDetailModel | null = null;
+  contractId: string | null = null;
+  deal: ProjectDealItem | null = null;
   investorId!: string;
 
   contractForm!: FormGroup;
-  contractId: string | null = null;
-
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
   vndCurrencyPipe!: VndCurrencyPipe;
@@ -76,21 +84,49 @@ export class CreateInvestmentContractPage implements OnInit {
 
     this.route.data.subscribe(data => {
       this.project = data['project'];
-    });
+      this.contract = data['contract'];
+      this.deal = data['deal'];
 
-    this.route.queryParamMap.subscribe(value => {
-      if (!value.get('investorId')) {
-        this.location.back(); // navigate back
+      if (this.contract !== null) {
+        // import data
+        this.isFromDeal = !!this.contract.dealOfferId;
+        this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT);
+        if (this.isReadOnly) {
+          this.contractForm.disable();
+        }
+        this.investorId = this.contract.investorId;
+        this.contractId = this.contract.id;
+        const shareQuantity = Math.round(this.project.totalShares * this.contract.sharePercentage / 100);
+        this.contractForm.patchValue({
+          contractName: this.contract.contractName,
+          contractPolicy: this.contract.contractPolicy,
+          contractIdNumber: this.contract.contractIdNumber,
+          shareQuantity: shareQuantity,
+          percentage: this.contract.sharePercentage,
+          buyPrice: this.contract.buyPrice
+        })
+        this.disbursements = this.contract.disbursements.map(d => {
+          const {id, ...rest} = d;
+          return rest;
+        })
+        this.disbursementTotalAmount = this.disbursements.reduce((total, disbursement) => total + (disbursement.amount || 0), 0);
+      } else if (this.deal !== null) {
+        this.isFromDeal = true;
+        this.investorId = this.deal.investorId;
+        const shareQuantity = Math.round(this.project.totalShares * this.deal.equityShareOffer / 100);
+        this.contractForm.patchValue({
+          shareQuantity: shareQuantity,
+          percentage: this.deal.equityShareOffer,
+          buyPrice: this.deal.amount
+        })
+      } else {
+        this.route.queryParamMap.subscribe(value => {
+          if (!value.get('investorId')) {
+            this.navigateBack();
+          }
+          this.investorId = value.get('investorId')!;
+        })
       }
-      this.investorId = value.get('investorId')!;
-      const percentage = parseInt(value.get('equityShare') ?? '0');
-      const shareQuantity = Math.round(this.project.totalShares * percentage / 100);
-      const buyPrice = parseInt(value.get('buyPrice') ?? '0');
-      this.contractForm.patchValue({
-        shareQuantity: shareQuantity,
-        percentage: percentage,
-        buyPrice: buyPrice
-      })
     });
   }
 
@@ -173,9 +209,18 @@ export class CreateInvestmentContractPage implements OnInit {
   createOrUpdateContract(): Observable<any> {
     var o: Observable<any>;
     if (!this.contractId) {
-      o = this.contractService
-        .createInvestmentContract(this.project.id, this.contractModel)
+      // Create contract
+      if (this.deal !== null) {
+        // From deal
+        o = this.contractService
+          .createInvestmentContractFromDeal(this.project.id, this.contractFromDealModel)
+      } else {
+        // Not from deal
+        o = this.contractService
+          .createInvestmentContract(this.project.id, this.contractModel)
+      }
     } else {
+      // Update contract
       o = this.contractService
         .updateInvestmentContract(this.contractId, this.project.id, this.contractModel)
     }
@@ -190,7 +235,7 @@ export class CreateInvestmentContractPage implements OnInit {
   get contractModel(): InvestmentContractCreateUpdateModel {
     return {
       contract: {
-        contractName: this.contractForm.value.contractName.length || 'Hợp đồng chưa có tên',
+        contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
         contractIdNumber: this.contractForm.value.contractIdNumber || ''
       },
@@ -204,7 +249,27 @@ export class CreateInvestmentContractPage implements OnInit {
     };
   }
 
+  get contractFromDealModel(): ContractCreateFromDealModel {
+    return {
+      dealId: this.deal!.id,
+      contract: {
+        contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
+        contractPolicy: this.contractForm.value.contractPolicy || '',
+        contractIdNumber: this.contractForm.value.contractIdNumber || ''
+      },
+      disbursements: this.disbursements
+    };
+  }
+
   showPreview() {
     alert('not implemented');
+  }
+
+  download() {
+    alert('not implemented');
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

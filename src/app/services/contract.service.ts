@@ -7,6 +7,8 @@ import { ContractListItemModel } from "../shared/models/contract/contract-list-i
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { Injectable } from "@angular/core";
 import { InvestmentContractCreateUpdateModel } from "../shared/models/contract/investment-contract-create-update.model";
+import { ContractCreateFromDealModel } from "../shared/models/contract/contract-create-from-deal.model";
+import { InvestmentContractDetailModel } from "../shared/models/contract/investment-contract-detail.model";
 
 @Injectable({
   providedIn: 'root',
@@ -40,9 +42,22 @@ export class ContractService {
     );
   }
 
+  getInvestmentContract(id: string, projectId: string): Observable<InvestmentContractDetailModel> {
+    return this.http.get<InvestmentContractDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`)
+    );
+  }
+
   createInvestmentContract(projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts`),
+      contract
+    );
+  }
+
+  createInvestmentContractFromDeal(projectId: string, contract: ContractCreateFromDealModel): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/from-deal`),
       contract
     );
   }
