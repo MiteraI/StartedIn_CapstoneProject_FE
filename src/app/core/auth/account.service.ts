@@ -54,6 +54,6 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('/api/profile'));
+    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('/api/full-profile'));
   }
 }
