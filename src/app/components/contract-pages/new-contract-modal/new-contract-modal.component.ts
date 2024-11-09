@@ -1,9 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { catchError, throwError } from 'rxjs';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
-import { ContractPartyModel } from 'src/app/shared/models/contract/contract-party.model';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -21,6 +20,7 @@ import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-i
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { DealStatus } from 'src/app/shared/enums/deal-status.enum';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-new-contract-modal',
@@ -43,6 +43,7 @@ import { DealStatus } from 'src/app/shared/enums/deal-status.enum';
   ]
 })
 export class NewContractModalComponent implements OnInit {
+  touched: boolean = false;
   contractTypeOptions = Object.values(ContractType)
     .filter(value => typeof value === 'number')
     .map(value => ({
@@ -59,12 +60,12 @@ export class NewContractModalComponent implements OnInit {
   selectedInvestorId: string | null = null;
 
   constructor(
-    private fb: FormBuilder,
     private modal: NzModalRef,
+    @Inject(NZ_MODAL_DATA) private projectId: string,
     private notification: NzNotificationService,
     private dealOfferService: DealOfferService,
     private projectService: ProjectService,
-    @Inject(NZ_MODAL_DATA) private projectId: string
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -89,8 +90,32 @@ export class NewContractModalComponent implements OnInit {
       .subscribe(response => this.investorList = response.filter(m => m.roleInTeam === TeamRole.INVESTOR));
   }
 
-  onSubmit() {
+  isValid(): boolean {
+    if (this.seletedType === ContractType.INVESTMENT) {
+      return (this.isFromDeal && !!this.selectedDealId)
+        || (!this.isFromDeal && !!this.selectedInvestorId)
+    } else {
+      return true;
+    }
+  }
 
+  navigateToCreateContract() {
+    if (this.seletedType === ContractType.INVESTMENT) {
+      if (this.isFromDeal) {
+        this.router.navigate(
+          ['/projects', this.projectId, 'create-investment-contract'],
+          {queryParams: {dealId: this.selectedDealId}}
+        );
+      } else {
+        this.router.navigate(
+          ['/projects', this.projectId, 'create-investment-contract'],
+          {queryParams: {investorId: this.selectedInvestorId}}
+        );
+      }
+      this.modal.close();
+    } else {
+
+    }
   }
 
   dismiss() {

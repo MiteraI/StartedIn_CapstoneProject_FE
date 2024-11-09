@@ -21,6 +21,7 @@
         nzPlaceHolder="Chọn thỏa thuận"
         [nzDisabled]="!isFromDeal"
         [(ngModel)]="selectedDealId"
+        (ngModelChange)="touched = true"
         class="w-full py-2"
       >
         <nz-option *ngFor="let deal of dealList" nzCustomContent [nzLabel]="deal.investorName" [nzValue]="deal.id">
@@ -36,6 +37,7 @@
         nzPlaceHolder="Chọn nhà đầu tư"
         [nzDisabled]="isFromDeal"
         [(ngModel)]="selectedInvestorId"
+        (ngModelChange)="touched = true"
         class="w-full py-2"
       >
         <nz-option *ngFor="let investor of investorList" nzCustomContent [nzLabel]="investor.fullName" [nzValue]="investor.id">
@@ -44,14 +46,18 @@
         </nz-option>
       </nz-select>
     </nz-radio-group>
+
+    <!-- Form Errors -->
+    <div *ngIf="!isValid() && touched" class="text-red-500 text-sm mb-4">
+      Phải chọn 1 thỏa thuận hoặc nhà đầu tư!
+    </div>
   </div>
 
   <div *ngIf="seletedType === 1">
 
 
     <!-- Form Errors -->
-    <div *ngIf="true"
-        class="text-red-500 text-sm mb-4">
+    <div *ngIf="!isValid() && touched" class="text-red-500 text-sm mb-4">
       At least one party is required
     </div>
   </div>
@@ -59,10 +65,14 @@
 
   <!-- Submit Button -->
   <div class="flex justify-end mt-6">
-    <button nz-button
-            nzType="primary"
-            class="px-6"
-            type="submit">
+    <button
+      nz-button
+      nzType="primary"
+      class="px-6"
+      type="submit"
+      [disabled]="!isValid()"
+      (click)="navigateToCreateContract()"
+    >
       Create Contract
     </button>
   </div>
