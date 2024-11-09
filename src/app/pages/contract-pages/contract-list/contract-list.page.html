@@ -120,6 +120,11 @@
                 <mat-icon fontIcon="delete_outline"></mat-icon>
               </button>
             </div>
+            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2">
+              <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
+                <mat-icon fontIcon="file_download"></mat-icon>
+              </button>
+            </div>
           </td>
         </tr>
       </ng-container>
@@ -153,6 +158,11 @@
               </button>
               <button (click)="$event.stopPropagation(); deleteContract(contract)" class="text-red-500">
                 <mat-icon fontIcon="delete_outline"></mat-icon>
+              </button>
+            </div>
+            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2">
+              <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
+                <mat-icon fontIcon="file_download"></mat-icon>
               </button>
             </div>
           </div>

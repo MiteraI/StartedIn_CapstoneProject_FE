@@ -104,4 +104,11 @@ export class ContractService {
       null
     );
   }
+
+  downloadContract(id: string, projectId: string): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/download`),
+      null
+    );
+  }
 }
