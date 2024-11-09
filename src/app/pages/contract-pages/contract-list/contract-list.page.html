@@ -25,7 +25,7 @@
       class="mr-2 hidden md:flex flex-grow justify-between items-center bg-gray-200 p-3 rounded-md"
       [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
     >
-      <span>Đã chọn {{selectedContracts.length}} hợp đồng</span>
+      <span>Đã chọn {{ selectedContracts.length }} hợp đồng</span>
       <button (click)="deleteSelected()" class="text-red-500 hover:text-red-700">
         Xóa
       </button>
@@ -70,13 +70,15 @@
           </td>
         </tr>
         <!-- Contract Rows -->
-        <tr *ngFor="let contract of group"
-            class="border-b hover:bg-gray-50">
+        <tr *ngFor="let contract of group" class="border-b hover:bg-gray-50">
           <td class="p-4">
             <input type="checkbox" [checked]="isSelected(contract)" (change)="toggleSelection(contract)" class="rounded">
           </td>
           <td class="p-4">
-            <div class="font-medium">{{contract.contractName}}</div>
+            <div
+              class="font-medium hover:font-bold hover:cursor-pointer"
+              [routerLink]="['/projects', projectId, 'investment-contract', contract.id]"
+            >{{ contract.contractName }}</div>
           </td>
           <td class="p-4">
             <div class="text-gray-600">{{ typeLabels[contract.contractType] }}</div>
@@ -128,8 +130,8 @@
         <div *ngFor="let contract of group" class="bg-white rounded-lg shadow p-4">
           <div class="flex items-start justify-between">
             <div class="flex-1">
-              <div class="text-2xl font-medium">{{contract.contractName}}</div>
-              <div class="text-xs text-gray-500 mt-1">{{typeLabels[contract.contractType]}}</div>
+              <div class="text-2xl font-medium">{{ contract.contractName }}</div>
+              <div class="text-xs text-gray-500 mt-1">{{ typeLabels[contract.contractType] }}</div>
             </div>
             <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2">
               <button (click)="sendContract(contract)" class="text-blue-500">

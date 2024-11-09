@@ -11,7 +11,7 @@ import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { IonIcon } from "@ionic/angular/standalone";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 interface FilterOptions {
   investorName?: string;
@@ -27,7 +27,7 @@ interface FilterOptions {
   templateUrl: './project-deal-list.page.html',
   styleUrls: ['./project-deal-list.page.scss'],
   standalone: true,
-  imports: [IonIcon,
+  imports: [
     CommonModule,
     NzAvatarModule,
     NzModalModule,
@@ -63,7 +63,8 @@ export class ProjectDealListPage implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NzModalService,
-    private dealOfferService: DealOfferService
+    private dealOfferService: DealOfferService,
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -91,6 +92,7 @@ export class ProjectDealListPage implements OnInit {
       )
       .pipe(
         catchError(error => {
+          this.notification.error("Lỗi", "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -232,9 +234,7 @@ export class ProjectDealListPage implements OnInit {
   navigateToCreateContract(deal: ProjectDealItem) {
     this.router.navigate(['projects', this.projectId, 'create-investment-contract', ], {
       queryParams: {
-        investorId: deal.investorId,
-        equityShare: deal.equityShareOffer,
-        buyPrice: deal.amount
+        dealId: deal.id
       }
     });
   }

@@ -6,7 +6,9 @@ import { ContractType } from "../shared/enums/contract-type.enum";
 import { ContractListItemModel } from "../shared/models/contract/contract-list-item.model";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { Injectable } from "@angular/core";
-import { InvestmentContractCreateModel } from "../shared/models/contract/investment-contract-create.model";
+import { InvestmentContractCreateUpdateModel } from "../shared/models/contract/investment-contract-create-update.model";
+import { ContractCreateFromDealModel } from "../shared/models/contract/contract-create-from-deal.model";
+import { InvestmentContractDetailModel } from "../shared/models/contract/investment-contract-detail.model";
 
 @Injectable({
   providedIn: 'root',
@@ -40,9 +42,29 @@ export class ContractService {
     );
   }
 
-  createInvestmentContract(projectId: string, contract: InvestmentContractCreateModel): Observable<any> {
+  getInvestmentContract(id: string, projectId: string): Observable<InvestmentContractDetailModel> {
+    return this.http.get<InvestmentContractDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`)
+    );
+  }
+
+  createInvestmentContract(projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts`),
+      contract
+    );
+  }
+
+  createInvestmentContractFromDeal(projectId: string, contract: ContractCreateFromDealModel): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/from-deal`),
+      contract
+    );
+  }
+
+  updateInvestmentContract(id: string, projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`),
       contract
     );
   }
