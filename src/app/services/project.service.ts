@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, map, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { ContractPartyModel } from '../shared/models/contract/contract-party.model'
 import { ExploreProjectsListItemModel } from '../shared/models/project/explore-projects-list-item.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
@@ -40,5 +40,9 @@ export class ProjectService {
     return this.http.get<TeamMemberModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`)
     );
+  }
+
+  getMembersInProject(projectId: string) {
+    return this.http.get<TeamMemberModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`))
   }
 }

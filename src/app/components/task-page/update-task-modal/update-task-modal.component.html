@@ -7,7 +7,7 @@
         <nz-form-item>
           <nz-form-label [nzRequired]="true">Title</nz-form-label>
           <nz-form-control [nzErrorTip]="'Please enter the title'">
-            <input nz-input formControlName="title" placeholder="Enter task title" (change)="handleInfoChanged()" />
+            <input nz-input formControlName="title" placeholder="Enter task title" (input)="handleInfoChanged()" />
           </nz-form-control>
         </nz-form-item>
 
@@ -15,7 +15,10 @@
           <nz-form-label>Milestone</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="milestone" nzPlaceHolder="Select milestone">
-              <nz-option *ngFor="let milestone of milestones" [nzValue]="milestone.value" [nzLabel]="milestone.label"></nz-option>
+              @for (milestone of milestones; track $index) {
+              <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
+
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -25,7 +28,7 @@
       <nz-form-item>
         <nz-form-label>Description</nz-form-label>
         <nz-form-control>
-          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Enter task description" (change)="handleInfoChanged()"></textarea>
+          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Enter task description" (input)="handleInfoChanged()"></textarea>
         </nz-form-control>
       </nz-form-item>
 
@@ -35,7 +38,9 @@
           <nz-form-label>Status</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="status" nzPlaceHolder="Select status" (ngModelChange)="handleStatusChanged($event)">
-              <nz-option *ngFor="let status of statuses" [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              @for (status of statuses; track $index) {
+              <nz-option [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -48,7 +53,7 @@
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
               nzPlaceHolder="Select deadline date and hour"
-              (change)="handleInfoChanged()"
+              (nzOnOk)="handleInfoChanged()"
             >
             </nz-date-picker>
           </nz-form-control>
@@ -60,8 +65,11 @@
         <nz-form-item>
           <nz-form-label>Parent Task</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="parentTask" nzPlaceHolder="Select parent task">
-              <nz-option *ngFor="let task of otherTasks" [nzValue]="task.value" [nzLabel]="task.label"></nz-option>
+            <nz-select formControlName="parentTask" nzPlaceHolder="Select parent task" (ngModelChange)="handleSelectParentTask($event)">
+              <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
+              @for (task of otherTasks; track $index) {
+              <nz-option [nzValue]="task.id" [nzLabel]="task.title"></nz-option>
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -69,8 +77,16 @@
         <nz-form-item>
           <nz-form-label>Assignees</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Select assignees">
-              <nz-option *ngFor="let user of users" [nzValue]="user.value" [nzLabel]="user.label"></nz-option>
+            <nz-select
+              formControlName="assignees"
+              [nzMode]="'multiple'"
+              nzPlaceHolder="Select assignees"
+              (nzOpenChange)="handleOpenAssigneeSelect()"
+              (ngModelChange)="handleSelectAssignChanged($event)"
+            >
+              @for (user of filteredUsers; track $index) {
+              <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -79,18 +95,27 @@
       <nz-form-item>
         <nz-form-label>Subtasks</nz-form-label>
         <nz-form-control>
-          <div formArrayName="subtasks">
-            <div *ngFor="let subtask of subTasks; let i = index" [formGroupName]="i" class="flex items-center gap-2 mb-2">
-              <input nz-input formControlName="title" placeholder="Enter subtask title" class="flex-grow" />
-              <button nz-button nzType="text" nzDanger>
-                <span nz-icon nzType="delete"></span>
-              </button>
-            </div>
-          </div>
-          <button nz-button nzType="dashed" class="w-full mt-2">
-            <span nz-icon nzType="plus"></span>
-            Add Subtask
-          </button>
+          <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="subTasks">
+            <thead>
+              <tr>
+                <th>Tên Tác Vụ</th>
+                <th>Trạng Thái</th>
+                <th>Hạn Chót</th>
+                <th>Người Tạo</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of basicTable.data; track data.id) {
+              <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.createdBy }}</td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
         </nz-form-control>
       </nz-form-item>
 
@@ -108,7 +133,7 @@
             </div>
           </div>
           <div class="flex gap-2">
-            <input nz-input formControlName="newComment" placeholder="Type your comment" class="flex-grow" />
+            <input nz-input placeholder="Type your comment" class="flex-grow" />
             <button nz-button nzType="primary">Comment</button>
           </div>
         </nz-form-control>

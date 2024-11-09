@@ -6,7 +6,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
-import { NZ_MODAL_DATA } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { AntdNotificationService } from 'src/app/services/antd-notification.service'
 import { TaskService } from 'src/app/services/task.service'
 
@@ -27,7 +27,7 @@ export class CreateTaskModalComponent {
 
   taskForm: FormGroup
 
-  constructor(private fb: FormBuilder, private datePipe: DatePipe, private taskService: TaskService, private antdNoti: AntdNotificationService) {
+  constructor(private fb: FormBuilder, private datePipe: DatePipe, private taskService: TaskService, private antdNoti: AntdNotificationService, private nzModalRef: NzModalRef) {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
@@ -37,7 +37,10 @@ export class CreateTaskModalComponent {
 
   onSubmit() {
     if (this.taskForm.valid) {
-      const formattedDeadline = this.taskForm.value.deadline.toISOString()
+      let deadline = this.taskForm.value.deadline
+      deadline = deadline instanceof Date ? deadline : new Date(deadline)
+      const formattedDeadline = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate(), deadline.getHours(), 0, 0).toISOString()
+
       const taskData = {
         ...this.taskForm.value,
         deadline: formattedDeadline,
@@ -46,6 +49,7 @@ export class CreateTaskModalComponent {
       this.taskService.createTask(this.nzModalData.projectId, taskData).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Created Task Successfully', '')
+          this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {

@@ -33,6 +33,7 @@ export class TaskTableComponent implements OnInit {
       nzData: {
         taskId: taskId,
         projectId: this.projectId,
+        taskList: this.taskList,
       },
       nzFooter: null,
     })
