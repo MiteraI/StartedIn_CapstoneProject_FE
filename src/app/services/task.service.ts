@@ -6,6 +6,7 @@ import { Pagination } from '../shared/models/pagination.model'
 import { TaskDetails } from '../shared/models/task/task-details.model'
 import { Task } from '../shared/models/task/task.model'
 import { UpdateTaskInfo } from '../shared/models/task/update-task.model'
+import { UpdateTaskStatus } from '../shared/models/task/update-task-status.model'
 
 @Injectable({
   providedIn: 'root',
@@ -31,5 +32,9 @@ export class TaskService {
 
   updateTaskInfo(projectId: string, taskId: string, updateTaskInfo: UpdateTaskInfo) {
     return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}`), updateTaskInfo)
+  }
+
+  updateTaskStatus(projectId: string, taskId: string, updateTaskStatus: UpdateTaskStatus) {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/status`), updateTaskStatus)
   }
 }
