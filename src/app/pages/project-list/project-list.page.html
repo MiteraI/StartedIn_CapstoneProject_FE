@@ -9,10 +9,7 @@
     </div>
     } @else {
     <div class="text-gray-500">Bạn không có dự án nào. <a class="" nz-button nzType="link">Thêm dự án mới!</a></div>
-    } 
-    <div class="text-gray-500">Bạn không có dự án nào. <a class="" nz-button nzType="link" (click)="openCreateProjectModal()">Thêm dự án mới!</a></div>
-    
-    @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
+    } @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
     <div class="text-2xl font-medium mb-8 mt-8">Dự án đang tham gia</div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
       <app-project-card class="cursor-pointer" [routerLink]="['/projects',project.id]" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
