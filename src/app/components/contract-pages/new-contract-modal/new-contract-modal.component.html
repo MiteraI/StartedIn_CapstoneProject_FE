@@ -1,8 +1,8 @@
-<form [formGroup]="contractForm" (ngSubmit)="onSubmit()" class="p-4">
+<div class="ant-modal-body">
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Contract Type</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-radio-group formControlName="contractType" nzButtonStyle="solid">
+      <nz-radio-group [(ngModel)]="seletedType" nzButtonStyle="solid">
         <label
           *ngFor="let option of contractTypeOptions"
           nz-radio-button
@@ -12,89 +12,58 @@
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Parties -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Parties</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <!-- Selected Parties Cards -->
-      <div class="flex flex-col gap-2 mb-3" *ngIf="selectedUsers.length > 0">
-        <div
-          *ngFor="let user of selectedUsers"
-          class="flex justify-between items-center px-3 py-2 bg-yellow-50 rounded"
-        >
-          <div class="flex items-center gap-2">
-            <nz-avatar
-              [nzText]="user.fullName | initialsOnly"
-              [ngStyle]="{'background-color': '#FF4D4F'}"
-              class="mr-2"
-            ></nz-avatar>
-            <div class="flex flex-col">
-              <div class="font-medium">{{user.fullName}}</div>
-              <div class="text-xs opacity-50">{{user.email}}</div>
-            </div>
-          </div>
-          <button
-            nz-button
-            nzType="text"
-            nzDanger
-            (click)="removeParty(user.id)"
-          >
-            <i nz-icon nzType="delete" nzTheme="outline"></i>
-          </button>
-        </div>
-      </div>
+  <div *ngIf="seletedType === 0">
+    <nz-radio-group [(ngModel)]="isFromDeal">
+      <label nz-radio [nzValue]="true">Cho thỏa thuận với:</label>
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Chọn thỏa thuận"
+        [nzDisabled]="!isFromDeal"
+        [(ngModel)]="selectedDealId"
+        (ngModelChange)="touched = true"
+        class="w-full py-2"
+      >
+        <nz-option *ngFor="let deal of dealList" nzCustomContent [nzLabel]="deal.investorName" [nzValue]="deal.id">
+          <span class="font-medium">{{ deal.investorName }}</span>
+          <span class="ml-2 text-xs opacity-50">{{ deal.amount | vndCurrency }} cho {{ deal.equityShareOffer }}%</span>
+        </nz-option>
+      </nz-select>
 
-      <!-- Party Search Input -->
-      <div class="party-search">
-        <nz-select
-          class="w-full"
-          [(ngModel)]="selectedPartyId"
-          [ngModelOptions]="{standalone: true}"
-          nzShowSearch
-          nzServerSearch
-          nzPlaceHolder="Type to search users"
-          [nzShowArrow]="false"
-          [nzFilterOption]="nzFilterOption"
-          (nzOnSearch)="onPartySearch($event)"
-          (ngModelChange)="onPartySelect($event)"
-        >
-          <nz-option
-            *ngFor="let user of filteredUsers"
-            [nzValue]="user.id"
-            [nzLabel]="user.fullName"
-            nzCustomContent
-          >
-            <div class="flex items-center py-1">
-              <!-- <nz-avatar
-                [nzText]="user.name | initialsOnly"
-                [ngStyle]="{'background-color': '#FF4D4F'}"
-                class="mr-2"
-              ></nz-avatar> -->
-              <div class="flex flex-col">
-                <div class="font-medium">{{user.fullName}}</div>
-                <div class="text-xs opacity-50">{{user.email}}</div>
-              </div>
-            </div>
-          </nz-option>
-        </nz-select>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
+      <label nz-radio [nzValue]="false">Cho nhà đầu tư:</label>
+      <nz-select
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="Chọn nhà đầu tư"
+        [nzDisabled]="isFromDeal"
+        [(ngModel)]="selectedInvestorId"
+        (ngModelChange)="touched = true"
+        class="w-full py-2"
+      >
+        <nz-option *ngFor="let investor of investorList" nzCustomContent [nzLabel]="investor.fullName" [nzValue]="investor.id">
+          <span class="font-medium">{{ investor.fullName }}</span>
+          <span class="ml-2 text-xs opacity-50">{{ investor.email }}</span>
+        </nz-option>
+      </nz-select>
+    </nz-radio-group>
 
-  <!-- Form Errors -->
-  <div *ngIf="contractForm.get('parties')?.errors?.['required'] && contractForm.touched"
-       class="text-red-500 text-sm mb-4">
-    At least one party is required
+    <!-- Form Errors -->
+    <div *ngIf="!isValid() && touched" class="text-red-500 text-sm mb-4">
+      Phải chọn 1 thỏa thuận hoặc nhà đầu tư!
+    </div>
   </div>
 
   <!-- Submit Button -->
   <div class="flex justify-end mt-6">
-    <button nz-button
-            nzType="primary"
-            class="px-6"
-            [disabled]="!contractForm.valid"
-            type="submit">
+    <button
+      nz-button
+      nzType="primary"
+      class="px-6"
+      type="submit"
+      [disabled]="!isValid()"
+      (click)="navigateToCreateContract()"
+    >
       Create Contract
     </button>
   </div>
-</form>
+</div>

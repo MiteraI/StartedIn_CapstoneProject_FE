@@ -87,6 +87,14 @@ export class DealOfferService {
     );
   }
 
+  getDealInProject(id: string, projectId: string): Observable<ProjectDealItem> {
+    return this.http.get<ProjectDealItem>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers/${id}`)
+    ).pipe(
+      map(response => this.parseNumericFields(response))
+    );
+  }
+
   acceptDeal(id: string, projectId: string): Observable<any> {
     return this.http.put(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers/${id}/accept`),

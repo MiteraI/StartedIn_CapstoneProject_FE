@@ -7,6 +7,7 @@ import { ExploreProjectsListItemModel } from '../shared/models/project/explore-p
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { ProjectModel } from '../shared/models/project/project.model'
 import { UserProjectsModel } from '../shared/models/project/user-projects.model'
+import { TeamMemberModel } from '../shared/models/user/team-member.model'
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +15,11 @@ import { UserProjectsModel } from '../shared/models/project/user-projects.model'
 export class ProjectService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
-  getProject(id: string): Observable<any> {
+  getProject(id: string): Observable<ProjectModel> {
     return this.http.get<ProjectModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${id}`))
   }
 
-  getContractPartiesForProject(id: string): Observable<any> {
+  getContractPartiesForProject(id: string): Observable<ContractPartyModel[]> {
     return this.http.get<ContractPartyModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${id}/parties`)
     );
@@ -31,8 +32,14 @@ export class ProjectService {
     );
   }
 
-  getUserProjects(): Observable<any> {
-    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'))
+  getUserProjects(): Observable<UserProjectsModel> {
+    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'));
+  }
+
+  getMembers(projectId: string): Observable<TeamMemberModel[]> {
+    return this.http.get<TeamMemberModel[]>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`)
+    );
   }
 
   createProject(projectForm: FormData): Observable<any> {

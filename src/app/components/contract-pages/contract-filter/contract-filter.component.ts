@@ -11,6 +11,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { ContractPartyModel } from 'src/app/shared/models/contract/contract-party.model';
 import { ProjectService } from 'src/app/services/project.service';
@@ -63,7 +64,8 @@ export class ContractFilterComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private fb: FormBuilder,
-    private menuState: MenuStateService
+    private menuState: MenuStateService,
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -71,7 +73,7 @@ export class ContractFilterComponent implements OnInit {
       .getContractPartiesForProject(this.data.id)
       .pipe(
         catchError(error => {
-          //TODO noti stuff
+          this.notification.error("Lỗi", "Lấy danh sách bên liên quan thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

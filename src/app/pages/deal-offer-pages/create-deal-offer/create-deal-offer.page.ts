@@ -4,6 +4,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular'
 import { DealOfferService } from 'src/app/services/deal-offer.service';
@@ -38,9 +39,10 @@ export class CreateDealOfferPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private dealOfferService: DealOfferService,
-    private router: Router
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class CreateDealOfferPage implements OnInit {
       .postDealOffer(dealOffer)
       .pipe(
         catchError(error => {
-          //TODO noti stuff
+          this.notification.error("Lỗi", "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

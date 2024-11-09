@@ -1,3 +1,34 @@
-<p>
-  update-task-modal works!
-</p>
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
+  <!-- Title Field -->
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Title</nz-form-label>
+    <nz-form-control [nzErrorTip]="'Please enter the title'">
+      <input nz-input formControlName="title" placeholder="Enter task title" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Description Field -->
+  <nz-form-item>
+    <nz-form-label>Description</nz-form-label>
+    <nz-form-control>
+      <textarea nz-input formControlName="description" placeholder="Enter task description"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Deadline Field (Date and Time Picker) -->
+  <nz-form-item>
+    <nz-form-label>Deadline</nz-form-label>
+    <nz-form-control>
+      <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Select deadline date and hour"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Submit Button -->
+  <nz-form-item>
+    <nz-form-control>
+      <div class="flex items-center justify-end">
+        <button nz-button nzType="default" [disabled]="taskForm.invalid">Update</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>

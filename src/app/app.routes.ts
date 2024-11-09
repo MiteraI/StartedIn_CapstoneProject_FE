@@ -1,7 +1,10 @@
 import { Routes } from '@angular/router'
 import { AuthenticatedGuard } from './shared/guards/authenticated.guard'
 import { mobileViewGuard } from './shared/guards/mobile-view.guard'
-import { CreateInvestmentContractDataResolver } from './shared/resolvers/create-investment-contract-data.resolver'
+import { ProjectDataResolver } from './shared/resolvers/project-data.resolver'
+import { DealOfferDataResolver } from './shared/resolvers/deal-offer-data.resolver'
+import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
+import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 
 export const routes: Routes = [
   {
@@ -61,8 +64,23 @@ export const routes: Routes = [
       },
       {
         path: 'create-investment-contract',
-        resolve: { project: CreateInvestmentContractDataResolver },
-        loadComponent: () => import('./pages/contract-pages/create-investment-contract/create-investment-contract.page').then((m) => m.CreateInvestmentContractPage),
+        resolve: { project: ProjectDataResolver, deal: DealOfferDataResolver },
+        loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
+      },
+      {
+        path: 'investment-contract/:contractId',
+        resolve: { project: ProjectDataResolver, contract: InvestmentContractDataResolver },
+        loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
+      },
+      {
+        path: 'create-internal-contract',
+        resolve: { project: ProjectDataResolver },
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
+      },
+      {
+        path: 'internal-contract/:contractId',
+        resolve: { project: ProjectDataResolver, contract: InternalContractDataResolver },
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
       },
       {
         path: 'others',
@@ -84,6 +102,4 @@ export const routes: Routes = [
     path: 'investor-deal-list',
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then( m => m.InvestorDealListPage)
   },
-
-
 ]
