@@ -9,6 +9,8 @@ import { Injectable } from "@angular/core";
 import { InvestmentContractCreateUpdateModel } from "../shared/models/contract/investment-contract-create-update.model";
 import { ContractCreateFromDealModel } from "../shared/models/contract/contract-create-from-deal.model";
 import { InvestmentContractDetailModel } from "../shared/models/contract/investment-contract-detail.model";
+import { InternalContractCreateUpdateModel } from "../shared/models/contract/internal-contract-create-update.model";
+import { InternalContractDetailModel } from "../shared/models/contract/internal-contract-detail.model";
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +67,26 @@ export class ContractService {
   updateInvestmentContract(id: string, projectId: string, contract: InvestmentContractCreateUpdateModel): Observable<any> {
     return this.http.put(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`),
+      contract
+    );
+  }
+
+  getInternalContract(id: string, projectId: string): Observable<InternalContractDetailModel> {
+    return this.http.get<InternalContractDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/shares-distribution-contracts/${id}`)
+    );
+  }
+
+  createInternalContract(projectId: string, contract: InternalContractCreateUpdateModel): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/shares-distribution-contracts`),
+      contract
+    );
+  }
+
+  updateInternalContract(id: string, projectId: string, contract: InternalContractCreateUpdateModel): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/shares-distribution-contracts/${id}`),
       contract
     );
   }

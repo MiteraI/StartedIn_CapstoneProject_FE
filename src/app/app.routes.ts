@@ -4,6 +4,7 @@ import { mobileViewGuard } from './shared/guards/mobile-view.guard'
 import { ProjectDataResolver } from './shared/resolvers/project-data.resolver'
 import { DealOfferDataResolver } from './shared/resolvers/deal-offer-data.resolver'
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
+import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 
 export const routes: Routes = [
   {
@@ -72,6 +73,16 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
       },
       {
+        path: 'create-internal-contract',
+        resolve: { project: ProjectDataResolver },
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
+      },
+      {
+        path: 'internal-contract/:contractId',
+        resolve: { project: ProjectDataResolver, contract: InternalContractDataResolver },
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
+      },
+      {
         path: 'others',
         canActivate: [mobileViewGuard],
         loadComponent: () => import('./layouts/mobile-project-details-navbar/mobile-project-details-navbar.component').then((m) => m.MobileProjectDetailsNavbarComponent),
@@ -91,8 +102,4 @@ export const routes: Routes = [
     path: 'investor-deal-list',
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then( m => m.InvestorDealListPage)
   },
-
-
-
-
 ]

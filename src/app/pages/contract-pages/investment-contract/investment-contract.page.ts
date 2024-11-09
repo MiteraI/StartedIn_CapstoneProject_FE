@@ -89,7 +89,7 @@ export class InvestmentContractPage implements OnInit {
       this.contract = data['contract'];
       this.deal = data['deal'];
 
-      if (this.contract !== null) {
+      if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;
         this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT);
@@ -112,7 +112,7 @@ export class InvestmentContractPage implements OnInit {
           return rest;
         })
         this.disbursementTotalAmount = this.disbursements.reduce((total, disbursement) => total + (disbursement.amount || 0), 0);
-      } else if (this.deal !== null) {
+      } else if (!!this.deal) {
         this.isFromDeal = true;
         this.investorId = this.deal.investorId;
         const shareQuantity = Math.round(this.project.totalShares * this.deal.equityShareOffer / 100);
