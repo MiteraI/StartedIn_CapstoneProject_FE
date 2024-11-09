@@ -1,18 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { catchError, throwError } from 'rxjs';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { ProjectService } from 'src/app/services/project.service';
@@ -30,15 +26,10 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     NzFormModule,
     NzRadioModule,
     NzSelectModule,
     NzButtonModule,
-    NzInputModule,
-    NzAvatarModule,
-    NzIconModule,
-    InitialsOnlyPipe,
     VndCurrencyPipe
   ]
 })
@@ -112,10 +103,10 @@ export class NewContractModalComponent implements OnInit {
           {queryParams: {investorId: this.selectedInvestorId}}
         );
       }
-      this.modal.close();
     } else {
-
+      this.router.navigate(['/projects', this.projectId, 'create-internal-contract']);
     }
+    this.modal.close();
   }
 
   dismiss() {
