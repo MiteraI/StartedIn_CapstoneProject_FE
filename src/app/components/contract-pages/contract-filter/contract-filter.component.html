@@ -1,13 +1,13 @@
 <form [formGroup]="filterForm" class="ant-modal-body">
   <!-- Contract Name -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Contract Name</nz-form-label>
+    <nz-form-label [nzSpan]="24">Tên hợp đồng</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-input-group>
         <input
           nz-input
           formControlName="contractName"
-          placeholder="Search by contract name"
+          placeholder="Nhập tên hợp đồng"
         />
       </nz-input-group>
     </nz-form-control>
@@ -15,7 +15,7 @@
 
   <!-- Contract Type -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Contract Type</nz-form-label>
+    <nz-form-label [nzSpan]="24">Loại hợp đồng</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-radio-group formControlName="contractType" nzButtonStyle="solid">
         <label nz-radio-button nzValue="">Tất cả</label>
@@ -30,7 +30,7 @@
 
   <!-- Parties -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Parties</nz-form-label>
+    <nz-form-label [nzSpan]="24">Bên liên quan</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <!-- Selected Parties Cards -->
       <div class="flex flex-col gap-2 mb-3" *ngIf="selectedUsers.length > 0">
@@ -79,17 +79,8 @@
             [nzLabel]="user.fullName"
             nzCustomContent
           >
-            <div class="flex items-center py-1">
-              <!-- <nz-avatar
-                [nzText]="user.name | initialsOnly"
-                [ngStyle]="{'background-color': '#FF4D4F'}"
-                class="mr-2"
-              ></nz-avatar> -->
-              <div class="flex flex-col">
-                <div class="font-medium">{{user.fullName}}</div>
-                <div class="text-xs opacity-50">{{user.email}}</div>
-              </div>
-            </div>
+            <span class="font-medium mr-2">{{user.fullName}}</span>
+            <span class="text-xs opacity-50">{{user.email}}</span>
           </nz-option>
         </nz-select>
       </div>
@@ -98,7 +89,7 @@
 
   <!-- Date Range -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Last Updated Date Range</nz-form-label>
+    <nz-form-label [nzSpan]="24">Lần cập nhật cuối</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-range-picker
         class="w-full"
@@ -110,12 +101,12 @@
 
   <!-- Status -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Contract Status</nz-form-label>
+    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
         class="w-full"
         formControlName="contractStatus"
-        nzPlaceHolder="Select contract status"
+        nzPlaceHolder="Chọn trạng thái"
       >
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
         <nz-option
@@ -130,13 +121,13 @@
 
 <div class="ant-modal-footer">
   <button nz-button (click)="resetFilters()">
-    Reset
+    Đặt lại bộ lọc
   </button>
   <button
     nz-button
     nzType="primary"
     (click)="applyFilters()"
   >
-    Apply Filters
+    Lọc
   </button>
 </div>

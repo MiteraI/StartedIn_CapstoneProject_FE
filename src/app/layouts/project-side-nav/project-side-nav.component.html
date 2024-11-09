@@ -9,14 +9,14 @@
       </div>
 
       <hr class="mx-4" />
-      <div class="flex flex-col items-center my-2">
+      <div class="flex flex-col my-2">
         @for (link of sideNavLinks; track link.linkText) {
-        <div [routerLink]="['/projects', currentId, link.linkName]" class="flex items-center my-1 cursor-pointer">
+        <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
           <mat-icon [fontIcon]="link.iconName"></mat-icon>
           <span class="text-lg mx-2">{{ link.linkText }}</span>
         </div>
         } @empty { }
-        <div class="flex items-center my-1 cursor-pointer">
+        <div class="flex ml-4 my-1 cursor-pointer">
           <mat-icon fontIcon="group_icon"></mat-icon>
           <span class="text-lg mx-2">Thành Viên</span>
         </div>
