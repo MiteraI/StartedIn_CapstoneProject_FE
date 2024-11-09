@@ -34,4 +34,8 @@ export class ProjectService {
   getUserProjects(): Observable<any> {
     return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'))
   }
+
+  createProject(projectForm: FormData): Observable<any> {
+    return this.http.post(this.applicationConfigService.getEndpointFor('/api/projects'), projectForm)
+  }
 }
