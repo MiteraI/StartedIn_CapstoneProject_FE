@@ -11,6 +11,8 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { CreateTaskModalComponent } from '../create-task-modal/create-task-modal.component'
 import { TaskService } from 'src/app/services/task.service'
 import { Task } from 'src/app/shared/models/task/task.model'
+import { AntdNotificationService } from 'src/app/services/antd-notification.service'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'app-task-view',
@@ -24,16 +26,37 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
   projectId = ''
   taskList: Task[] = []
-  constructor(private viewMode: ViewModeConfigService, private modalService: NzModalService, private activatedRoute: ActivatedRoute, private taskService: TaskService) {
+  isFetchAllTaskLoading: boolean = false
+
+  constructor(
+    private viewMode: ViewModeConfigService,
+    private modalService: NzModalService,
+    private activatedRoute: ActivatedRoute,
+    private taskService: TaskService,
+    private antdNoti: AntdNotificationService
+  ) {
     viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
+    this.isFetchAllTaskLoading = true
     taskService
       .getTaskListForProject(this.projectId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((val) => {
-        this.taskList = val.data
+      .subscribe({
+        next: (val) => {
+          this.taskList = val.data
+          this.isFetchAllTaskLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isFetchAllTaskLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openInfoNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
       })
   }
 

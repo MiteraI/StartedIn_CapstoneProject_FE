@@ -10,13 +10,13 @@
       Thêm Tác Vụ
     </button>
   </div>
-  <app-task-table [taskList]="taskList" [projectId]="projectId"></app-task-table>
+  <app-task-table [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-task-table>
 </div>
 } @else {
 <div>
   <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
     <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
   </div>
-  <app-task-list [taskList]="taskList" [projectId]="projectId"></app-task-list>
+  <app-task-list [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-task-list>
 </div>
 }

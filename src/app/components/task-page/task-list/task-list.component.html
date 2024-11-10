@@ -1,7 +1,11 @@
-@if (taskList.length !== 0) { @for (task of taskList; track task.id) {
+@if (isFetchAllTaskLoading) {
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+  <nz-spin nzSimple></nz-spin>
+</div>
+} @else { @if (taskList.length !== 0) { @for (task of taskList; track task.id) {
 <app-task-list-item [task]="task" (click)="openUpdateTaskModal(task.id)"></app-task-list-item>
 } } @else {
-<div class="flex justify-center items-center h-full w-full">
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2">
   <span>There is no task</span>
 </div>
-}
+} }

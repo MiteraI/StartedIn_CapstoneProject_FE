@@ -17,6 +17,9 @@ import { Milestone } from 'src/app/shared/models/project-charter/project-charter
 import { ProjectService } from 'src/app/services/project.service'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 
 interface IModalData {
   taskId: string
@@ -29,7 +32,7 @@ interface IModalData {
   templateUrl: './update-task-modal.component.html',
   styleUrls: ['./update-task-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzDatePickerModule, NzButtonModule, NzInputModule, ReactiveFormsModule, CommonModule, NzSelectModule, NzTableModule],
+  imports: [NzFormModule, NzDatePickerModule, NzButtonModule, NzInputModule, ReactiveFormsModule, CommonModule, NzSelectModule, NzTableModule, NzSpinModule, NzPopconfirmModule],
   providers: [DatePipe],
 })
 export class UpdateTaskModalComponent implements OnInit {
@@ -56,6 +59,7 @@ export class UpdateTaskModalComponent implements OnInit {
   initialParentTaskId: string = ''
   isMilestoneFetched: boolean = false
   isOtherTasksFetched: boolean = false
+  isFetchTaskDetailsLoading: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -195,8 +199,25 @@ export class UpdateTaskModalComponent implements OnInit {
     }
   }
 
+  handleDeleteTask() {
+    this.taskService.deleteTask(this.nzModalData.projectId, this.nzModalData.taskId).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Xóa tác vụ thành công')
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openInfoNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+        } else {
+        }
+      },
+    })
+  }
+
   ngOnInit() {
     if (this.nzModalData.taskId) {
+      this.isFetchTaskDetailsLoading = true
       this.taskService.getTaskDetails(this.nzModalData.projectId, this.nzModalData.taskId).subscribe({
         next: (task) => {
           this.initialAssigneeIds = task.assignees.map((user) => user.id)
@@ -215,13 +236,23 @@ export class UpdateTaskModalComponent implements OnInit {
             },
             { emitEvent: false }
           )
+          this.isFetchTaskDetailsLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openInfoNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+          this.isFetchTaskDetailsLoading = false
         },
       })
     }
 
     this.projectService.getMembersInProject(this.nzModalData.projectId).subscribe({
       next: (res) => {
-        this.users = res
+        this.users = res.filter((u) => u.roleInTeam !== TeamRole.INVESTOR && u.roleInTeam !== TeamRole.MENTOR)
         this.filteredUsers = res
       },
       error: (error: HttpErrorResponse) => {

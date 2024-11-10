@@ -51,4 +51,8 @@ export class TaskService {
   updateParentTask(projectId: string, taskId: string, updateTaskParent: UpdateTaskParent) {
     return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/parent`), updateTaskParent)
   }
+
+  deleteTask(projectId: string, taskId: string) {
+    return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}`))
+  }
 }

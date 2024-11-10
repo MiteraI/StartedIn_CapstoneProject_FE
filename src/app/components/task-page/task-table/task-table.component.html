@@ -1,4 +1,4 @@
-<nz-table #basicTable nzSize="middle" [nzData]="taskList">
+<nz-table #basicTable nzSize="middle" [nzLoading]="isFetchAllTaskLoading" [nzData]="taskList">
   <thead>
     <tr>
       <th>Tên Tác Vụ</th>
@@ -13,12 +13,12 @@
     <tr>
       <td>{{ data.title }}</td>
       <td>{{ labels[data.status] }}</td>
-      <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date: 'd \'tháng\' M, h:mm a') }}</td>
+      <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
       <td>{{ data.createdBy }}</td>
       <td>
         <button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Chỉnh Sửa</button>
         <nz-divider nzType="vertical"></nz-divider>
-        <button nz-button nzType="primary">Xóa</button>
+        <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
       </td>
     </tr>
     }
