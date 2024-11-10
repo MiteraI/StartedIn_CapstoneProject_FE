@@ -1,4 +1,10 @@
 <div class="flex flex-col h-[80vh]">
+  @if (isFetchTaskDetailsLoading) {
+  <div class="min-h-[74vh]"></div>
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  } @else {
   <!-- Container for the entire modal content -->
   <div class="flex-1 overflow-y-auto">
     <form [formGroup]="taskForm" nz-form nzLayout="vertical" class="px-4">
@@ -92,6 +98,7 @@
         </nz-form-item>
       </div>
 
+      @if (subTasks.length > 0) {
       <nz-form-item>
         <nz-form-label>Subtasks</nz-form-label>
         <nz-form-control>
@@ -118,6 +125,7 @@
           </nz-table>
         </nz-form-control>
       </nz-form-item>
+      }
 
       <!-- Comment Section -->
       <nz-form-item>
@@ -140,7 +148,9 @@
       </nz-form-item>
     </form>
   </div>
-  <div class="flex items-center justify-end px-4 py-2 bg-white border-t">
-    <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || !isInfoChanged">Update</button>
+  }
+  <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
+    <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Tác Vụ</button>
+    <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || !isInfoChanged">Cập Nhật</button>
   </div>
 </div>
