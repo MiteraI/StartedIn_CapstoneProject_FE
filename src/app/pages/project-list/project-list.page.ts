@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
 import { IonContent } from '@ionic/angular/standalone'
-import { RouterModule } from '@angular/router'
+import { ActivatedRoute, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model'
 import { CommonModule } from '@angular/common'
@@ -15,18 +15,15 @@ import { ProjectCreateModalComponent } from 'src/app/components/project-pages/pr
   templateUrl: './project-list.page.html',
   styleUrls: ['./project-list.page.scss'],
   standalone: true,
-  imports: [ RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule],
+  imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule],
 })
 export class ProjectListPage implements OnInit {
   userProjects: UserProjectsModel | undefined
   ownProjects: ExploreProjectsListItemModel[] = []
   participatedProjects: ExploreProjectsListItemModel[] = []
-  constructor(private projectService: ProjectService, private modalService: NzModalService, private cdr: ChangeDetectorRef) {}
+  constructor(private projectService: ProjectService, private modalService: NzModalService, private cdr: ChangeDetectorRef, private route: ActivatedRoute) {}
   ngOnInit() {
-    this.projectService.getUserProjects().subscribe((userProjects: UserProjectsModel) => {
-      this.userProjects = userProjects
-      this.cdr.detectChanges()
-    })
+    this.userProjects = this.route.snapshot.data['userProjects']
   }
 
   openCreateProjectModal() {

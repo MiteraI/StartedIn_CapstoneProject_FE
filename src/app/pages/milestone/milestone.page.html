@@ -1,0 +1,26 @@
+<app-filter-bar viewName="Cột mốc" (searchString)="printSearchString($event)">
+  <div desktop>This should be rendered in header selection of ng-content</div>
+  <div mobile>This should be rendered in body selection of ng-content</div>
+</app-filter-bar>
+
+<!-- Desktop View -->
+@if (isDesktopView) {
+<div class="flex flex-col w-full px-3 mt-4">
+  <div class="flex justify-end">
+    <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+      <mat-icon fontIcon="add_icon"></mat-icon>
+      Thêm Cột Mốc
+    </button>
+  </div>
+  <app-milestone-table [milestones]="milestones" [projectId]="projectId"></app-milestone-table>
+</div>
+}
+<!-- Mobile View -->
+@else {
+<div class="flex flex-col w-full px-3 mt-4">
+  <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+    <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
+  </div>
+  <app-milestone-mobile-view [milestones]="milestones" [projectId]="projectId"></app-milestone-mobile-view>
+</div>
+}

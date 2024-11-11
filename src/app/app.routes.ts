@@ -5,11 +5,14 @@ import { ProjectDataResolver } from './shared/resolvers/project-data.resolver'
 import { DealOfferDataResolver } from './shared/resolvers/deal-offer-data.resolver'
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
+import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
+import { MilestoneDataResolver } from './shared/resolvers/milestone-data.resolver'
 
 export const routes: Routes = [
   {
     path: 'projects',
     canActivate: [AuthenticatedGuard],
+    resolve: { userProjects: UserProjectDataResolver },
     loadComponent: () => import('./pages/project-list/project-list.page').then((m) => m.ProjectListPage),
   },
   {
@@ -60,7 +63,7 @@ export const routes: Routes = [
       },
       {
         path: 'project-deal-list',
-        loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then( m => m.ProjectDealListPage)
+        loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
       },
       {
         path: 'create-investment-contract',
@@ -75,12 +78,17 @@ export const routes: Routes = [
       {
         path: 'create-internal-contract',
         resolve: { project: ProjectDataResolver },
-        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then((m) => m.InternalContractPage),
       },
       {
         path: 'internal-contract/:contractId',
         resolve: { project: ProjectDataResolver, contract: InternalContractDataResolver },
-        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then( m => m.InternalContractPage)
+        loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then((m) => m.InternalContractPage),
+      },
+      {
+        path: 'milestones',
+        resolve: { milestones: MilestoneDataResolver },
+        loadComponent: () => import('./pages/milestone/milestone.page').then((m) => m.MilestonePage),
       },
       {
         path: 'others',
@@ -100,6 +108,6 @@ export const routes: Routes = [
   },
   {
     path: 'investor-deal-list',
-    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then( m => m.InvestorDealListPage)
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
   },
 ]

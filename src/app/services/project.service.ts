@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, map, Observable } from 'rxjs'
@@ -43,6 +43,10 @@ export class ProjectService {
   }
 
   createProject(projectForm: FormData): Observable<any> {
-    return this.http.post(this.applicationConfigService.getEndpointFor('/api/projects'), projectForm)
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor('/api/projects'), 
+      projectForm
+    );
   }
 }
+

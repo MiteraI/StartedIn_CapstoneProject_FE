@@ -22,7 +22,6 @@ export class ProjectCreateModalComponent implements OnInit {
   selectedFile: File | null = null
   previewUrl: string | ArrayBuffer | null = null
   projectForm: FormGroup
-  formData: FormData = new FormData()
 
   constructor(private fb: FormBuilder, private datePipe: DatePipe, private messageService: NzMessageService, private projectService: ProjectService) {
     this.projectForm = this.fb.group({
@@ -56,31 +55,34 @@ export class ProjectCreateModalComponent implements OnInit {
 
   onSubmit() {
     if (this.projectForm.valid) {
+      const formData = new FormData()
+
+      formData.append('ProjectName', this.projectForm.get('projectName')?.value)
+      formData.append('Description', this.projectForm.get('description')?.value)
+      formData.append('LogoFile', this.selectedFile!)
+      formData.append('TotalShares', this.projectForm.get('totalShares')!.value)
+
       const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'yyyy-MM-dd')
       const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'yyyy-MM-dd')
-
-      this.formData.append('ProjectName', this.projectForm.get('projectName')?.value)
-      this.formData.append('Description', this.projectForm.get('description')?.value)
-      this.formData.append('LogoFile', this.projectForm.get('logoFile')?.value)
-      this.formData.append('TotalShares', this.projectForm.get('totalShares')!.value)
       if (formattedStartDate) {
-        this.formData.append('StartDate', formattedStartDate)
+        formData.append('StartDate', formattedStartDate)
       }
       if (formattedEndDate) {
-        this.formData.append('EndDate', formattedEndDate)
+        formData.append('EndDate', formattedEndDate)
       }
 
       // console log the form data
-      for (let pair of (this.formData as any).entries()) {
+      for (let pair of (formData as any).entries()) {
         console.log(`${pair[0]}: ${pair[1]}`)
       }
-      this.projectService.createProject(this.formData).subscribe({
+      console.log(formData.getAll('ProjectName'))
+      this.projectService.createProject(formData).subscribe({
         next: (response) => {
           this.messageService.success('Project created successfully')
         },
         error: (error) => {
-          this.messageService.error('error', error.error)
-          console.error('Error creating project', error)
+          this.messageService.error(error.error)
+          console.error('Error creating project', error.error)
         },
       })
     }
