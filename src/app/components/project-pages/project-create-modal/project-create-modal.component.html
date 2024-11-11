@@ -1,0 +1,48 @@
+<form nz-form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="projectName">Tên dự án</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập tên dự án">
+      <input nz-input formControlName="projectName" id="projectName" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Miêu tả</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập miêu tả dự án">
+      <textarea nz-input formControlName="description" id="description"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Logo</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input type="file" (change)="onFileSelected($event)" required />
+      @if (previewUrl) {<img [src]="previewUrl" alt="Logo Preview" class="size-24" />} @else {
+      <img src="https://www.energyfit.com.mk/wp-content/plugins/ap_background/images/default/default_large.png" alt="Default Logo" class="size-24" />
+      }
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="totalShares">Tổng cổ phần</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="totalShares" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy chọn ngày bắt đầu">
+      <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">Ngày kết thúc</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item nz-row class="submit-area">
+    <nz-form-control [nzSpan]="14" [nzOffset]="6">
+      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid">Submit</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -1,0 +1,23 @@
+<nz-table #basicTable nzSize="middle" [nzData]="milestones">
+  <thead>
+    <tr>
+      <th>Tên Cột Mốc</th>
+      <th>Ngày Kết Thúc</th>
+      <th>Ngày Gia Hạn</th>
+      <th>Số Ngày Gia Hạn</th>
+      <th>Giai Đoạn</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (data of basicTable.data; track data.id) {
+    <tr>
+      <td>{{ data.title }}</td>
+      <td>{{ data.dueDate === null ? 'Không Có Ngày Kết Thúc' : (data.dueDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>{{ data.extendedDate === null ? 'Không Có Ngày Gia Hạn' : (data.extendedDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>{{ data.extendedCount === null ? '0' : data.extendedCount }}</td>
+      <td>{{ statusLabels[data.phaseName] }}</td>
+    </tr>
+    }
+  </tbody></nz-table
+>
