@@ -9,3 +9,7 @@ export type ProjectMilestoneModel = {
   phaseName: PhaseState
   id: string
 }
+export type Milestone = {
+  id: string
+  title: string
+}

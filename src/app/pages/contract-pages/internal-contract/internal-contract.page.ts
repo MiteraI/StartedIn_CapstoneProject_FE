@@ -22,6 +22,7 @@ import { InternalContractDetailModel } from 'src/app/shared/models/contract/inte
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { AccountService } from 'src/app/core/auth/account.service';
 
 @Component({
   selector: 'app-internal-contract',
@@ -57,6 +58,8 @@ export class InternalContractPage implements OnInit {
 
   shareTotal: number = 0;
 
+  private currentUserId: string | null = null;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -64,10 +67,17 @@ export class InternalContractPage implements OnInit {
     private fb: FormBuilder,
     private contractService: ContractService,
     private projectService: ProjectService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit() {
+    this.accountService.account$.subscribe(account => {
+      if (account) {
+        this.currentUserId = account.id;
+      }
+    });
+
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
@@ -102,6 +112,13 @@ export class InternalContractPage implements OnInit {
           contractIdNumber: this.contract.contractIdNumber,
         })
         this.contract.shareEquities.forEach(share => this.addShare(share));
+      } else {
+        this.addShare({
+          userId: this.currentUserId!,
+          shareQuantity: 0,
+          percentage: 0,
+          buyPrice: 0
+        })
       }
     });
   }
@@ -122,6 +139,9 @@ export class InternalContractPage implements OnInit {
   }
 
   removeShare(index: number) {
+    if (this.sharesFormArray.length <= 1) {
+      return;
+    }
     this.sharesFormArray.removeAt(index);
     this.updateTotalShares();
   }
@@ -203,7 +223,17 @@ export class InternalContractPage implements OnInit {
   }
 
   download() {
-    alert('not implemented');
+    this.contractService
+      .downloadContract(this.contractId!, this.project.id)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Tải hợp đồng thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(response => {
+        window.open(response.downLoadUrl, '_blank');
+      });
   }
 
   navigateBack() {

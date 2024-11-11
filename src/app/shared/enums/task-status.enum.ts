@@ -7,7 +7,6 @@ export enum TaskStatus {
   DONE = 5,
 }
 
-
 export const TaskStatusLabels: Record<TaskStatus, string> = {
   [TaskStatus.NOT_STARTED]: 'Chưa Bắt Đầu',
   [TaskStatus.IN_PROGRESS]: 'Đang Làm',

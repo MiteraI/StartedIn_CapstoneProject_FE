@@ -268,7 +268,17 @@ export class InvestmentContractPage implements OnInit {
   }
 
   download() {
-    alert('not implemented');
+    this.contractService
+      .downloadContract(this.contractId!, this.project.id)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Tải hợp đồng thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(response => {
+        window.open(response.downLoadUrl, '_blank');
+      });
   }
 
   navigateBack() {

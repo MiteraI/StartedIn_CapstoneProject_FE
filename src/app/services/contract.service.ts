@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { ApplicationConfigService } from "../core/config/application-config.service";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { ContractStatus } from "../shared/enums/contract-status.enum";
 import { ContractType } from "../shared/enums/contract-type.enum";
 import { ContractListItemModel } from "../shared/models/contract/contract-list-item.model";
@@ -72,8 +72,15 @@ export class ContractService {
   }
 
   getInternalContract(id: string, projectId: string): Observable<InternalContractDetailModel> {
-    return this.http.get<InternalContractDetailModel>(
+    return this.http.get<any>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/shares-distribution-contracts/${id}`)
+    ).pipe(
+      map(response => {
+        return {
+          ...response,
+          shareEquities: response.userShareEquityInContract
+        }
+      })
     );
   }
 
@@ -94,6 +101,13 @@ export class ContractService {
   sendContract(id: string, projectId: string): Observable<any> {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/invite`),
+      null
+    );
+  }
+
+  downloadContract(id: string, projectId: string): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/download`),
       null
     );
   }

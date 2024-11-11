@@ -225,12 +225,26 @@ export class ContractListPage implements OnInit {
 
   // add stuff
   openAddModal() {
-    // Implement modal opening logic
-    const modalRef = this.modalService.create({
+    this.modalService.create({
       nzTitle: 'New Contract',
       nzContent: NewContractModalComponent,
       nzFooter: null,
       nzData: this.projectId
     });
+  }
+
+  // download stuff
+  download(contract: ContractListItemModel) {
+    this.contractService
+      .downloadContract(contract.id, this.projectId)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Tải hợp đồng thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(response => {
+        window.open(response.downLoadUrl, '_blank');
+      });
   }
 }

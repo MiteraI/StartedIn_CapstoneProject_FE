@@ -1,34 +1,156 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
-  <!-- Title Field -->
-  <nz-form-item>
-    <nz-form-label [nzRequired]="true">Title</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Please enter the title'">
-      <input nz-input formControlName="title" placeholder="Enter task title" />
-    </nz-form-control>
-  </nz-form-item>
+<div class="flex flex-col h-[80vh]">
+  @if (isFetchTaskDetailsLoading) {
+  <div class="min-h-[74vh]"></div>
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  } @else {
+  <!-- Container for the entire modal content -->
+  <div class="flex-1 overflow-y-auto">
+    <form [formGroup]="taskForm" nz-form nzLayout="vertical" class="px-4">
+      <!-- Title and Milestone Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <nz-form-item>
+          <nz-form-label [nzRequired]="true">Title</nz-form-label>
+          <nz-form-control [nzErrorTip]="'Please enter the title'">
+            <input nz-input formControlName="title" placeholder="Enter task title" (input)="handleInfoChanged()" />
+          </nz-form-control>
+        </nz-form-item>
 
-  <!-- Description Field -->
-  <nz-form-item>
-    <nz-form-label>Description</nz-form-label>
-    <nz-form-control>
-      <textarea nz-input formControlName="description" placeholder="Enter task description"></textarea>
-    </nz-form-control>
-  </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Milestone</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="milestone" nzPlaceHolder="Select milestone">
+              @for (milestone of milestones; track $index) {
+              <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
 
-  <!-- Deadline Field (Date and Time Picker) -->
-  <nz-form-item>
-    <nz-form-label>Deadline</nz-form-label>
-    <nz-form-control>
-      <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Select deadline date and hour"></nz-date-picker>
-    </nz-form-control>
-  </nz-form-item>
-
-  <!-- Submit Button -->
-  <nz-form-item>
-    <nz-form-control>
-      <div class="flex items-center justify-end">
-        <button nz-button nzType="default" [disabled]="taskForm.invalid">Update</button>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
       </div>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+
+      <!-- Description -->
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Enter task description" (input)="handleInfoChanged()"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Status and Deadline Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <nz-form-item>
+          <nz-form-label>Status</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="status" nzPlaceHolder="Select status" (ngModelChange)="handleStatusChanged($event)">
+              @for (status of statuses; track $index) {
+              <nz-option [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Deadline</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker
+              formControlName="deadline"
+              [nzShowTime]="{ nzFormat: 'HH' }"
+              nzFormat="yyyy-MM-dd HH:00:00"
+              nzPlaceHolder="Select deadline date and hour"
+              (nzOnOk)="handleInfoChanged()"
+            >
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <!-- Parent Task and Assignee Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <nz-form-item>
+          <nz-form-label>Parent Task</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="parentTask" nzPlaceHolder="Select parent task" (ngModelChange)="handleSelectParentTask($event)">
+              <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
+              @for (task of otherTasks; track $index) {
+              <nz-option [nzValue]="task.id" [nzLabel]="task.title"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Assignees</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="assignees"
+              [nzMode]="'multiple'"
+              nzPlaceHolder="Select assignees"
+              (nzOpenChange)="handleOpenAssigneeSelect()"
+              (ngModelChange)="handleSelectAssignChanged($event)"
+            >
+              @for (user of filteredUsers; track $index) {
+              <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      @if (subTasks.length > 0) {
+      <nz-form-item>
+        <nz-form-label>Subtasks</nz-form-label>
+        <nz-form-control>
+          <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="subTasks">
+            <thead>
+              <tr>
+                <th>Tên Tác Vụ</th>
+                <th>Trạng Thái</th>
+                <th>Hạn Chót</th>
+                <th>Người Tạo</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of basicTable.data; track data.id) {
+              <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.createdBy }}</td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
+        </nz-form-control>
+      </nz-form-item>
+      }
+
+      <!-- Comment Section -->
+      <nz-form-item>
+        <nz-form-label>Comments</nz-form-label>
+        <nz-form-control>
+          <div class="mb-4">
+            <div *ngFor="let comment of comments" class="mb-3 p-3 bg-gray-50 rounded">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-medium">{{ comment.author }}</span>
+                <span class="text-gray-500 text-sm">{{ comment.date | date : 'short' }}</span>
+              </div>
+              <p class="text-gray-700">{{ comment.content }}</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <input nz-input placeholder="Type your comment" class="flex-grow" />
+            <button nz-button nzType="primary">Comment</button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  }
+  <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
+    <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Tác Vụ</button>
+    <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || !isInfoChanged">Cập Nhật</button>
+  </div>
+</div>
