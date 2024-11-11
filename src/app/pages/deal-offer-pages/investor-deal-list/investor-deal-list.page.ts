@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 import { catchError, throwError } from 'rxjs';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
@@ -10,7 +10,7 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { IonIcon } from "@ionic/angular/standalone";
+import { Router } from '@angular/router';
 
 interface FilterOptions {
   projectName?: string;
@@ -26,7 +26,7 @@ interface FilterOptions {
   templateUrl: './investor-deal-list.page.html',
   styleUrls: ['./investor-deal-list.page.scss'],
   standalone: true,
-  imports: [IonIcon,
+  imports: [
     CommonModule,
     NzAvatarModule,
     NzModalModule,
@@ -57,8 +57,8 @@ export class InvestorDealListPage implements OnInit {
   @ViewChild('filterComponent') filterComponent: any;
 
   constructor(
-    private modalService: NzModalService,
-    private dealOfferService: DealOfferService
+    private dealOfferService: DealOfferService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -142,5 +142,9 @@ export class InvestorDealListPage implements OnInit {
 
   onFilterMenuOpened() {
     this.filterComponent.updateForm(this.filter);
+  }
+
+  navigateToDealDetails(deal: InvestorDealItem) {
+    this.router.navigate(['/deal', deal.id]);
   }
 }

@@ -2,11 +2,12 @@ import { Routes } from '@angular/router'
 import { AuthenticatedGuard } from './shared/guards/authenticated.guard'
 import { mobileViewGuard } from './shared/guards/mobile-view.guard'
 import { ProjectDataResolver } from './shared/resolvers/project-data.resolver'
-import { DealOfferDataResolver } from './shared/resolvers/deal-offer-data.resolver'
+import { ProjectDealDataResolver } from './shared/resolvers/project-deal-data.resolver'
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
 import { MilestoneDataResolver } from './shared/resolvers/milestone-data.resolver'
+import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 
 export const routes: Routes = [
   {
@@ -67,12 +68,12 @@ export const routes: Routes = [
       },
       {
         path: 'deal/:dealId',
-        resolve: { deal: DealOfferDataResolver },
+        resolve: { deal: ProjectDealDataResolver },
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then( m => m.ProjectDealDetailPage)
       },
       {
         path: 'create-investment-contract',
-        resolve: { project: ProjectDataResolver, deal: DealOfferDataResolver },
+        resolve: { project: ProjectDataResolver, deal: ProjectDealDataResolver },
         loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
       },
       {
@@ -113,6 +114,14 @@ export const routes: Routes = [
   },
   {
     path: 'investor-deal-list',
+    canActivate: [AuthenticatedGuard],
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
+  },
+  {
+    path: 'deal/:dealId',
+    canActivate: [AuthenticatedGuard],
+    resolve: { deal: InvestorDealDataResolver },
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-detail/investor-deal-detail.page').then( m => m.InvestorDealDetailPage)
   }
+
 ]
