@@ -6,8 +6,9 @@ import { ProjectDealItem } from '../models/deal-offer/project-deal-item.model';
 
 export const DealOfferDataResolver: ResolveFn<ProjectDealItem | null> = (route, state) => {
   const dealOfferService = inject(DealOfferService);
+  const dealId = route.queryParamMap.get('dealId')! || route.paramMap.get('dealId')!
   return dealOfferService
-    .getDealInProject(route.parent?.queryParamMap.get('dealId')!, route.parent?.paramMap.get('id')!)
+    .getDealInProject(dealId, route.parent?.paramMap.get('id')!)
     .pipe(
       first(),
       catchError(error => {

@@ -66,6 +66,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
       },
       {
+        path: 'deal/:dealId',
+        resolve: { deal: DealOfferDataResolver },
+        loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then( m => m.ProjectDealDetailPage)
+      },
+      {
         path: 'create-investment-contract',
         resolve: { project: ProjectDataResolver, deal: DealOfferDataResolver },
         loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
@@ -109,5 +114,5 @@ export const routes: Routes = [
   {
     path: 'investor-deal-list',
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
-  },
+  }
 ]
