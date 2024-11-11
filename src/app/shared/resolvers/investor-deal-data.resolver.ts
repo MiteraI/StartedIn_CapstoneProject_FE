@@ -2,13 +2,13 @@ import { ResolveFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { catchError, first, of } from 'rxjs';
 import { DealOfferService } from 'src/app/services/deal-offer.service';
-import { ProjectDealItem } from '../models/deal-offer/project-deal-item.model';
+import { InvestorDealItem } from '../models/deal-offer/investor-deal-item.model';
 
-export const DealOfferDataResolver: ResolveFn<ProjectDealItem | null> = (route, state) => {
+export const InvestorDealDataResolver: ResolveFn<InvestorDealItem | null> = (route, state) => {
   const dealOfferService = inject(DealOfferService);
-  const dealId = route.queryParamMap.get('dealId')! || route.paramMap.get('dealId')!
+  const dealId = route.paramMap.get('dealId')!
   return dealOfferService
-    .getDealInProject(dealId, route.parent?.paramMap.get('id')!)
+    .getDeal(dealId)
     .pipe(
       first(),
       catchError(error => {

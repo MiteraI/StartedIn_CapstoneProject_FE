@@ -61,6 +61,14 @@ export class DealOfferService {
     );
   }
 
+  getDeal(id: string): Observable<InvestorDealItem> {
+    return this.http.get<InvestorDealItem>(
+      this.applicationConfigService.getEndpointFor(`/api/deal-offers/${id}`)
+    ).pipe(
+      map(response => this.parseNumericFields(response))
+    );
+  }
+
   getProjectDealList(
     projectId: string,
     pageIndex: number,

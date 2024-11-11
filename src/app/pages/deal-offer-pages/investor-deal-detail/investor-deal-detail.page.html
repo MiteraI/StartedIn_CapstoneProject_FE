@@ -1,0 +1,45 @@
+<ion-card class="max-w-3xl mx-auto my-4">
+  <ion-card-header>
+    <div class="flex justify-between items-center">
+      <div class="text-2xl font-medium text-black">Chi tiết thỏa thuận</div>
+      <div>
+        <span [ngClass]="{
+          'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
+          'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
+          'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+        }">
+          ● {{ statusLabels[deal.dealStatus!] }}
+        </span>
+      </div>
+    </div>
+  </ion-card-header>
+
+  <ion-card-content class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="text-gray-500 text-sm">Tên dự án</div>
+        <div class="font-medium text-black">{{ deal.projectName }}</div>
+      </div>
+
+      <div>
+        <div class="text-gray-500 text-sm">Trưởng nhóm</div>
+        <div class="font-medium text-black">{{ deal.leaderName }}</div>
+      </div>
+
+      <div>
+        <div class="text-gray-500 text-sm">Số tiền đầu tư</div>
+        <div class="font-medium text-black">{{ deal.amount | vndCurrency }}</div>
+      </div>
+
+      <div>
+        <div class="text-gray-500 text-sm">Tỉ lệ cổ phần</div>
+        <div class="font-medium text-black">{{ deal.equityShareOffer }}%</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-gray-500 text-sm">Điều khoản</div>
+      <div class="mt-1 whitespace-pre-wrap text-black">{{ deal.termCondition }}</div>
+    </div>
+  </ion-card-content>
+</ion-card>
