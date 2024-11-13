@@ -160,7 +160,7 @@
               <div class="text-2xl font-medium">{{ contract.contractName }}</div>
               <div class="text-xs text-gray-500 mt-1">{{ typeLabels[contract.contractType] }}</div>
             </div>
-            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2">
+            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500">
                 <mat-icon fontIcon="send"></mat-icon>
               </button>
@@ -168,7 +168,7 @@
                 <mat-icon fontIcon="delete_outline"></mat-icon>
               </button>
             </div>
-            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2">
+            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="file_download"></mat-icon>
               </button>

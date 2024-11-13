@@ -1,7 +1,6 @@
 export type SearchResponseModel<T> = {
-  responseList: T[];
-  pageIndex: number;
-  pageSize: number;
-  totalRecord: number;
-  totalPage: number;
+  data: T[];
+  page: number;
+  size: number;
+  total: number;
 }

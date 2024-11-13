@@ -28,7 +28,7 @@ export class DealOfferService {
   private parseSearchResponse<T extends InvestorDealItem | ProjectDealItem>(response: SearchResponseModel<T>): SearchResponseModel<T> {
     return {
       ...response,
-      responseList: response.responseList.map(item => this.parseNumericFields(item))
+      data: response.data.map(item => this.parseNumericFields(item))
     };
   }
 

@@ -37,11 +37,10 @@ interface FilterOptions {
 })
 export class InvestorDealListPage implements OnInit {
   searchResult: SearchResponseModel<InvestorDealItem> = {
-    responseList: [],
-    pageIndex: 1,
-    pageSize: 10,
-    totalPage: 0,
-    totalRecord: 0
+    data: [],
+    page: 1,
+    size: 10,
+    total: 0
   };
 
   dealOffers: InvestorDealItem[] = [];
@@ -84,7 +83,7 @@ export class InvestorDealListPage implements OnInit {
       )
       .subscribe(result => {
         this.searchResult = result;
-        this.dealOffers = result.responseList;
+        this.dealOffers = result.data;
       });
   }
 

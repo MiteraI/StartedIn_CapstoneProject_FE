@@ -45,11 +45,10 @@ interface FilterOptions {
 export class ContractListPage implements OnInit {
   projectId!: string;
   searchResult: SearchResponseModel<ContractListItemModel> = {
-    responseList: [],
-    pageIndex: 1,
-    pageSize: 10,
-    totalPage: 0,
-    totalRecord: 0
+    data: [],
+    page: 1,
+    size: 10,
+    total: 0
   };
 
   contracts: ContractListItemModel[] = [];
@@ -97,8 +96,8 @@ export class ContractListPage implements OnInit {
         this.filter.contractName,
         this.filter.contractType,
         this.filter.parties,
-        sd ? `${sd.getFullYear()}-${sd.getMonth() + 1}-${sd.getDate()}` : undefined,
-        ed ? `${ed.getFullYear()}-${ed.getMonth() + 1}-${ed.getDate()}` : undefined,
+        this.filter.lastUpdatedStartDate,
+        this.filter.lastUpdatedEndDate,
         this.filter.contractStatus
       )
       .pipe(

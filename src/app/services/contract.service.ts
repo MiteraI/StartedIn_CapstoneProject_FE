@@ -28,15 +28,15 @@ export class ContractService {
     contractName?: string,
     contractType?: ContractType,
     parties?: string[],
-    lastUpdatedStartDate?: string,
-    lastUpdatedEndDate?: string,
+    lastUpdatedStartDate?: Date,
+    lastUpdatedEndDate?: Date,
     contractStatus?: ContractStatus
   ): Observable<any> {
     const query = (contractName?.trim() ? `contractName=${contractName}&` : '')
       + (contractType ? `contractTypeEnum=${contractType}&` : '')
       + (!!parties && parties.length > 0 ? `parties=${parties?.join("&parties=")}&` : '')
-      + (lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate}&` : '')
-      + (lastUpdatedEndDate ? `lastUpdatedEndDate=${lastUpdatedEndDate}&` : '')
+      + (lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate.toISOString().split('T')[0]}&` : '')
+      + (lastUpdatedEndDate ? `lastUpdatedEndDate=${lastUpdatedEndDate.toISOString().split('T')[0]}&` : '')
       + (contractStatus ? `contractStatusEnum=${contractStatus}&` : '')
       + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
     return this.http.get<SearchResponseModel<ContractListItemModel>>(
