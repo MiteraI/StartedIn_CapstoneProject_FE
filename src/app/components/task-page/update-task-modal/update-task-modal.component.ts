@@ -250,7 +250,7 @@ export class UpdateTaskModalComponent implements OnInit {
       })
     }
 
-    this.projectService.getMembersInProject(this.nzModalData.projectId).subscribe({
+    this.projectService.getMembers(this.nzModalData.projectId).subscribe({
       next: (res) => {
         this.users = res.filter((u) => u.roleInTeam !== TeamRole.INVESTOR && u.roleInTeam !== TeamRole.MENTOR)
         this.filteredUsers = res

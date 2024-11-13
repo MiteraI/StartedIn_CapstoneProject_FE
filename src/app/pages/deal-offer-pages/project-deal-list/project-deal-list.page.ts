@@ -40,11 +40,10 @@ export class ProjectDealListPage implements OnInit {
   projectId!: string;
 
   searchResult: SearchResponseModel<ProjectDealItem> = {
-    responseList: [],
-    pageIndex: 1,
-    pageSize: 10,
-    totalPage: 0,
-    totalRecord: 0
+    data: [],
+    page: 1,
+    size: 10,
+    total: 0
   };
 
   deals: ProjectDealItem[] = [];
@@ -98,7 +97,7 @@ export class ProjectDealListPage implements OnInit {
       )
       .subscribe(result => {
         this.searchResult = result;
-        this.deals = result.responseList;
+        this.deals = result.data;
       });
   }
 
@@ -240,6 +239,6 @@ export class ProjectDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: ProjectDealItem) {
-    this.router.navigate(['/projects', this.projectId, 'deal', deal.id]);
+    this.router.navigate([deal.id]);
   }
 }

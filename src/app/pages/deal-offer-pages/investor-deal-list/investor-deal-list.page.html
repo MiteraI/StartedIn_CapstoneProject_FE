@@ -67,7 +67,7 @@
           </span>
         </td>
         <td>
-          <div *ngIf="offer.dealStatus === dealStatuses.WAITING" class="space-x-2">
+          <div *ngIf="offer.dealStatus === dealStatuses.WAITING" class="space-x-2 h-6">
             <button (click)="deleteOffer(offer)" class="text-red-500 hover:text-red-700">
               <mat-icon fontIcon="delete_outline"></mat-icon>
             </button>
@@ -90,7 +90,7 @@
             <div class="text-2xl font-medium">{{ offer.projectName }}</div>
             <span class="text-xs text-gray-500 mt-1">{{ offer.leaderName }}</span>
           </div>
-          <button (click)="deleteOffer(offer)" class="text-red-500 px-2">
+          <button (click)="deleteOffer(offer)" class="text-red-500 px-2 h-6">
             <mat-icon fontIcon="delete_outline"></mat-icon>
           </button>
         </div>

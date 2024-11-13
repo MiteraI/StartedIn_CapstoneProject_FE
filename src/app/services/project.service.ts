@@ -42,13 +42,9 @@ export class ProjectService {
     );
   }
 
-  getMembersInProject(projectId: string) {
-    return this.http.get<TeamMemberModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`))
-  }
-
   createProject(projectForm: FormData): Observable<any> {
     return this.http.post(
-      this.applicationConfigService.getEndpointFor('/api/projects'), 
+      this.applicationConfigService.getEndpointFor('/api/projects'),
       projectForm
     );
   }

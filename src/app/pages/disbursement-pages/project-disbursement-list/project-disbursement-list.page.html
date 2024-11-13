@@ -1,0 +1,128 @@
+<app-filter-bar
+  viewName="Danh sách giải ngân"
+  [searchValue]="filter.name ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-disbursement-filter
+      #filterComponent
+      [data]="filterData"
+      [showProjectSelect]="false"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-disbursement-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-disbursement-filter
+      #filterComponent
+      [data]="filterData"
+      [showProjectSelect]="false"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-disbursement-filter>
+  </div>
+</app-filter-bar>
+
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table border">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left">Tiêu đề</th>
+        <th class="p-4 text-left">Nhà đầu tư</th>
+        <th class="p-4 text-left">Số hợp đồng</th>
+        <th class="p-4 text-left">Thời gian</th>
+        <th class="p-4 text-left">Số tiền</th>
+        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-left"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let group of disbursementGroups; index as i">
+        <!-- Date Header Row -->
+        <tr class="bg-gray-100">
+          <td colspan="7" class="px-3 py-1 font-medium">
+            {{ formatGroupHeader(keys[i]) }}
+          </td>
+        </tr>
+        <!-- Disbursement Rows -->
+        <tr
+          *ngFor="let disbursement of group"
+          class="border-b hover:bg-gray-50"
+        >
+          <td class="p-4">
+            <div class="font-medium">{{ disbursement.title }}</div>
+          </td>
+          <td class="p-4">{{ disbursement.investorName }}</td>
+          <td class="p-4">{{ disbursement.contractIdNumber }}</td>
+          <td class="p-4">
+            {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
+          </td>
+          <td class="p-4">{{ disbursement.amount | vndCurrency }}</td>
+          <td class="p-4">
+            <span [ngClass]="{
+              'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
+              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+              'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
+              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+              'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
+              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+            }">
+              ● {{ statusLabels[disbursement.disbursementStatus] }}
+            </span>
+          </td>
+          <td class="p-4">
+            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
+              <button (click)="confirmDisbursement(disbursement)" class="text-green-500 hover:text-green-700">
+                <mat-icon fontIcon="check"></mat-icon>
+              </button>
+              <button (click)="openRejectModal(disbursement)" class="text-red-500 hover:text-red-700">
+                <mat-icon fontIcon="close"></mat-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <ng-container *ngFor="let group of disbursementGroups; index as i">
+      <div class="bg-gray-100 px-3 py-1 font-medium">
+        {{ formatGroupHeader(keys[i]) }}
+      </div>
+      <div class="space-y-4">
+        <div *ngFor="let disbursement of group" class="bg-white rounded-lg shadow p-4">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="text-xl font-medium">{{ disbursement.title }}</div>
+              <div class="text-sm text-gray-500">{{ disbursement.investorName }}</div>
+              <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
+            </div>
+            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
+              <button (click)="confirmDisbursement(disbursement)" class="text-green-500">
+                <mat-icon fontIcon="check"></mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="text-sm">
+              {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
+            </div>
+            <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
+            <span [ngClass]="{
+              'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
+              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+              'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
+              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+              'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
+              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+            }">
+              ● {{ statusLabels[disbursement.disbursementStatus] }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

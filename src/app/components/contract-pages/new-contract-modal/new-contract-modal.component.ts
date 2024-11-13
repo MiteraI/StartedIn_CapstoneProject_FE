@@ -68,7 +68,7 @@ export class NewContractModalComponent implements OnInit {
           return throwError(() => new Error(error.error));
         })
       )
-      .subscribe(response => this.dealList = response.responseList.filter(d => d.dealStatus === DealStatus.ACCEPTED));
+      .subscribe(response => this.dealList = response.data.filter(d => d.dealStatus === DealStatus.ACCEPTED));
 
     this.projectService
       .getMembers(this.projectId)

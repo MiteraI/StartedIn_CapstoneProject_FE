@@ -15,16 +15,15 @@ import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/expl
   templateUrl: 'project-card.component.html',
   styleUrls: ['project-card.component.scss'],
 })
-export class ProjectCardComponent implements OnInit {
+export class ProjectCardComponent {
   @Input({ required: true }) project!: ExploreProjectsListItemModel
 
+  // TODO remove invest button, nav to details
   constructor(private router: Router) {
     addIcons({ cashOutline })
   }
 
-  ngOnInit() {}
-
   navigateToCreateDealOffer() {
-    this.router.navigate(['/projects', this.project.id, 'create-deal-offer'])
+    this.router.navigate(['/projects', this.project.id, 'create-deal'])
   }
 }

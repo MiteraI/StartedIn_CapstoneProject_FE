@@ -59,15 +59,15 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
-        path: 'create-deal-offer',
+        path: 'create-deal',
         loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
       },
       {
-        path: 'project-deal-list',
+        path: 'deals',
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
       },
       {
-        path: 'deal/:dealId',
+        path: 'deals/:dealId',
         resolve: { deal: ProjectDealDataResolver },
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then( m => m.ProjectDealDetailPage)
       },
@@ -92,6 +92,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then((m) => m.InternalContractPage),
       },
       {
+        path: 'disbursements',
+        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-list/project-disbursement-list.page').then( m => m.ProjectDisbursementListPage)
+      },
+      {
+        path: 'disbursements/:disbursementId',
+        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-detail/project-disbursement-detail.page').then( m => m.ProjectDisbursementDetailPage)
+      },
+      {
         path: 'milestones',
         resolve: { milestones: MilestoneDataResolver },
         loadComponent: () => import('./pages/milestone/milestone.page').then((m) => m.MilestonePage),
@@ -113,15 +121,25 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then((m) => m.InvestorExploreProjectsPage),
   },
   {
-    path: 'investor-deal-list',
+    path: 'deals',
     canActivate: [AuthenticatedGuard],
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
   },
   {
-    path: 'deal/:dealId',
+    path: 'deals/:dealId',
     canActivate: [AuthenticatedGuard],
     resolve: { deal: InvestorDealDataResolver },
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-detail/investor-deal-detail.page').then( m => m.InvestorDealDetailPage)
-  }
+  },
+  {
+    path: 'disbursements',
+    canActivate: [AuthenticatedGuard],
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then( m => m.InvestorDisbursementListPage)
+  },
+  {
+    path: 'disbursements/:disbursementId',
+    canActivate: [AuthenticatedGuard],
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then( m => m.InvestorDisbursementDetailPage)
+  },
 
 ]

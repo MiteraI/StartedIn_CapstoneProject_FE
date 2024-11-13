@@ -18,11 +18,10 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 
 export class InvestorExploreProjectsPage implements OnInit {
   projects: SearchResponseModel<ExploreProjectsListItemModel> = {
-    responseList: [],
-    pageIndex: 1,
-    pageSize: 15,
-    totalPage: 0,
-    totalRecord: 0
+    data: [],
+    page: 1,
+    size: 15,
+    total: 0
   };
 
   constructor(
