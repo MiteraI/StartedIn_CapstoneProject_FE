@@ -240,6 +240,6 @@ export class ProjectDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: ProjectDealItem) {
-    this.router.navigate(['/projects', this.projectId, 'deal', deal.id]);
+    this.router.navigate([deal.id]);
   }
 }

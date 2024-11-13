@@ -148,6 +148,6 @@ export class InvestorDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: InvestorDealItem) {
-    this.router.navigate(['/deal', deal.id]);
+    this.router.navigate([deal.id]);
   }
 }
