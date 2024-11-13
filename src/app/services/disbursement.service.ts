@@ -3,7 +3,7 @@ import { ApplicationConfigService } from "../core/config/application-config.serv
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
-import { ProjectDisbursementItemModel } from "../shared/models/disbursement/project-disbursement-item.model";
+import { DisbursementItemModel } from "../shared/models/disbursement/disbursement-item.model";
 import { DisbursementStatus } from "../shared/enums/disbursement-status.enum";
 
 @Injectable({
@@ -15,14 +15,14 @@ export class DisbursementService {
     private applicationConfigService: ApplicationConfigService
   ) {}
 
-  private parseNumericFields<T extends ProjectDisbursementItemModel>(disbursement: T): T {
+  private parseNumericFields<T extends DisbursementItemModel>(disbursement: T): T {
     return {
       ...disbursement,
       amount: typeof disbursement.amount === 'string' ? parseFloat(disbursement.amount) : disbursement.amount
     };
   }
 
-  private parseSearchResponse<T extends ProjectDisbursementItemModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
+  private parseSearchResponse<T extends DisbursementItemModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
     return {
       ...response,
       data: response.data.map(item => this.parseNumericFields(item))
@@ -41,18 +41,18 @@ export class DisbursementService {
     status?: DisbursementStatus,
     investorId?: string,
     contractId?: string
-  ): Observable<SearchResponseModel<ProjectDisbursementItemModel>> {
-    const query = (name?.trim() ? `name=${name}&` : '')
+  ): Observable<SearchResponseModel<DisbursementItemModel>> {
+    const query = (name?.trim() ? `title=${name}&` : '')
       + (periodFrom ? `periodFrom=${periodFrom.toISOString().split('T')[0]}&` : '')
       + (periodTo ? `periodTo=${periodTo.toISOString().split('T')[0]}&` : '')
       + (amountFrom ? `amountFrom=${amountFrom}&` : '')
       + (amountTo ? `amountTo=${amountTo}&` : '')
-      + (status !== undefined ? `status=${status}&` : '')
+      + (status ? `disbursementStatus=${status}&` : '')
       + (investorId ? `investorId=${investorId}&` : '')
       + (contractId ? `contractId=${contractId}&` : '')
-      + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+      + `page=${pageIndex}&size=${pageSize}`;
 
-    return this.http.get<SearchResponseModel<ProjectDisbursementItemModel>>(
+    return this.http.get<SearchResponseModel<DisbursementItemModel>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements?${query}`)
     ).pipe(
       map(response => this.parseSearchResponse(response))

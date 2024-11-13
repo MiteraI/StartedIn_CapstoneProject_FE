@@ -4,7 +4,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { DisbursementService } from 'src/app/services/disbursement.service';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
-import { ProjectDisbursementItemModel } from 'src/app/shared/models/disbursement/project-disbursement-item.model';
+import { DisbursementItemModel } from 'src/app/shared/models/disbursement/disbursement-item.model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { RejectDisbursementFormComponent } from 'src/app/components/disbursement-pages/reject-disbursement-form/reject-disbursement-form.component';
+import { DisbursementFilterComponent } from 'src/app/components/disbursement-pages/disbursement-filter/disbursement-filter.component';
 
 interface FilterOptions {
   name?: string;
@@ -36,6 +37,7 @@ interface FilterOptions {
     NzAvatarModule,
     NzModalModule,
     FilterBarComponent,
+    DisbursementFilterComponent,
     MatIconModule,
     RouterModule,
     VndCurrencyPipe
@@ -43,17 +45,17 @@ interface FilterOptions {
 })
 export class ProjectDisbursementListPage implements OnInit {
   projectId!: string;
-  searchResult: SearchResponseModel<ProjectDisbursementItemModel> = {
+  searchResult: SearchResponseModel<DisbursementItemModel> = {
     data: [],
     page: 1,
     size: 10,
     total: 0
   };
 
-  disbursements: ProjectDisbursementItemModel[] = [];
-  selectedDisbursements: ProjectDisbursementItemModel[] = [];
+  disbursements: DisbursementItemModel[] = [];
+  selectedDisbursements: DisbursementItemModel[] = [];
   keys: string[] = [];
-  disbursementGroups: ProjectDisbursementItemModel[][] = [];
+  disbursementGroups: DisbursementItemModel[][] = [];
 
   filter: FilterOptions = {};
   pageIndex: number = 1;
@@ -61,6 +63,8 @@ export class ProjectDisbursementListPage implements OnInit {
 
   disbursementStatuses = DisbursementStatus;
   statusLabels = DisbursementStatusLabels;
+
+  @ViewChild('filterComponent') filterComponent!: DisbursementFilterComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -108,14 +112,6 @@ export class ProjectDisbursementListPage implements OnInit {
       });
   }
 
-  onSearch(searchText: string) {
-    this.filter = {
-      ...this.filter,
-      name: searchText
-    };
-    this.filterDisbursements();
-  }
-
   groupDisbursements() {
     var groupCount = 0;
     this.disbursementGroups = [];
@@ -143,7 +139,7 @@ export class ProjectDisbursementListPage implements OnInit {
     return format(new Date(dateStr), 'dd/MM/yyyy');
   }
 
-  openRejectModal(disbursement: ProjectDisbursementItemModel) {
+  openRejectModal(disbursement: DisbursementItemModel) {
     this.modalService.create({
       nzTitle: 'Từ chối giải ngân',
       nzContent: RejectDisbursementFormComponent,
@@ -155,21 +151,45 @@ export class ProjectDisbursementListPage implements OnInit {
     });
   }
 
-  rejectDisbursement(disbursement: ProjectDisbursementItemModel, reason: string) {
+  rejectDisbursement(disbursement: DisbursementItemModel, reason: string) {
     // TODO: Implement reject disbursement API call
     console.log('Rejecting disbursement:', disbursement.id, 'Reason:', reason);
   }
 
-  disburseFunds(disbursement: ProjectDisbursementItemModel) {
+  confirmDisbursement(disbursement: DisbursementItemModel) {
     this.modalService.confirm({
-      nzTitle: 'Xác nhận giải ngân',
-      nzContent: `Bạn có chắc chắn muốn giải ngân ${disbursement.amount} VND cho ${disbursement.investorName}?`,
-      nzOkText: 'Giải ngân',
+      nzTitle: 'Xác nhận đã giải ngân',
+      nzContent: `Xác nhận ${disbursement.investorName} đã giải ngân cho ${disbursement.title}?`,
+      nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOnOk: () => {
         // TODO: Implement disburse funds API call
         console.log('Disbursing funds:', disbursement.id);
       }
     });
+  }
+
+  get filterData() {
+    return {
+      ...this.filter,
+      projectId: this.projectId
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.filterDisbursements();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      name: searchText
+    };
+    this.filterDisbursements();
   }
 }

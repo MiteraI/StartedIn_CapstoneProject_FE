@@ -86,8 +86,6 @@ export class ContractListPage implements OnInit {
 
   // filter stuff
   filterContracts() {
-    const sd = this.filter.lastUpdatedStartDate;
-    const ed = this.filter.lastUpdatedEndDate;
     this.contractService
       .getContractListForProject(
         this.projectId,
