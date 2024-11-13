@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
 import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
@@ -16,6 +16,9 @@ import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.compon
 import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 interface FilterOptions {
   contractName?: string;
@@ -39,7 +42,9 @@ interface FilterOptions {
     FilterBarComponent,
     ContractFilterComponent,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    NzPaginationModule,
+    NzSpinModule
   ]
 })
 export class ContractListPage implements OnInit {
@@ -47,7 +52,7 @@ export class ContractListPage implements OnInit {
   searchResult: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
-    size: 10,
+    size: 20,
     total: 0
   };
 
@@ -58,12 +63,15 @@ export class ContractListPage implements OnInit {
 
   filter: FilterOptions = {};
   pageIndex: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 2;
 
   contractTypes = ContractType;
   contractStatuses = ContractStatus;
   typeLabels = ContractTypeLabels;
   statusLabels = ContractStatusLabels;
+
+  isLoading = false;
+  isDesktopView = false;
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
 
@@ -71,8 +79,13 @@ export class ContractListPage implements OnInit {
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private contractService: ContractService,
-    private notification: NzNotificationService
-  ) {}
+    private notification: NzNotificationService,
+    private viewMode: ViewModeConfigService
+  ) {
+    this.viewMode.isDesktopView$.subscribe(isDesktop => {
+      this.isDesktopView = isDesktop;
+    });
+  }
 
   ngOnInit() {
     this.route.parent?.paramMap.subscribe(map => {
@@ -106,7 +119,7 @@ export class ContractListPage implements OnInit {
       )
       .subscribe(result => {
         this.searchResult = result;
-        this.contracts = result.responseList;
+        this.contracts = result.data;
         this.groupContracts();
       });
   }
@@ -261,5 +274,62 @@ export class ContractListPage implements OnInit {
       .subscribe(response => {
         window.open(response.downLoadUrl, '_blank');
       });
+  }
+
+  // Add scroll handler for mobile infinite scroll
+  @HostListener('window:scroll', ['$event'])
+  onScroll(): void {
+    if (this.isDesktopView || this.isLoading) return;
+
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (windowHeight + scrollTop >= documentHeight - 100) {
+      this.loadMore();
+    }
+  }
+
+  loadMore(): void {
+    if (this.searchResult.page * this.searchResult.size >= this.searchResult.total) return;
+
+    this.isLoading = true;
+    this.pageIndex++;
+
+    this.contractService
+      .getContractListForProject(
+        this.projectId,
+        this.pageIndex,
+        this.pageSize,
+        this.filter.contractName,
+        this.filter.contractType,
+        this.filter.parties,
+        this.filter.lastUpdatedStartDate,
+        this.filter.lastUpdatedEndDate,
+        this.filter.contractStatus
+      )
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(result => {
+        this.searchResult.data = [...this.searchResult.data, ...result.data];
+        this.contracts = [...this.contracts, ...result.data];
+        this.groupContracts();
+        this.isLoading = false;
+      });
+  }
+
+  onPageIndexChange(index: number): void {
+    this.pageIndex = index;
+    this.filterContracts();
+  }
+
+  onPageSizeChange(size: number): void {
+    this.pageSize = size;
+    this.pageIndex = 1;
+    this.filterContracts();
   }
 }
