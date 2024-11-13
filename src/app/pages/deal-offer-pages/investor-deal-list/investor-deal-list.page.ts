@@ -93,6 +93,8 @@ export class InvestorDealListPage implements OnInit {
   }
 
   toggleSelection(offer: InvestorDealItem) {
+    if (offer.dealStatus !== DealStatus.WAITING) return;
+
     const index = this.selectedOffers.findIndex(o => o.id === offer.id);
     if (index === -1) {
       this.selectedOffers.push(offer);
@@ -102,15 +104,16 @@ export class InvestorDealListPage implements OnInit {
   }
 
   isAllSelected(): boolean {
-    return this.dealOffers.length > 0
-      && this.dealOffers.every(offer => this.isSelected(offer));
+    const selectableOffers = this.dealOffers.filter(o => o.dealStatus === DealStatus.WAITING);
+    return selectableOffers.length > 0 && selectableOffers.every(offer => this.isSelected(offer));
   }
 
   toggleAllSelection() {
+    const selectableOffers = this.dealOffers.filter(o => o.dealStatus === DealStatus.WAITING);
     if (this.isAllSelected()) {
       this.selectedOffers = [];
     } else {
-      this.selectedOffers = [...this.dealOffers];
+      this.selectedOffers = [...selectableOffers];
     }
   }
 

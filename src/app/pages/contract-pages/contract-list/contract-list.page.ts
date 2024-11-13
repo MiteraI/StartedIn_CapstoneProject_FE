@@ -193,7 +193,13 @@ export class ContractListPage implements OnInit {
   }
 
   // send stuff
-  sendSelected() {}
+  get canSendSelected() {
+    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.DRAFT);
+  }
+
+  sendSelected() {
+    this.selectedContracts.forEach(c => this.sendContract(c));
+  }
 
   sendContract(contract: ContractListItemModel) {
     this.contractService
@@ -208,19 +214,23 @@ export class ContractListPage implements OnInit {
   }
 
   // delete stuff
+  get canDeleteSelected() {
+    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.DRAFT);
+  }
+
   deleteSelected() {
-    // Implement delete functionality
-    this.contracts = this.contracts.filter(
-      contract => !this.selectedContracts.some(c => c.id === contract.id)
-    );
-    this.selectedContracts = [];
+    this.selectedContracts.forEach(c => this.deleteContract(c));
+    this.groupContracts();
+  }
+
+  deleteSingle(contract: ContractListItemModel) {
+    this.deleteContract(contract);
     this.groupContracts();
   }
 
   deleteContract(contract: ContractListItemModel) {
-    // Delete single contract (mobile view)
+    // TODO call be
     this.contracts = this.contracts.filter(c => c.id !== contract.id);
-    this.groupContracts();
   }
 
   // add stuff
@@ -234,6 +244,14 @@ export class ContractListPage implements OnInit {
   }
 
   // download stuff
+  get canDownloadSelected() {
+    return this.selectedContracts.every(c => c.contractStatus !== ContractStatus.DRAFT);
+  }
+
+  downloadSelected() {
+    this.selectedContracts.forEach(c => this.download(c));
+  }
+
   download(contract: ContractListItemModel) {
     this.contractService
       .downloadContract(contract.id, this.projectId)

@@ -87,7 +87,15 @@
           <ng-template #disbursementItem let-item let-index="index">
             <nz-list-item>
               <div class="flex w-full items-center justify-between">
-                <span>{{ item.title }}</span>
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ item.title }}</span>
+                  <div class="text-sm text-gray-500">
+                    <span>Số tiền: {{ item.amount | vndCurrency }}</span>
+                    <span class="mx-2">•</span>
+                    <span>Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }}</span>
+                    <span> - {{ item.endDate | date:'dd/MM/yyyy' }}</span>
+                  </div>
+                </div>
                 <div class="flex gap-2">
                   <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
                     <i nz-icon nzType="edit"></i>

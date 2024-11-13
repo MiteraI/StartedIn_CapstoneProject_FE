@@ -44,11 +44,11 @@
       >
         <td class="p-4" (click)="$event.stopPropagation()">
           <input
+            *ngIf="deal.dealStatus === dealStatuses.WAITING"
             type="checkbox"
             [checked]="isSelected(deal)"
             (change)="toggleSelection(deal)"
             class="rounded"
-            [disabled]="deal.dealStatus !== dealStatuses.WAITING"
           >
         </td>
         <td class="p-4">
