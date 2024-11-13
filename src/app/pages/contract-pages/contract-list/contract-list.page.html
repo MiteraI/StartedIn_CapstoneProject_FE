@@ -26,9 +26,17 @@
       [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
     >
       <span>Đã chọn {{ selectedContracts.length }} hợp đồng</span>
-      <button (click)="deleteSelected()" class="text-red-500 hover:text-red-700">
-        Xóa
-      </button>
+      <div class="space-x-4 h-6">
+        <button *ngIf="canSendSelected" (click)="deleteSelected()" class="text-blue-500 hover:text-blue-700">
+          <mat-icon fontIcon="send"></mat-icon>
+        </button>
+        <button *ngIf="canDeleteSelected" (click)="sendSelected()" class="text-red-500 hover:text-red-700">
+          <mat-icon fontIcon="delete_outline"></mat-icon>
+        </button>
+        <button *ngIf="canDownloadSelected" (click)="downloadSelected()" class="text-green-500 hover:text-green-700">
+          <mat-icon fontIcon="file_download"></mat-icon>
+        </button>
+      </div>
     </div>
     <div class="flex flex-col md:flex-row gap-3">
       <button
@@ -80,7 +88,7 @@
             contract.id
           ]"
         >
-          <td class="p-4">
+          <td class="p-4" (click)="$event.stopPropagation()">
             <input type="checkbox" [checked]="isSelected(contract)" (change)="toggleSelection(contract)" class="rounded">
           </td>
           <td class="p-4">
@@ -99,7 +107,7 @@
               ></nz-avatar>
             </div>
           </td>
-          <td class="p-4 text-gray-600">{{formatDate(contract.lastUpdatedTime)}}</td>
+          <td class="p-4 text-gray-600">{{ formatDate(contract.lastUpdatedTime) }}</td>
           <td class="p-4">
             <span [ngClass]="{
               'text-gray-500': contract.contractStatus === contractStatuses.DRAFT,
@@ -112,7 +120,7 @@
             </span>
           </td>
           <td class="p-4">
-            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2">
+            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500 hover:text-blue-700">
                 <mat-icon fontIcon="send"></mat-icon>
               </button>
@@ -120,7 +128,7 @@
                 <mat-icon fontIcon="delete_outline"></mat-icon>
               </button>
             </div>
-            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2">
+            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="file_download"></mat-icon>
               </button>
@@ -170,7 +178,7 @@
           <div class="mt-3 flex justify-between items-end">
             <div>
               <div class="text-sm text-gray-500">
-                {{formatDate(contract.lastUpdatedTime)}}
+                {{ formatDate(contract.lastUpdatedTime) }}
               </div>
               <div class="mt-1">
                 <span [ngClass]="{

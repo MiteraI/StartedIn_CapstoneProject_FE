@@ -40,7 +40,8 @@ import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
-    IonicModule
+    IonicModule,
+    VndCurrencyPipe
   ]
 })
 export class InvestmentContractPage implements OnInit {
