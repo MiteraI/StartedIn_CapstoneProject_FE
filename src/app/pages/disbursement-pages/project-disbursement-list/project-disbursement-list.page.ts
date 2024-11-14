@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { DisbursementService } from 'src/app/services/disbursement.service';
-import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { DisbursementItemModel } from 'src/app/shared/models/disbursement/disbursement-item.model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -15,6 +14,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { RejectDisbursementFormComponent } from 'src/app/components/disbursement-pages/reject-disbursement-form/reject-disbursement-form.component';
 import { DisbursementFilterComponent } from 'src/app/components/disbursement-pages/disbursement-filter/disbursement-filter.component';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { Subject, takeUntil } from 'rxjs';
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
+import { ScrollService } from 'src/app/core/util/scroll.service';
+import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 
 interface FilterOptions {
   name?: string;
@@ -40,17 +45,14 @@ interface FilterOptions {
     DisbursementFilterComponent,
     MatIconModule,
     RouterModule,
-    VndCurrencyPipe
+    VndCurrencyPipe,
+    NzPaginationModule,
+    NzSpinModule,
+    InitialsOnlyPipe
   ]
 })
-export class ProjectDisbursementListPage implements OnInit {
+export class ProjectDisbursementListPage implements OnInit, OnDestroy {
   projectId!: string;
-  searchResult: SearchResponseModel<DisbursementItemModel> = {
-    data: [],
-    page: 1,
-    size: 10,
-    total: 0
-  };
 
   disbursements: DisbursementItemModel[] = [];
   selectedDisbursements: DisbursementItemModel[] = [];
@@ -59,10 +61,15 @@ export class ProjectDisbursementListPage implements OnInit {
 
   filter: FilterOptions = {};
   pageIndex: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 20;
+  totalRecords: number = 200;
 
   disbursementStatuses = DisbursementStatus;
   statusLabels = DisbursementStatusLabels;
+
+  isLoading = false;
+  isDesktopView = false;
+  private destroy$ = new Subject<void>();
 
   @ViewChild('filterComponent') filterComponent!: DisbursementFilterComponent;
 
@@ -70,7 +77,9 @@ export class ProjectDisbursementListPage implements OnInit {
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private disbursementService: DisbursementService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private viewMode: ViewModeConfigService,
+    private scrollService: ScrollService
   ) {}
 
   ngOnInit() {
@@ -81,9 +90,25 @@ export class ProjectDisbursementListPage implements OnInit {
       this.projectId = map.get('id')!;
       this.filterDisbursements();
     });
+
+    this.viewMode.isDesktopView$.subscribe(isDesktop => {
+      this.isDesktopView = isDesktop;
+    });
+
+    this.scrollService.scroll$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadMore();
+      });
   }
 
-  filterDisbursements() {
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  filterDisbursements(append: boolean = false) {
+    this.isLoading = true;
     this.disbursementService
       .getDisbursementsForProject(
         this.projectId,
@@ -105,10 +130,10 @@ export class ProjectDisbursementListPage implements OnInit {
         })
       )
       .subscribe(result => {
-        this.searchResult = result;
-        console.log(result);
-        this.disbursements = result.data;
+        this.disbursements = append ? [...this.disbursements, ...result.data] : result.data;
+        this.totalRecords = result.total;
         this.groupDisbursements();
+        this.isLoading = false;
       });
   }
 
@@ -163,7 +188,7 @@ export class ProjectDisbursementListPage implements OnInit {
       nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOnOk: () => {
-        // TODO: Implement disburse funds API call
+        // TODO: Implement confirm API call
         console.log('Disbursing funds:', disbursement.id);
       }
     });
@@ -190,6 +215,28 @@ export class ProjectDisbursementListPage implements OnInit {
       ...this.filter,
       name: searchText
     };
+    this.filterDisbursements();
+  }
+
+  get isEndOfList(): boolean {
+    return this.pageIndex * this.pageSize >= this.totalRecords;
+  }
+
+  loadMore(): void {
+    if (this.isDesktopView || this.isLoading || this.isEndOfList) return;
+
+    this.pageIndex++;
+    this.filterDisbursements(true);
+  }
+
+  onPageIndexChange(pageIndex: number) {
+    this.pageIndex = pageIndex;
+    this.filterDisbursements();
+  }
+
+  onPageSizeChange(pageSize: number) {
+    this.pageSize = pageSize;
+    this.pageIndex = 1;
     this.filterDisbursements();
   }
 }

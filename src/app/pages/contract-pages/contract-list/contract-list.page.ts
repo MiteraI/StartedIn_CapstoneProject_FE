@@ -58,7 +58,7 @@ export class ContractListPage implements OnInit, OnDestroy {
   filter: FilterOptions = {};
   pageIndex: number = 1;
   pageSize: number = 20;
-  totalRecords: number = 100;
+  totalRecords: number = 200;
 
   contractTypes = ContractType;
   contractStatuses = ContractStatus;
@@ -94,9 +94,7 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.scrollService.scroll$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.canLoadMore) {
-          this.loadMore();
-        }
+        this.loadMore();
       });
   }
 
@@ -282,14 +280,12 @@ export class ContractListPage implements OnInit, OnDestroy {
   }
 
   // infinite scroll stuff
-  get canLoadMore(): boolean {
-    return !this.isDesktopView
-      && !this.isLoading
-      && this.pageIndex * this.pageSize < this.totalRecords
+  get isEndOfList(): boolean {
+    return this.pageIndex * this.pageSize >= this.totalRecords
   }
 
   loadMore(): void {
-    if (!this.canLoadMore) return;
+    if (this.isDesktopView || this.isLoading || this.isEndOfList) return;
 
     this.pageIndex++;
     this.filterContracts(true);
