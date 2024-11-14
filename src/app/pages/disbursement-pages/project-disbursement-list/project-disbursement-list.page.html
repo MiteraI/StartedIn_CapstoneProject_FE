@@ -109,7 +109,6 @@
           <div class="flex items-start justify-between">
             <div class="flex-1">
               <div class="text-xl font-medium">{{ disbursement.title }}</div>
-              <div class="text-sm text-gray-500">{{ disbursement.investorName }}</div>
               <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
             </div>
             <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
@@ -118,21 +117,30 @@
               </button>
             </div>
           </div>
-          <div class="mt-2">
-            <div class="text-sm">
-              {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
+          <div class="mt-2 flex justify-between items-end">
+            <div>
+              <div class="text-sm">
+                {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
+              </div>
+              <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
+              <span [ngClass]="{
+                'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
+                'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+                'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
+                'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+                'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
+                'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+              }">
+                ● {{ statusLabels[disbursement.disbursementStatus] }}
+              </span>
             </div>
-            <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
-            <span [ngClass]="{
-              'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
-              'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
-              'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
-            }">
-              ● {{ statusLabels[disbursement.disbursementStatus] }}
-            </span>
+            <div class="flex">
+              <nz-avatar
+                [nzText]="disbursement.investorName | initialsOnly"
+                [nzSize]="32"
+                class="bg-orange-600 ring-2 ring-white"
+              ></nz-avatar>
+            </div>
           </div>
         </div>
       </div>

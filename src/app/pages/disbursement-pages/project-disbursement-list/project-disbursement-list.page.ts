@@ -19,6 +19,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { Subject, takeUntil } from 'rxjs';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
+import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 
 interface FilterOptions {
   name?: string;
@@ -46,7 +47,8 @@ interface FilterOptions {
     RouterModule,
     VndCurrencyPipe,
     NzPaginationModule,
-    NzSpinModule
+    NzSpinModule,
+    InitialsOnlyPipe
   ]
 })
 export class ProjectDisbursementListPage implements OnInit, OnDestroy {
