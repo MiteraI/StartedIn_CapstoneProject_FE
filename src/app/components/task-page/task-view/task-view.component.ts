@@ -11,7 +11,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { CreateTaskModalComponent } from '../create-task-modal/create-task-modal.component'
 import { TaskService } from 'src/app/services/task.service'
 import { Task } from 'src/app/shared/models/task/task.model'
-import { AntdNotificationService } from 'src/app/services/antd-notification.service'
+import { AntdNotificationService } from 'src/app/core/services/antd-notification.service'
 import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({

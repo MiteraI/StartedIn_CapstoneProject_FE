@@ -26,7 +26,7 @@ export class ProjectService {
   }
 
   getProjectsToExplore(pageIndex: number, pageSize: number): Observable<any> {
-    const query = `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+    const query = `page=${pageIndex}&size=${pageSize}`;
     return this.http.get<SearchResponseModel<ExploreProjectsListItemModel>>(
       this.applicationConfigService.getEndpointFor(`/api/startups?${query}`),
     );

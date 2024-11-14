@@ -17,7 +17,7 @@ import { ContractPartyModel } from 'src/app/shared/models/contract/contract-part
 import { ProjectService } from 'src/app/services/project.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { MenuStateService } from 'src/app/core/services/menu-state.service';
 
 @Component({
   selector: 'app-contract-filter',

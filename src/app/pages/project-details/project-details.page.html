@@ -3,7 +3,7 @@
   <router-outlet></router-outlet>
 </project-side-nav>
 } @else {
-<div class="overflow-y-scroll max-h-[93vh]">
+<div class="scroll-container overflow-y-scroll max-h-[93vh]" (scroll)="onScroll($event)">
   <router-outlet></router-outlet>
 </div>
 }

@@ -31,14 +31,14 @@ export class ContractService {
     lastUpdatedStartDate?: Date,
     lastUpdatedEndDate?: Date,
     contractStatus?: ContractStatus
-  ): Observable<any> {
+  ): Observable<SearchResponseModel<ContractListItemModel>> {
     const query = (contractName?.trim() ? `contractName=${contractName}&` : '')
       + (contractType ? `contractTypeEnum=${contractType}&` : '')
       + (!!parties && parties.length > 0 ? `parties=${parties?.join("&parties=")}&` : '')
       + (lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate.toISOString().split('T')[0]}&` : '')
       + (lastUpdatedEndDate ? `lastUpdatedEndDate=${lastUpdatedEndDate.toISOString().split('T')[0]}&` : '')
       + (contractStatus ? `contractStatusEnum=${contractStatus}&` : '')
-      + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+      + `page=${pageIndex}&size=${pageSize}`;
     return this.http.get<SearchResponseModel<ContractListItemModel>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${id}/contracts?${query}`),
     );

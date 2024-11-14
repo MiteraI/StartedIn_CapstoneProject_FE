@@ -139,7 +139,19 @@
     </tbody>
   </table>
 
-  <!-- Mobile View -->
+  <!-- Pagination -->
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
   <div class="md:hidden space-y-4">
     <ng-container *ngFor="let group of contractGroups; index as i">
       <div class="bg-gray-100 px-3 py-1 font-medium">
@@ -157,7 +169,7 @@
             ]"
           >
             <div class="flex-1">
-              <div class="text-2xl font-medium">{{ contract.contractName }}</div>
+              <div class="text-2xl font-medium mr-2">{{ contract.contractName }}</div>
               <div class="text-xs text-gray-500 mt-1">{{ typeLabels[contract.contractType] }}</div>
             </div>
             <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
@@ -204,5 +216,12 @@
         </div>
       </div>
     </ng-container>
+
+    <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="pageIndex * pageSize >= totalRecords" class="text-center text-gray-500 py-4">
+      Bạn đã xem hết các hợp đồng!
+    </div>
   </div>
 </div>

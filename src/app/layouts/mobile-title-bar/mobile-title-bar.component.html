@@ -1,0 +1,7 @@
+<div *ngIf="!isDesktopView" class="flex items-center w-full justify-between min-h-[7vh] sticky top-0 border-2 bg-white z-10">
+  <mat-icon (click)="navigateBack()" fontIcon="chevron_left" class="ml-2"></mat-icon>
+  <span>{{ viewName }}</span>
+  <div class="flex items-center space-x-3 mr-2">
+    <app-profile-dropdown></app-profile-dropdown>
+  </div>
+</div>

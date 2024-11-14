@@ -52,7 +52,7 @@ export class DealOfferService {
       + (maxAmount ? `maxAmount=${maxAmount}&` : '')
       + (minEquity ? `minEquity=${minEquity}&` : '')
       + (maxEquity ? `maxEquity=${maxEquity}&` : '')
-      + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+      + `page=${pageIndex}&size=${pageSize}`;
 
     return this.http.get<SearchResponseModel<InvestorDealItem>>(
       this.applicationConfigService.getEndpointFor(`/api/deal-offers?${query}`)
@@ -86,7 +86,7 @@ export class DealOfferService {
       + (maxAmount ? `maxAmount=${maxAmount}&` : '')
       + (minEquity ? `minEquity=${minEquity}&` : '')
       + (maxEquity ? `maxEquity=${maxEquity}&` : '')
-      + `pageIndex=${pageIndex}&pageSize=${pageSize}`;
+      + `page=${pageIndex}&size=${pageSize}`;
 
     return this.http.get<SearchResponseModel<ProjectDealItem>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/deal-offers?${query}`)

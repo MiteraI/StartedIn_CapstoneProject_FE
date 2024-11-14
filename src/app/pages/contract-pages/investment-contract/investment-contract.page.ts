@@ -23,6 +23,7 @@ import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-i
 import { ContractCreateFromDealModel } from 'src/app/shared/models/contract/contract-create-from-deal.model';
 import { InvestmentContractDetailModel } from 'src/app/shared/models/contract/investment-contract-detail.model';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
+import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
 
 @Component({
   selector: 'app-investment-contract',
@@ -41,7 +42,8 @@ import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
     NzIconModule,
     NzInputNumberModule,
     IonicModule,
-    VndCurrencyPipe
+    VndCurrencyPipe,
+    MobileTitleBarComponent
   ]
 })
 export class InvestmentContractPage implements OnInit {
