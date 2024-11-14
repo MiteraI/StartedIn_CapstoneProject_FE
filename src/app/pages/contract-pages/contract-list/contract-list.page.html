@@ -220,7 +220,7 @@
     <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
       <nz-spin nzSimple></nz-spin>
     </div>
-    <div *ngIf="pageIndex * pageSize >= totalRecords" class="text-center text-gray-500 py-4">
+    <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
       Bạn đã xem hết các hợp đồng!
     </div>
   </div>

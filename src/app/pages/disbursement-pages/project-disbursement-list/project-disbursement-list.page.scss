@@ -1,0 +1,10 @@
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: white;
+}
+
+:host ::ng-deep .ant-spin-dot {
+  font-size: 24px;
+}
