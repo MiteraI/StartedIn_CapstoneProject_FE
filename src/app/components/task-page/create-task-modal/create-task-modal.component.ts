@@ -7,7 +7,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
-import { AntdNotificationService } from 'src/app/core/services/antd-notification.service'
+import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { TaskService } from 'src/app/services/task.service'
 
 interface IModalData {

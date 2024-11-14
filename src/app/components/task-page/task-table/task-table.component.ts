@@ -7,7 +7,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { UpdateTaskModalComponent } from '../update-task-modal/update-task-modal.component'
 import { CommonModule } from '@angular/common'
-import { AntdNotificationService } from 'src/app/core/services/antd-notification.service'
+import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { TaskService } from 'src/app/services/task.service'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 

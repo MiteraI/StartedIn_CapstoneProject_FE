@@ -18,7 +18,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { ScrollService } from 'src/app/core/services/scroll.service';
+import { ScrollService } from 'src/app/core/util/scroll.service';
 
 interface FilterOptions {
   contractName?: string;

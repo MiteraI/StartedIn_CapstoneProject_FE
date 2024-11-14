@@ -3,7 +3,7 @@ import { ProjectSideNavComponent } from 'src/app/layouts/project-side-nav/projec
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { Subject, takeUntil } from 'rxjs'
-import { ScrollService } from 'src/app/core/services/scroll.service'
+import { ScrollService } from 'src/app/core/util/scroll.service'
 
 @Component({
   selector: 'app-project-details',
