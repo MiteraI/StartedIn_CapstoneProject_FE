@@ -58,4 +58,33 @@ export class DisbursementService {
       map(response => this.parseSearchResponse(response))
     );
   }
+
+  getDisbursements(
+    pageIndex: number,
+    pageSize: number,
+    name?: string,
+    periodFrom?: Date,
+    periodTo?: Date,
+    amountFrom?: number,
+    amountTo?: number,
+    status?: DisbursementStatus,
+    projectId?: string,
+    contractId?: string
+  ): Observable<SearchResponseModel<DisbursementItemModel>> {
+    const query = (name?.trim() ? `title=${name}&` : '')
+      + (periodFrom ? `periodFrom=${periodFrom.toISOString().split('T')[0]}&` : '')
+      + (periodTo ? `periodTo=${periodTo.toISOString().split('T')[0]}&` : '')
+      + (amountFrom ? `amountFrom=${amountFrom}&` : '')
+      + (amountTo ? `amountTo=${amountTo}&` : '')
+      + (status ? `disbursementStatus=${status}&` : '')
+      + (projectId ? `projectId=${projectId}&` : '')
+      + (contractId ? `contractId=${contractId}&` : '')
+      + `page=${pageIndex}&size=${pageSize}`;
+
+    return this.http.get<SearchResponseModel<DisbursementItemModel>>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements?${query}`)
+    ).pipe(
+      map(response => this.parseSearchResponse(response))
+    );
+  }
 }

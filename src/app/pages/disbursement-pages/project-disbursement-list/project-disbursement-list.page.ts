@@ -164,23 +164,6 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     return format(new Date(dateStr), 'dd/MM/yyyy');
   }
 
-  openRejectModal(disbursement: DisbursementItemModel) {
-    this.modalService.create({
-      nzTitle: 'Từ chối giải ngân',
-      nzContent: RejectDisbursementFormComponent,
-      nzData: disbursement,
-      nzOnOk: (componentInstance) => {
-        const reason = componentInstance.rejectForm.get('reason')!.value;
-        this.rejectDisbursement(disbursement, reason);
-      }
-    });
-  }
-
-  rejectDisbursement(disbursement: DisbursementItemModel, reason: string) {
-    // TODO: Implement reject disbursement API call
-    console.log('Rejecting disbursement:', disbursement.id, 'Reason:', reason);
-  }
-
   confirmDisbursement(disbursement: DisbursementItemModel) {
     this.modalService.confirm({
       nzTitle: 'Xác nhận đã giải ngân',

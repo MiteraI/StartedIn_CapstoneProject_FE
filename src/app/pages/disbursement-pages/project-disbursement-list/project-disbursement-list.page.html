@@ -71,12 +71,9 @@
             </span>
           </td>
           <td class="p-4">
-            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
+            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.ACCEPTED" class="space-x-2 h-6">
               <button (click)="confirmDisbursement(disbursement)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="check"></mat-icon>
-              </button>
-              <button (click)="openRejectModal(disbursement)" class="text-red-500 hover:text-red-700">
-                <mat-icon fontIcon="close"></mat-icon>
               </button>
             </div>
           </td>
