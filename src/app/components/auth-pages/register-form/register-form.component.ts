@@ -14,7 +14,7 @@ import { MaskitoDirective } from '@maskito/angular';
 import { addIcons } from 'ionicons';
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { RegisterRequest } from 'src/app/shared/models/register.model';
-import { RegisterService } from 'src/app/services/auth/register.service';
+import { RegisterService } from 'src/app/services/register.service';
 import { catchError, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';

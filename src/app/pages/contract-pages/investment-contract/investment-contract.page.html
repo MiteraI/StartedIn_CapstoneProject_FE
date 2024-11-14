@@ -1,26 +1,28 @@
+<app-mobile-title-bar viewName="Chi tiết hợp đồng"></app-mobile-title-bar>
+
 <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
-  <ion-card class="p-4">
+  <ion-card class="md:p-4">
     <ion-card-header>
       <div class="font-bold text-3xl text-black">Chi tiết hợp đồng</div>
     </ion-card-header>
 
     <ion-card-content>
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Mã số hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Mã số hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
           <input nz-input formControlName="contractIdNumber" placeholder="Nhập mã số hợp đồng" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tên hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
           <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Số cổ phần</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Số cổ phần</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số cổ phần!">
           <nz-input-number
             formControlName="shareQuantity"
@@ -35,7 +37,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tỉ lệ cổ phần (%)</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
           <nz-input-number
             formControlName="percentage"
@@ -53,7 +55,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Giá mua</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Giá mua</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
           <nz-input-number
             formControlName="buyPrice"
@@ -69,7 +71,7 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều khoản hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
         <nz-form-control [nzSpan]="18">
           <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
         </nz-form-control>
@@ -90,10 +92,11 @@
                 <div class="flex flex-col">
                   <span class="font-medium">{{ item.title }}</span>
                   <div class="text-sm text-gray-500">
-                    <span>Số tiền: {{ item.amount | vndCurrency }}</span>
-                    <span class="mx-2">•</span>
-                    <span>Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }}</span>
-                    <span> - {{ item.endDate | date:'dd/MM/yyyy' }}</span>
+                    <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
+                    <span class="mx-2 hidden md:inline">•</span>
+                    <div class="md:inline">
+                      Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
+                    </div>
                   </div>
                 </div>
                 <div class="flex gap-2">

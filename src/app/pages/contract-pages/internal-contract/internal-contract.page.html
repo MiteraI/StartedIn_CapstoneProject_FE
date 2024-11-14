@@ -1,26 +1,28 @@
+<app-mobile-title-bar viewName="Chi tiết hợp đồng"></app-mobile-title-bar>
+
 <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
-  <ion-card class="p-4">
+  <ion-card class="md:p-4">
     <ion-card-header>
       <div class="font-bold text-3xl text-black">Chi tiết hợp đồng</div>
     </ion-card-header>
 
     <ion-card-content>
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Mã số hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Mã số hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
           <input nz-input formControlName="contractIdNumber" placeholder="Nhập mã số hợp đồng" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tên hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
           <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều khoản hợp đồng</nz-form-label>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
         <nz-form-control [nzSpan]="18">
           <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
         </nz-form-control>
@@ -36,21 +38,25 @@
 
         <div formArrayName="shares">
           <div *ngFor="let share of sharesFormArray.controls; let i = index" [formGroupName]="i" class="mb-4 p-2 border rounded">
-            <div class="flex mb-2">
+            <div class="flex flex-wrap">
               <nz-select
                 nzShowSearch
                 nzAllowClear
                 nzPlaceHolder="Thành viên"
                 [nzDisabled]="isReadOnly"
                 formControlName="userId"
-                class="w-1/3"
+                class="mb-2 w-2/3 md:w-1/3"
               >
                 <nz-option *ngFor="let member of memberList" nzCustomContent [nzLabel]="member.fullName" [nzValue]="member.id">
                   <span class="font-medium">{{ member.fullName }}</span>
                   <span class="ml-2 text-xs opacity-50">{{ member.email }}</span>
                 </nz-option>
               </nz-select>
-              <div class="px-2 w-1/12 text-center my-auto">giữ</div>
+              <div class="flex items-center justify-center px-2 mb-2 w-1/6 md:w-1/12">giữ</div>
+
+              <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeShare(i)" class="mb-2 w-1/6 md:hidden">
+                <i nz-icon nzType="delete"></i>
+              </button>
 
               <nz-input-number
                 formControlName="percentage"
@@ -60,24 +66,23 @@
                 [nzFormatter]="percentFormatter"
                 [nzParser]="percentParser"
                 (nzBlur)="updateShareQuantity(i)"
-                class="w-1/4"
+                class="mb-2 w-1/3 md:w-1/6"
               ></nz-input-number>
-              <div class="px-2 w-1/4 my-auto">tỉ lệ cổ phần,</div>
+              <div class="flex items-center px-4 mb-2 w-2/3 md:w-1/3">tỉ lệ cổ phần,</div>
 
-              <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeShare(i)" class="w-1/12">
+              <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeShare(i)" class="mb-2 w-1/12 hidden md:block">
                 <i nz-icon nzType="delete"></i>
               </button>
-            </div>
-            <div class="flex">
-              <div class="px-2 w-5/12 text-right my-auto">tương đương</div>
+
+              <div class="flex items-center px-2 mb-2 md:justify-end md:w-5/12">tương đương</div>
               <nz-input-number
                 formControlName="shareQuantity"
                 [nzMin]="0"
                 [nzStep]="1"
                 (nzBlur)="updateSharePercentage(i)"
-                class="w-1/4"
+                class="mb-2 w-1/4"
               ></nz-input-number>
-              <div class="px-2 w-1/3 my-auto">cổ phần</div>
+              <div class="flex items-center px-4 mb-2 w-1/3">cổ phần</div>
             </div>
           </div>
         </div>

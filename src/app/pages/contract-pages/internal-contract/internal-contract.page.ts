@@ -23,6 +23,7 @@ import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
+import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
 
 @Component({
   selector: 'app-internal-contract',
@@ -40,7 +41,8 @@ import { AccountService } from 'src/app/core/auth/account.service';
     NzIconModule,
     NzSelectModule,
     NzInputNumberModule,
-    IonicModule
+    IonicModule,
+    MobileTitleBarComponent
   ]
 })
 export class InternalContractPage implements OnInit {

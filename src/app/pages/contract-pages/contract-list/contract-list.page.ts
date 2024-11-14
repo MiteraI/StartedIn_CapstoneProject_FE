@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
-import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { catchError, throwError, Subject, takeUntil } from 'rxjs';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -19,6 +18,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { ScrollService } from 'src/app/core/services/scroll.service';
 
 interface FilterOptions {
   contractName?: string;
@@ -47,14 +47,8 @@ interface FilterOptions {
     NzSpinModule
   ]
 })
-export class ContractListPage implements OnInit {
+export class ContractListPage implements OnInit, OnDestroy {
   projectId!: string;
-  searchResult: SearchResponseModel<ContractListItemModel> = {
-    data: [],
-    page: 1,
-    size: 20,
-    total: 0
-  };
 
   contracts: ContractListItemModel[] = [];
   selectedContracts: ContractListItemModel[] = [];
@@ -63,7 +57,8 @@ export class ContractListPage implements OnInit {
 
   filter: FilterOptions = {};
   pageIndex: number = 1;
-  pageSize: number = 2;
+  pageSize: number = 20;
+  totalRecords: number = 100;
 
   contractTypes = ContractType;
   contractStatuses = ContractStatus;
@@ -74,18 +69,16 @@ export class ContractListPage implements OnInit {
   isDesktopView = false;
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private contractService: ContractService,
     private notification: NzNotificationService,
-    private viewMode: ViewModeConfigService
-  ) {
-    this.viewMode.isDesktopView$.subscribe(isDesktop => {
-      this.isDesktopView = isDesktop;
-    });
-  }
+    private viewMode: ViewModeConfigService,
+    private scrollService: ScrollService
+  ) {}
 
   ngOnInit() {
     this.route.parent?.paramMap.subscribe(map => {
@@ -94,11 +87,22 @@ export class ContractListPage implements OnInit {
       }
       this.projectId = map.get('id')!;
       this.filterContracts();
-    })
+    });
+    this.viewMode.isDesktopView$.subscribe(isDesktop => {
+      this.isDesktopView = isDesktop;
+    });
+    this.scrollService.scroll$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.canLoadMore) {
+          this.loadMore();
+        }
+      });
   }
 
   // filter stuff
-  filterContracts() {
+  filterContracts(append: boolean = false) {
+    this.isLoading = true;
     this.contractService
       .getContractListForProject(
         this.projectId,
@@ -118,9 +122,10 @@ export class ContractListPage implements OnInit {
         })
       )
       .subscribe(result => {
-        this.searchResult = result;
-        this.contracts = result.data;
+        this.contracts = append ? [...this.contracts, ...result.data] : result.data;
+        this.totalRecords = result.total;
         this.groupContracts();
+        this.isLoading = false;
       });
   }
 
@@ -276,50 +281,18 @@ export class ContractListPage implements OnInit {
       });
   }
 
-  // Add scroll handler for mobile infinite scroll
-  @HostListener('window:scroll', ['$event'])
-  onScroll(): void {
-    if (this.isDesktopView || this.isLoading) return;
-
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    if (windowHeight + scrollTop >= documentHeight - 100) {
-      this.loadMore();
-    }
+  // infinite scroll stuff
+  get canLoadMore(): boolean {
+    return !this.isDesktopView
+      && !this.isLoading
+      && this.pageIndex * this.pageSize < this.totalRecords
   }
 
   loadMore(): void {
-    if (this.searchResult.page * this.searchResult.size >= this.searchResult.total) return;
+    if (!this.canLoadMore) return;
 
-    this.isLoading = true;
     this.pageIndex++;
-
-    this.contractService
-      .getContractListForProject(
-        this.projectId,
-        this.pageIndex,
-        this.pageSize,
-        this.filter.contractName,
-        this.filter.contractType,
-        this.filter.parties,
-        this.filter.lastUpdatedStartDate,
-        this.filter.lastUpdatedEndDate,
-        this.filter.contractStatus
-      )
-      .pipe(
-        catchError(error => {
-          this.notification.error("Lỗi", "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
-          return throwError(() => new Error(error.error));
-        })
-      )
-      .subscribe(result => {
-        this.searchResult.data = [...this.searchResult.data, ...result.data];
-        this.contracts = [...this.contracts, ...result.data];
-        this.groupContracts();
-        this.isLoading = false;
-      });
+    this.filterContracts(true);
   }
 
   onPageIndexChange(index: number): void {
@@ -331,5 +304,10 @@ export class ContractListPage implements OnInit {
     this.pageSize = size;
     this.pageIndex = 1;
     this.filterContracts();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

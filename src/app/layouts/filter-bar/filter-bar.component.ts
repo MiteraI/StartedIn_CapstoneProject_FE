@@ -7,7 +7,7 @@ import { Router } from '@angular/router'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatMenuTrigger } from '@angular/material/menu'
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { MenuStateService } from 'src/app/services/menu-state.service'
+import { MenuStateService } from 'src/app/core/services/menu-state.service'
 import { FormsModule } from '@angular/forms'
 
 @Component({
