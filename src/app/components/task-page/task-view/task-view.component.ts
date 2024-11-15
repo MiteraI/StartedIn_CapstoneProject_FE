@@ -13,6 +13,7 @@ import { TaskService } from 'src/app/services/task.service'
 import { Task } from 'src/app/shared/models/task/task.model'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { HttpErrorResponse } from '@angular/common/http'
+import { ScrollService } from 'src/app/core/util/scroll.service'
 
 @Component({
   selector: 'app-task-view',
@@ -26,6 +27,9 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>()
   projectId = ''
   taskList: Task[] = []
+  size: number = 12
+  page: number = 1
+  total: number = 0 //Total of tasks (filter or not)
   isFetchAllTaskLoading: boolean = false
 
   constructor(
@@ -33,19 +37,39 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     private modalService: NzModalService,
     private activatedRoute: ActivatedRoute,
     private taskService: TaskService,
-    private antdNoti: AntdNotificationService
-  ) {
-    viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
-    this.activatedRoute.parent?.paramMap.subscribe((value) => {
-      this.projectId = value.get('id')!
+    private antdNoti: AntdNotificationService,
+    private scrollService: ScrollService
+  ) {}
+
+  openCreateTaskModal() {
+    const modalRef = this.modalService.create({
+      nzTitle: 'Tác Vụ Mới',
+      nzContent: CreateTaskModalComponent,
+      nzData: {
+        projectId: this.projectId,
+      },
+      nzFooter: null,
     })
+  }
+
+  onPaginationChanged(page: number) {
+    this.page = page
     this.isFetchAllTaskLoading = true
-    taskService
-      .getTaskListForProject(this.projectId)
+    this.fetchTasks(this.isDesktopView)
+  }
+
+  private fetchTasks(isDesktop: boolean) {
+    this.taskService
+      .getTaskListForProject(this.projectId, this.page, this.size)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
-          this.taskList = val.data
+          if (isDesktop) {
+            this.taskList = val.data
+          } else {
+            this.taskList = [...this.taskList, ...val.data]
+          }
+          this.total = val.total
           this.isFetchAllTaskLoading = false
         },
         error: (error: HttpErrorResponse) => {
@@ -60,18 +84,34 @@ export class TaskViewComponent implements OnInit, OnDestroy {
       })
   }
 
-  openCreateTaskModal() {
-    const modalRef = this.modalService.create({
-      nzTitle: 'Tác Vụ Mới',
-      nzContent: CreateTaskModalComponent,
-      nzData: {
-        projectId: this.projectId,
-      },
-      nzFooter: null,
-    })
+  get isEndOfList(): boolean {
+    return this.page * this.size >= this.total
   }
 
-  ngOnInit() {}
+  loadMore(): void {
+    //Only in mobile load more and add to the task array
+    if (this.isDesktopView || this.isFetchAllTaskLoading || this.isEndOfList) return
+
+    this.page++
+    this.fetchTasks(false)
+  }
+
+  ngOnInit() {
+    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
+    if (this.isDesktopView) {
+      this.size = 10
+    } else {
+      this.size = 12
+    }
+    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+      this.projectId = value.get('id')!
+    })
+    this.isFetchAllTaskLoading = true
+    this.fetchTasks(this.isDesktopView)
+    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.loadMore()
+    })
+  }
 
   ngOnDestroy() {
     this.destroy$.next()

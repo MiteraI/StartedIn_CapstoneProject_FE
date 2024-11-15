@@ -1,4 +1,14 @@
-<nz-table #basicTable nzSize="middle" [nzLoading]="isFetchAllTaskLoading" [nzData]="taskList">
+<nz-table
+  #basicTable
+  nzSize="small"
+  [nzFrontPagination]="false"
+  [nzLoading]="isFetchAllTaskLoading"
+  [nzData]="taskList"
+  [nzTotal]="total"
+  [nzPageIndex]="page"
+  [nzPageSize]="size"
+  (nzPageIndexChange)="onPageChange($event)"
+>
   <thead>
     <tr>
       <th>Tên Tác Vụ</th>

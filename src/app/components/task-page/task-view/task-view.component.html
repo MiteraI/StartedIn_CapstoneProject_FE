@@ -10,7 +10,7 @@
       Thêm Tác Vụ
     </button>
   </div>
-  <app-task-table [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-task-table>
+  <app-task-table [total]="total" [page]="page" [size]="size" [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading" (pageChanged)="onPaginationChanged($event)"></app-task-table>
 </div>
 } @else {
 <div>
