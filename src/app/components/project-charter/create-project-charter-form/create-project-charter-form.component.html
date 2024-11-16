@@ -57,7 +57,7 @@
 
     <div class="flex justify-between">
       <p class="text-xl font-semibold text-gray-600">ĐIỀU LỆ DỰ ÁN</p>
-      <span nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
+      <span *ngIf="isCharterExist" nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
     </div>
     <div class="sm:flex w-full">
       <div class="space-y-4 sm:w-1/2">
@@ -93,7 +93,7 @@
       <label class="text-gray-600 pt-3">KẾT QUẢ ĐẦU RA</label>
       <textarea placeholder="Nhập kết quả đầu ra" formControlName="deliverables" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
     </div>
-    <div *ngIf="isEditable" class="text-right">
+    <div *ngIf="isEditable && isCharterExist" class="text-right">
       <button [disabled]="projectCharterForm.invalid" class="rounded-md" nz-button nzType="primary" type="button" (click)="saveEdit()">Save</button>
     </div>
 

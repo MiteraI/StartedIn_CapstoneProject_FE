@@ -11,6 +11,7 @@ import { MilestoneTableComponent } from '../../components/milestone/milestone-ta
 import { MilestoneMobileViewComponent } from '../../components/milestone/milestone-mobile-view/milestone-mobile-view.component'
 import { MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { MilestoneCreateModalComponent } from 'src/app/components/milestone/milestone-create-modal/milestone-create-modal.component'
 
 @Component({
   selector: 'app-milestone',
@@ -41,6 +42,13 @@ export class MilestonePage implements OnInit {
   }
 
   openCreateTaskModal() {
-    throw new Error('Method not implemented.')
+    const modalRef = this.modalService.create({
+      nzTitle: 'Cột Mốc mới',
+      nzContent: MilestoneCreateModalComponent,
+      nzData: {
+        projectId: this.projectId,
+      },
+      nzFooter: null,
+    })
   }
 }
