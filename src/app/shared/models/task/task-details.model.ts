@@ -1,5 +1,5 @@
 import { TaskStatus } from '../../enums/task-status.enum'
-import { Milestone } from '../project-charter/project-charter.model'
+import { Milestone } from '../milestone/milestone.model'
 import { TeamMemberModel } from '../user/team-member.model'
 import { Task } from './task.model'
 

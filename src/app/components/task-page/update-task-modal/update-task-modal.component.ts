@@ -13,7 +13,6 @@ import { TaskService } from 'src/app/services/task.service'
 import { TaskStatus, TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { UpdateTaskInfo } from 'src/app/shared/models/task/update-task.model'
 import { Task } from 'src/app/shared/models/task/task.model'
-import { Milestone } from 'src/app/shared/models/project-charter/project-charter.model'
 import { ProjectService } from 'src/app/services/project.service'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
@@ -22,6 +21,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { Subject, takeUntil } from 'rxjs'
+import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 
 interface IModalData {
   taskId: string
