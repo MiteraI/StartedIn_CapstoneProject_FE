@@ -23,6 +23,30 @@
     </nz-form-control>
   </nz-form-item>
 
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <nz-form-item>
+      <nz-form-label>Milestone</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="milestone" nzPlaceHolder="Select milestone">
+          @for (milestone of milestones; track $index) {
+          <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Assignees</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Select assignees">
+          @for (user of users; track $index) {
+          <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
   <!-- Submit Button -->
   <nz-form-item>
     <nz-form-control>

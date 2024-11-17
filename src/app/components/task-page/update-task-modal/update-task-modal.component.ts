@@ -82,13 +82,16 @@ export class UpdateTaskModalComponent implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid && this.isInfoChanged) {
-      const deadline = this.taskForm.value.deadline
-      const formattedDeadline = deadline instanceof Date ? deadline.toISOString() : new Date(deadline).toISOString()
+      let deadline = this.taskForm.value.deadline
+      if (deadline) {
+        deadline = deadline instanceof Date ? deadline : new Date(deadline)
+        deadline = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate(), deadline.getHours(), 0, 0).toISOString()
+      }
 
       const taskData: UpdateTaskInfo = {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
-        deadline: formattedDeadline,
+        deadline: deadline,
       }
 
       this.taskService.updateTaskInfo(this.nzModalData.projectId, this.nzModalData.taskId, taskData).subscribe({
