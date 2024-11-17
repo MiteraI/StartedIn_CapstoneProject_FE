@@ -1,12 +1,4 @@
-export type Milestone = {
-  id: string
-  title: string
-  description: string
-  dueDate: string 
-  extendedDate: string 
-  extendedCount: number
-  phaseName: number
-}
+import { Milestone } from "../milestone/milestone.model"
 
 export type ProjectCharter = {
   id: string

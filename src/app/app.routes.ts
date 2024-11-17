@@ -6,7 +6,6 @@ import { ProjectDealDataResolver } from './shared/resolvers/project-deal-data.re
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
-import { MilestoneDataResolver } from './shared/resolvers/milestone-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 
 export const routes: Routes = [
@@ -69,7 +68,7 @@ export const routes: Routes = [
       {
         path: 'deals/:dealId',
         resolve: { deal: ProjectDealDataResolver },
-        loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then( m => m.ProjectDealDetailPage)
+        loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then((m) => m.ProjectDealDetailPage),
       },
       {
         path: 'create-investment-contract',
@@ -93,16 +92,15 @@ export const routes: Routes = [
       },
       {
         path: 'disbursements',
-        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-list/project-disbursement-list.page').then( m => m.ProjectDisbursementListPage)
+        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-list/project-disbursement-list.page').then((m) => m.ProjectDisbursementListPage),
       },
       {
         path: 'disbursements/:disbursementId',
-        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-detail/project-disbursement-detail.page').then( m => m.ProjectDisbursementDetailPage)
+        loadComponent: () => import('./pages/disbursement-pages/project-disbursement-detail/project-disbursement-detail.page').then((m) => m.ProjectDisbursementDetailPage),
       },
       {
         path: 'milestones',
-        resolve: { milestones: MilestoneDataResolver },
-        loadComponent: () => import('./pages/milestone/milestone.page').then((m) => m.MilestonePage),
+        loadComponent: () => import('./components/milestone-page/milestone-view/milestone-view.component').then((m) => m.MilestoneViewComponent),
       },
       {
         path: 'others',
@@ -129,17 +127,16 @@ export const routes: Routes = [
     path: 'deals/:dealId',
     canActivate: [AuthenticatedGuard],
     resolve: { deal: InvestorDealDataResolver },
-    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-detail/investor-deal-detail.page').then( m => m.InvestorDealDetailPage)
+    loadComponent: () => import('./pages/deal-offer-pages/investor-deal-detail/investor-deal-detail.page').then((m) => m.InvestorDealDetailPage),
   },
   {
     path: 'disbursements',
     canActivate: [AuthenticatedGuard],
-    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then( m => m.InvestorDisbursementListPage)
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then((m) => m.InvestorDisbursementListPage),
   },
   {
     path: 'disbursements/:disbursementId',
     canActivate: [AuthenticatedGuard],
-    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then( m => m.InvestorDisbursementDetailPage)
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
   },
-
 ]

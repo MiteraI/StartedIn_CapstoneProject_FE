@@ -9,6 +9,8 @@ import { UpdateTaskInfo } from '../shared/models/task/update-task.model'
 import { UpdateTaskStatus } from '../shared/models/task/update-task-status.model'
 import { UpdateTaskAssignment } from '../shared/models/task/update-task-assignment.model'
 import { UpdateTaskParent } from '../shared/models/task/update-task-parent.model'
+import { TaskStatus } from '../shared/enums/task-status.enum'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -20,12 +22,25 @@ export class TaskService {
     return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks`), createTask)
   }
 
-  getTaskListForProject(projectId: string) {
-    return this.http.get<Pagination<Task>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks`))
-  }
+  getTaskListForProject(
+    projectId: string,
+    page: number,
+    size: number,
+    title?: string,
+    status?: TaskStatus,
+    late?: boolean,
+    assigneeId?: string,
+    milestoneId?: string
+  ): Observable<Pagination<Task>> {
+    const query =
+      (title?.trim() ? `title=${title}&` : '') +
+      (status ? `status=${status}&` : '') +
+      (late !== undefined ? `late=${late}&` : '') +
+      (assigneeId ? `assigneeId=${assigneeId}&` : '') +
+      (milestoneId ? `milestoneId=${milestoneId}&` : '') +
+      `page=${page}&size=${size}`
 
-  getTaskCatalog() {
-    //Filter and stuff
+    return this.http.get<Pagination<Task>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks?${query}`))
   }
 
   getTaskDetails(projectId: string, taskId: string) {
