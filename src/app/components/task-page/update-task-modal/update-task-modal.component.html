@@ -71,10 +71,23 @@
         <nz-form-item>
           <nz-form-label>Parent Task</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="parentTask" nzPlaceHolder="Select parent task" (ngModelChange)="handleSelectParentTask($event)">
+            <nz-select
+              formControlName="parentTask"
+              nzPlaceHolder="Select parent task"
+              (ngModelChange)="handleSelectParentTask($event)"
+              (nzOpenChange)="handleOpenParentTask()"
+              (nzScrollToBottom)="loadMoreOtherTasks()"
+            >
               <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
-              @for (task of otherTasks; track $index) {
+              @if (initialParentTask) {
+              <nz-option [nzValue]="initialParentTask.id" [nzLabel]="initialParentTask.title"></nz-option>
+              } @for (task of otherTasks; track $index) {
               <nz-option [nzValue]="task.id" [nzLabel]="task.title"></nz-option>
+              } @if (isOtherTasksFetchLoading) {
+              <nz-option nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
               }
             </nz-select>
           </nz-form-control>
@@ -109,7 +122,6 @@
                 <th>Trạng Thái</th>
                 <th>Hạn Chót</th>
                 <th>Người Tạo</th>
-                <th>Hành Động</th>
               </tr>
             </thead>
             <tbody>

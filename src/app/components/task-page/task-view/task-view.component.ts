@@ -59,6 +59,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchTasks(isDesktop: boolean) {
+    //TODO: Add filter logic
     this.taskService
       .getTaskListForProject(this.projectId, this.page, this.size)
       .pipe(takeUntil(this.destroy$))
@@ -99,7 +100,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
     if (this.isDesktopView) {
-      this.size = 10
+      this.size = 8
     } else {
       this.size = 12
     }
