@@ -13,8 +13,8 @@ import { MilestoneService } from 'src/app/services/milestone.service'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { MilestoneCreateModel } from 'src/app/shared/models/milestone/milestone-create.model'
 import { NzNotificationModule } from 'ng-zorro-antd/notification'
-import { AntdNotificationService } from 'src/app/services/antd-notification.service'
 import { HttpErrorResponse } from '@angular/common/http'
+import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 
 
 interface IModalData {

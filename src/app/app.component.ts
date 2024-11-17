@@ -42,8 +42,8 @@ export class AppComponent {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         const currentUrl = event.url
-        this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register')
-        this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register')
+        this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
+        this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
         this.inProjectDetails = /\/projects\/\d+/.test(currentUrl)
       }
     })
