@@ -6,7 +6,6 @@ import { ProjectDealDataResolver } from './shared/resolvers/project-deal-data.re
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
-import { MilestoneDataResolver } from './shared/resolvers/milestone-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 
 export const routes: Routes = [
@@ -120,8 +119,7 @@ export const routes: Routes = [
       },
       {
         path: 'milestones',
-        resolve: { milestones: MilestoneDataResolver },
-        loadComponent: () => import('./pages/milestone/milestone.page').then((m) => m.MilestonePage),
+        loadComponent: () => import('./components/milestone-page/milestone-view/milestone-view.component').then((m) => m.MilestoneViewComponent),
       },
       {
         path: 'others',

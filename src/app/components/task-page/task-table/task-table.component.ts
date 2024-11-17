@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 import { Task } from 'src/app/shared/models/task/task.model'
@@ -19,9 +19,13 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
   styleUrls: ['./task-table.component.scss'],
 })
 export class TaskTableComponent implements OnInit {
+  @Output() pageChanged = new EventEmitter<number>()
   @Input({ required: true }) taskList: Task[] = []
   @Input({ required: true }) projectId: string = ''
   @Input({ required: true }) isFetchAllTaskLoading: boolean = false
+  @Input() total: number = 0
+  @Input() size: number = 10
+  @Input() page: number = 1
 
   labels = TaskStatusLabels
 
@@ -54,9 +58,12 @@ export class TaskTableComponent implements OnInit {
       nzData: {
         taskId: taskId,
         projectId: this.projectId,
-        taskList: this.taskList,
       },
       nzFooter: null,
     })
+  }
+
+  onPageChange(page: number) {
+    this.pageChanged.emit(page)
   }
 }

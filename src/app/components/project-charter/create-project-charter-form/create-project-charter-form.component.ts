@@ -11,12 +11,13 @@ import { catchError, tap } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { Milestone, ProjectCharter } from 'src/app/shared/models/project-charter/project-charter.model'
+import { ProjectCharter } from 'src/app/shared/models/project-charter/project-charter.model'
 import { NzModalService, NzModalModule } from 'ng-zorro-antd/modal'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { ViewMilestoneModalComponent } from '../view-milestone-modal/view-milestone-modal.component'
 import { ProjectCharterUpdateModel } from 'src/app/shared/models/project-charter/project-charter-update.model'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
+import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',

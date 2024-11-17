@@ -13,18 +13,19 @@ import { TaskService } from 'src/app/services/task.service'
 import { TaskStatus, TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { UpdateTaskInfo } from 'src/app/shared/models/task/update-task.model'
 import { Task } from 'src/app/shared/models/task/task.model'
-import { Milestone } from 'src/app/shared/models/project-charter/project-charter.model'
 import { ProjectService } from 'src/app/services/project.service'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
+import { NzIconModule } from 'ng-zorro-antd/icon'
+import { Subject, takeUntil } from 'rxjs'
+import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 
 interface IModalData {
   taskId: string
   projectId: string
-  taskList: Task[]
 }
 
 @Component({
@@ -32,7 +33,19 @@ interface IModalData {
   templateUrl: './update-task-modal.component.html',
   styleUrls: ['./update-task-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzDatePickerModule, NzButtonModule, NzInputModule, ReactiveFormsModule, CommonModule, NzSelectModule, NzTableModule, NzSpinModule, NzPopconfirmModule],
+  imports: [
+    NzFormModule,
+    NzDatePickerModule,
+    NzButtonModule,
+    NzInputModule,
+    ReactiveFormsModule,
+    CommonModule,
+    NzSelectModule,
+    NzTableModule,
+    NzSpinModule,
+    NzPopconfirmModule,
+    NzIconModule,
+  ],
   providers: [DatePipe],
 })
 export class UpdateTaskModalComponent implements OnInit {
@@ -46,19 +59,40 @@ export class UpdateTaskModalComponent implements OnInit {
     { value: 4, label: TaskStatusLabels[4] },
     { value: 5, label: TaskStatusLabels[5] },
   ]
-  milestones: Milestone[] = []
-  otherTasks: Task[] = this.nzModalData.taskList.filter((task) => task.id !== this.nzModalData.taskId)
+  taskForm: FormGroup
+  private destroy$ = new Subject<void>()
+
+  subTasks: Task[] = []
+  comments: { content: string; author: string; date: string }[] = []
+  isInfoChanged: boolean = false
+  initialStatus: TaskStatus = 0
+
+  // Assignee handling vars
   users: TeamMemberModel[] = []
   filteredUsers: TeamMemberModel[] = []
   initialAssigneeIds: string[] = []
-  subTasks: Task[] = []
-  comments: { content: string; author: string; date: string }[] = []
-  taskForm: FormGroup
-  isInfoChanged: boolean = false
-  initialStatus: TaskStatus = 0
+
+  // Parent task handling vars
   initialParentTaskId: string = ''
-  isMilestoneFetched: boolean = false
+  initialParentTask: Task | null = null //for showing up in the select, because only when click on the the select then task list will be loaded
+  otherTasks: Task[] = []
   isOtherTasksFetched: boolean = false
+  isOtherTasksFetchLoading = false
+  otherTasksPage = 1
+  otherTasksSize = 10
+  otherTasksTotal = 0
+
+  // Milestone assign handling vars
+  initialMilestoneId: string = ''
+  initialMilestone: Milestone | null = null
+  milestones: Milestone[] = []
+  isMilestoneFetched: boolean = false
+  isMilestonesFetched: boolean = false
+  isMilestonesFetchLoading = false
+  milestonesPage = 1
+  milestonesSize = 10
+  milestonesTotal = 0
+
   isFetchTaskDetailsLoading: boolean = false
 
   constructor(
@@ -82,13 +116,16 @@ export class UpdateTaskModalComponent implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid && this.isInfoChanged) {
-      const deadline = this.taskForm.value.deadline
-      const formattedDeadline = deadline instanceof Date ? deadline.toISOString() : new Date(deadline).toISOString()
+      let deadline = this.taskForm.value.deadline
+      if (deadline) {
+        deadline = deadline instanceof Date ? deadline : new Date(deadline)
+        deadline = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate(), deadline.getHours(), 0, 0).toISOString()
+      }
 
       const taskData: UpdateTaskInfo = {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
-        deadline: formattedDeadline,
+        deadline: deadline,
       }
 
       this.taskService.updateTaskInfo(this.nzModalData.projectId, this.nzModalData.taskId, taskData).subscribe({
@@ -130,8 +167,17 @@ export class UpdateTaskModalComponent implements OnInit {
     }
   }
 
-  handleOpenAssigneeSelect() {
-    this.updateFilteredUsers()
+  handleOpenParentTask() {
+    if (!this.isOtherTasksFetched) {
+      this.isOtherTasksFetched = true
+      this.fetchTasks()
+    }
+  }
+
+  loadMoreOtherTasks() {
+    if (this.otherTasksPage * this.otherTasksSize >= this.otherTasksTotal) return
+    this.otherTasksPage = this.otherTasksPage + 1
+    this.fetchTasks()
   }
 
   handleSelectParentTask(parentTaskId: string) {
@@ -150,6 +196,31 @@ export class UpdateTaskModalComponent implements OnInit {
         },
       })
     }
+  }
+
+  private fetchTasks() {
+    this.isOtherTasksFetchLoading = true
+    //TODO: Add filter logic
+    this.taskService
+      .getTaskListForProject(this.nzModalData.projectId, this.otherTasksPage, this.otherTasksSize)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (val) => {
+          const tasks = val.data.filter((t) => t.id !== this.initialParentTaskId && t.id !== this.nzModalData.taskId)
+          this.otherTasks = [...this.otherTasks, ...tasks]
+          this.otherTasksTotal = val.total
+          this.isOtherTasksFetchLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isOtherTasksFetchLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openInfoNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
   }
 
   handleSelectAssignChanged(currentSelectedIds: string[]) {
@@ -193,6 +264,10 @@ export class UpdateTaskModalComponent implements OnInit {
     }
   }
 
+  handleOpenAssigneeSelect() {
+    this.updateFilteredUsers()
+  }
+
   handleOpenMilestoneSelect() {
     if (!this.isMilestoneFetched) {
       // Fetch milestones
@@ -223,6 +298,7 @@ export class UpdateTaskModalComponent implements OnInit {
           this.initialAssigneeIds = task.assignees.map((user) => user.id)
           this.initialStatus = task.status
           this.initialParentTaskId = task.parentTask === null ? '' : task.parentTask.id
+          this.initialParentTask = task.parentTask
           this.subTasks = task.subTasks
           this.taskForm.setValue(
             {
