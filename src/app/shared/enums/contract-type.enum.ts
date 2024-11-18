@@ -1,6 +1,6 @@
 export enum ContractType {
-  INVESTMENT = 0,
-  INTERNAL = 1
+  INTERNAL = 1,
+  INVESTMENT = 2
 }
 
 export const ContractTypeLabels: Record<ContractType, string> = {

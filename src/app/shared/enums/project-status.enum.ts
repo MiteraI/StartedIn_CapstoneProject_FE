@@ -1,7 +1,7 @@
 export enum ProjectStatus {
-  CONSTRUCTING = 0,
-  ACTIVE = 1,
-  CLOSED = 2
+  CONSTRUCTING = 1,
+  ACTIVE = 2,
+  CLOSED = 3
 }
 
 export const ProjectStatusLabels: Record<ProjectStatus, string> = {
