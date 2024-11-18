@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Observable, map, take } from 'rxjs';
+import { Observable, filter, map, take } from 'rxjs';
 import { AccountService } from '../../core/auth/account.service';
 
 @Injectable({
@@ -11,9 +11,10 @@ export class UserGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
     return this.accountService.account$.pipe(
+      filter(account => account !== null),
       take(1),
       map(account => {
-        if (account?.authorities.includes('User')) {
+        if (account!.authorities.includes('User')) {
           return true;
         }
         this.router.navigate(['/login']);
