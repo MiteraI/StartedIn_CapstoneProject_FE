@@ -1,14 +1,13 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core'
-import { IonContent } from '@ionic/angular/standalone'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model'
 import { CommonModule } from '@angular/common'
-import { ProjectService } from 'src/app/services/project.service'
 import { UserProjectsModel } from 'src/app/shared/models/project/user-projects.model'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { ProjectCreateModalComponent } from 'src/app/components/project-pages/project-create-modal/project-create-modal.component'
+import { AccountService } from 'src/app/core/auth/account.service'
 
 @Component({
   selector: 'app-project-list',
@@ -18,12 +17,25 @@ import { ProjectCreateModalComponent } from 'src/app/components/project-pages/pr
   imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule],
 })
 export class ProjectListPage implements OnInit {
-  userProjects: UserProjectsModel | undefined
-  ownProjects: ExploreProjectsListItemModel[] = []
-  participatedProjects: ExploreProjectsListItemModel[] = []
-  constructor(private projectService: ProjectService, private modalService: NzModalService, private cdr: ChangeDetectorRef, private route: ActivatedRoute) {}
+  userProjects: UserProjectsModel | undefined;
+  ownProjects: ExploreProjectsListItemModel[] = [];
+  participatedProjects: ExploreProjectsListItemModel[] = [];
+
+  isInvestor = true;
+
+  constructor(
+    private modalService: NzModalService,
+    private route: ActivatedRoute,
+    private accountService: AccountService
+  ) {}
+
   ngOnInit() {
-    this.userProjects = this.route.snapshot.data['userProjects']
+    this.userProjects = this.route.snapshot.data['userProjects'];
+    this.accountService.account$.subscribe(account => {
+      if (account) {
+        this.isInvestor = account.authorities.includes('Investor');
+      }
+    })
   }
 
   openCreateProjectModal() {

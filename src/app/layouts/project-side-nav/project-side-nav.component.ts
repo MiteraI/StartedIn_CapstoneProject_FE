@@ -39,11 +39,11 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.opened = !this.opened
   }
 
-  sideNavLinks: {
+  userSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = this.isUser ? [
+  }[] = [
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
     { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
@@ -56,7 +56,13 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
     { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
     { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
-  ] : [
+  ]
+
+  investorSideNavLinks: {
+    linkName: string
+    iconName: string
+    linkText: string
+  }[] = [
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },

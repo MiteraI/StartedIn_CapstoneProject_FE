@@ -24,6 +24,8 @@ import { ContractCreateFromDealModel } from 'src/app/shared/models/contract/cont
 import { InvestmentContractDetailModel } from 'src/app/shared/models/contract/investment-contract-detail.model';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
+import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 
 @Component({
   selector: 'app-investment-contract',
@@ -73,7 +75,8 @@ export class InvestmentContractPage implements OnInit {
     private fb: FormBuilder,
     private modalService: NzModalService,
     private contractService: ContractService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
@@ -85,6 +88,12 @@ export class InvestmentContractPage implements OnInit {
       shareQuantity: [0, [Validators.required]],
       percentage: [0, [Validators.required]],
       buyPrice: [0, [Validators.required]]
+    });
+
+    this.roleService.role$.subscribe(role => {
+      if (role !== TeamRole.LEADER) {
+        this.contractForm.disable();
+      }
     });
 
     this.route.data.subscribe(data => {
