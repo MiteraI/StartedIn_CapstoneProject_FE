@@ -122,27 +122,28 @@ export const routes: Routes = [
   },
   {
     path: 'explore',
+    canActivate: [InvestorGuard],
     loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then((m) => m.InvestorExploreProjectsPage),
   },
   {
     path: 'deals',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [InvestorGuard],
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
   },
   {
     path: 'deals/:dealId',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [InvestorGuard],
     resolve: { deal: InvestorDealDataResolver },
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-detail/investor-deal-detail.page').then((m) => m.InvestorDealDetailPage),
   },
   {
     path: 'disbursements',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [InvestorGuard],
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then((m) => m.InvestorDisbursementListPage),
   },
   {
     path: 'disbursements/:disbursementId',
-    canActivate: [AuthenticatedGuard],
+    canActivate: [InvestorGuard],
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
   },
 ]
