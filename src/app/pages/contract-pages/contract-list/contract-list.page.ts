@@ -19,6 +19,8 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ScrollService } from 'src/app/core/util/scroll.service';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
+import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 
 interface FilterOptions {
   contractName?: string;
@@ -68,6 +70,8 @@ export class ContractListPage implements OnInit, OnDestroy {
   isLoading = false;
   isDesktopView = false;
 
+  isLeader = false;
+
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
 
@@ -77,7 +81,8 @@ export class ContractListPage implements OnInit, OnDestroy {
     private contractService: ContractService,
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
@@ -96,6 +101,7 @@ export class ContractListPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadMore();
       });
+    this.roleService.role$.subscribe(role => this.isLeader = (role === TeamRole.LEADER));
   }
 
   // filter stuff
@@ -120,7 +126,8 @@ export class ContractListPage implements OnInit, OnDestroy {
         })
       )
       .subscribe(result => {
-        this.contracts = append ? [...this.contracts, ...result.data] : result.data;
+        const newData = result.data.filter(c => this.isLeader || c.contractStatus !== ContractStatus.DRAFT);
+        this.contracts = append ? [...this.contracts, ...newData] : newData;
         this.totalRecords = result.total;
         this.groupContracts();
         this.isLoading = false;

@@ -8,6 +8,7 @@ import { InternalContractDataResolver } from './shared/resolvers/internal-contra
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 import { InvestorGuard } from './shared/guards/investor.guard'
+import { UserGuard } from './shared/guards/user.guard'
 
 export const routes: Routes = [
   {
@@ -48,6 +49,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'tasks',
+        canActivate: [UserGuard],
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
       },
       {
@@ -60,19 +62,23 @@ export const routes: Routes = [
       },
       {
         path: 'create-deal',
+        canActivate: [InvestorGuard],
         loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
       },
       {
         path: 'deals',
+        canActivate: [UserGuard],
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
       },
       {
         path: 'deals/:dealId',
+        canActivate: [UserGuard],
         resolve: { deal: ProjectDealDataResolver },
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-detail/project-deal-detail.page').then((m) => m.ProjectDealDetailPage),
       },
       {
         path: 'create-investment-contract',
+        canActivate: [UserGuard],
         resolve: { project: ProjectDataResolver, deal: ProjectDealDataResolver },
         loadComponent: () => import('./pages/contract-pages/investment-contract/investment-contract.page').then((m) => m.InvestmentContractPage),
       },
@@ -83,6 +89,7 @@ export const routes: Routes = [
       },
       {
         path: 'create-internal-contract',
+        canActivate: [UserGuard],
         resolve: { project: ProjectDataResolver },
         loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then((m) => m.InternalContractPage),
       },
@@ -93,10 +100,12 @@ export const routes: Routes = [
       },
       {
         path: 'disbursements',
+        canActivate: [UserGuard],
         loadComponent: () => import('./pages/disbursement-pages/project-disbursement-list/project-disbursement-list.page').then((m) => m.ProjectDisbursementListPage),
       },
       {
         path: 'disbursements/:disbursementId',
+        canActivate: [UserGuard],
         loadComponent: () => import('./pages/disbursement-pages/project-disbursement-detail/project-disbursement-detail.page').then((m) => m.ProjectDisbursementDetailPage),
       },
       {
@@ -115,7 +124,7 @@ export const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'tasks',
+        redirectTo: 'charter',
         pathMatch: 'full',
       },
     ],

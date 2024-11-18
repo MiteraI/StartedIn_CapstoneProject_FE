@@ -24,6 +24,7 @@ import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 
 @Component({
   selector: 'app-internal-contract',
@@ -70,21 +71,28 @@ export class InternalContractPage implements OnInit {
     private contractService: ContractService,
     private projectService: ProjectService,
     private notification: NzNotificationService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
+    this.contractForm = this.fb.group({
+      contractName: ['', [Validators.required]],
+      contractPolicy: [''],
+      contractIdNumber: ['', [Validators.required]],
+      shares: this.fb.array([])
+    });
+
     this.accountService.account$.subscribe(account => {
       if (account) {
         this.currentUserId = account.id;
       }
     });
 
-    this.contractForm = this.fb.group({
-      contractName: ['', [Validators.required]],
-      contractPolicy: [''],
-      contractIdNumber: ['', [Validators.required]],
-      shares: this.fb.array([])
+    this.roleService.role$.subscribe(role => {
+      if (role !== TeamRole.LEADER) {
+        this.contractForm.disable();
+      }
     });
 
     this.route.data.subscribe(data => {
@@ -100,7 +108,7 @@ export class InternalContractPage implements OnInit {
         .subscribe(response => this.memberList = response.filter(m => m.roleInTeam !== TeamRole.INVESTOR));
 
       this.contract = data['contract'];
-      if (!!this.contract) {
+      if (this.contract) {
         // import data
         this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT);
 
