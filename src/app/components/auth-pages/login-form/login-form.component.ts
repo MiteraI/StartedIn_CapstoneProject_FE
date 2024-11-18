@@ -7,9 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { IonInput, IonButton } from '@ionic/angular/standalone';
 import { catchError, tap, throwError } from 'rxjs';
 import { AuthJwtService } from 'src/app/core/auth/auth-jwt.service';
 import { Login } from 'src/app/shared/models/login.model';
@@ -21,12 +19,10 @@ import { Login } from 'src/app/shared/models/login.model';
   standalone: true,
   imports: [
     RouterModule,
-    IonIcon,
     IonInput,
     IonButton,
-    IonIcon,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
 })
 export class LoginFormComponent implements OnInit {
@@ -40,7 +36,6 @@ export class LoginFormComponent implements OnInit {
     private authService: AuthJwtService,
     private router: Router
   ) {
-    addIcons({ eyeOutline, eyeOffOutline });
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
       password: ['', Validators.required],

@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { StateStorageService } from './state-storage.service';
 import { ApplicationConfigService } from '../config/application-config.service';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Account } from './account.model';
-import { BehaviorSubject, EMPTY, Observable, catchError, of, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, catchError, tap } from 'rxjs';
 import { AuthJwtService } from './auth-jwt.service';
 
 @Injectable({
@@ -54,6 +53,6 @@ export class AccountService {
   }
 
   private fetch(): Observable<Account> {
-    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('/api/full-profile'));
+    return this.http.get<Account>(this.applicationConfigService.getEndpointFor('/api/profile'));
   }
 }

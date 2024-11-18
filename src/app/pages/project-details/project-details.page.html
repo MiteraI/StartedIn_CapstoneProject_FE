@@ -1,7 +1,7 @@
 @if (isDesktopView) {
-<project-side-nav [currentId]="projectId" class="h-full">
+<app-project-side-nav [currentId]="projectId" class="h-full">
   <router-outlet></router-outlet>
-</project-side-nav>
+</app-project-side-nav>
 } @else {
 <div class="scroll-container overflow-y-scroll max-h-[93vh]" (scroll)="onScroll($event)">
   <router-outlet></router-outlet>
