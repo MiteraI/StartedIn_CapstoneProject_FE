@@ -81,9 +81,9 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      if (params['projectId']) {
-        this.filter.projectId = params['projectId'];
+    this.route.parent?.params.subscribe(params => {
+      if (params['id']) {
+        this.filter.projectId = params['id'];
         this.isInProject = true;
       }
       this.filterDisbursements();

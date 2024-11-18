@@ -8,6 +8,7 @@ import { InternalContractDataResolver } from './shared/resolvers/internal-contra
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
 import { MilestoneDataResolver } from './shared/resolvers/milestone-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
+import { InvestorGuard } from './shared/guards/investor.guard'
 
 export const routes: Routes = [
   {
@@ -108,6 +109,11 @@ export const routes: Routes = [
         path: 'others',
         canActivate: [mobileViewGuard],
         loadComponent: () => import('./layouts/mobile-project-details-navbar/mobile-project-details-navbar.component').then((m) => m.MobileProjectDetailsNavbarComponent),
+      },
+      {
+        path: 'investor-disbursements',
+        canActivate: [InvestorGuard],
+        loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then( m => m.InvestorDisbursementListPage),
       },
       {
         path: '',
