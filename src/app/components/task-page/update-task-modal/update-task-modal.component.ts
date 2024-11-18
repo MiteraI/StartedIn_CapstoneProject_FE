@@ -130,7 +130,7 @@ export class UpdateTaskModalComponent implements OnInit {
 
       this.taskService.updateTaskInfo(this.nzModalData.projectId, this.nzModalData.taskId, taskData).subscribe({
         next: (response) => {
-          this.antdNoti.openSuccessNotification('Updated Task Successfully', '')
+          this.antdNoti.openSuccessNotification('Cập Nhật Tác Vụ Thành Công', '')
           this.nzModalRef.close(response)
         },
         error: (error: HttpErrorResponse) => {

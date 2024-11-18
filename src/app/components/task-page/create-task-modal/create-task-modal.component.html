@@ -2,8 +2,8 @@
   <!-- Title Field -->
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Title</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Please enter the title'">
-      <input nz-input formControlName="title" placeholder="Enter task title" />
+    <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
+      <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
     </nz-form-control>
   </nz-form-item>
 
@@ -11,7 +11,7 @@
   <nz-form-item>
     <nz-form-label>Description</nz-form-label>
     <nz-form-control>
-      <textarea nz-input formControlName="description" placeholder="Enter task description"></textarea>
+      <textarea nz-input formControlName="description" placeholder="Nhập thông tin tác vụ"></textarea>
     </nz-form-control>
   </nz-form-item>
 
@@ -20,7 +20,7 @@
     <nz-form-item>
       <nz-form-label>Parent Task</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="parentTask" nzPlaceHolder="Select parent task" (nzOpenChange)="handleOpenParentTask()" (nzScrollToBottom)="loadMoreOtherTasks()">
+        <nz-select formControlName="parentTask" nzPlaceHolder="Chọn tác vụ mẹ" (nzOpenChange)="handleOpenParentTask()" (nzScrollToBottom)="loadMoreOtherTasks()">
           @for (task of otherTasks; track $index) {
           <nz-option [nzValue]="task.id" [nzLabel]="task.title"></nz-option>
           } @if (isOtherTasksFetchLoading) {
@@ -36,7 +36,7 @@
     <nz-form-item>
       <nz-form-label>Deadline</nz-form-label>
       <nz-form-control>
-        <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Select deadline date and hour"></nz-date-picker>
+        <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Chọn hạn chót"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
   </div>
@@ -46,7 +46,7 @@
     <nz-form-item>
       <nz-form-label>Milestone</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="milestone" nzPlaceHolder="Select milestone">
+        <nz-select formControlName="milestone" nzPlaceHolder="Chọn cột mốc">
           @for (milestone of milestones; track $index) {
           <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
           }
@@ -57,7 +57,7 @@
     <nz-form-item>
       <nz-form-label>Assignees</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Select assignees">
+        <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện">
           @for (user of users; track $index) {
           <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
           }

@@ -1,3 +1,36 @@
-<p>
-  milestone-table works!
-</p>
+<nz-table
+  #basicTable
+  nzSize="small"
+  [nzFrontPagination]="false"
+  [nzLoading]="isFetchAllTaskLoading"
+  [nzData]="milestoneList"
+  [nzTotal]="total"
+  [nzPageIndex]="page"
+  [nzPageSize]="size"
+  (nzPageIndexChange)="onPageChange($event)"
+>
+  <thead>
+    <tr>
+      <th>Tên Tác Vụ</th>
+      <th>Trạng Thái</th>
+      <th>Hạn Chót</th>
+      <th>Hạn Kéo Dài</th>
+      <th>Hành Động</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of basicTable.data; track data.id) {
+    <tr>
+      <td>{{ data.title }}</td>
+      <td>{{ labels[data.phaseName] }}</td>
+      <td>{{ data.dueDate }}</td>
+      <td>{{ data.extendedDate === null ? 'Không Kéo Dài' : (data.extendedDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>
+        <button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Chi Tiết</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa cột mốc này không?">Xóa</button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</nz-table>

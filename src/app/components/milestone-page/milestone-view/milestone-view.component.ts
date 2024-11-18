@@ -45,7 +45,7 @@ export class MilestoneViewComponent implements OnInit {
 
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
-      nzTitle: 'Tác Vụ Mới',
+      nzTitle: 'Cột Mốc Mới',
       nzContent: CreateMilestoneModalComponent,
       nzData: {
         projectId: this.projectId,
@@ -62,7 +62,7 @@ export class MilestoneViewComponent implements OnInit {
 
   private fetchTasks(isDesktop: boolean) {
     //TODO: Add filter logic
-    this.milestoneService.getMilestones(this.projectId)
+    this.milestoneService.getMilestones(this.projectId, this.page, this.size)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {

@@ -1,3 +1,47 @@
-<p>
-  create-milestone-modal works!
-</p>
+<form [formGroup]="milestoneForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
+  <!-- Title Field -->
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Title</nz-form-label>
+    <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
+      <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Description Field -->
+  <nz-form-item>
+    <nz-form-label>Description</nz-form-label>
+    <nz-form-control>
+      <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <nz-form-item>
+      <nz-form-label>Giai Đoạn Dự Án</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng chọn giai đoạn dự án'">
+        <nz-select formControlName="phaseEnum" nzPlaceHolder="Chọn giai đoạn dự án">
+          @for (phaseName of phaseNames; track phaseName.value) {
+          <nz-option [nzValue]="phaseName.value" [nzLabel]="phaseName.label"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>Ngày Kết Thúc</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
+        <nz-date-picker formControlName="dueDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <!-- Submit Button -->
+  <nz-form-item>
+    <nz-form-control>
+      <div class="flex items-center justify-end">
+        <button nz-button nzType="default" [disabled]="milestoneForm.invalid">Tạo</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>
