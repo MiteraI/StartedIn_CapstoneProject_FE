@@ -12,7 +12,6 @@ import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.compon
 import { MatIconModule } from '@angular/material/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
-import { RejectDisbursementFormComponent } from 'src/app/components/disbursement-pages/reject-disbursement-form/reject-disbursement-form.component';
 import { DisbursementFilterComponent } from 'src/app/components/disbursement-pages/disbursement-filter/disbursement-filter.component';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -171,8 +170,15 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       nzOkText: 'Xác nhận',
       nzOkType: 'primary',
       nzOnOk: () => {
-        // TODO: Implement confirm API call
-        console.log('Disbursing funds:', disbursement.id);
+        this.disbursementService
+          .confirmDisbursement(disbursement.id, this.projectId)
+          .pipe(
+            catchError(error => {
+              this.notification.error("Lỗi", "Xác nhận giải ngân thất bại!", { nzDuration: 2000 });
+              return throwError(() => new Error(error.error));
+            })
+          )
+          .subscribe(response => disbursement.disbursementStatus = DisbursementStatus.FINISHED);
       }
     });
   }

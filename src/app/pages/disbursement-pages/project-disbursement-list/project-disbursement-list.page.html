@@ -61,9 +61,9 @@
           <td class="p-4">
             <span [ngClass]="{
               'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
               'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
               'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
               'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
             }">
@@ -108,7 +108,7 @@
               <div class="text-xl font-medium">{{ disbursement.title }}</div>
               <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
             </div>
-            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
+            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.ACCEPTED" class="space-x-2 h-6">
               <button (click)="confirmDisbursement(disbursement)" class="text-green-500">
                 <mat-icon fontIcon="check"></mat-icon>
               </button>
@@ -122,9 +122,9 @@
               <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
               <span [ngClass]="{
                 'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-                'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+                'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
                 'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-                'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+                'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
                 'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
                 'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
               }">

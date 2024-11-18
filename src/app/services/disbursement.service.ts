@@ -59,6 +59,14 @@ export class DisbursementService {
     );
   }
 
+  confirmDisbursement(id: string, projectId: string): Observable<string> {
+    return this.http.put<string>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/${id}/confirm`),
+      null,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
   getDisbursements(
     pageIndex: number,
     pageSize: number,
@@ -85,6 +93,32 @@ export class DisbursementService {
       this.applicationConfigService.getEndpointFor(`/api/disbursements?${query}`)
     ).pipe(
       map(response => this.parseSearchResponse(response))
+    );
+  }
+
+  getPaymentUrl(id: string): Observable<string> {
+    return this.http.post<string>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/${id}/payments`),
+      null,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
+  acceptDisbursement(id: string, files: File[]): Observable<string> {
+    const formdata = new FormData();
+    files.forEach(file => formdata.append('evidenceFiles', file));
+    return this.http.post<string>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/${id}/accept`),
+      formdata,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
+  rejectDisbursement(id: string, reason: string): Observable<string> {
+    return this.http.put<string>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/${id}/reject`),
+      { declineReason: reason },
+      { responseType: 'text' as 'json' }
     );
   }
 }

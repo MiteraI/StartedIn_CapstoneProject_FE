@@ -63,9 +63,9 @@
           <td class="p-4">
             <span [ngClass]="{
               'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
               'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
               'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
               'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
             }">
@@ -73,8 +73,8 @@
             </span>
           </td>
           <td class="p-4">
-            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
-              <button (click)="disburseFunds(disbursement)" class="text-green-500 hover:text-green-700">
+            <div *ngIf="canDisburse(disbursement)" class="space-x-2 h-6">
+              <button (click)="openDisburseModal(disbursement)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="payments"></mat-icon>
               </button>
               <button (click)="openRejectModal(disbursement)" class="text-red-500 hover:text-red-700">
@@ -114,11 +114,11 @@
               <div *ngIf="!isInProject" class="text-sm text-gray-500">{{ disbursement.projectName }}</div>
               <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
             </div>
-            <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.PENDING" class="space-x-2 h-6">
+            <div *ngIf="canDisburse(disbursement)" class="space-x-2 h-6">
               <button (click)="openRejectModal(disbursement)" class="text-red-500">
                 <mat-icon fontIcon="close"></mat-icon>
               </button>
-              <button (click)="disburseFunds(disbursement)" class="text-green-500">
+              <button (click)="openDisburseModal(disbursement)" class="text-green-500">
                 <mat-icon fontIcon="payments"></mat-icon>
               </button>
             </div>
@@ -130,9 +130,9 @@
             <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
             <span [ngClass]="{
               'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
               'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
               'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
               'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
             }">

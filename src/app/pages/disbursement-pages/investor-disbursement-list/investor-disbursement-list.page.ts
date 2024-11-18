@@ -18,8 +18,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { Subject, takeUntil } from 'rxjs';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
-import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { RejectDisbursementFormComponent } from 'src/app/components/disbursement-pages/reject-disbursement-form/reject-disbursement-form.component';
+import { DisburseModalComponent } from 'src/app/components/disbursement-pages/disburse-modal/disburse-modal.component';
 
 interface FilterOptions {
   name?: string;
@@ -81,7 +81,6 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Check for projectId in query params
     this.route.queryParams.subscribe(params => {
       if (params['projectId']) {
         this.filter.projectId = params['projectId'];
@@ -162,15 +161,18 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
     return format(new Date(dateStr), 'dd/MM/yyyy');
   }
 
-  disburseFunds(disbursement: DisbursementItemModel) {
-    this.modalService.confirm({
-      nzTitle: 'Xác nhận giải ngân',
-      nzContent: `Xác nhận đã giải ngân cho ${disbursement.title}?`,
-      nzOkText: 'Xác nhận',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        // TODO: Implement disburse API call
-        console.log('Disbursing funds:', disbursement.id);
+  canDisburse(disbursement: DisbursementItemModel): boolean {
+    return disbursement.disbursementStatus === DisbursementStatus.PENDING
+      || disbursement.disbursementStatus === DisbursementStatus.OVERDUE;
+  }
+
+  openDisburseModal(disbursement: DisbursementItemModel) {
+    this.modalService.create({
+      nzTitle: 'Giải ngân',
+      nzContent: DisburseModalComponent,
+      nzData: disbursement,
+      nzOnOk: (componentInstance) => {
+        return componentInstance.handleConfirm();
       }
     });
   }
@@ -182,14 +184,17 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
       nzData: disbursement,
       nzOnOk: (componentInstance) => {
         const reason = componentInstance.rejectForm.get('reason')!.value;
-        this.rejectDisbursement(disbursement, reason);
+        this.disbursementService
+          .rejectDisbursement(disbursement.id, reason)
+          .pipe(
+            catchError(error => {
+              this.notification.error("Lỗi", "Từ chối giải ngân thất bại!", { nzDuration: 2000 });
+              return throwError(() => new Error(error.error));
+            })
+          )
+          .subscribe(response => disbursement.disbursementStatus = DisbursementStatus.REJECTED);
       }
     });
-  }
-
-  rejectDisbursement(disbursement: DisbursementItemModel, reason: string) {
-    // TODO: Implement reject disbursement API call
-    console.log('Rejecting disbursement:', disbursement.id, 'Reason:', reason);
   }
 
   get filterData() {
