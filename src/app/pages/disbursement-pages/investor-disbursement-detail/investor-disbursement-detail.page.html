@@ -59,7 +59,9 @@
         <!-- Period -->
         <div class="bg-gray-50 p-4 rounded-lg">
           <div class="text-sm font-medium text-gray-500 mb-1">Thời gian dự kiến giải ngân</div>
-          <div class="text-lg">{{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}</div>
+          <div class="text-lg">{{ formatDate(disbursement.startDate) }}</div>
+          <div class="text-sm font-medium text-gray-500 mb-1 pt-4">Hạn chót</div> <!-- Added pt-4 for padding-top -->
+          <div class="text-lg">{{ formatDate(disbursement.endDate) }}</div>
         </div>
 
         <!-- Investor Info -->
