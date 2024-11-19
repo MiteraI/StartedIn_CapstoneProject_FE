@@ -121,6 +121,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then( m => m.InvestorDisbursementListPage),
       },
       {
+        path: 'equity',
+        loadComponent: () => import('./pages/share-equity-pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
+      },
+      {
         path: '',
         redirectTo: 'charter',
         pathMatch: 'full',
