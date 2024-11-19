@@ -1,12 +1,14 @@
 <div class="">
   <h3>Trưởng nhóm</h3>
-  <p>Nguyễn Văn A</p>
+  <p>{{ projectOverview?.leaderFullName }}</p>
 </div>
 <div class="w-2/3">
   <h3>Mô tả dự án</h3>
   <p class="break-words">
-    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae, excepturi sunt facere in quae iusto quas voluptas labore ex beatae. Esse, animi rerum. Corporis
-    accusantium vero expedita, sed numquam eveniet. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Recusandae, excepturi sunt facere in quae iusto quas voluptas labore
-    ex beatae. Esse, animi rerum. Corporis accusantium vero expedita, sed numquam eveniet.
+    {{ projectOverview?.description }}
   </p>
+  <h3>Ngày bắt đầu</h3>
+  <p>{{ projectOverview?.startDate | date : 'dd-MM-yyyy' }}</p>
+  <h3>Ngày kết thúc</h3>
+  <p>{{ projectOverview?.endDate ? (projectOverview?.endDate | date : 'dd-MM-yyyy') : 'Chưa xác định' }}</p>
 </div>

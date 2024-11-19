@@ -1,4 +1,6 @@
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:5231',
+  backendUrl: 'https://startedin-api-1300b23c0f01.herokuapp.com',
+
+  // backendUrl: 'http://localhost:5231',
 }

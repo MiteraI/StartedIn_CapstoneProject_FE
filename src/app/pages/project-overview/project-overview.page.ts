@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
-import { RouterOutlet, RouterModule } from '@angular/router'
+import { RouterOutlet, RouterModule, ActivatedRoute } from '@angular/router'
+import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
+import { ProjectOverviewService } from 'src/app/services/project-overview.service'
 
 @Component({
   selector: 'app-project-overview',
@@ -11,7 +13,14 @@ import { RouterOutlet, RouterModule } from '@angular/router'
   imports: [CommonModule, FormsModule, RouterOutlet, RouterModule],
 })
 export class ProjectOverviewPage implements OnInit {
-  constructor() {}
+  projectOverview: ProjectOveriewModel | undefined
+  constructor(private route: ActivatedRoute, private projectOverviewService: ProjectOverviewService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.route.data.subscribe((data) => {
+      this.projectOverview = data['projectOverview']
+      this.projectOverviewService.setProjectOverview(this.projectOverview)
+      console.log(this.projectOverview)
+    })
+  }
 }

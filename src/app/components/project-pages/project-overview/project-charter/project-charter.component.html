@@ -1,24 +1,20 @@
 <div class="max-w-4xl p-6 bg-white shadow-lg rounded-lg">
-  <h1 class="text-2xl font-bold text-blue-600 mb-6">SIMPLE PROJECT CHARTER TEMPLATE</h1>
+  <h1 class="text-2xl font-bold text-blue-600 mb-6">Điều lệ dự án</h1>
 
   <!-- Project Header Information -->
   <div class="grid grid-cols-3 gap-4 mb-6">
     <div>
-      <label class="text-sm font-semibold text-gray-600">PROJECT NAME</label>
-      <div class="p-2 bg-gray-50 border rounded">project.name</div>
+      <label class="text-sm font-semibold text-gray-600">TÊN DỰ ÁN</label>
+      <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectName }}</div>
     </div>
     <div>
-      <label class="text-sm font-semibold text-gray-600">PROJECT MANAGER</label>
-      <div class="p-2 bg-gray-50 border rounded">project.manager</div>
-    </div>
-    <div>
-      <label class="text-sm font-semibold text-gray-600">PROJECT SPONSOR</label> 
-      <div class="p-2 bg-gray-50 border rounded">project.sponsor</div>
+      <label class="text-sm font-semibold text-gray-600">CHỦ DỰ ÁN</label>
+      <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.leaderFullName }}</div>
     </div>
   </div>
 
   <!-- Contact Information -->
-  <div class="grid grid-cols-3 gap-4 mb-6">
+  <!-- <div class="grid grid-cols-3 gap-4 mb-6">
     <div>
       <label class="text-sm font-semibold text-gray-600">EMAIL</label>
       <div class="p-2 bg-gray-50 border rounded">project.email</div>
@@ -31,57 +27,57 @@
       <label class="text-sm font-semibold text-gray-600">ORGANIZATIONAL UNIT</label>
       <div class="p-2 bg-gray-50 border rounded">project.orgUnit</div>
     </div>
-  </div>
+  </div> -->
 
   <!-- Project Estimates -->
-  <div class="grid grid-cols-4 gap-4 mb-8">
-    <div>
+  <div class="grid grid-cols-2 gap-4 mb-8">
+    <!-- <div>
       <label class="text-sm font-semibold text-gray-600">ESTIMATED COSTS</label>
       <div class="p-2 bg-gray-50 border rounded">$project.estimatedCosts</div>
     </div>
     <div>
       <label class="text-sm font-semibold text-gray-600">EXPECTED SAVINGS</label>
       <div class="p-2 bg-gray-50 border rounded">$project.expectedSavings</div>
+    </div> -->
+    <div>
+      <label class="text-sm font-semibold text-gray-600">NGÀY BẮT ĐẦU</label>
+      <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.startDate | date : 'dd-MM-yyyy' }}</div>
     </div>
     <div>
-      <label class="text-sm font-semibold text-gray-600">EXPECTED START DATE</label>
-      <div class="p-2 bg-gray-50 border rounded">project.startDate</div>
-    </div>
-    <div>
-      <label class="text-sm font-semibold text-gray-600">EXPECTED COMPLETION</label>
-      <div class="p-2 bg-gray-50 border rounded">project.completionDate</div>
+      <label class="text-sm font-semibold text-gray-600">NGÀY KẾT THÚC</label>
+      <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.endDate ? (projectOverview?.endDate | date : 'dd-MM-yyyy') : 'Chưa xác định' }}</div>
     </div>
   </div>
 
   <!-- Project Overview -->
   <section class="mb-8">
-    <h2 class="text-xl font-semibold mb-4">PROJECT OVERVIEW</h2>
+    <h2 class="text-xl font-semibold mb-4">TỔNG QUAN DỰ ÁN</h2>
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">PROBLEM OR ISSUE</label>
-        <div class="p-2 bg-gray-50 border rounded">project.problem</div>
-      </div>
-      <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">PURPOSE OF PROJECT</label>
-        <div class="p-2 bg-gray-50 border rounded">project.purpose</div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">GIẢ ĐỊNH</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.assumptions }}</div>
       </div>
       <div>
         <label class="block text-sm font-semibold bg-amber-100 p-2">BUSINESS CASE</label>
-        <div class="p-2 bg-gray-50 border rounded">project.businessCase</div>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.businessCase }}</div>
       </div>
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">GOALS / METRICS</label>
-        <div class="p-2 bg-gray-50 border rounded">project.goals</div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">HẠN CHẾ</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.constraints }}</div>
       </div>
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">EXPECTED DELIVERABLES</label>
-        <div class="p-2 bg-gray-50 border rounded">project.deliverables</div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">SẢN PHẨM</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.deliverables }}</div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC TIÊU</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.goal }}</div>
       </div>
     </div>
   </section>
 
   <!-- Project Scope -->
-  <section class="mb-8">
+  <!-- <section class="mb-8">
     <h2 class="text-xl font-semibold mb-4">PROJECT SCOPE</h2>
     <div class="space-y-4">
       <div>
@@ -93,25 +89,28 @@
         <div class="p-2 bg-gray-50 border rounded">project.outsideScope</div>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Tentative Schedule -->
   <section>
-    <h2 class="text-xl font-semibold mb-4">TENTATIVE SCHEDULE</h2>
+    <h2 class="text-xl font-semibold mb-4">LỊCH TRÌNH DỰ ÁN</h2>
     <table class="w-full">
       <thead class="bg-gray-100">
         <tr>
-          <th class="text-left p-2 border">KEY MILESTONE</th>
-          <th class="text-left p-2 border w-32">START</th>
-          <th class="text-left p-2 border w-32">FINISH</th>
+          <th class="text-left p-2 border">CỘT MỐC</th>
+          <th class="text-left p-2 border">GIAI ĐOẠN</th>
+          <th class="text-left p-2 border w-32">KẾT THÚC</th>
         </tr>
       </thead>
       <tbody>
+        @for (milestone of projectOverview?.projectCharterResponseDto?.milestones; track milestone.id) {
+
         <tr>
-          <td class="p-2 border">milestone.name</td>
-          <td class="p-2 border">milestone.startDate</td>
-          <td class="p-2 border">milestone.finishDate</td>
+          <td class="p-2 border">{{ milestone.title }}</td>
+          <td class="p-2 border">{{ getPhaseLabel(milestone.phaseName) }}</td>
+          <td class="p-2 border">{{ milestone.dueDate | date : 'dd-MM-yyyy' }}</td>
         </tr>
+        }
       </tbody>
     </table>
   </section>

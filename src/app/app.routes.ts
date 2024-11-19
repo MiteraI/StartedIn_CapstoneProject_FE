@@ -7,6 +7,7 @@ import { InvestmentContractDataResolver } from './shared/resolvers/investment-co
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
 import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
+import { ProjectOverviewDataResolver } from './shared/resolvers/overview-projects-data.resolver'
 
 export const routes: Routes = [
   {
@@ -43,6 +44,7 @@ export const routes: Routes = [
   {
     path: 'project-overview/:projectId',
     loadComponent: () => import('./pages/project-overview/project-overview.page').then((m) => m.ProjectOverviewPage),
+    resolve: { projectOverview: ProjectOverviewDataResolver },
     children: [
       {
         path: '', // Add this default route
