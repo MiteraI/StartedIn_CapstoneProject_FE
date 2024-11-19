@@ -1,13 +1,104 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>project-disbursement-detail</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="max-w-4xl mx-auto p-4">
+  <div *ngIf="disbursement" class="bg-white rounded-lg shadow">
+    <!-- Header -->
+    <div class="p-6 border-b">
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <div class="flex items-center space-x-4 mb-4 md:mb-0">
+          <nz-avatar
+            [nzSize]="64"
+            [nzText]="disbursement.investorName | initialsOnly"
+            class="bg-orange-600 text-3xl"
+          ></nz-avatar>
+          <div class="flex-1">
+            <div class="text-2xl font-bold">{{ disbursement.title }}</div>
+            <div class="mt-1 text-gray-500 flex items-center md:space-x-2">
+              <span class="hidden md:inline">{{ disbursement.investorName }}</span>
+              <span class="hidden md:inline">•</span>
+              <span>{{ disbursement.contractIdNumber }}</span>
+            </div>
+          </div>
+        </div>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">project-disbursement-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+        <div class="md:text-right">
+          <div [ngClass]="{
+            'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
+            'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+            'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
+            'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+            'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
+            'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+          }">
+            ● {{ statusLabels[disbursement.disbursementStatus] }}
+          </div>
+          <div class="text-2xl font-bold mt-1">{{ disbursement.amount | vndCurrency }}</div>
+          <div *ngIf="canConfirm()" class="mt-4 flex justify-end space-x-2">
+            <button
+              (click)="confirmDisbursement()"
+              class="flex items-center space-x-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+            >
+              <mat-icon fontIcon="check"></mat-icon>
+              <span>Xác nhận giải ngân</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+      <!-- Left Column -->
+      <div class="space-y-6">
+        <!-- Period -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <div class="text-sm font-medium text-gray-500 mb-1">Thời gian dự kiến giải ngân</div>
+          <div class="text-lg">{{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}</div>
+        </div>
+
+        <!-- Investor Info -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <div class="text-sm font-medium text-gray-500 mb-2">Nhà đầu tư</div>
+          <div class="flex items-center space-x-3">
+            <nz-avatar
+              [nzSize]="40"
+              [nzText]="disbursement.investorName | initialsOnly"
+              class="bg-orange-600 text-xl"
+            ></nz-avatar>
+            <div>
+              <div class="font-medium text-xl">{{ disbursement.investorName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="space-y-6">
+        <!-- Condition -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <div class="text-sm font-medium text-gray-500 mb-1">Điều kiện</div>
+          <div class="whitespace-pre-line">{{ disbursement.condition }}</div>
+        </div>
+
+        <!-- Attachments -->
+        <div *ngIf="disbursement.disbursementAttachments?.length" class="bg-gray-50 p-4 rounded-lg">
+          <div class="text-sm font-medium text-gray-500 mb-2">Tài liệu đính kèm</div>
+          <div class="space-y-2">
+            <div
+              *ngFor="let attachment of disbursement.disbursementAttachments"
+              class="flex items-center p-2 bg-white rounded hover:bg-gray-100 cursor-pointer"
+              (click)="downloadAttachment(attachment.evidenceFile, attachment.fileName)"
+            >
+              <span class="material-icons text-gray-500 mr-2">attachment</span>
+              <span class="text-sm overflow-auto">{{ attachment.fileName }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Decline Reason -->
+        <div *ngIf="disbursement.declineReason" class="bg-red-50 p-4 rounded-lg">
+          <div class="text-sm font-medium text-red-500 mb-1">Lý do từ chối</div>
+          <div class="text-red-600">{{ disbursement.declineReason }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

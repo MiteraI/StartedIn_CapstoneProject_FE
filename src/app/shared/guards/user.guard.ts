@@ -7,7 +7,9 @@ import { AccountService } from '../../core/auth/account.service';
   providedIn: 'root',
 })
 export class UserGuard implements CanActivate {
-  constructor(private accountService: AccountService, private router: Router) {}
+  constructor(private accountService: AccountService, private router: Router) {
+    accountService.identity().subscribe();
+  }
 
   canActivate(): Observable<boolean> {
     return this.accountService.account$.pipe(

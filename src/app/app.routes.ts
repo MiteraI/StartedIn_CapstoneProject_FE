@@ -9,6 +9,8 @@ import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.r
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 import { InvestorGuard } from './shared/guards/investor.guard'
 import { UserGuard } from './shared/guards/user.guard'
+import { ProjectDisbursementDataResolver } from './shared/resolvers/project-disbursement-data.resolver'
+import { InvestorDisbursementDataResolver } from './shared/resolvers/investor-disbursement-data.resolver'
 
 export const routes: Routes = [
   {
@@ -61,11 +63,6 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
-        path: 'create-deal',
-        canActivate: [InvestorGuard],
-        loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
-      },
-      {
         path: 'deals',
         canActivate: [UserGuard],
         loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
@@ -106,6 +103,7 @@ export const routes: Routes = [
       {
         path: 'disbursements/:disbursementId',
         canActivate: [UserGuard],
+        resolve: { disbursement: ProjectDisbursementDataResolver },
         loadComponent: () => import('./pages/disbursement-pages/project-disbursement-detail/project-disbursement-detail.page').then((m) => m.ProjectDisbursementDetailPage),
       },
       {
@@ -140,6 +138,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
   },
   {
+    path: 'projects/:projectId/create-deal',
+    canActivate: [InvestorGuard],
+    loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
+  },
+  {
     path: 'deals/:dealId',
     canActivate: [InvestorGuard],
     resolve: { deal: InvestorDealDataResolver },
@@ -153,6 +156,7 @@ export const routes: Routes = [
   {
     path: 'disbursements/:disbursementId',
     canActivate: [InvestorGuard],
+    resolve: { disbursement: InvestorDisbursementDataResolver },
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
   },
 ]

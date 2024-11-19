@@ -5,6 +5,7 @@ import { map, Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { DisbursementItemModel } from "../shared/models/disbursement/disbursement-item.model";
 import { DisbursementStatus } from "../shared/enums/disbursement-status.enum";
+import { DisbursementDetailModel } from "../shared/models/disbursement/disbursement-detail.model";
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +16,14 @@ export class DisbursementService {
     private applicationConfigService: ApplicationConfigService
   ) {}
 
-  private parseNumericFields<T extends DisbursementItemModel>(disbursement: T): T {
+  private parseNumericFields<T extends DisbursementItemModel | DisbursementDetailModel>(disbursement: T): T {
     return {
       ...disbursement,
       amount: typeof disbursement.amount === 'string' ? parseFloat(disbursement.amount) : disbursement.amount
     };
   }
 
-  private parseSearchResponse<T extends DisbursementItemModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
+  private parseSearchResponse<T extends DisbursementItemModel | DisbursementDetailModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
     return {
       ...response,
       data: response.data.map(item => this.parseNumericFields(item))
@@ -119,6 +120,22 @@ export class DisbursementService {
       this.applicationConfigService.getEndpointFor(`/api/disbursements/${id}/reject`),
       { declineReason: reason },
       { responseType: 'text' as 'json' }
+    );
+  }
+
+  getInvestorDisbursementDetail(id: string): Observable<DisbursementDetailModel> {
+    return this.http.get<DisbursementDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/${id}`)
+    ).pipe(
+      map(disbursement => this.parseNumericFields(disbursement))
+    );
+  }
+
+  getProjectDisbursementDetail(projectId: string, id: string): Observable<DisbursementDetailModel> {
+    return this.http.get<DisbursementDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/${id}`)
+    ).pipe(
+      map(disbursement => this.parseNumericFields(disbursement))
     );
   }
 }
