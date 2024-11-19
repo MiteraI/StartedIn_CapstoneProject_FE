@@ -31,6 +31,7 @@
         <th class="p-4 text-left">Nhà đầu tư</th>
         <th class="p-4 text-left">Số hợp đồng</th>
         <th class="p-4 text-left">Thời gian dự kiến giải ngân</th>
+        <th class="p-4 text-left">Hạn chót giải ngân</th>
         <th class="p-4 text-left">Số tiền</th>
         <th class="p-4 text-left">Trạng thái</th>
         <th class="p-4 text-left"></th>
@@ -55,9 +56,8 @@
           </td>
           <td class="p-4">{{ disbursement.investorName }}</td>
           <td class="p-4">{{ disbursement.contractIdNumber }}</td>
-          <td class="p-4">
-            {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
-          </td>
+          <td class="p-4 text-center">{{ formatDate(disbursement.startDate) }}</td>
+          <td class="p-4 text-center" >{{ formatDate(disbursement.endDate) }}</td> 
           <td class="p-4">{{ disbursement.amount | vndCurrency }}</td>
           <td class="p-4">
             <span [ngClass]="{
