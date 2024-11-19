@@ -30,9 +30,9 @@
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Tiêu đề</th>
-        <th *ngIf="!isInProject" class="p-4 text-left">Dự án</th>
+        <th class="p-4 text-left">Dự án</th>
         <th class="p-4 text-left">Số hợp đồng</th>
-        <th class="p-4 text-left">Thời gian</th>
+        <th class="p-4 text-left">Thời gian dự kiến giải ngân</th>
         <th class="p-4 text-left">Số tiền</th>
         <th class="p-4 text-left">Trạng thái</th>
         <th class="p-4 text-left"></th>
@@ -49,12 +49,13 @@
         <!-- Disbursement Rows -->
         <tr
           *ngFor="let disbursement of group"
-          class="border-b hover:bg-gray-50"
+          class="border-b hover:bg-gray-50 cursor-pointer"
+          [routerLink]="['/disbursements', disbursement.id]"
         >
           <td class="p-4">
             <div class="font-medium">{{ disbursement.title }}</div>
           </td>
-          <td *ngIf="!isInProject" class="p-4">{{ disbursement.projectName }}</td>
+          <td class="p-4">{{ disbursement.projectName }}</td>
           <td class="p-4">{{ disbursement.contractIdNumber }}</td>
           <td class="p-4">
             {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
@@ -74,10 +75,10 @@
           </td>
           <td class="p-4">
             <div *ngIf="canDisburse(disbursement)" class="space-x-2 h-6">
-              <button (click)="openDisburseModal(disbursement)" class="text-green-500 hover:text-green-700">
+              <button (click)="$event.stopPropagation(); openDisburseModal(disbursement)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="payments"></mat-icon>
               </button>
-              <button (click)="openRejectModal(disbursement)" class="text-red-500 hover:text-red-700">
+              <button (click)="$event.stopPropagation(); openRejectModal(disbursement)" class="text-red-500 hover:text-red-700">
                 <mat-icon fontIcon="close"></mat-icon>
               </button>
             </div>
@@ -107,38 +108,40 @@
         {{ formatGroupHeader(keys[i]) }}
       </div>
       <div class="space-y-4">
-        <div *ngFor="let disbursement of group" class="bg-white rounded-lg shadow p-4">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="text-xl font-medium">{{ disbursement.title }}</div>
-              <div *ngIf="!isInProject" class="text-sm text-gray-500">{{ disbursement.projectName }}</div>
-              <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
+        <div *ngFor="let disbursement of group" class="bg-white rounded-lg shadow">
+          <a [routerLink]="['/disbursements', disbursement.id]" class="block p-4">
+            <div class="flex items-start justify-between">
+              <div class="flex-1">
+                <div class="text-xl font-medium">{{ disbursement.title }}</div>
+                <div *ngIf="!isInProject" class="text-sm text-gray-500">{{ disbursement.projectName }}</div>
+                <div class="text-sm text-gray-500">{{ disbursement.contractIdNumber }}</div>
+              </div>
+              <div *ngIf="canDisburse(disbursement)" class="space-x-2 h-6">
+                <button (click)="$event.stopPropagation(); openRejectModal(disbursement)" class="text-red-500">
+                  <mat-icon fontIcon="close"></mat-icon>
+                </button>
+                <button (click)="$event.stopPropagation(); openDisburseModal(disbursement)" class="text-green-500">
+                  <mat-icon fontIcon="payments"></mat-icon>
+                </button>
+              </div>
             </div>
-            <div *ngIf="canDisburse(disbursement)" class="space-x-2 h-6">
-              <button (click)="openRejectModal(disbursement)" class="text-red-500">
-                <mat-icon fontIcon="close"></mat-icon>
-              </button>
-              <button (click)="openDisburseModal(disbursement)" class="text-green-500">
-                <mat-icon fontIcon="payments"></mat-icon>
-              </button>
+            <div class="mt-2">
+              <div class="text-sm">
+                {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
+              </div>
+              <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
+              <span [ngClass]="{
+                'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
+                'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
+                'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
+                'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
+                'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
+                'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+              }">
+                ● {{ statusLabels[disbursement.disbursementStatus] }}
+              </span>
             </div>
-          </div>
-          <div class="mt-2">
-            <div class="text-sm">
-              {{ formatDate(disbursement.startDate) }} - {{ formatDate(disbursement.endDate) }}
-            </div>
-            <div class="text-lg font-medium">{{ disbursement.amount | vndCurrency }}</div>
-            <span [ngClass]="{
-              'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
-              'text-blue-500': disbursement.disbursementStatus === disbursementStatuses.ACCEPTED,
-              'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
-              'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
-              'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
-            }">
-              ● {{ statusLabels[disbursement.disbursementStatus] }}
-            </span>
-          </div>
+          </a>
         </div>
       </div>
     </ng-container>

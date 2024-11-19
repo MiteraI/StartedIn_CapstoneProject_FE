@@ -31,7 +31,7 @@ export class ProjectListPage implements OnInit {
 
   ngOnInit() {
     this.userProjects = this.route.snapshot.data['userProjects'];
-    this.accountService.account$.subscribe(account => {
+    this.accountService.identity().subscribe(account => {
       if (account) {
         this.isInvestor = account.authorities.includes('Investor');
       }

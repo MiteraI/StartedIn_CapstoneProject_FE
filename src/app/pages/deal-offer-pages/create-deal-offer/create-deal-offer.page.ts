@@ -57,18 +57,21 @@ export class CreateDealOfferPage implements OnInit {
 
   onSubmit(): void {
     if (this.dealOfferForm.valid) {
-      const dealOffer: DealOfferCreateModel = {...this.dealOfferForm.value, projectId: this.route.parent?.snapshot.paramMap.get('id')!}
+      const dealOffer: DealOfferCreateModel = {
+        ...this.dealOfferForm.value,
+        projectId: this.route.snapshot.paramMap.get('projectId')!
+      };
       this.dealOfferService
-      .postDealOffer(dealOffer)
-      .pipe(
-        catchError(error => {
-          this.notification.error("Lỗi", "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
-          return throwError(() => new Error(error.error));
-        })
-      )
-      .subscribe(result => {
-        this.router.navigate(['deals']);
-      });
+        .postDealOffer(dealOffer)
+        .pipe(
+          catchError(error => {
+            this.notification.error("Lỗi", "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
+            return throwError(() => new Error(error.error));
+          })
+        )
+        .subscribe(result => {
+          this.router.navigate(['deals']);
+        });
     }
   }
 }
