@@ -85,7 +85,6 @@ export class InvestmentContractPage implements OnInit {
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
       contractIdNumber: ['', [Validators.required]],
-      shareQuantity: [0, [Validators.required]],
       percentage: [0, [Validators.required]],
       buyPrice: [0, [Validators.required]]
     });
@@ -110,12 +109,10 @@ export class InvestmentContractPage implements OnInit {
         }
         this.investorId = this.contract.investorId;
         this.contractId = this.contract.id;
-        const shareQuantity = Math.round(this.project.totalShares * this.contract.sharePercentage / 100);
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
           contractIdNumber: this.contract.contractIdNumber,
-          shareQuantity: shareQuantity,
           percentage: this.contract.sharePercentage,
           buyPrice: this.contract.buyPrice
         })
@@ -127,9 +124,7 @@ export class InvestmentContractPage implements OnInit {
       } else if (!!this.deal) {
         this.isFromDeal = true;
         this.investorId = this.deal.investorId;
-        const shareQuantity = Math.round(this.project.totalShares * this.deal.equityShareOffer / 100);
         this.contractForm.patchValue({
-          shareQuantity: shareQuantity,
           percentage: this.deal.equityShareOffer,
           buyPrice: this.deal.amount
         })
@@ -142,14 +137,6 @@ export class InvestmentContractPage implements OnInit {
         })
       }
     });
-  }
-
-  updateShareQuantity() {
-    this.contractForm.patchValue({shareQuantity: Math.round(this.project.totalShares * this.contractForm.value.percentage / 100)});
-  }
-
-  updateSharePercentage() {
-    this.contractForm.patchValue({percentage: (this.contractForm.value.shareQuantity / this.project.totalShares * 100).toFixed(2)});
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
@@ -255,7 +242,6 @@ export class InvestmentContractPage implements OnInit {
       },
       investorInfo: {
         userId: this.investorId,
-        shareQuantity: this.contractForm.value.shareQuantity,
         percentage: this.contractForm.value.percentage,
         buyPrice: this.contractForm.value.buyPrice,
       },

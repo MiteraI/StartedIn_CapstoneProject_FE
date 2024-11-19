@@ -125,7 +125,6 @@ export class InternalContractPage implements OnInit {
       } else {
         this.addShare({
           userId: this.currentUserId!,
-          shareQuantity: 0,
           percentage: 0,
           buyPrice: 0
         })
@@ -140,7 +139,6 @@ export class InternalContractPage implements OnInit {
   addShare(share?: ShareEquityCreateUpdateModel) {
     const shareForm = this.fb.group({
       userId: [share?.userId || '', Validators.required],
-      shareQuantity: [share?.shareQuantity || 0, [Validators.required, Validators.min(0)]],
       percentage: [share?.percentage || 0, [Validators.required, Validators.min(0), Validators.max(100)]]
     });
 
@@ -161,18 +159,6 @@ export class InternalContractPage implements OnInit {
       (total, control) => total + (control.get('percentage')?.value || 0),
       0
     );
-  }
-
-  updateShareQuantity(index: number) {
-    this.sharesFormArray.at(index).patchValue({
-      shareQuantity: Math.round(this.project.totalShares * this.sharesFormArray.at(index).value.percentage / 100)
-    });
-  }
-
-  updateSharePercentage(index: number) {
-    this.sharesFormArray.at(index).patchValue({
-      percentage: (this.sharesFormArray.at(index).value.shareQuantity / this.project.totalShares * 100).toFixed(2)
-    });
   }
 
   save() {
