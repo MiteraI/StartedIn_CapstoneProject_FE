@@ -11,19 +11,32 @@
       <!-- Title and Milestone Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Title</nz-form-label>
-          <nz-form-control [nzErrorTip]="'Please enter the title'">
-            <input nz-input formControlName="title" placeholder="Enter task title" (input)="handleInfoChanged()" />
+          <nz-form-label [nzRequired]="true">Tên Tác Vụ</nz-form-label>
+          <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
+            <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" (input)="handleInfoChanged()" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Milestone</nz-form-label>
+          <nz-form-label>Cột Mốc</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="milestone" nzPlaceHolder="Select milestone">
-              @for (milestone of milestones; track $index) {
+            <nz-select
+              formControlName="milestone"
+              nzPlaceHolder="Chọn cột mốc"
+              (ngModelChange)="handleSelectMilestone($event)"
+              (nzOpenChange)="handleOpenMilestoneSelect()"
+              (nzScrollToBottom)="loadMoreMilestones()"
+            >
+              <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
+              @if (initialMilestone) {
+              <nz-option [nzValue]="initialMilestone.id" [nzLabel]="initialMilestone.title"></nz-option>
+              } @for (milestone of milestones; track $index) {
               <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
-
+              } @if (isMilestonesFetchLoading) {
+              <nz-option nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
               }
             </nz-select>
           </nz-form-control>
@@ -32,18 +45,18 @@
 
       <!-- Description -->
       <nz-form-item>
-        <nz-form-label>Description</nz-form-label>
+        <nz-form-label>Mô Tả</nz-form-label>
         <nz-form-control>
-          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Enter task description" (input)="handleInfoChanged()"></textarea>
+          <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Nhập thông tin tác vụ" (input)="handleInfoChanged()"></textarea>
         </nz-form-control>
       </nz-form-item>
 
-      <!-- Status and Deadline Row -->
+      <!-- Status and Deadline Row and Man Hour -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Status</nz-form-label>
+          <nz-form-label>Trạng Thái</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="status" nzPlaceHolder="Select status" (ngModelChange)="handleStatusChanged($event)">
+            <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)">
               @for (status of statuses; track $index) {
               <nz-option [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
               }
@@ -52,13 +65,20 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Deadline</nz-form-label>
+          <nz-form-label>Công Số</nz-form-label>
+          <nz-form-control>
+            <nz-input-number formControlName="manHour" [nzMin]="1" [nzPrecision]="0" [nzMax]="48" [nzStep]="1" (ngModelChange)="handleInfoChanged()"></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Hạn Chót</nz-form-label>
           <nz-form-control>
             <nz-date-picker
               formControlName="deadline"
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
-              nzPlaceHolder="Select deadline date and hour"
+              nzPlaceHolder="Chọn hạn chót"
               (nzOnOk)="handleInfoChanged()"
             >
             </nz-date-picker>
@@ -69,11 +89,11 @@
       <!-- Parent Task and Assignee Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Parent Task</nz-form-label>
+          <nz-form-label>Tác Vụ Mẹ</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="parentTask"
-              nzPlaceHolder="Select parent task"
+              nzPlaceHolder="Chọn tác vụ mẹ"
               (ngModelChange)="handleSelectParentTask($event)"
               (nzOpenChange)="handleOpenParentTask()"
               (nzScrollToBottom)="loadMoreOtherTasks()"
@@ -94,12 +114,12 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Assignees</nz-form-label>
+          <nz-form-label>Người Làm</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="assignees"
               [nzMode]="'multiple'"
-              nzPlaceHolder="Select assignees"
+              nzPlaceHolder="Chọn người thực hiện"
               (nzOpenChange)="handleOpenAssigneeSelect()"
               (ngModelChange)="handleSelectAssignChanged($event)"
             >
@@ -113,7 +133,7 @@
 
       @if (subTasks.length > 0) {
       <nz-form-item>
-        <nz-form-label>Subtasks</nz-form-label>
+        <nz-form-label>Tác Vụ Con</nz-form-label>
         <nz-form-control>
           <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="subTasks">
             <thead>
@@ -141,7 +161,7 @@
 
       <!-- Comment Section -->
       <nz-form-item>
-        <nz-form-label>Comments</nz-form-label>
+        <nz-form-label>Ghi Chú</nz-form-label>
         <nz-form-control>
           <div class="mb-4">
             <div *ngFor="let comment of comments" class="mb-3 p-3 bg-gray-50 rounded">
@@ -153,7 +173,7 @@
             </div>
           </div>
           <div class="flex gap-2">
-            <input nz-input placeholder="Type your comment" class="flex-grow" />
+            <input nz-input placeholder="Để lại ý kiến" class="flex-grow" />
             <button nz-button nzType="primary">Comment</button>
           </div>
         </nz-form-control>
