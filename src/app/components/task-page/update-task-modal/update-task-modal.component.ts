@@ -23,6 +23,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { Subject, takeUntil } from 'rxjs'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 
 interface IModalData {
   taskId: string
@@ -46,6 +47,7 @@ interface IModalData {
     NzSpinModule,
     NzPopconfirmModule,
     NzIconModule,
+    NzInputNumberModule,
   ],
   providers: [DatePipe],
 })
@@ -53,12 +55,12 @@ export class UpdateTaskModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   taskStatusLabels = TaskStatusLabels
   statuses: { label: string; value: number }[] = [
-    { value: 0, label: TaskStatusLabels[0] },
     { value: 1, label: TaskStatusLabels[1] },
     { value: 2, label: TaskStatusLabels[2] },
     { value: 3, label: TaskStatusLabels[3] },
     { value: 4, label: TaskStatusLabels[4] },
     { value: 5, label: TaskStatusLabels[5] },
+    { value: 6, label: TaskStatusLabels[6] },
   ]
   taskForm: FormGroup
   private destroy$ = new Subject<void>()
@@ -66,7 +68,7 @@ export class UpdateTaskModalComponent implements OnInit {
   subTasks: Task[] = []
   comments: { content: string; author: string; date: string }[] = []
   isInfoChanged: boolean = false
-  initialStatus: TaskStatus = 0
+  initialStatus: TaskStatus = 1
 
   // Assignee handling vars
   users: TeamMemberModel[] = []
@@ -108,6 +110,7 @@ export class UpdateTaskModalComponent implements OnInit {
       title: ['', [Validators.required]],
       description: [''],
       deadline: [null],
+      manHour: [null],
       status: [null],
       parentTask: [''],
       milestone: [null],
@@ -127,6 +130,7 @@ export class UpdateTaskModalComponent implements OnInit {
         title: this.taskForm.value.title,
         description: this.taskForm.value.description,
         deadline: deadline,
+        manHour: this.taskForm.value.manHour,
       }
 
       this.taskService.updateTaskInfo(this.nzModalData.projectId, this.nzModalData.taskId, taskData).subscribe({
@@ -154,6 +158,7 @@ export class UpdateTaskModalComponent implements OnInit {
     if (status !== this.initialStatus) {
       this.taskService.updateTaskStatus(this.nzModalData.projectId, this.nzModalData.taskId, { status: status }).subscribe({
         next: (res) => {
+          this.antdNoti.openSuccessNotification('', 'Cập nhật trạng thái thành công')
           this.initialStatus = status
         },
         error: (error: HttpErrorResponse) => {
@@ -184,7 +189,7 @@ export class UpdateTaskModalComponent implements OnInit {
   handleSelectParentTask(parentTaskId: string) {
     if (parentTaskId !== this.initialParentTaskId) {
       this.taskService.updateParentTask(this.nzModalData.projectId, this.nzModalData.taskId, { parentTaskId: parentTaskId }).subscribe({
-        next: (res) => {          
+        next: (res) => {
           this.initialParentTaskId = parentTaskId
         },
         error: (error: HttpErrorResponse) => {
@@ -273,6 +278,7 @@ export class UpdateTaskModalComponent implements OnInit {
     if (milestoneId !== this.initialParentTaskId) {
       this.taskService.updateTaskMilestone(this.nzModalData.projectId, this.nzModalData.taskId, { milestoneId: milestoneId }).subscribe({
         next: (res) => {
+          this.antdNoti.openSuccessNotification('', 'Cập nhật cột mốc thành công')
           this.initialMilestoneId = milestoneId
         },
         error: (error: HttpErrorResponse) => {
@@ -360,6 +366,7 @@ export class UpdateTaskModalComponent implements OnInit {
               description: task.description,
               deadline: this.datePipe.transform(task.deadline, 'yyyy-MM-dd HH:00:00'),
               status: task.status,
+              manHour: task.manHour,
               parentTask: task.parentTask === null ? '' : task.parentTask.id,
               milestone: task.milestone === null ? '' : task.milestone.id,
               assignees: task.assignees.map((user) => user.id),

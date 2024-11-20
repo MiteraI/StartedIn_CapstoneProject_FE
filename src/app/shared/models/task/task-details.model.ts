@@ -9,6 +9,7 @@ export type TaskDetails = {
   deadline: string
   status: TaskStatus
   isLate: boolean
+  manHour: number
   parentTask: Task
   milestone: Milestone
   assignees: TeamMemberModel[]

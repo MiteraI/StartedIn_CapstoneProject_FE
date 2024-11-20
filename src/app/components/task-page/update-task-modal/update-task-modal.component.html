@@ -27,6 +27,7 @@
               (nzOpenChange)="handleOpenMilestoneSelect()"
               (nzScrollToBottom)="loadMoreMilestones()"
             >
+              <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
               @if (initialMilestone) {
               <nz-option [nzValue]="initialMilestone.id" [nzLabel]="initialMilestone.title"></nz-option>
               } @for (milestone of milestones; track $index) {
@@ -50,7 +51,7 @@
         </nz-form-control>
       </nz-form-item>
 
-      <!-- Status and Deadline Row -->
+      <!-- Status and Deadline Row and Man Hour -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
           <nz-form-label>Trạng Thái</nz-form-label>
@@ -60,6 +61,13 @@
               <nz-option [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
               }
             </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Công Số</nz-form-label>
+          <nz-form-control>
+            <nz-input-number formControlName="manHour" [nzMin]="1" [nzPrecision]="0" [nzMax]="48" [nzStep]="1" (ngModelChange)="handleInfoChanged()"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
 

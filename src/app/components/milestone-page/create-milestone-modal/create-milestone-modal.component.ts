@@ -11,6 +11,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
+import { CreateMilestone } from 'src/app/shared/models/milestone/milestone-create.model'
 
 interface IModalData {
   projectId: string
@@ -28,27 +29,29 @@ export class CreateMilestoneModalComponent implements OnInit {
   milestoneForm: FormGroup
 
   phaseNames: { label: string; value: number }[] = [
-    { value: 0, label: PhaseStateLabels[0] },
-    { value: 1, label: PhaseStateLabels[1] },
-    { value: 2, label: PhaseStateLabels[2] },
-    { value: 3, label: PhaseStateLabels[3] },
+    { value: 0, label: PhaseStateLabels[1] },
+    { value: 1, label: PhaseStateLabels[2] },
+    { value: 2, label: PhaseStateLabels[3] },
+    { value: 3, label: PhaseStateLabels[4] },
   ]
 
   constructor(private fb: FormBuilder, private milestoneService: MilestoneService, private nzModalRef: NzModalRef, private antdNoti: AntdNotificationService) {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
-      dueDate: [null, Validators.required],
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required],
       phaseEnum: [null, Validators.required],
     })
   }
 
   onSubmit() {
     if (this.milestoneForm.valid) {
-      const milestone = {
+      const milestone: CreateMilestone = {
         title: this.milestoneForm.value.title,
         description: this.milestoneForm.value.description,
-        dueDate: this.milestoneForm.value.dueDate,
+        startDate: this.milestoneForm.value.startDate,
+        endDate: this.milestoneForm.value.endDate,
         phaseEnum: this.milestoneForm.value.phaseEnum,
       }
 

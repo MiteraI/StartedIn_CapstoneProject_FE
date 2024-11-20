@@ -15,6 +15,7 @@ import { NzTableModule } from 'ng-zorro-antd/table'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
+import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { Task } from 'src/app/shared/models/task/task.model'
 
 interface IModalData {
@@ -45,11 +46,13 @@ export class UpdateMilestoneModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   milestoneForm: FormGroup
 
+  taskStatusLabels = TaskStatusLabels
+
   phaseNames: { label: string; value: number }[] = [
-    { value: 0, label: PhaseStateLabels[0] },
-    { value: 1, label: PhaseStateLabels[1] },
-    { value: 2, label: PhaseStateLabels[2] },
-    { value: 3, label: PhaseStateLabels[3] },
+    { value: 0, label: PhaseStateLabels[1] },
+    { value: 1, label: PhaseStateLabels[2] },
+    { value: 2, label: PhaseStateLabels[3] },
+    { value: 3, label: PhaseStateLabels[4] },
   ]
 
   assignedTasks: Task[] = []
@@ -61,9 +64,9 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.milestoneForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
-      dueDate: [null, Validators.required],
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required],
       phaseEnum: [null, Validators.required],
-      inCharter: [false],
     })
   }
 
@@ -90,15 +93,14 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.isFetchMilestoneDetailLoading = true
     this.milestoneService.getMilestoneDetail(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
       next: (response) => {
-        console.log(response);
-        
         this.milestoneForm.setValue({
           title: response.title,
           description: response.description,
-          dueDate: new Date(response.dueDate),
+          startDate: '2021-09-01',
+          endDate: '2021-09-30',
           phaseEnum: response.phaseName,
-          inCharter: response.charterId === null ? false : true,
         })
+        this.assignedTasks = response.assignedTasks
         this.isFetchMilestoneDetailLoading = false
       },
       error: (error) => {

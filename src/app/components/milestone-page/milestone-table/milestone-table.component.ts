@@ -11,13 +11,14 @@ import { UpdateMilestoneModalComponent } from '../update-milestone-modal/update-
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
+import { NzProgressModule } from 'ng-zorro-antd/progress'
 
 @Component({
   selector: 'app-milestone-table',
   templateUrl: './milestone-table.component.html',
   styleUrls: ['./milestone-table.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule],
+  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule],
 })
 export class MilestoneTableComponent implements OnInit {
   @Output() pageChanged = new EventEmitter<number>()

@@ -36,15 +36,44 @@
           </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item>
+        <!-- <nz-form-item>
           <nz-form-label>Ngày Kết Thúc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
             <nz-date-picker nzDisabled formControlName="dueDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
           </nz-form-control>
-        </nz-form-item>
+        </nz-form-item> -->
       </div>
+
+      @if (assignedTasks.length > 0) {
+      <nz-form-item>
+        <nz-form-label>Tác Vụ Con</nz-form-label>
+        <nz-form-control>
+          <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="assignedTasks">
+            <thead>
+              <tr>
+                <th>Tên Tác Vụ</th>
+                <th>Trạng Thái</th>
+                <th>Hạn Chót</th>
+                <th>Người Tạo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of basicTable.data; track data.id) {
+              <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.createdBy }}</td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
+        </nz-form-control>
+      </nz-form-item>
+      }
     </form>
   </div>
+
   }
   <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
     <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteMilestone()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Cột Mốc</button>

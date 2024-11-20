@@ -18,20 +18,16 @@
   <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Giai Đoạn Dự Án</nz-form-label>
-      <nz-form-control [nzErrorTip]="'Vui lòng chọn giai đoạn dự án'">
-        <nz-select formControlName="phaseEnum" nzPlaceHolder="Chọn giai đoạn dự án">
-          @for (phaseName of phaseNames; track phaseName.value) {
-          <nz-option [nzValue]="phaseName.value" [nzLabel]="phaseName.label"></nz-option>
-          }
-        </nz-select>
+      <nz-form-label>Ngày Bắt Đầu</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
+        <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label>Ngày Kết Thúc</nz-form-label>
       <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
-        <nz-date-picker formControlName="dueDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
+        <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
   </div>
