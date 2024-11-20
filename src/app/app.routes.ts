@@ -11,6 +11,7 @@ import { InvestorGuard } from './shared/guards/investor.guard'
 import { UserGuard } from './shared/guards/user.guard'
 import { ProjectDisbursementDataResolver } from './shared/resolvers/project-disbursement-data.resolver'
 import { InvestorDisbursementDataResolver } from './shared/resolvers/investor-disbursement-data.resolver'
+import { TransactionDataResolver } from './shared/resolvers/transaction-data.resolver'
 
 export const routes: Routes = [
   {
@@ -123,6 +124,15 @@ export const routes: Routes = [
       {
         path: 'equity',
         loadComponent: () => import('./pages/share-equity-pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
+      },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./pages/transaction-pages/transactions/transactions.page').then( m => m.TransactionsPage)
+      },
+      {
+        path: 'transactions/:transactionId',
+        resolve: { transaction: TransactionDataResolver },
+        loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then( m => m.TransactionDetailsPage)
       },
       {
         path: '',
