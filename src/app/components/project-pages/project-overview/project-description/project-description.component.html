@@ -7,8 +7,8 @@
   <p class="break-words">
     {{ projectOverview?.description }}
   </p>
-  <h3>Ngày bắt đầu</h3>
+  <p class="font-semibold">Ngày bắt đầu dự án</p>
   <p>{{ projectOverview?.startDate | date : 'dd-MM-yyyy' }}</p>
-  <h3>Ngày kết thúc</h3>
+  <p class="font-semibold">Ngày kết thúc dự án</p>
   <p>{{ projectOverview?.endDate ? (projectOverview?.endDate | date : 'dd-MM-yyyy') : 'Chưa xác định' }}</p>
 </div>

@@ -3,7 +3,9 @@ export type InvestmentCallResponseDto = {
   projectId: string
   targetCall: number
   amountRaised: number
-  startDate: string 
+  remainAvailableEquityShare: number
+  equityShareCall: number
+  startDate: string
   endDate: string
   status: number
   totalInvestor: number

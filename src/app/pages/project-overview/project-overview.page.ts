@@ -14,6 +14,7 @@ import { ProjectOverviewService } from 'src/app/services/project-overview.servic
 })
 export class ProjectOverviewPage implements OnInit {
   projectOverview: ProjectOveriewModel | undefined
+  remainingAmount: number = 0
   constructor(private route: ActivatedRoute, private projectOverviewService: ProjectOverviewService) {}
 
   ngOnInit() {
@@ -21,6 +22,7 @@ export class ProjectOverviewPage implements OnInit {
       this.projectOverview = data['projectOverview']
       this.projectOverviewService.setProjectOverview(this.projectOverview)
       console.log(this.projectOverview)
+      this.remainingAmount = this.projectOverview?.investmentCallResponseDto?.targetCall! - this.projectOverview?.investmentCallResponseDto?.amountRaised!
     })
   }
 }

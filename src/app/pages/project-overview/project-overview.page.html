@@ -10,25 +10,46 @@
     <div class="ml-10 w-1/3">
       <div class="h-2 bg-green-600 w-full"></div>
       <div class="mt-5">
-        <p class="text-2xl text-green-600"><strong>10,000,000 </strong>vnd</p>
-        <p class="text-base text-gray-500">Cần thêm <strong>10,000,000 </strong>vnd</p>
+        <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.targetCall | number }}</strong> vnd</p>
+        <p class="text-base text-gray-500">
+          Cần thêm
+          <strong>{{ remainingAmount | number }}</strong>
+          vnd
+        </p>
+      </div>
+      <div class="mt-5 flex justify-between">
+        <div>
+          <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.equityShareCall | number }}</strong>%</p>
+          <p class="text-base text-gray-500">cổ phần</p>
+        </div>
+        <div>
+          <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.remainAvailableEquityShare | number }}</strong>%</p>
+          <p class="text-base text-gray-500">cổ phần còn lại</p>
+        </div>
       </div>
       <div class="mt-5">
-        <p class="text-2xl text-gray-500"><strong>69 </strong></p>
+        <p class="text-2xl text-gray-500"><strong>{{ projectOverview?.investmentCallResponseDto?.totalInvestor }}</strong></p>
         <p class="text-base text-gray-500">Nhà đầu tư</p>
       </div>
-      <div class="mt-5">
-        <p class="text-2xl text-gray-500"><strong>14 </strong></p>
-        <p class="text-base text-gray-500">Số ngày còn lại</p>
+      <div class="mt-5 flex justify-between">
+        <div>
+          <p class="text-2xl text-gray-500"><strong>{{ projectOverview?.investmentCallResponseDto?.startDate | date : 'dd/MM/yyyy' }}</strong></p>
+          <p class="text-base text-gray-500">Ngày bắt đầu</p>
+        </div>
+        <div>
+          <p class="text-2xl text-gray-500">
+            <strong
+              >{{ projectOverview?.investmentCallResponseDto?.endDate ? (projectOverview?.investmentCallResponseDto?.endDate | date : 'dd/MM/yyyy') : 'Chưa xác định' }}</strong
+            >
+          </p>
+          <p class="text-base text-gray-500">Ngày kết thúc</p>
+        </div>
       </div>
       <div class="mt-5">
         <button class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">Đầu tư ngay</button>
       </div>
       <div class="mt-5">
         <button class="w-1/2 text-black bg-slate-50 border-2 border-solid border-slate-300 py-3 rounded-lg transition duration-75 hover:border-slate-500">Yêu thích</button>
-      </div>
-      <div class="mt-5">
-        <p class="text-sm text-gray-500"><strong>All or nothing.</strong> This project will only be funded if it reaches its goal by Sat, December 14 2024 12:00 AM UTC +07:00.</p>
       </div>
     </div>
   </div>
