@@ -11,6 +11,8 @@ import { InvestorGuard } from './shared/guards/investor.guard'
 import { UserGuard } from './shared/guards/user.guard'
 import { ProjectDisbursementDataResolver } from './shared/resolvers/project-disbursement-data.resolver'
 import { InvestorDisbursementDataResolver } from './shared/resolvers/investor-disbursement-data.resolver'
+import { TransactionDataResolver } from './shared/resolvers/transaction-data.resolver'
+import { ProjectOverviewDataResolver } from './shared/resolvers/overview-projects-data.resolver'
 
 export const routes: Routes = [
   {
@@ -43,6 +45,26 @@ export const routes: Routes = [
   {
     path: 'create-project-charter',
     loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
+  },
+  {
+    path: 'project-overview/:projectId',
+    loadComponent: () => import('./pages/project-overview/project-overview.page').then((m) => m.ProjectOverviewPage),
+    resolve: { projectOverview: ProjectOverviewDataResolver },
+    children: [
+      {
+        path: '', // Add this default route
+        redirectTo: 'description',
+        pathMatch: 'full',
+      },
+      {
+        path: 'description',
+        loadComponent: () => import('./components/project-pages/project-overview/project-description/project-description.component').then((m) => m.ProjectDescriptionComponent),
+      },
+      {
+        path: 'charter',
+        loadComponent: () => import('./components/project-pages/project-overview/project-charter/project-charter.component').then((m) => m.ProjectCharterComponent),
+      },
+    ],
   },
   {
     path: 'projects/:id',
@@ -123,6 +145,15 @@ export const routes: Routes = [
       {
         path: 'equity',
         loadComponent: () => import('./pages/share-equity-pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
+      },
+      {
+        path: 'transactions',
+        loadComponent: () => import('./pages/transaction-pages/transactions/transactions.page').then( m => m.TransactionsPage)
+      },
+      {
+        path: 'transactions/:transactionId',
+        resolve: { transaction: TransactionDataResolver },
+        loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then( m => m.TransactionDetailsPage)
       },
       {
         path: '',

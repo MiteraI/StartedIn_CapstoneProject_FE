@@ -1,0 +1,99 @@
+<app-filter-bar
+  viewName="Lịch sử giao dịch"
+  [searchValue]="filter.name ?? ''"
+  (searchString)="onSearch($event)"
+>
+</app-filter-bar>
+
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table border">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left">Giao dịch</th>
+        <th class="p-4 text-left">Ngày</th>
+        <th class="p-4 text-left">Nội dung</th>
+        <th class="p-4 text-left">Số tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let transaction of transactions"
+        class="border-b hover:bg-gray-50 cursor-pointer"
+        [routerLink]="[transaction.id]"
+      >
+        <td class="p-4 max-w-80">
+          <div class="flex items-center h-full">
+            <div>
+              <mat-icon
+                [fontIcon]="
+                  transaction.type === transactionTypes.DISBURSEMENT ? 'local_atm_icon' :
+                  transaction.type === transactionTypes.ASSET_EXPENSE ? 'inventory_icon' :
+                  'miscellaneous_services'
+                "
+              ></mat-icon>
+            </div>
+            <div class="ml-4">
+              <div class="font-bold">{{ transaction.fromUserName }} → {{ transaction.toUserName }}</div>
+              <div>{{ typeLabels[transaction.type] }}</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-4 min-w-32">{{ transaction.lastUpdatedTime | slice:0:10 }}</td>
+        <td class="p-4 max-w-80">{{ processContent(transaction.content) || 'Không có nội dung' }}</td>
+        <td
+          class="p-4 font-bold"
+          [ngClass]="{'text-green-500': transaction.isInFlow, 'text-red-500': !transaction.isInFlow}"
+        >{{ transaction.isInFlow ? '+' : '-' }}{{ transaction.amount | vndCurrency }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Desktop Pagination -->
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[10, 20, 50]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <div class="space-y-4">
+      <div *ngFor="let transaction of transactions" class="bg-white rounded-lg shadow">
+        <a [routerLink]="[transaction.id]" class="block p-4">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="text-xl font-medium">{{ typeLabels[transaction.type] }}</div>
+              <div class="text-sm text-gray-500">
+                {{ processContent(transaction.content) }}
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="text-sm">
+              {{ transaction.fromUserName }} → {{ transaction.toUserName }}
+            </div>
+            <div
+              class="text-lg font-medium"
+              [ngClass]="{'text-green-500': transaction.isInFlow, 'text-red-500': !transaction.isInFlow}"
+            >{{ transaction.amount | vndCurrency }}</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Loading Spinner -->
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các giao dịch!
+  </div>
+</div>

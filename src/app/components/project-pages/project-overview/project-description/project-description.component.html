@@ -1,0 +1,14 @@
+<div class="">
+  <h3>Trưởng nhóm</h3>
+  <p>{{ projectOverview?.leaderFullName }}</p>
+</div>
+<div class="w-2/3">
+  <h3>Mô tả dự án</h3>
+  <p class="break-words">
+    {{ projectOverview?.description }}
+  </p>
+  <p class="font-semibold">Ngày bắt đầu dự án</p>
+  <p>{{ projectOverview?.startDate | date : 'dd-MM-yyyy' }}</p>
+  <p class="font-semibold">Ngày kết thúc dự án</p>
+  <p>{{ projectOverview?.endDate ? (projectOverview?.endDate | date : 'dd-MM-yyyy') : 'Chưa xác định' }}</p>
+</div>
