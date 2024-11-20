@@ -17,6 +17,7 @@ import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { Task } from 'src/app/shared/models/task/task.model'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { MilestoneService } from 'src/app/services/milestone.service'
 
 interface IModalData {
   projectId: string
@@ -33,7 +34,6 @@ interface IModalData {
 export class CreateTaskModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   users: TeamMemberModel[] = []
-  milestones: Milestone[] = []
   taskForm: FormGroup
   private destroy$ = new Subject<void>()
 
@@ -41,6 +41,7 @@ export class CreateTaskModalComponent implements OnInit {
     private fb: FormBuilder,
     private datePipe: DatePipe,
     private taskService: TaskService,
+    private milestoneService: MilestoneService,
     private projectService: ProjectService,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef
@@ -63,6 +64,14 @@ export class CreateTaskModalComponent implements OnInit {
   otherTasksSize = 10
   otherTasksTotal = 0
 
+  // Milestone handling vars
+  milestones: Milestone[] = []
+  isMilestonesFetched: boolean = false
+  isMilestonesFetchLoading = false
+  milestonesPage = 1
+  milestonesSize = 10
+  milestonesTotal = 0
+
   handleOpenParentTask() {
     if (!this.isOtherTasksFetched) {
       this.isOtherTasksFetched = true
@@ -74,6 +83,20 @@ export class CreateTaskModalComponent implements OnInit {
     if (this.otherTasksPage * this.otherTasksSize >= this.otherTasksTotal) return
     this.otherTasksPage = this.otherTasksPage + 1
     this.fetchTasks()
+  }
+
+  handleOpenMilestoneSelect() {
+    if (!this.isMilestonesFetched) {
+      // Fetch milestones
+      this.isMilestonesFetched = true
+      this.fetchMilestones()
+    }
+  }
+
+  loadMoreMilestones() {
+    if (this.milestonesPage * this.milestonesSize >= this.milestonesTotal) return
+    this.milestonesPage = this.milestonesPage + 1
+    this.fetchMilestones()
   }
 
   onSubmit() {
@@ -96,7 +119,7 @@ export class CreateTaskModalComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -114,7 +137,7 @@ export class CreateTaskModalComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
-          this.antdNoti.openInfoNotification('', error.error)
+          this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
         } else {
@@ -138,7 +161,31 @@ export class CreateTaskModalComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           this.isOtherTasksFetchLoading = false
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
+  }
+
+  private fetchMilestones() {
+    this.isMilestonesFetchLoading = true
+    //TODO: Add filter logic
+    this.milestoneService
+      .getMilestones(this.nzModalData.projectId, this.milestonesPage, this.milestonesSize)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (val) => {
+          this.milestones = [...this.milestones, ...val.data]
+          this.milestonesTotal = val.total
+          this.isMilestonesFetchLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isMilestonesFetchLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {

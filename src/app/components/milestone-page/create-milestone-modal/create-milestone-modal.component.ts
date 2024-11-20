@@ -59,7 +59,9 @@ export class CreateMilestoneModalComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 403) {
+            this.antdNoti.openErrorNotification('Không thể tạo cột mốc', 'Bạn không có quyền tạo cột mốc cho dự án này')
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {

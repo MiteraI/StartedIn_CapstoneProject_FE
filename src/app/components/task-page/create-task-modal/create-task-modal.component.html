@@ -1,7 +1,7 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
   <!-- Title Field -->
   <nz-form-item>
-    <nz-form-label [nzRequired]="true">Title</nz-form-label>
+    <nz-form-label [nzRequired]="true">Tên Tác Vụ</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
       <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
     </nz-form-control>
@@ -9,7 +9,7 @@
 
   <!-- Description Field -->
   <nz-form-item>
-    <nz-form-label>Description</nz-form-label>
+    <nz-form-label>Nội Dung</nz-form-label>
     <nz-form-control>
       <textarea nz-input formControlName="description" placeholder="Nhập thông tin tác vụ"></textarea>
     </nz-form-control>
@@ -18,7 +18,7 @@
   <!-- Deadline Field (Date and Time Picker) and Choose Parent Task-->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Parent Task</nz-form-label>
+      <nz-form-label>Tác Vụ Mẹ</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="parentTask" nzPlaceHolder="Chọn tác vụ mẹ" (nzOpenChange)="handleOpenParentTask()" (nzScrollToBottom)="loadMoreOtherTasks()">
           @for (task of otherTasks; track $index) {
@@ -34,7 +34,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Deadline</nz-form-label>
+      <nz-form-label>Hạn Chót</nz-form-label>
       <nz-form-control>
         <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Chọn hạn chót"></nz-date-picker>
       </nz-form-control>
@@ -44,18 +44,23 @@
   <!-- Choose milestone and assignees -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Milestone</nz-form-label>
+      <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="milestone" nzPlaceHolder="Chọn cột mốc">
+        <nz-select formControlName="milestone" nzPlaceHolder="Chọn cột mốc" (nzOpenChange)="handleOpenMilestoneSelect()" (nzScrollToBottom)="loadMoreMilestones()">
           @for (milestone of milestones; track $index) {
           <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
+          } @if (isMilestonesFetchLoading) {
+          <nz-option nzDisabled nzCustomContent>
+            <span nz-icon nzType="loading" class="loading-icon"></span>
+            Loading Data...
+          </nz-option>
           }
         </nz-select>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Assignees</nz-form-label>
+      <nz-form-label>Người Làm</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện">
           @for (user of users; track $index) {

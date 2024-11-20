@@ -34,28 +34,28 @@ export class MilestoneTableComponent implements OnInit {
 
   ngOnInit() {}
 
-  openUpdateTaskModal(taskId: string) {
+  openUpdateMilestoneModal(milestoneId: string) {
     const modalRef = this.modalService.create({
       nzTitle: 'Thông Tin Cột Mốc',
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '0px' },
       nzContent: UpdateMilestoneModalComponent,
       nzData: {
-        taskId: taskId,
+        milestoneId: milestoneId,
         projectId: this.projectId,
       },
       nzFooter: null,
     })
   }
 
-  handleDeleteTask(taskId: string) {
-    this.milestoneService.deleteMilestone(this.projectId, taskId).subscribe({
+  handleDeleteMilestone(milestoneId: string) {
+    this.milestoneService.deleteMilestone(this.projectId, milestoneId).subscribe({
       next: (response) => {
         this.antdNoti.openSuccessNotification('Xóa Cột Mốc Thành Công', '')
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
-          this.antdNoti.openInfoNotification('', error.error)
+          this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
         } else {

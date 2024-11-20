@@ -11,19 +11,31 @@
       <!-- Title and Milestone Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Title</nz-form-label>
+          <nz-form-label [nzRequired]="true">Tên Tác Vụ</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
             <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" (input)="handleInfoChanged()" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Milestone</nz-form-label>
+          <nz-form-label>Cột Mốc</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="milestone" nzPlaceHolder="Chọn cột mốc">
-              @for (milestone of milestones; track $index) {
+            <nz-select
+              formControlName="milestone"
+              nzPlaceHolder="Chọn cột mốc"
+              (ngModelChange)="handleSelectMilestone($event)"
+              (nzOpenChange)="handleOpenMilestoneSelect()"
+              (nzScrollToBottom)="loadMoreMilestones()"
+            >
+              @if (initialMilestone) {
+              <nz-option [nzValue]="initialMilestone.id" [nzLabel]="initialMilestone.title"></nz-option>
+              } @for (milestone of milestones; track $index) {
               <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
-
+              } @if (isMilestonesFetchLoading) {
+              <nz-option nzDisabled nzCustomContent>
+                <span nz-icon nzType="loading" class="loading-icon"></span>
+                Loading Data...
+              </nz-option>
               }
             </nz-select>
           </nz-form-control>
@@ -32,7 +44,7 @@
 
       <!-- Description -->
       <nz-form-item>
-        <nz-form-label>Description</nz-form-label>
+        <nz-form-label>Mô Tả</nz-form-label>
         <nz-form-control>
           <textarea nz-input formControlName="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Nhập thông tin tác vụ" (input)="handleInfoChanged()"></textarea>
         </nz-form-control>
@@ -41,7 +53,7 @@
       <!-- Status and Deadline Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Status</nz-form-label>
+          <nz-form-label>Trạng Thái</nz-form-label>
           <nz-form-control>
             <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)">
               @for (status of statuses; track $index) {
@@ -52,7 +64,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Deadline</nz-form-label>
+          <nz-form-label>Hạn Chót</nz-form-label>
           <nz-form-control>
             <nz-date-picker
               formControlName="deadline"
@@ -69,7 +81,7 @@
       <!-- Parent Task and Assignee Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Parent Task</nz-form-label>
+          <nz-form-label>Tác Vụ Mẹ</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="parentTask"
@@ -94,7 +106,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Assignees</nz-form-label>
+          <nz-form-label>Người Làm</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="assignees"
@@ -113,7 +125,7 @@
 
       @if (subTasks.length > 0) {
       <nz-form-item>
-        <nz-form-label>Subtasks</nz-form-label>
+        <nz-form-label>Tác Vụ Con</nz-form-label>
         <nz-form-control>
           <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="subTasks">
             <thead>
@@ -141,7 +153,7 @@
 
       <!-- Comment Section -->
       <nz-form-item>
-        <nz-form-label>Comments</nz-form-label>
+        <nz-form-label>Ghi Chú</nz-form-label>
         <nz-form-control>
           <div class="mb-4">
             <div *ngFor="let comment of comments" class="mb-3 p-3 bg-gray-50 rounded">

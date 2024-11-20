@@ -22,6 +22,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { Subject, takeUntil } from 'rxjs'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
+import { MilestoneService } from 'src/app/services/milestone.service'
 
 interface IModalData {
   taskId: string
@@ -86,7 +87,6 @@ export class UpdateTaskModalComponent implements OnInit {
   initialMilestoneId: string = ''
   initialMilestone: Milestone | null = null
   milestones: Milestone[] = []
-  isMilestoneFetched: boolean = false
   isMilestonesFetched: boolean = false
   isMilestonesFetchLoading = false
   milestonesPage = 1
@@ -99,6 +99,7 @@ export class UpdateTaskModalComponent implements OnInit {
     private fb: FormBuilder,
     private datePipe: DatePipe,
     private taskService: TaskService,
+    private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService,
     private projectService: ProjectService,
     private nzModalRef: NzModalRef
@@ -135,7 +136,7 @@ export class UpdateTaskModalComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -157,7 +158,7 @@ export class UpdateTaskModalComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -183,12 +184,12 @@ export class UpdateTaskModalComponent implements OnInit {
   handleSelectParentTask(parentTaskId: string) {
     if (parentTaskId !== this.initialParentTaskId) {
       this.taskService.updateParentTask(this.nzModalData.projectId, this.nzModalData.taskId, { parentTaskId: parentTaskId }).subscribe({
-        next: (res) => {
+        next: (res) => {          
           this.initialParentTaskId = parentTaskId
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -214,7 +215,7 @@ export class UpdateTaskModalComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           this.isOtherTasksFetchLoading = false
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -233,7 +234,7 @@ export class UpdateTaskModalComponent implements OnInit {
           next: (res) => {},
           error: (error: HttpErrorResponse) => {
             if (error.status === 400) {
-              this.antdNoti.openInfoNotification('', error.error)
+              this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
               this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
             } else {
@@ -253,7 +254,7 @@ export class UpdateTaskModalComponent implements OnInit {
           next: (res) => {},
           error: (error: HttpErrorResponse) => {
             if (error.status === 400) {
-              this.antdNoti.openInfoNotification('', error.error)
+              this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
               this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
             } else {
@@ -268,10 +269,61 @@ export class UpdateTaskModalComponent implements OnInit {
     this.updateFilteredUsers()
   }
 
-  handleOpenMilestoneSelect() {
-    if (!this.isMilestoneFetched) {
-      // Fetch milestones
+  handleSelectMilestone(milestoneId: string) {
+    if (milestoneId !== this.initialParentTaskId) {
+      this.taskService.updateTaskMilestone(this.nzModalData.projectId, this.nzModalData.taskId, { milestoneId: milestoneId }).subscribe({
+        next: (res) => {
+          this.initialMilestoneId = milestoneId
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
     }
+  }
+
+  handleOpenMilestoneSelect() {
+    if (!this.isMilestonesFetched) {
+      // Fetch milestones
+      this.isMilestonesFetched = true
+      this.fetchMilestones()
+    }
+  }
+
+  loadMoreMilestones() {
+    if (this.milestonesPage * this.milestonesSize >= this.milestonesTotal) return
+    this.milestonesPage = this.milestonesPage + 1
+    this.fetchMilestones()
+  }
+
+  private fetchMilestones() {
+    this.isMilestonesFetchLoading = true
+    //TODO: Add filter logic
+    this.milestoneService
+      .getMilestones(this.nzModalData.projectId, this.milestonesPage, this.milestonesSize)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (val) => {
+          const moreMilestones = val.data.filter((m) => m.id !== this.initialMilestoneId && m.id)
+          this.milestones = [...this.milestones, ...moreMilestones]
+          this.milestonesTotal = val.total
+          this.isMilestonesFetchLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isMilestonesFetchLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
   }
 
   handleDeleteTask() {
@@ -281,7 +333,7 @@ export class UpdateTaskModalComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
-          this.antdNoti.openInfoNotification('', error.error)
+          this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
         } else {
@@ -299,6 +351,8 @@ export class UpdateTaskModalComponent implements OnInit {
           this.initialStatus = task.status
           this.initialParentTaskId = task.parentTask === null ? '' : task.parentTask.id
           this.initialParentTask = task.parentTask
+          this.initialMilestoneId = task.milestone === null ? '' : task.milestone.id
+          this.initialMilestone = task.milestone
           this.subTasks = task.subTasks
           this.taskForm.setValue(
             {
@@ -307,7 +361,7 @@ export class UpdateTaskModalComponent implements OnInit {
               deadline: this.datePipe.transform(task.deadline, 'yyyy-MM-dd HH:00:00'),
               status: task.status,
               parentTask: task.parentTask === null ? '' : task.parentTask.id,
-              milestone: task.milestone ?? null,
+              milestone: task.milestone === null ? '' : task.milestone.id,
               assignees: task.assignees.map((user) => user.id),
             },
             { emitEvent: false }
@@ -316,7 +370,7 @@ export class UpdateTaskModalComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -333,7 +387,7 @@ export class UpdateTaskModalComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
-          this.antdNoti.openInfoNotification('', error.error)
+          this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
         } else {
