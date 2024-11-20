@@ -1,3 +1,5 @@
+import { AssetStatus } from "../../enums/asset-status.enum";
+
 export type AssetModel = {
   id: string;
   projectId: string;
@@ -5,6 +7,6 @@ export type AssetModel = {
   price: number;
   purchaseDate: string;
   quantity: number;
-  assetStatus: number; // TODO status
+  assetStatus: AssetStatus;
   serialNumber: string;
 }
