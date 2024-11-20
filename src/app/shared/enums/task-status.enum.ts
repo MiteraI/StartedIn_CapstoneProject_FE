@@ -4,7 +4,7 @@ export enum TaskStatus {
   PENDING = 2,
   REVIEW = 3,
   OPEN = 4,
-  DONE = 5,
+  DONE = 5
 }
 
 export const TaskStatusLabels: Record<TaskStatus, string> = {

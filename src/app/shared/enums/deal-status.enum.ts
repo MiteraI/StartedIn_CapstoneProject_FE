@@ -1,7 +1,7 @@
 export enum DealStatus {
-  WAITING = 0,
-  ACCEPTED = 1,
-  REJECTED = 2
+  WAITING = 1,
+  ACCEPTED = 2,
+  REJECTED = 3
 }
 
 export const DealStatusLabels: Record<DealStatus, string> = {

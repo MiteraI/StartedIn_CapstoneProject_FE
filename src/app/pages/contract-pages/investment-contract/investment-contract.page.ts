@@ -24,6 +24,8 @@ import { ContractCreateFromDealModel } from 'src/app/shared/models/contract/cont
 import { InvestmentContractDetailModel } from 'src/app/shared/models/contract/investment-contract-detail.model';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
+import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 
 @Component({
   selector: 'app-investment-contract',
@@ -73,7 +75,8 @@ export class InvestmentContractPage implements OnInit {
     private fb: FormBuilder,
     private modalService: NzModalService,
     private contractService: ContractService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
@@ -82,9 +85,14 @@ export class InvestmentContractPage implements OnInit {
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
       contractIdNumber: ['', [Validators.required]],
-      shareQuantity: [0, [Validators.required]],
       percentage: [0, [Validators.required]],
       buyPrice: [0, [Validators.required]]
+    });
+
+    this.roleService.role$.subscribe(role => {
+      if (role !== TeamRole.LEADER) {
+        this.contractForm.disable();
+      }
     });
 
     this.route.data.subscribe(data => {
@@ -101,12 +109,10 @@ export class InvestmentContractPage implements OnInit {
         }
         this.investorId = this.contract.investorId;
         this.contractId = this.contract.id;
-        const shareQuantity = Math.round(this.project.totalShares * this.contract.sharePercentage / 100);
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
           contractIdNumber: this.contract.contractIdNumber,
-          shareQuantity: shareQuantity,
           percentage: this.contract.sharePercentage,
           buyPrice: this.contract.buyPrice
         })
@@ -118,9 +124,7 @@ export class InvestmentContractPage implements OnInit {
       } else if (!!this.deal) {
         this.isFromDeal = true;
         this.investorId = this.deal.investorId;
-        const shareQuantity = Math.round(this.project.totalShares * this.deal.equityShareOffer / 100);
         this.contractForm.patchValue({
-          shareQuantity: shareQuantity,
           percentage: this.deal.equityShareOffer,
           buyPrice: this.deal.amount
         })
@@ -133,14 +137,6 @@ export class InvestmentContractPage implements OnInit {
         })
       }
     });
-  }
-
-  updateShareQuantity() {
-    this.contractForm.patchValue({shareQuantity: Math.round(this.project.totalShares * this.contractForm.value.percentage / 100)});
-  }
-
-  updateSharePercentage() {
-    this.contractForm.patchValue({percentage: (this.contractForm.value.shareQuantity / this.project.totalShares * 100).toFixed(2)});
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
@@ -246,7 +242,6 @@ export class InvestmentContractPage implements OnInit {
       },
       investorInfo: {
         userId: this.investorId,
-        shareQuantity: this.contractForm.value.shareQuantity,
         percentage: this.contractForm.value.percentage,
         buyPrice: this.contractForm.value.buyPrice,
       },

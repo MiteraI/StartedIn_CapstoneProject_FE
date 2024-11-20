@@ -1,26 +1,33 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
-import { ProjectSideNavItemComponent } from './project-side-nav-item/project-side-nav-item.component'
-import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import { Subject } from 'rxjs'
+import { RouterModule } from '@angular/router'
+import { Subject, takeUntil } from 'rxjs'
+import { AccountService } from '../../core/auth/account.service'
+import { CommonModule } from '@angular/common'
 
 @Component({
-  selector: 'project-side-nav',
+  selector: 'app-project-side-nav',
   standalone: true,
-  imports: [MatSidenavModule, MatIconModule, ProjectSideNavItemComponent, RouterModule],
+  imports: [CommonModule, MatSidenavModule, MatIconModule, RouterModule],
   templateUrl: './project-side-nav.component.html',
   styleUrl: './project-side-nav.component.css',
 })
 export class ProjectSideNavComponent implements OnInit, OnDestroy {
-  @Input() opened = true
-  @Input() currentId = ''
+  @Input() opened = true;
+  @Input() currentId = '';
 
-  private destroy$ = new Subject<void>()
+  isUser = false;
+  private destroy$ = new Subject<void>();
 
-  constructor() {}
+  constructor(private accountService: AccountService) {}
 
   ngOnInit(): void {
+    this.accountService.account$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(account => {
+        this.isUser = account?.authorities.includes('User') ?? false;
+      });
   }
 
   ngOnDestroy() {
@@ -32,22 +39,39 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.opened = !this.opened
   }
 
-  sideNavLinks: {
+  userSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
   }[] = [
+    { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
+    { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
+    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
     { linkName: 'finance', iconName: 'savings_icon', linkText: 'Chi tiêu' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
     { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
-    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
-    { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
     { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
-    { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
-    { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
     { linkName: 'deals', iconName: 'request_quote_icon', linkText: 'Deals' },
-    { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
+    { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
+    { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
     { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'transaction', iconName:'receipt_long_outlined', linkText:'Lịch sử giao dịch'}
   ]
+
+  investorSideNavLinks: {
+    linkName: string
+    iconName: string
+    linkText: string
+  }[] = [
+    { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
+    { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
+    { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
+    { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
+    { linkName: 'investor-disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
+    { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
+    { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
+    { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
+    { linkName: 'transaction', iconName:'receipt_long_outlined', linkText:'Lịch sử giao dịch'}
+  ];
 }
