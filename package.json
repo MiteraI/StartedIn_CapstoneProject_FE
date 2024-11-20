@@ -34,6 +34,7 @@
     "@maskito/core": "^3.1.1",
     "@ng-icons/core": "^25.1.0",
     "@ng-icons/lucide": "^29.5.2",
+    "chart.js": "^4.4.6",
     "class-variance-authority": "^0.6.0",
     "clsx": "^2.1.1",
     "ionicons": "^7.2.1",

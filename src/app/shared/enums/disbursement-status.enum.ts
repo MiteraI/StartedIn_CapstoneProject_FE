@@ -1,10 +1,10 @@
 export enum DisbursementStatus {
-  PENDING = 0,
-  ACCEPTED = 1,
-  REJECTED = 2,
-  FINISHED = 3,
-  OVERDUE = 4,
-  ERROR = 5
+  PENDING = 1,
+  ACCEPTED = 2,
+  REJECTED = 3,
+  FINISHED = 4,
+  OVERDUE = 5,
+  ERROR = 6
 }
 
 export const DisbursementStatusLabels: Record<DisbursementStatus, string> = {

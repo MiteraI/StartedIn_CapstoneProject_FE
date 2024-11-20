@@ -1,8 +1,8 @@
 export enum PhaseState {
-  INITIALIZING = 0,
-  PLANNING = 1,
-  EXECUTING = 2,
-  CLOSING = 3,
+  INITIALIZING = 1,
+  PLANNING = 2,
+  EXECUTING = 3,
+  CLOSING = 4
 }
 
 export const PhaseStateLabels: Record<PhaseState, string> = {

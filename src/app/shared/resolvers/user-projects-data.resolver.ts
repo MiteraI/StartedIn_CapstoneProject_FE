@@ -12,7 +12,6 @@ export const UserProjectDataResolver: ResolveFn<UserProjectsModel | null> = (rou
       return of(null)
     }),
     map((result) => {
-      console.log('AAAA',result)
       return result
     })
   )

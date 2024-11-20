@@ -1,9 +1,9 @@
 export enum ContractStatus {
-  DRAFT = 0,
-  SENT = 1,
-  COMPLETED = 2,
-  DECLINED = 3,
-  EXPIRED = 4
+  DRAFT = 1,
+  SENT = 2,
+  COMPLETED = 3,
+  DECLINED = 4,
+  EXPIRED = 5
 }
 
 export const ContractStatusLabels: Record<ContractStatus, string> = {

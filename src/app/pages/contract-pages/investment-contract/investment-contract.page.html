@@ -22,21 +22,6 @@
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Số cổ phần</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số cổ phần!">
-          <nz-input-number
-            formControlName="shareQuantity"
-            [nzDisabled]="isFromDeal || isReadOnly"
-            [nzMin]="0"
-            [nzMax]="project.remainingShares"
-            [nzStep]="1"
-            (nzBlur)="updateSharePercentage()"
-            class="w-full">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
         <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
           <nz-input-number
@@ -48,7 +33,6 @@
             nzPlaceHolder="Nhập tỉ lệ cổ phần"
             [nzFormatter]="percentFormatter"
             [nzParser]="percentParser"
-            (nzBlur)="updateShareQuantity()"
             class="w-full">
           </nz-input-number>
         </nz-form-control>

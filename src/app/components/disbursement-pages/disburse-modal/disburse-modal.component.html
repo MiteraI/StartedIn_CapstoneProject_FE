@@ -1,0 +1,38 @@
+<form [formGroup]="disburseForm" class="ant-modal-body">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Phương thức giải ngân</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-radio-group formControlName="method" nzButtonStyle="solid">
+        <label nz-radio-button nzValue="payment_gateway">Cổng thanh toán</label>
+        <label nz-radio-button nzValue="other">Khác</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <ng-container *ngIf="disburseForm.get('method')?.value === 'payment_gateway'">
+    <div>Bạn sẽ được chuyển hướng đến trang thanh toán điện tử của PayOs</div>
+  </ng-container>
+
+  <ng-container *ngIf="disburseForm.get('method')?.value === 'other'">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24">Tài liệu chứng minh</nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng tải lên tài liệu chứng minh!">
+        <nz-upload
+          ngDefaultControl
+          formControlName="files"
+          [(nzFileList)]="fileList"
+          [nzBeforeUpload]="beforeUpload"
+          [nzRemove]="removeUpload"
+          [nzMultiple]="true"
+          [nzShowUploadList]="true"
+          class="mb-2"
+        >
+          <button nz-button class="flex justify-center items-center">
+            <mat-icon fontIcon="file_upload"></mat-icon>
+            <span class="px-2">Tải lên tài liệu</span>
+          </button>
+        </nz-upload>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</form>

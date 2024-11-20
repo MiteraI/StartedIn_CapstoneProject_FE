@@ -1,8 +1,8 @@
 export enum TeamRole {
-  LEADER = 0,
-  MEMBER = 1,
-  INVESTOR = 2,
-  MENTOR = 3,
+  LEADER = 1,
+  MEMBER = 2,
+  INVESTOR = 3,
+  MENTOR = 4
 }
 
 export const TeamRoleLabels: Record<TeamRole, string> = {

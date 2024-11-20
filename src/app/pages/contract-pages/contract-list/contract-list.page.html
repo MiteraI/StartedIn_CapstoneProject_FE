@@ -38,7 +38,7 @@
         </button>
       </div>
     </div>
-    <div class="flex flex-col md:flex-row gap-3">
+    <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
       <button
         (click)="openAddModal()"
         class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
@@ -120,7 +120,7 @@
             </span>
           </td>
           <td class="p-4">
-            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
+            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT && isLeader" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500 hover:text-blue-700">
                 <mat-icon fontIcon="send"></mat-icon>
               </button>
