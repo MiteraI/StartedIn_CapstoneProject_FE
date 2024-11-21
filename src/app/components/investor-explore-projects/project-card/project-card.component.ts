@@ -20,7 +20,7 @@ export class ProjectCardComponent {
 
   // TODO remove invest button, nav to details
   constructor(private router: Router) {
-    addIcons({ cashOutline })
+    addIcons({cashOutline});
   }
 
   navigateToCreateDealOffer() {
