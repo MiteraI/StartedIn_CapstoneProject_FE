@@ -1,0 +1,73 @@
+<app-filter-bar
+  viewName="Danh mục tài sản"
+  [searchValue]="filter.assetName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-asset-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-asset-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-asset-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-asset-filter>
+  </div>
+</app-filter-bar>
+
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table border">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left w-1/4">Tên tài sản</th>
+        <th class="p-4 text-left w-1/6">Số seri</th>
+        <th class="p-4 text-left">Số lượng</th>
+        <th class="p-4 text-left">Giá</th>
+        <th class="p-4 text-left">Ngày mua</th>
+        <th class="p-4 text-left">Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let asset of assets"
+        class="border-b hover:bg-gray-50 cursor-pointer"
+      >
+          <td class="p-4">
+            <div class="font-medium hover:font-bold">{{asset.assetName}}</div>
+          </td>
+          <td class="p-4">
+            <div class="text-gray-600">{{asset.serialNumber}}</div>
+          </td>
+          <td class="p-4">
+            <div class="text-gray-600">{{asset.quantity}}</div>
+          </td>
+          <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
+          <td class="p-4 text-gray-600">{{formatDate(asset.purchaseDate)}}</td>
+          <td class="p-4">
+            <span [ngClass]="{
+              'text-green-500': asset.status === assetStatuses.AVAILABLE,
+              'text-red-500': asset.status === assetStatuses.SOLD,
+              'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
+            }">
+              ● {{statusLabels[asset.status]}}
+            </span>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>

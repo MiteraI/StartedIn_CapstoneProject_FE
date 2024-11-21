@@ -164,6 +164,10 @@ export const routes: Routes = [
         redirectTo: 'charter',
         pathMatch: 'full',
       },
+      {
+        path: 'assets',
+        loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
+      }
     ],
   },
   {
@@ -197,5 +201,9 @@ export const routes: Routes = [
     canActivate: [InvestorGuard],
     resolve: { disbursement: InvestorDisbursementDataResolver },
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
-  },
+  }
+  
+
+ 
+
 ]
