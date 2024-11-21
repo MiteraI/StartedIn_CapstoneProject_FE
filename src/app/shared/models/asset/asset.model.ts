@@ -7,6 +7,6 @@ export type AssetModel = {
   price: number;
   purchaseDate: string;
   quantity: number;
-  assetStatus: AssetStatus;
+  status: AssetStatus;
   serialNumber: string;
 }

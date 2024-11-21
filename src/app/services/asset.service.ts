@@ -22,13 +22,13 @@ export class AssetService {
         assetName?: string,
         fromPrice?: number,
         toPrice?: number,
-        assetStatus?: AssetStatus,
+        status?: AssetStatus,
         serialNumber?: string,
         fromDate?: Date,
         toDate?: Date
     ) : Observable<SearchResponseModel<AssetModel>> {
         const query = (assetName?.trim() ? `assetName=${assetName}&` : '')
-          + (assetStatus ? `assetStatus=${assetStatus}&` : '')
+          + (status ? `status=${status}&` : '')
           + (fromPrice ? `fromPrice=${fromPrice}&`:'')
           + (toPrice ? `toPrice=${toPrice}&`:'')
           + (serialNumber ? `serialNumber=${serialNumber}&`:'')
