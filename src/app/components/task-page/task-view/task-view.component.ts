@@ -44,6 +44,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
       nzTitle: 'Tác Vụ Mới',
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
       nzContent: CreateTaskModalComponent,
       nzData: {
         projectId: this.projectId,

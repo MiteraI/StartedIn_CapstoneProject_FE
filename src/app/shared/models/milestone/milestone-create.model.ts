@@ -5,5 +5,4 @@ export type CreateMilestone = {
   description: string
   startDate: string
   endDate: string
-  phaseEnum: PhaseState
 }
