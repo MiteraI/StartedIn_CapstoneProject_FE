@@ -44,6 +44,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     iconName: string
     linkText: string
   }[] = [
+    { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
     { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
@@ -64,6 +65,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     iconName: string
     linkText: string
   }[] = [
+    { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },

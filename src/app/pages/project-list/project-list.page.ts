@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, RouterModule } from '@angular/router'
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model'
 import { CommonModule } from '@angular/common'
@@ -26,7 +26,8 @@ export class ProjectListPage implements OnInit {
   constructor(
     private modalService: NzModalService,
     private route: ActivatedRoute,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -44,5 +45,11 @@ export class ProjectListPage implements OnInit {
       nzContent: ProjectCreateModalComponent,
       nzFooter: null,
     })
+  }
+
+  navigateToProject(id: string) {
+    console.log(this.isInvestor);
+
+    this.router.navigate(['/projects', id, this.isInvestor ? 'charter' : 'tasks']);
   }
 }
