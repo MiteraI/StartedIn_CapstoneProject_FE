@@ -167,6 +167,10 @@ export const routes: Routes = [
       {
         path: 'assets',
         loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
+      },
+      {
+        path: 'team-members',
+        loadComponent: () => import('./pages/member-pages/member-list/member-list.page').then( m => m.MemberListPage)
       }
     ],
   },
@@ -201,9 +205,5 @@ export const routes: Routes = [
     canActivate: [InvestorGuard],
     resolve: { disbursement: InvestorDisbursementDataResolver },
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
-  }
-  
-
- 
-
+  },
 ]

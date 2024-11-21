@@ -1,0 +1,42 @@
+<div class="p-4 max-w-7xl mx-auto">
+  <table class="w-full hidden md:table border">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-center">Ảnh đại diện</th>
+        <th class="p-4 text-center">Tên thành viên</th>
+        <th class="p-4 text-center">Email cá nhân</th>
+        <th class="p-4 text-center">Vai trò</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let member of members"
+        class="border-b hover:bg-gray-50 cursor-pointer"
+      >
+          <td class="p-4 text-center">
+            <nz-avatar
+              [nzSize]="40"
+              [nzText]="member.fullName| initialsOnly"
+              class="bg-orange-600 text-xl"
+            ></nz-avatar>
+          </td>
+          <td class="p-4 text-center">
+            <div class="font-medium hover:font-bold">{{member.fullName}}</div>
+          </td>
+          <td class="p-4 text-center">
+            <div class="text-gray-600">{{member.email}}</div>
+          </td>
+          <td class="p-4 text-center">
+            <span [ngClass]="{
+              'text-red-500': member.roleInTeam === teamRoles.LEADER,
+              'text-black-500': member.roleInTeam === teamRoles.MEMBER,
+              'text-blue-700': member.roleInTeam === teamRoles.INVESTOR,
+              'text-yellow-700': member.roleInTeam === teamRoles.MENTOR
+            }">
+              ● {{teamRoleLabels[member.roleInTeam]}}
+            </span>
+          </td>
+        </tr>
+    </tbody>
+  </table>  
+</div>
