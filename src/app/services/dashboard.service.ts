@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
-import { delay, map, Observable, of } from 'rxjs'
+import { map, Observable } from 'rxjs'
 import { DashboardModel } from '../shared/models/dashboard/dashboard.model'
 
 @Injectable({
@@ -13,15 +13,17 @@ export class DashboardService {
   private parseNumericFields<T extends DashboardModel>(dashboard: T): T {
     return {
       ...dashboard,
+      currentBudget: typeof dashboard.currentBudget === 'string' ? parseInt(dashboard.currentBudget) : dashboard.currentBudget,
       inAmount: typeof dashboard.inAmount === 'string' ? parseInt(dashboard.inAmount) : dashboard.inAmount,
+      outAmount: typeof dashboard.outAmount === 'string' ? parseInt(dashboard.outAmount) : dashboard.outAmount,
+      remainingDisbursement: typeof dashboard.remainingDisbursement === 'string' ? parseInt(dashboard.remainingDisbursement) : dashboard.remainingDisbursement,
+      disbursedAmount: typeof dashboard.disbursedAmount === 'string' ? parseInt(dashboard.disbursedAmount) : dashboard.disbursedAmount,
+      selfRemainingDisbursement: typeof dashboard.selfRemainingDisbursement === 'string' ? parseInt(dashboard.selfRemainingDisbursement) : dashboard.selfRemainingDisbursement,
+      selfDisbursedAmount: typeof dashboard.selfDisbursedAmount === 'string' ? parseInt(dashboard.selfDisbursedAmount) : dashboard.selfDisbursedAmount
     };
   }
 
   getDashboard(projectId: string): Observable<DashboardModel> {
-    return of(sampleDashboardData).pipe(
-      delay(1000), // Delay for 1000 milliseconds (1 second)
-      map(response => this.parseNumericFields(response))
-    );
     return this.http.get<DashboardModel>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/dashboard`)
     ).pipe(
@@ -29,32 +31,3 @@ export class DashboardService {
     );
   }
 }
-
-// Sample data object
-export const sampleDashboardData: DashboardModel = {
-  currentBudget: 1000000000,
-  inAmount: 250000000,
-  outAmount: 180000000,
-  remainingDisbursement: 500000000,
-  disbursedAmount: 500000000,
-  shareEquityPercentage: 25.5,
-  milestoneProgress: [
-    {
-      id: "m1",
-      title: "Project Planning Phase",
-      progress: 100
-    },
-    {
-      id: "m2",
-      title: "Development Phase",
-      progress: 75
-    },
-    {
-      id: "m3",
-      title: "Testing Phase",
-      progress: 30
-    }
-  ],
-  selfRemainingDisbursement: 150000000,
-  selfDisbursedAmount: 100000000
-};

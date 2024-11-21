@@ -5,7 +5,7 @@
         <div class="text-2xl font-medium mb-8">Dự án của tôi</div>
         <div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-            <app-project-card class="cursor-pointer" [routerLink]="['/projects', project.id]" *ngFor="let project of userProjects?.listOwnProject" [project]="project" />
+            <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listOwnProject" [project]="project" />
           </div>
         </div>
       } @else {
@@ -16,7 +16,7 @@
     @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
       <div class="text-2xl font-medium mb-8 mt-8">Dự án đang tham gia</div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-        <app-project-card class="cursor-pointer" [routerLink]="['/projects', project.id, isInvestor ? 'charter' : 'tasks']" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
+        <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
       </div>
     } @else {
       <div class="text-gray-500">Bạn không tham gia vào dự án nào.</div>
