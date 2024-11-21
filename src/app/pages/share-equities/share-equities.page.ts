@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { afterRender, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShareEquityService } from 'src/app/services/share-equity.service';
@@ -21,6 +21,7 @@ import { TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
 export class ShareEquitiesPage implements OnInit {
   equities: ShareEquityItemModel[] = [];
   chart: Chart<'doughnut', number[], string> | undefined;
+  chartRendered: boolean = false;
   projectId: string = '';
   totalPercentage: number = 0;
   selectedDate: Date = new Date();
@@ -30,7 +31,7 @@ export class ShareEquitiesPage implements OnInit {
     private shareEquityService: ShareEquityService,
     private route: ActivatedRoute,
     private notification: NzNotificationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.route.parent?.paramMap.subscribe(params => {
@@ -109,5 +110,7 @@ export class ShareEquitiesPage implements OnInit {
         }
       }
     });
+
+    this.chartRendered = true;
   }
 }

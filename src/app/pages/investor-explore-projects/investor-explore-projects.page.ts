@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { catchError, throwError } from 'rxjs';
 import { ProjectCardComponent } from 'src/app/components/investor-explore-projects/project-card/project-card.component';
@@ -11,7 +12,7 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 @Component({
   selector: 'app-investor-explore-projects',
   standalone: true,
-  imports: [ProjectCardComponent, CommonModule, FilterBarComponent],
+  imports: [ProjectCardComponent, CommonModule, FilterBarComponent, RouterModule],
   templateUrl: 'investor-explore-projects.page.html',
   styleUrls: ['investor-explore-projects.page.scss']
 })

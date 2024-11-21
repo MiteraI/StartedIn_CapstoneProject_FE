@@ -18,6 +18,7 @@ import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { Task } from 'src/app/shared/models/task/task.model'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 
 interface IModalData {
   projectId: string
@@ -28,7 +29,7 @@ interface IModalData {
   templateUrl: './create-task-modal.component.html',
   styleUrls: ['./create-task-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule],
+  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzInputNumberModule],
   providers: [DatePipe],
 })
 export class CreateTaskModalComponent implements OnInit {
@@ -52,6 +53,7 @@ export class CreateTaskModalComponent implements OnInit {
       deadline: [null],
       milestone: [null],
       assignees: [[]],
+      manHour: [0],
       parentTask: [null],
     })
   }

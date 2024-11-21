@@ -1,4 +1,4 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4 py-2">
   <!-- Title Field -->
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Tên Tác Vụ</nz-form-label>
@@ -21,6 +21,7 @@
       <nz-form-label>Tác Vụ Mẹ</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="parentTask" nzPlaceHolder="Chọn tác vụ mẹ" (nzOpenChange)="handleOpenParentTask()" (nzScrollToBottom)="loadMoreOtherTasks()">
+          <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
           @for (task of otherTasks; track $index) {
           <nz-option [nzValue]="task.id" [nzLabel]="task.title"></nz-option>
           } @if (isOtherTasksFetchLoading) {
@@ -41,12 +42,20 @@
     </nz-form-item>
   </div>
 
+  <nz-form-item>
+    <nz-form-label>Công Số</nz-form-label>
+    <nz-form-control>
+      <nz-input-number formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" [nzStep]="1"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
   <!-- Choose milestone and assignees -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
       <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="milestone" nzPlaceHolder="Chọn cột mốc" (nzOpenChange)="handleOpenMilestoneSelect()" (nzScrollToBottom)="loadMoreMilestones()">
+          <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
           } @if (isMilestonesFetchLoading) {

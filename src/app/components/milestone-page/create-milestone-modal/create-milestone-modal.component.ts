@@ -41,18 +41,23 @@ export class CreateMilestoneModalComponent implements OnInit {
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      phaseEnum: [null, Validators.required],
     })
   }
 
   onSubmit() {
     if (this.milestoneForm.valid) {
+      //Create milestone object with start and end date with only date part and no time part
       const milestone: CreateMilestone = {
         title: this.milestoneForm.value.title,
         description: this.milestoneForm.value.description,
-        startDate: this.milestoneForm.value.startDate,
-        endDate: this.milestoneForm.value.endDate,
-        phaseEnum: this.milestoneForm.value.phaseEnum,
+        startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
+        endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
+      }
+
+      //If start date is after end date, show error notification
+      if (new Date(milestone.startDate) > new Date(milestone.endDate)) {
+        this.antdNoti.openErrorNotification('Ngày bắt đầu không thể sau ngày kết thúc', '')
+        return
       }
 
       this.milestoneService.createMilestone(this.nzModalData.projectId, milestone).subscribe({

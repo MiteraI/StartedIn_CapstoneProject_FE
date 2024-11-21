@@ -144,7 +144,7 @@ export const routes: Routes = [
       },
       {
         path: 'equity',
-        loadComponent: () => import('./pages/share-equity-pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
+        loadComponent: () => import('./pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
       },
       {
         path: 'transactions',
@@ -154,6 +154,10 @@ export const routes: Routes = [
         path: 'transactions/:transactionId',
         resolve: { transaction: TransactionDataResolver },
         loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then( m => m.TransactionDetailsPage)
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
       },
       {
         path: '',

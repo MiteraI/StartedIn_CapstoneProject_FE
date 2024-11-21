@@ -66,11 +66,40 @@ export class UpdateMilestoneModalComponent implements OnInit {
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      phaseEnum: [null, Validators.required],
     })
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if (this.milestoneForm.valid && this.isInfoChanged) {
+      const milestone = {
+        title: this.milestoneForm.value.title,
+        description: this.milestoneForm.value.description,
+        startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
+        endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
+      }
+
+      if (new Date(milestone.startDate) > new Date(milestone.endDate)) {
+        this.antdNoti.openErrorNotification('Ngày bắt đầu không thể sau ngày kết thúc', '')
+        return
+      }
+
+      this.milestoneService.updateMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId, milestone).subscribe({
+        next: (response) => {
+          this.antdNoti.openSuccessNotification('Cập Nhật Cột Mốc Thành Công', '')
+          this.nzModalRef.close()
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+            console.error('', error)
+          }
+        },
+      })
+    }
+  }
 
   handleDeleteMilestone() {
     this.milestoneService.deleteMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
@@ -89,6 +118,10 @@ export class UpdateMilestoneModalComponent implements OnInit {
     })
   }
 
+  handleInfoChanged() {
+    this.isInfoChanged = true
+  }
+
   ngOnInit() {
     this.isFetchMilestoneDetailLoading = true
     this.milestoneService.getMilestoneDetail(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
@@ -96,9 +129,8 @@ export class UpdateMilestoneModalComponent implements OnInit {
         this.milestoneForm.setValue({
           title: response.title,
           description: response.description,
-          startDate: '2021-09-01',
-          endDate: '2021-09-30',
-          phaseEnum: response.phaseName,
+          startDate: response.startDate,
+          endDate: response.endDate,
         })
         this.assignedTasks = response.assignedTasks
         this.isFetchMilestoneDetailLoading = false
