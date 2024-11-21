@@ -1,3 +1,75 @@
-<p>
-  update-milestone-modal works!
-</p>
+<div class="flex flex-col h-[80vh]">
+  @if (isFetchMilestoneDetailLoading) {
+  <div class="min-h-[74vh]"></div>
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  } @else {
+  <div class="flex-1 overflow-y-auto">
+    <form [formGroup]="milestoneForm" nz-form nzLayout="vertical" class="px-4">
+      <!-- Title Field -->
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Title</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
+          <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Description Field -->
+      <nz-form-item>
+        <nz-form-label>Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <nz-form-item>
+          <nz-form-label>Giai Đoạn Dự Án</nz-form-label>
+          <nz-form-control [nzErrorTip]="'Vui lòng chọn giai đoạn dự án'">
+            <nz-select formControlName="phaseEnum" nzPlaceHolder="Chọn giai đoạn dự án">
+              @for (phaseName of phaseNames; track phaseName.value) {
+              <nz-option [nzValue]="phaseName.value" [nzLabel]="phaseName.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      @if (assignedTasks.length > 0) {
+      <nz-form-item>
+        <nz-form-label>Tác Vụ Con</nz-form-label>
+        <nz-form-control>
+          <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="assignedTasks">
+            <thead>
+              <tr>
+                <th>Tên Tác Vụ</th>
+                <th>Trạng Thái</th>
+                <th>Hạn Chót</th>
+                <th>Người Tạo</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of basicTable.data; track data.id) {
+              <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.createdBy }}</td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
+        </nz-form-control>
+      </nz-form-item>
+      }
+    </form>
+  </div>
+
+  }
+  <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
+    <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteMilestone()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Cột Mốc</button>
+    <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="milestoneForm.invalid || !isInfoChanged">Cập Nhật</button>
+  </div>
+</div>

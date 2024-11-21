@@ -4,8 +4,8 @@ export type Milestone = {
   id: string
   title: string
   description: string
-  dueDate: string
-  extendedDate: string
-  extendedCount: number
+  startDate: string
+  endDate: string
+  progress: number
   phaseName: PhaseState
 }

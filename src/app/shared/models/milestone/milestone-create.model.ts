@@ -1,8 +1,9 @@
 import { PhaseState } from '../../enums/phase-status.enum'
 
 export type CreateMilestone = {
-  milstoneTitle: string
+  title: string
   description: string
-  dueDate: Date
+  startDate: string
+  endDate: string
   phaseEnum: PhaseState
 }

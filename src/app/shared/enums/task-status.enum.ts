@@ -1,10 +1,10 @@
 export enum TaskStatus {
-  NOT_STARTED = 0,
-  IN_PROGRESS = 1,
-  PENDING = 2,
-  REVIEW = 3,
-  OPEN = 4,
-  DONE = 5
+  NOT_STARTED = 1,
+  IN_PROGRESS = 2,
+  PENDING = 3,
+  REVIEW = 4,
+  OPEN = 5,
+  DONE = 6
 }
 
 export const TaskStatusLabels: Record<TaskStatus, string> = {
