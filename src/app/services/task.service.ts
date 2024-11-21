@@ -11,6 +11,7 @@ import { UpdateTaskAssignment } from '../shared/models/task/update-task-assignme
 import { UpdateTaskParent } from '../shared/models/task/update-task-parent.model'
 import { TaskStatus } from '../shared/enums/task-status.enum'
 import { Observable } from 'rxjs'
+import { UpdateTaskMilestone } from '../shared/models/task/update-task-milestone.model'
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,10 @@ export class TaskService {
 
   updateParentTask(projectId: string, taskId: string, updateTaskParent: UpdateTaskParent) {
     return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/parent`), updateTaskParent)
+  }
+
+  updateTaskMilestone(projectId: string, taskId: string, updateTaskParent: UpdateTaskMilestone) {
+    return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/milestone`), updateTaskParent)
   }
 
   deleteTask(projectId: string, taskId: string) {

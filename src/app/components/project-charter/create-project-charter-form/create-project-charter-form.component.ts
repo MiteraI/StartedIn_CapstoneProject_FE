@@ -151,7 +151,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
         this.formBuilder.group({
           milstoneTitle: [milestone.title, Validators.required],
           description: [milestone.description, Validators.required],
-          dueDate: [milestone.dueDate, Validators.required],
+          dueDate: [milestone.endDate, Validators.required],
           phaseEnum: [milestone.phaseName, Validators.required],
         })
       )

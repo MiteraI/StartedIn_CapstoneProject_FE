@@ -45,7 +45,7 @@ export class MilestoneViewComponent implements OnInit {
 
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
-      nzTitle: 'Tác Vụ Mới',
+      nzTitle: 'Cột Mốc Mới',
       nzContent: CreateMilestoneModalComponent,
       nzData: {
         projectId: this.projectId,
@@ -57,12 +57,12 @@ export class MilestoneViewComponent implements OnInit {
   onPaginationChanged(page: number) {
     this.page = page
     this.isFetchAllTaskLoading = true
-    this.fetchTasks(this.isDesktopView)
+    this.fetchMilestones(this.isDesktopView)
   }
 
-  private fetchTasks(isDesktop: boolean) {
+  private fetchMilestones(isDesktop: boolean) {
     //TODO: Add filter logic
-    this.milestoneService.getMilestones(this.projectId)
+    this.milestoneService.getMilestones(this.projectId, this.page, this.size)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -77,7 +77,7 @@ export class MilestoneViewComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           this.isFetchAllTaskLoading = false
           if (error.status === 400) {
-            this.antdNoti.openInfoNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
           } else {
@@ -95,7 +95,7 @@ export class MilestoneViewComponent implements OnInit {
     if (this.isDesktopView || this.isFetchAllTaskLoading || this.isEndOfList) return
 
     this.page++
-    this.fetchTasks(false)
+    this.fetchMilestones(false)
   }
 
   ngOnInit() {
@@ -109,7 +109,7 @@ export class MilestoneViewComponent implements OnInit {
       this.projectId = value.get('id')!
     })
     this.isFetchAllTaskLoading = true
-    this.fetchTasks(this.isDesktopView)
+    this.fetchMilestones(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })

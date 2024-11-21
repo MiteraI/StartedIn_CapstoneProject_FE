@@ -40,7 +40,7 @@ export class TaskTableComponent implements OnInit {
       },
       error: (error) => {
         if (error.status === 400) {
-          this.antdNoti.openInfoNotification('', error.error)
+          this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
         } else {
