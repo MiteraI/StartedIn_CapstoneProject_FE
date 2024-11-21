@@ -13,8 +13,8 @@
     <tr>
       <th>Tên Tác Vụ</th>
       <th>Trạng Thái</th>
-      <th>Hạn Chót</th>
-      <th>Hạn Kéo Dài</th>
+      <th>Ngày Bắt Đầu</th>
+      <th>Ngày Kết Thúc</th>
       <th>Tiến Độ</th>
       <th>Hành Động</th>
     </tr>
@@ -25,12 +25,12 @@
       <td>{{ data.title }}</td>
       <td>{{ labels[data.phaseName] }}</td>
       <td>{{ data.startDate }}</td>
-      <td>{{ data.endDate === null ? 'Không Kéo Dài' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>{{ data.endDate }}</td>
       <td>
         @if (data.progress !== null) {
         <nz-progress [nzPercent]="data.progress" [nzStrokeWidth]="20"></nz-progress>
         } @else {
-          <span>Nothing</span>
+        <span>Nothing</span>
         }
       </td>
       <td>
