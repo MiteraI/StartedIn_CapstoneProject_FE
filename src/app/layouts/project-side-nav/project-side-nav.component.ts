@@ -57,6 +57,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
     { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
     { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'team-members', iconName: 'group_icon', linkText: 'Thành viên' },
   ]
 
   investorSideNavLinks: {
@@ -74,5 +75,6 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
     { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
     { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
+    { linkName: 'team-members', iconName: 'group_icon', linkText: 'Thành viên' },
   ];
 }

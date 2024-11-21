@@ -16,10 +16,6 @@
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
-        <div class="flex ml-4 my-1 cursor-pointer">
-          <mat-icon fontIcon="group_icon"></mat-icon>
-          <span class="text-lg mx-2">Thành Viên</span>
-        </div>
       </div>
       <div *ngIf="!isUser" class="flex flex-col my-2">
         @for (link of investorSideNavLinks; track link.linkText) {
@@ -28,10 +24,6 @@
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
-        <div class="flex ml-4 my-1 cursor-pointer">
-          <mat-icon fontIcon="group_icon"></mat-icon>
-          <span class="text-lg mx-2">Thành Viên</span>
-        </div>
       </div>
     </div>
   </mat-drawer>
