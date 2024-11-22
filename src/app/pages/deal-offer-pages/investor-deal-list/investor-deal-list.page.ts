@@ -73,7 +73,7 @@ export class InvestorDealListPage implements OnInit {
   constructor(
     private dealOfferService: DealOfferService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
