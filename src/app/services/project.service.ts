@@ -9,6 +9,7 @@ import { ProjectModel } from '../shared/models/project/project.model'
 import { UserProjectsModel } from '../shared/models/project/user-projects.model'
 import { TeamMemberModel } from '../shared/models/user/team-member.model'
 import { ProjectOveriewModel } from '../shared/models/project/project-overview.model'
+import { UserInviteModel } from '../shared/models/user/user-invite.model'
 
 @Injectable({
   providedIn: 'root',
@@ -35,6 +36,14 @@ export class ProjectService {
 
   getMembers(projectId: string): Observable<TeamMemberModel[]> {
     return this.http.get<TeamMemberModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`))
+  }
+
+  inviteMembers(projectId: string, users: UserInviteModel[]): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/invite`),
+      users,
+      { responseType: 'text' as 'json' }
+    )
   }
 
   createProject(projectForm: FormData): Observable<any> {
