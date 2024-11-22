@@ -3,12 +3,15 @@ import { MatIconModule } from '@angular/material/icon'
 import { Subject, takeUntil } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ProfileDropdownComponent } from '../header/profile-dropdown/profile-dropdown.component'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { MatMenuModule } from '@angular/material/menu'
 import { MatMenuTrigger } from '@angular/material/menu'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { MenuStateService } from 'src/app/core/util/menu-state.service'
 import { FormsModule } from '@angular/forms'
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
+import { MembersModalComponent } from './members-modal/members-modal.component'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-filter-bar',
@@ -19,7 +22,9 @@ import { FormsModule } from '@angular/forms'
     MatMenuModule,
     MatMenuTrigger,
     NzButtonModule,
-    FormsModule
+    FormsModule,
+    NzModalModule,
+    CommonModule
   ],
   templateUrl: './filter-bar.component.html',
   styleUrls: ['./filter-bar.component.scss'],
@@ -31,6 +36,7 @@ export class FilterBarComponent implements OnInit, OnDestroy {
   @Output() filterMenuOpened = new EventEmitter<void>();
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
+  projectId: string | null = null;
   isDesktopView: boolean = false
   isSearching: boolean = false
   private destroy$ = new Subject<void>()
@@ -38,7 +44,9 @@ export class FilterBarComponent implements OnInit, OnDestroy {
   constructor(
     private viewMode: ViewModeConfigService,
     private router: Router,
-    private menuState: MenuStateService
+    private menuState: MenuStateService,
+    private modal: NzModalService,
+    private route: ActivatedRoute
   ) {}
 
   @ViewChild(MatMenuTrigger) set menuTrigger(trigger: MatMenuTrigger) {
@@ -48,7 +56,15 @@ export class FilterBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
+    this.viewMode.isDesktopView$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((val) => (this.isDesktopView = val));
+    this.route.parent?.paramMap.subscribe(map => {
+      if (!map.get('id')) {
+        return;
+      }
+      this.projectId = map.get('id')!;
+    });
   }
 
   ngOnDestroy() {
@@ -78,5 +94,15 @@ export class FilterBarComponent implements OnInit, OnDestroy {
 
   onMenuOpened() {
     this.filterMenuOpened.emit();
+  }
+
+  openMembersModal() {
+    this.modal.create({
+      nzFooter: null,
+      nzWidth: 480,
+      nzContent: MembersModalComponent,
+      nzClassName: 'members-modal',
+      nzData: this.projectId
+    });
   }
 }

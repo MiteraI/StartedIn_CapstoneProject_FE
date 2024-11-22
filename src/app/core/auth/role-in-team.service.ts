@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { BehaviorSubject, Observable, filter, switchMap } from 'rxjs';
 import { ApplicationConfigService } from '../config/application-config.service';
 import { TeamRole } from '../../shared/enums/team-role.enum';
@@ -24,7 +24,7 @@ export class RoleInTeamService {
     // Listen to route changes and update role when project ID changes
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter(event => event instanceof NavigationStart),
         switchMap(() => {
           const projectId = this.findProjectId(this.route.root);
           if (projectId) {
