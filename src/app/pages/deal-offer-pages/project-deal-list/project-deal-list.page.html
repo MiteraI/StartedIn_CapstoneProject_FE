@@ -1,5 +1,5 @@
 <app-filter-bar
-  viewName="Deal List"
+  viewName="Danh mục các yêu cầu thương lượng"
   [searchValue]="filter.investorName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
@@ -87,6 +87,18 @@
       </tr>
     </tbody>
   </table>
+  
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[10, 20, 50]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
 
   <!-- Mobile View -->
   <div class="md:hidden space-y-4">
@@ -140,6 +152,13 @@
           </span>
         </div>
       </div>
+    </div>
+    
+    <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+      Bạn đã xem hết các hợp đồng!
     </div>
   </div>
 </div>
