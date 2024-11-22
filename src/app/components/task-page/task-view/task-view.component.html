@@ -1,7 +1,23 @@
-<app-filter-bar viewName="Tác Vụ" (searchString)="printSearchString($event)">
-  <div desktop>This should be rendered in header selection of ng-content</div>
-  <div mobile>This should be rendered in body selection of ng-content</div>
+<app-filter-bar
+  viewName="Danh mục hợp đồng"
+  [searchValue]="filter.title ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-task-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-task-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-task-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-task-filter>
+  </div>
 </app-filter-bar>
+
 @if (isDesktopView) {
 <div class="flex flex-col w-full px-3 mt-4">
   <div class="flex justify-end">

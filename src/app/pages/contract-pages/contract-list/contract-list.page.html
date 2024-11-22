@@ -98,12 +98,12 @@
             <div class="text-gray-600">{{ typeLabels[contract.contractType] }}</div>
           </td>
           <td class="p-4">
-            <div class="flex -space-x-3">
+            <div class="flex">
               <nz-avatar
                 *ngFor="let party of contract.parties"
                 [nzText]="party.fullName | initialsOnly"
                 [nzSize]="32"
-                class="mr-2 bg-orange-600 ring-2 ring-white"
+                class="-mr-2 bg-orange-600 ring-2 ring-white"
               ></nz-avatar>
             </div>
           </td>
@@ -204,12 +204,12 @@
                 </span>
               </div>
             </div>
-            <div class="flex -space-x-2">
+            <div class="flex">
               <nz-avatar
                 *ngFor="let party of contract.parties"
                 [nzText]="party.fullName | initialsOnly"
                 [nzSize]="24"
-                class="mr-2 bg-orange-600 ring-2 ring-white"
+                class="-mr-1 bg-orange-600 ring-2 ring-white"
               ></nz-avatar>
             </div>
           </div>

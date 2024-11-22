@@ -10,13 +10,14 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { format } from 'date-fns';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
+import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 
 @Component({
   selector: 'app-share-equities',
   templateUrl: './share-equities.page.html',
   styleUrls: ['./share-equities.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzDatePickerModule]
+  imports: [CommonModule, FormsModule, NzDatePickerModule, TitleBarComponent]
 })
 export class ShareEquitiesPage implements OnInit {
   equities: ShareEquityItemModel[] = [];

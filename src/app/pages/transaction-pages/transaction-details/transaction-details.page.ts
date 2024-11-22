@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
+import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 
 @Component({
   selector: 'app-transaction-details',
@@ -18,7 +19,8 @@ import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
     MatIconModule,
     VndCurrencyPipe,
     InitialsOnlyPipe,
-    NzAvatarModule
+    NzAvatarModule,
+    TitleBarComponent
   ]
 })
 export class TransactionDetailsPage implements OnInit {

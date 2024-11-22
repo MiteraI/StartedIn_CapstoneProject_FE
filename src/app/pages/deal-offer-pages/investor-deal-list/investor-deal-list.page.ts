@@ -179,7 +179,7 @@ export class InvestorDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: InvestorDealItem) {
-    this.router.navigate([deal.id], { relativeTo: this.route});
+    this.router.navigate([deal.id], { relativeTo: this.route });
   }
   get isEndOfList(): boolean {
     return this.pageIndex * this.pageSize >= this.totalRecords
