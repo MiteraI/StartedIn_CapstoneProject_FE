@@ -1,0 +1,85 @@
+<div class="max-w-3xl mx-auto p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <!-- Info Section -->
+    <div class="mb-8">
+      <div class="text-2xl font-bold mb-4">Thiết lập PayOS</div>
+
+      <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-blue-700 info-text">
+              PayOS là cổng thanh toán điện tử giúp bạn nhận thanh toán từ nhà đầu tư một cách an toàn và thuận tiện.
+              Để sử dụng PayOS, bạn cần đăng ký tài khoản tại
+              <a href="https://payos.vn" target="_blank" class="font-medium underline">website của PayOS</a>
+              và nhập các thông tin xác thực bên dưới.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <form [formGroup]="payosForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="flex justify-end mb-4">
+        <button
+          type="button"
+          nz-button
+          nzType="default"
+          (click)="showKeys = !showKeys"
+          class="flex items-center">
+          <span nz-icon [nzType]="showKeys ? 'eye-invisible' : 'eye'" nzTheme="outline"></span>
+          <span class="ml-2">{{ showKeys ? 'Ẩn' : 'Hiện' }} thông tin xác thực</span>
+        </button>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Client Key</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập Client Key">
+          <input
+            nz-input
+            formControlName="clientKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập Client Key của bạn" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>API Key</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập API Key">
+          <input
+            nz-input
+            formControlName="apiKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập API Key của bạn" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" nzRequired>Checksum Key</nz-form-label>
+        <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập Checksum Key">
+          <input
+            nz-input
+            formControlName="checksumKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập Checksum Key của bạn" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="flex justify-end">
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [disabled]="!payosForm.valid"
+          class="px-6">
+          Lưu thông tin
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
