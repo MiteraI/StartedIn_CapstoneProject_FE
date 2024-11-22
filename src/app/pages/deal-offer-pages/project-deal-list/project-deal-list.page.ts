@@ -267,7 +267,7 @@ export class ProjectDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: ProjectDealItem) {
-    this.router.navigate([deal.id], { relativeTo: this.route});
+    this.router.navigate([deal.id], { relativeTo: this.route });
   }
 
   get isEndOfList(): boolean {

@@ -10,7 +10,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { MenuStateService } from 'src/app/core/util/menu-state.service'
 import { FormsModule } from '@angular/forms'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
-import { MembersModalComponent } from './members-modal/members-modal.component'
+import { MembersModalComponent } from '../../components/members-modal/members-modal.component'
 import { CommonModule } from '@angular/common'
 
 @Component({
