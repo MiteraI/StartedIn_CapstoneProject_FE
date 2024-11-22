@@ -10,13 +10,14 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
+
 
 interface FilterOptions {
   projectName?: string;
@@ -72,6 +73,7 @@ export class InvestorDealListPage implements OnInit {
   constructor(
     private dealOfferService: DealOfferService,
     private router: Router,
+    private route: ActivatedRoute
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
@@ -177,7 +179,7 @@ export class InvestorDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: InvestorDealItem) {
-    this.router.navigate([deal.id]);
+    this.router.navigate([deal.id], { relativeTo: this.route});
   }
   get isEndOfList(): boolean {
     return this.pageIndex * this.pageSize >= this.totalRecords
