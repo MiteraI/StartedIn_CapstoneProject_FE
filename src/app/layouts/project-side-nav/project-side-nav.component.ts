@@ -69,7 +69,8 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
     { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
     { linkName: 'deals', iconName: 'request_quote_icon', linkText: 'Deals' },
-    { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
+    //{ linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
   ]
 
   memberSideNavLinks: {
