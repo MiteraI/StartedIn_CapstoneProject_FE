@@ -60,7 +60,12 @@ margin-left: 13%;
 margin-right: 13%;
 }
 
-
 :root {
 --font-sans: ''
+}
+
+.hide-dropdown {
+  .ant-select-dropdown {
+    display: none !important;
+  }
 }
