@@ -167,10 +167,6 @@ export const routes: Routes = [
       {
         path: 'assets',
         loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
-      },
-      {
-        path: 'team-members',
-        loadComponent: () => import('./pages/member-pages/member-list/member-list.page').then( m => m.MemberListPage)
       }
     ],
   },
