@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 
 @Component({
   selector: 'app-project-disbursement-detail',
@@ -24,7 +25,8 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
     NzAvatarModule,
     InitialsOnlyPipe,
     MatIconModule,
-    NzModalModule
+    NzModalModule,
+    TitleBarComponent
   ]
 })
 export class ProjectDisbursementDetailPage implements OnInit {

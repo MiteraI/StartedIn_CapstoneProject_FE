@@ -39,7 +39,6 @@ interface FilterOptions {
     CommonModule,
     NzAvatarModule,
     NzModalModule,
-    InitialsOnlyPipe,
     FilterBarComponent,
     AssetFilterComponent,
     MatIconModule,
@@ -48,11 +47,11 @@ interface FilterOptions {
     NzSpinModule,
     VndCurrencyPipe,
     AssetFilterComponent
-]
+  ]
 })
 
 export class AssetListPage implements OnInit, OnDestroy {
-  
+
   projectId!: string;
 
   assets: AssetModel[] = [];
@@ -68,7 +67,7 @@ export class AssetListPage implements OnInit, OnDestroy {
   isDesktopView = false;
 
   isLeader = false;
-  
+
   @ViewChild(AssetFilterComponent) filterComponent!: AssetFilterComponent;
   private destroy$ = new Subject<void>();
 
@@ -80,7 +79,7 @@ export class AssetListPage implements OnInit, OnDestroy {
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
   ) {}
-  
+
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe(map => {
       if (!map.get('id')) {
