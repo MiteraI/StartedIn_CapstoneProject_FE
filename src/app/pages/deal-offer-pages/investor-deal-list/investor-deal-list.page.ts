@@ -11,6 +11,7 @@ import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 interface FilterOptions {
   projectName?: string;
@@ -32,7 +33,8 @@ interface FilterOptions {
     NzModalModule,
     FilterBarComponent,
     VndCurrencyPipe,
-    MatIconModule
+    MatIconModule,
+    NzPaginationModule,
   ]
 })
 export class InvestorDealListPage implements OnInit {
@@ -49,6 +51,7 @@ export class InvestorDealListPage implements OnInit {
   filter: FilterOptions = {};
   pageIndex: number = 1;
   pageSize: number = 10;
+  totalRecords: number = 200
 
   dealStatuses = DealStatus;
   statusLabels = DealStatusLabels;
@@ -84,6 +87,7 @@ export class InvestorDealListPage implements OnInit {
       .subscribe(result => {
         this.searchResult = result;
         this.dealOffers = result.data;
+        this.totalRecords = result.total;
       });
   }
 
@@ -148,5 +152,19 @@ export class InvestorDealListPage implements OnInit {
 
   navigateToDealDetails(deal: InvestorDealItem) {
     this.router.navigate([deal.id]);
+  }
+  get isEndOfList(): boolean {
+    return this.pageIndex * this.pageSize >= this.totalRecords
+  }
+
+  onPageIndexChange(index: number): void {
+    this.pageIndex = index;
+    this.filterOffers();
+  }
+
+  onPageSizeChange(size: number): void {
+    this.pageSize = size;
+    this.pageIndex = 1;
+    this.filterOffers();
   }
 }
