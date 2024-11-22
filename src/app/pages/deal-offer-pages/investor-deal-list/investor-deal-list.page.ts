@@ -10,7 +10,7 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface FilterOptions {
   projectName?: string;
@@ -57,7 +57,8 @@ export class InvestorDealListPage implements OnInit {
 
   constructor(
     private dealOfferService: DealOfferService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -147,6 +148,6 @@ export class InvestorDealListPage implements OnInit {
   }
 
   navigateToDealDetails(deal: InvestorDealItem) {
-    this.router.navigate([deal.id]);
+    this.router.navigate([deal.id], { relativeTo: this.route});
   }
 }
