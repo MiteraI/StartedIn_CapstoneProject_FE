@@ -69,7 +69,6 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   isLoading = false;
   isDesktopView = false;
-
   isLeader = false;
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;

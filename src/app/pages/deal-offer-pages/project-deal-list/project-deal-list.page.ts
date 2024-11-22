@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { catchError, throwError } from 'rxjs';
+import { catchError, Subject, takeUntil, throwError } from 'rxjs';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.enum';
@@ -12,6 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
+import { ScrollService } from 'src/app/core/util/scroll.service';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
+import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 interface FilterOptions {
   investorName?: string;
@@ -33,7 +39,9 @@ interface FilterOptions {
     NzModalModule,
     FilterBarComponent,
     VndCurrencyPipe,
-    MatIconModule
+    MatIconModule,
+    NzPaginationModule,
+    NzSpinModule
   ]
 })
 export class ProjectDealListPage implements OnInit {
@@ -52,18 +60,27 @@ export class ProjectDealListPage implements OnInit {
   filter: FilterOptions = {};
   pageIndex: number = 1;
   pageSize: number = 10;
+  totalRecords: number = 200;
 
   dealStatuses = DealStatus;
   statusLabels = DealStatusLabels;
 
+  isLoading = false;
+  isDesktopView = false;
+  isLeader = false;
+
   @ViewChild('filterComponent') filterComponent: any;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NzModalService,
     private dealOfferService: DealOfferService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private viewMode: ViewModeConfigService,
+    private scrollService: ScrollService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
@@ -74,9 +91,18 @@ export class ProjectDealListPage implements OnInit {
       this.projectId = map.get('id')!
       this.filterDeals();
     });
+    this.viewMode.isDesktopView$.subscribe(isDesktop => {
+      this.isDesktopView = isDesktop;
+    });
+    this.scrollService.scroll$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.loadMore();
+      });
+    this.roleService.role$.subscribe(role => this.isLeader = (role?.roleInTeam === TeamRole.LEADER));
   }
 
-  filterDeals() {
+  filterDeals(append: boolean = false) {
     this.dealOfferService
       .getProjectDealList(
         this.projectId,
@@ -98,6 +124,8 @@ export class ProjectDealListPage implements OnInit {
       .subscribe(result => {
         this.searchResult = result;
         this.deals = result.data;
+        this.totalRecords = result.total;
+        this.isLoading = false;
       });
   }
 
@@ -240,5 +268,26 @@ export class ProjectDealListPage implements OnInit {
 
   navigateToDealDetails(deal: ProjectDealItem) {
     this.router.navigate([deal.id], { relativeTo: this.route});
+  }
+
+  get isEndOfList(): boolean {
+    return this.pageIndex * this.pageSize >= this.totalRecords
+  }
+
+  loadMore(): void {
+    if (this.isDesktopView || this.isLoading || this.isEndOfList) return;
+
+    this.pageIndex++;
+    this.filterDeals(true);
+  }
+  onPageIndexChange(index: number): void {
+    this.pageIndex = index;
+    this.filterDeals();
+  }
+
+  onPageSizeChange(size: number): void {
+    this.pageSize = size;
+    this.pageIndex = 1;
+    this.filterDeals();
   }
 }
