@@ -25,24 +25,48 @@
 
     <!-- Form Section -->
     <form [formGroup]="payosForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="flex justify-end mb-4">
+        <button
+          type="button"
+          nz-button
+          nzType="default"
+          (click)="showKeys = !showKeys"
+          class="flex items-center">
+          <span nz-icon [nzType]="showKeys ? 'eye-invisible' : 'eye'" nzTheme="outline"></span>
+          <span class="ml-2">{{ showKeys ? 'Ẩn' : 'Hiện' }} thông tin xác thực</span>
+        </button>
+      </div>
+
       <nz-form-item>
         <nz-form-label [nzSpan]="24" nzRequired>Client Key</nz-form-label>
         <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập Client Key">
-          <input nz-input formControlName="clientKey" placeholder="Nhập Client Key của bạn" />
+          <input
+            nz-input
+            formControlName="clientKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập Client Key của bạn" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label [nzSpan]="24" nzRequired>API Key</nz-form-label>
         <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập API Key">
-          <input nz-input formControlName="apiKey" placeholder="Nhập API Key của bạn" />
+          <input
+            nz-input
+            formControlName="apiKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập API Key của bạn" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
         <nz-form-label [nzSpan]="24" nzRequired>Checksum Key</nz-form-label>
         <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập Checksum Key">
-          <input nz-input formControlName="checksumKey" placeholder="Nhập Checksum Key của bạn" />
+          <input
+            nz-input
+            formControlName="checksumKey"
+            [type]="showKeys ? 'text' : 'password'"
+            placeholder="Nhập Checksum Key của bạn" />
         </nz-form-control>
       </nz-form-item>
 

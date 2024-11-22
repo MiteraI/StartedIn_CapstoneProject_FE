@@ -11,6 +11,7 @@ import { PayosInfoModel } from 'src/app/shared/models/project/payos-info.model';
 import { catchError, throwError } from 'rxjs';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-payos-setup',
@@ -22,12 +23,14 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
     ReactiveFormsModule,
     NzFormModule,
     NzInputModule,
-    NzButtonModule
+    NzButtonModule,
+    NzIconModule
   ]
 })
 export class PayosSetupPage implements OnInit {
   payosForm!: FormGroup;
   projectId!: string;
+  showKeys: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +44,12 @@ export class PayosSetupPage implements OnInit {
   ngOnInit() {
     this.projectId = this.route.parent?.snapshot.paramMap.get('id')!;
 
+    this.payosForm = this.fb.group({
+      clientKey: ['', Validators.required],
+      apiKey: ['', Validators.required],
+      checksumKey: ['', Validators.required]
+    });
+
     // Check if user is leader
     this.roleService.role$.subscribe(role => {
       if (role && role.roleInTeam !== TeamRole.LEADER) {
@@ -53,12 +62,6 @@ export class PayosSetupPage implements OnInit {
   }
 
   private initializeForm() {
-    this.payosForm = this.fb.group({
-      clientKey: ['', Validators.required],
-      apiKey: ['', Validators.required],
-      checksumKey: ['', Validators.required]
-    });
-
     // Load existing PayOS info if available
     this.projectService.getPayosInfo(this.projectId)
       .pipe(
