@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { TransactionModel } from 'src/app/shared/models/transaction/transaction.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,10 +10,15 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { Subject, takeUntil, catchError, throwError } from 'rxjs';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
 import { TransactionType, TransactionTypeLabels } from 'src/app/shared/enums/transaction-type.enum';
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
+import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { TransactionTypeModalComponent } from 'src/app/components/transaction-pages/transaction-type-modal/transaction-type-modal.component';
 
 interface FilterOptions {
   name?: string;
@@ -33,7 +38,9 @@ interface FilterOptions {
     RouterModule,
     VndCurrencyPipe,
     NzPaginationModule,
-    NzSpinModule
+    NzSpinModule,
+    NzButtonModule,
+    NzModalModule
   ]
 })
 export class TransactionsPage implements OnInit, OnDestroy {
@@ -52,13 +59,17 @@ export class TransactionsPage implements OnInit, OnDestroy {
   isLoading = false;
   isDesktopView = false;
   private destroy$ = new Subject<void>();
+  isLeader = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private transactionService: TransactionService,
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private modal: NzModalService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit() {
@@ -77,6 +88,10 @@ export class TransactionsPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadMore();
       });
+
+    this.roleService.role$.subscribe(role => {
+      this.isLeader = role?.roleInTeam === TeamRole.LEADER;
+    });
   }
 
   ngOnDestroy() {
@@ -135,5 +150,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
     this.pageSize = pageSize;
     this.pageIndex = 1;
     this.filterTransactions();
+  }
+
+  showTypeModal(): void {
+    this.modal.create({
+      nzTitle: 'Chọn loại giao dịch',
+      nzContent: TransactionTypeModalComponent,
+      nzFooter: null,
+      nzData: this.projectId
+    });
   }
 }

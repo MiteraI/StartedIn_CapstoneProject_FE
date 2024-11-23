@@ -22,7 +22,7 @@
   </div>
 </app-filter-bar>
 
-<div class="p-4 max-w-7xl mx-auto">
+<div class="p-4 max-w-7xl mx-auto max-h-[79vh] overflow-y-auto">
   <!-- Desktop Table View -->
   <table class="w-full hidden md:table border">
     <thead>
@@ -57,7 +57,7 @@
           <td class="p-4">{{ disbursement.investorName }}</td>
           <td class="p-4">{{ disbursement.contractIdNumber }}</td>
           <td class="p-4 text-center">{{ formatDate(disbursement.startDate) }}</td>
-          <td class="p-4 text-center" >{{ formatDate(disbursement.endDate) }}</td> 
+          <td class="p-4 text-center" >{{ formatDate(disbursement.endDate) }}</td>
           <td class="p-4">{{ disbursement.amount | vndCurrency }}</td>
           <td class="p-4">
             <span [ngClass]="{

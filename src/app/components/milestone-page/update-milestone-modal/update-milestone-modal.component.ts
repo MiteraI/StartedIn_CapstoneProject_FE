@@ -51,21 +51,21 @@ export class UpdateMilestoneModalComponent implements OnInit {
   private destroy$ = new Subject<void>()
 
   assignedTasks: Task[] = []
-  
+
   initialPhaseId: string = ''
   initialPhase: Phase | null = null
   phases: Phase[] = []
   isPhasesFetched: boolean = false
   isPhasesFetchLoading = false
-  
+
   isInfoChanged: boolean = false
-  
+
   isFetchMilestoneDetailLoading = false
 
   constructor(
-    private fb: FormBuilder, 
-    private antdNoti: AntdNotificationService, 
-    private nzModalRef: NzModalRef, 
+    private fb: FormBuilder,
+    private antdNoti: AntdNotificationService,
+    private nzModalRef: NzModalRef,
     private milestoneService: MilestoneService,
     private phaseService: PhaseService) {
     this.milestoneForm = this.fb.group({
@@ -124,7 +124,6 @@ export class UpdateMilestoneModalComponent implements OnInit {
 
   private fetchPhases() {
     this.isPhasesFetchLoading = true
-    //TODO: Add filter logic
     this.phaseService
       .getPhases(this.nzModalData.projectId)
       .pipe(takeUntil(this.destroy$))
