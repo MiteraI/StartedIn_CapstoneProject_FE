@@ -1,0 +1,48 @@
+<form [formGroup]="filterForm" class="ant-modal-body">
+  <!-- Milstone Title -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Tên cột mốc</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Phase -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Giai đoạn</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select
+        class="w-full"
+        formControlName="phaseId"
+        nzPlaceHolder="Chọn giai đoạn"
+        nzAllowClear
+        (nzScrollToBottom)="onPhaseScroll()"
+      >
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option
+          *ngFor="let phase of phases"
+          [nzValue]="phase.id"
+          [nzLabel]="phase.phaseName"
+        ></nz-option>
+        <nz-option *ngIf="isPhaseLoading" nzDisabled nzCustomContent>
+          <span class="text-center w-full block">Loading...</span>
+        </nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+</form>
+
+<div class="ant-modal-footer">
+  <button nz-button (click)="resetFilters()">
+    Đặt lại bộ lọc
+  </button>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="applyFilters()"
+  >
+    Lọc
+  </button>
+</div>
+
