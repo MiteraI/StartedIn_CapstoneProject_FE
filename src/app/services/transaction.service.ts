@@ -4,6 +4,7 @@ import { ApplicationConfigService } from '../core/config/application-config.serv
 import { map, Observable } from 'rxjs'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { TransactionModel } from '../shared/models/transaction/transaction.model'
+import { TransactionCreateModel } from '../shared/models/transaction/transaction-create.model'
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,23 @@ export class TransactionService {
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/transactions/${id}`)
     ).pipe(
       map(transaction => this.parseNumericFields(transaction))
+    );
+  }
+
+  createTransaction(projectId: string, transaction: TransactionCreateModel): Observable<TransactionModel> {
+    return this.http.post<TransactionModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/transactions`),
+      transaction
+    );
+  }
+
+  uploadEvidence(id: string, projectId: string, file: File): Observable<string> {
+    const formdata = new FormData();
+    formdata.append('file', file);
+    return this.http.post<string>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/transactions/${id}/evidence`),
+      formdata,
+      { responseType: 'text' as 'json' }
     );
   }
 }

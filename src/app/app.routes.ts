@@ -156,6 +156,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then( m => m.TransactionDetailsPage)
       },
       {
+        path: 'create-transaction',
+        loadComponent: () => import('./pages/transaction-pages/create-transaction/create-transaction.page').then( m => m.CreateTransactionPage)
+      },
+      {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
       },
@@ -172,7 +176,11 @@ export const routes: Routes = [
       {
         path: 'assets',
         loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
-      }
+      },
+      {
+        path: 'buy-assets',
+        loadComponent: () => import('./pages/asset-pages/buy-assets/buy-assets.page').then( m => m.BuyAssetsPage)
+      },
     ],
   },
   {

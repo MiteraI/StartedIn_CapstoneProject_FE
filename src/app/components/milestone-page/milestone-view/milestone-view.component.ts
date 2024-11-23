@@ -67,11 +67,10 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMilestones(isDesktop: boolean) {
-    //TODO: Add filter logic
     this.isFetchAllMilestonesLoading = true
     this.milestoneService.getMilestones(
-      this.projectId, 
-      this.page, 
+      this.projectId,
+      this.page,
       this.size,
       this.filter.title,
       this.filter.phaseId)
