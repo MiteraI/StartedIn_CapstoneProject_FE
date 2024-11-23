@@ -7,5 +7,5 @@ export enum TransactionType {
 export const TransactionTypeLabels: Record<TransactionType, string> = {
   [TransactionType.DISBURSEMENT]: 'Giải ngân',
   [TransactionType.ASSET_EXPENSE]: 'Mua tài sản',
-  [TransactionType.OTHER]: 'Khác'
+  [TransactionType.OTHER]: 'Giao dịch khác'
 }

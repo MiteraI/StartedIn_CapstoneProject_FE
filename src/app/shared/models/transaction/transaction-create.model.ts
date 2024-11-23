@@ -10,5 +10,5 @@ export type TransactionCreateModel = {
   type: TransactionType;
   isInFlow: boolean;
   content: string;
-  assets: TransactionAsset[];
+  assets?: TransactionAsset[];
 }
