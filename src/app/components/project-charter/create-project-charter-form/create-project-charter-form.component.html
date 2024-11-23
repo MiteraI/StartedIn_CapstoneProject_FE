@@ -1,6 +1,4 @@
 <mat-card class="p-6 max-w-4xl mx-auto">
-  <p class="text-2xl font-semibold mb-4 text-gray-600">BẢNG ĐIỀU LỆ DỰ ÁN</p>
-
   <!------------------------------>
   <!-- Project Detail ------------>
   <!------------------------------>
@@ -47,52 +45,56 @@
       </div>
     </div>
   </div> -->
-
   <!--------------------------------->
   <!-- Create Project Charter Form -->
   <!--------------------------------->
 
-  <form [formGroup]="projectCharterForm" (ngSubmit)="onSubmit()" class="mt-5 space-y-4">
-    <div class="border-b border-gray-300 pb-4 mb-4"></div>
-
+  <form [formGroup]="projectCharterForm" (ngSubmit)="onSubmit()" class="max-w-4xl p-6 bg-white shadow-lg rounded-lg">
     <div class="flex justify-between">
-      <p class="text-xl font-semibold text-gray-600">ĐIỀU LỆ DỰ ÁN</p>
+      <h1 class="text-2xl font-bold text-blue-600 mb-6">ĐIỀU LỆ DỰ ÁN</h1>
       <span *ngIf="isCharterExist" nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
     </div>
-    <div class="sm:flex w-full">
-      <div class="space-y-4 sm:w-1/2">
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="text-gray-600 pt-3">BỐI CẢNH DỰ ÁN</label>
-          <textarea placeholder="Nhập bối cảnh dự án" formControlName="businessCase" class="col-span-2 border border-gray-300 rounded w-full"></textarea>
+
+    <!-- Project Overview Section -->
+    <section class="mb-8">
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">BỐI CẢNH DỰ ÁN</label>
+          <textarea placeholder="Nhập bối cảnh dự án" formControlName="businessCase" class="p-2 bg-gray-50 border rounded w-full"></textarea>
         </div>
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="text-gray-600 pt-3">MỤC TIÊU</label>
-          <textarea placeholder="Nhập mục tiêu" formControlName="goal" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC TIÊU</label>
+          <textarea placeholder="Nhập mục tiêu" formControlName="goal" class="p-2 bg-gray-50 border rounded w-full"></textarea>
         </div>
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="text-gray-600 pt-3">MỤC ĐÍCH</label>
-          <textarea placeholder="Nhập mục đích" formControlName="objective" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC ĐÍCH</label>
+          <textarea placeholder="Nhập mục đích" formControlName="objective" class="p-2 bg-gray-50 border rounded w-full"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">PHẠM VI</label>
+          <textarea placeholder="Nhập phạm vi" formControlName="scope" class="p-2 bg-gray-50 border rounded w-full"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">HẠN CHẾ</label>
+          <textarea placeholder="Nhập hạn chế" formControlName="constraints" class="p-2 bg-gray-50 border rounded w-full"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">GIẢ ĐỊNH</label>
+          <textarea placeholder="Nhập giả định" formControlName="assumptions" class="p-2 bg-gray-50 border rounded w-full"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold bg-amber-100 p-2">KẾT QUẢ ĐẦU RA</label>
+          <textarea placeholder="Nhập kết quả đầu ra" formControlName="deliverables" class="p-2 bg-gray-50 border rounded w-full"></textarea>
         </div>
       </div>
-      <div class="space-y-4 sm:w-1/2 sm:ml-5">
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="text-gray-600 pt-3">PHẠM VI</label>
-          <textarea placeholder="Nhập phạm vi" formControlName="scope" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
-        </div>
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="text-gray-600 pt-3">HẠN CHẾ</label>
-          <textarea placeholder="Nhập hạn chế" formControlName="constraints" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
-        </div>
-        <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-          <label class="font text-gray-600 pt-3">GIẢ ĐỊNH</label>
-          <textarea placeholder="Nhập giả định" formControlName="assumptions" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="sm:grid sm:grid-cols-3 gap-4 items-start">
-      <label class="text-gray-600 pt-3">KẾT QUẢ ĐẦU RA</label>
-      <textarea placeholder="Nhập kết quả đầu ra" formControlName="deliverables" class="col-span-2 border border-gray-300 rounded p-2 w-full"></textarea>
-    </div>
+    </section>
+
     <div *ngIf="isEditable && isCharterExist" class="text-right">
       <button [disabled]="projectCharterForm.invalid" class="rounded-md" nz-button nzType="primary" type="button" (click)="saveEdit()">Save</button>
     </div>
@@ -101,58 +103,47 @@
       <div class="border-b border-gray-300 pb-4 mb-4"></div>
 
       <!------------------------------------------------->
-      <!-- Create Many Milestones ----------------------->
+      <!-- Create Many Phases ----------------------->
       <!------------------------------------------------->
 
-      <p class="font-semibold text-xl text-gray-600 mb-2">CỘT MỐC</p>
-      <div *ngIf="!isCharterExist" formArrayName="listMilestoneCreateDto">
-        @for (milestone of listMilestoneCreateDto.controls; track $index; let i = $index) {
+      <p class="font-semibold text-xl text-gray-600 mb-2">GIAI ĐOẠN</p>
+      <div *ngIf="!isCharterExist" formArrayName="listCreatePhaseDtos">
+        @for (phase of listCreatePhaseDtos.controls; track $index; let i = $index) {
         <div class="space-y-4 my-4" [formGroupName]="i">
           <div class="flex justify-end">
             <mat-icon (click)="showConfirmDelete(i)" class="text-right cursor-pointer text-red-500">delete</mat-icon>
           </div>
-          <div class="sm:grid sm:grid-cols-3 items-center">
-            <label class="text-gray-600">TIÊU ĐỀ</label>
-            <input placeholder="Nhập tiêu đề" formControlName="milstoneTitle" type="text" class="col-span-2 border border-gray-300 rounded p-2 w-full" />
+          <div class="sm:grid sm:grid-cols-4 items-center">
+            <label class="text-gray-600">GIAI ĐOẠN</label>
+            <input placeholder="Nhập giai đoạn" formControlName="phaseName" type="text" class="col-span-3 rounded w-full" />
           </div>
-          <div class="sm:grid sm:grid-cols-3 items-center">
-            <label class="text-gray-600">MÔ TẢ</label>
-            <input placeholder="Nhập mô tả" formControlName="description" type="text" class="col-span-2 border border-gray-300 rounded p-2 w-full" />
-          </div>
-          <div class="sm:flex sm:justify-between w-full gap-4">
-            <div class="flex-1 sm:grid sm:grid-cols-2 items-center">
-              <label class="col-span-1 text-gray-600">NGÀY HOÀN THÀNH</label>
-              <input formControlName="startDate" [min]="minDate" type="date" class="border border-gray-300 rounded p-2 w-full" />
+          <div class="sm:grid sm:grid-cols-4 w-full gap-4">
+            <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center">
+              <label class="col-span-1 text-gray-600">NGÀY BẮT ĐẦU</label>
+              <input formControlName="startDate" [min]="minDate" type="date" class="rounded w-full ml-1" />
             </div>
-            <div class="flex-1 sm:grid sm:grid-cols-2 items-center mt-4 sm:mt-0">
-              <label class="col-span-1 text-gray-600">TRẠNG THÁI GIAI ĐOẠN</label>
-              <select formControlName="phaseEnum" class="border border-gray-300 rounded p-2 w-full">
-                <option value="" disabled selected>Chọn Giai Đoạn</option>
-                @for (state of phaseStates; track $index) {
-                <option [value]="state.value">{{ state.label }}</option>
-                }
-              </select>
+            <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center mt-4 sm:mt-0">
+              <label class="col-span-1 text-gray-600">NGÀY KẾT THÚC</label>
+              <input formControlName="endDate" [min]="minDate" type="date" class="rounded w-full" />
             </div>
           </div>
         </div>
         }
       </div>
       <ng-container *ngIf="!isLoading && isCharterExist" class="mt-5">
-        <nz-table [nzShowPagination]="false" [nzBordered]="false" nzSize="small" [nzData]="listMilestoneCreateDto.controls" [nzBordered]="true">
+        <nz-table [nzShowPagination]="false" [nzBordered]="false" nzSize="small" [nzData]="listCreatePhaseDtos.controls" [nzBordered]="true">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Phase Type</th>
-              <th>Actions</th>
+              <th>Giai Đoạn</th>
+              <th>Ngày Bắt Đầu</th>
+              <th>Ngày Kết Thúc</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let milestone of listMilestoneCreateDto.controls; let i = index" [formGroupName]="i">
-              <td>{{ milestone.get('milstoneTitle')!.value }}</td>
-              <td>{{ getPhaseLabel(milestone.get('phaseEnum')!.value) }}</td>
-              <td>
-                <span class="cursor-pointer" (click)="openDetailModal(i)" nz-icon nzType="eye" nzTheme="outline"></span>
-              </td>
+            <tr *ngFor="let phase of listCreatePhaseDtos.controls; let i = index" [formGroupName]="i">
+              <td>{{ phase.get('phaseName')!.value }}</td>
+              <td>{{ phase.get('startDate')!.value }}</td>
+              <td>{{ phase.get('endDate')!.value }}</td>
             </tr>
           </tbody>
         </nz-table>
@@ -170,7 +161,7 @@
         >
           Submit
         </button>
-        <mat-icon (click)="addMilestone()" class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md">add</mat-icon>
+        <mat-icon (click)="addMilestone()" class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md" fontIcon="add">add</mat-icon>
       </div>
     </div>
   </form>
