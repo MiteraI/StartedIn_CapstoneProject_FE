@@ -1,5 +1,3 @@
-import { PhaseState } from '../../enums/phase-status.enum'
-
 export type Milestone = {
   id: string
   title: string
@@ -7,5 +5,5 @@ export type Milestone = {
   startDate: string
   endDate: string
   progress: number
-  phaseName: PhaseState
+  phaseName: string
 }

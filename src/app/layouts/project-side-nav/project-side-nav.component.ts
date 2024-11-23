@@ -2,9 +2,11 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { RouterModule } from '@angular/router'
-import { Subject, takeUntil } from 'rxjs'
+import { filter, Subject, takeUntil } from 'rxjs'
 import { AccountService } from '../../core/auth/account.service'
 import { CommonModule } from '@angular/common'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 
 @Component({
   selector: 'app-project-side-nav',
@@ -17,16 +19,20 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true;
   @Input() currentId = '';
 
-  isUser = false;
+  role: TeamRole | null = null;
+  teamRole = TeamRole;
   private destroy$ = new Subject<void>();
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, private roleService: RoleInTeamService) {}
 
   ngOnInit(): void {
-    this.accountService.account$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(account => {
-        this.isUser = account?.authorities.includes('User') ?? false;
+    this.roleService.role$
+      .pipe(
+        takeUntil(this.destroy$),
+        filter(role => role !== null)
+      )
+      .subscribe(role => {
+        this.role = role!.roleInTeam;
       });
   }
 
@@ -39,7 +45,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.opened = !this.opened
   }
 
-  userSideNavLinks: {
+  sharedSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
@@ -47,16 +53,32 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
-    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
     { linkName: 'transactions', iconName: 'savings_icon', linkText: 'Chi tiêu' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
     { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
-    { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
+    //{ linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
+    //{ linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
+  ];
+
+  leaderSideNavLinks: {
+    linkName: string
+    iconName: string
+    linkText: string
+  }[] = [
+    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
+    { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
     { linkName: 'deals', iconName: 'request_quote_icon', linkText: 'Deals' },
-    { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
-    { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
-    { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
+    //{ linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+  ]
+
+  memberSideNavLinks: {
+    linkName: string
+    iconName: string
+    linkText: string
+  }[] = [
+    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
   ]
 
   investorSideNavLinks: {
@@ -64,15 +86,6 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     iconName: string
     linkText: string
   }[] = [
-    { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
-    { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
-    { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'savings_icon', linkText: 'Chi tiêu' },
-    { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
-    { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
     { linkName: 'investor-disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
-    { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
-    { linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
-    { linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
   ];
 }

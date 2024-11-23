@@ -7,13 +7,14 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { catchError, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, VndCurrencyPipe]
+  imports: [CommonModule, VndCurrencyPipe, TitleBarComponent]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null;

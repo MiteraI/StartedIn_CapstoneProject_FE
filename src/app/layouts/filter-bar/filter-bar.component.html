@@ -3,11 +3,11 @@
   <div>
     <span class="text-xl">{{ viewName }}</span>
   </div>
-  <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-1/2">
+  <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-5/12">
     <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full" />
     <mat-icon (click)="onSearchClick()" fontIcon="search_icon" class="cursor-pointer"></mat-icon>
   </div>
-  <div>
+  <div class="flex items-center space-x-3">
     <button
       [matMenuTriggerFor]="filterMenu"
       [matMenuTriggerRestoreFocus]="false"
@@ -24,6 +24,16 @@
         <ng-content select="[desktop]"></ng-content>
       </div>
     </mat-menu>
+    <button
+      *ngIf="projectId"
+      nz-button
+      nzType="default"
+      class="flex items-center space-x-2"
+      (click)="openMembersModal()"
+    >
+      <mat-icon fontIcon="group"></mat-icon>
+      Thành viên
+    </button>
   </div>
 </div>
 } @else {

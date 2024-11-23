@@ -1,7 +1,7 @@
 export type Phase = {
-  phaseName: string
-  startDate: string
-  endDate: string
-  projectCharterId: string
-  id: string
+  id: string;
+  phaseName: string;
+  startDate: string;
+  endDate: string;
+  projectCharterId: string;
 }

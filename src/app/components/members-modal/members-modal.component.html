@@ -1,0 +1,50 @@
+<div class="p-6 ant-modal-body">
+  <div class="text-lg font-medium mb-4">Mời thêm thành viên</div>
+
+  <div class="mb-6 flex flex-wrap items-center">
+    <nz-select
+      class="w-full mb-2"
+      nzMode="tags"
+      [nzTokenSeparators]="[',', ' ']"
+      nzDropdownClassName="hide-dropdown"
+      [(ngModel)]="emailsToInvite"
+      nzPlaceHolder="Nhập email"
+    ></nz-select>
+    <nz-select
+      class="w-2/3 mb-2 mr-2"
+      [(ngModel)]="roleInTeam"
+    >
+      <nz-option [nzValue]="teamRoles.MEMBER" [nzLabel]="teamRoleLabels[teamRoles.MEMBER]"></nz-option>
+      <nz-option [nzValue]="teamRoles.MENTOR" [nzLabel]="teamRoleLabels[teamRoles.MENTOR]"></nz-option>
+    </nz-select>
+    <button
+      nz-button
+      nzType="primary"
+      class="flex-grow mb-2"
+      [disabled]="!emailsToInvite.length"
+      (click)="inviteMembers()"
+    >
+      Mời
+    </button>
+  </div>
+
+  <div class="text-sm font-medium text-gray-500 mb-4">Danh sách thành viên</div>
+
+  <div class="space-y-3 overflow-y-auto">
+    <div *ngFor="let member of members" class="flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <nz-avatar
+          [nzText]="member.fullName | initialsOnly"
+          class="bg-blue-500"
+        ></nz-avatar>
+        <div>
+          <div class="font-medium">{{member.fullName}}</div>
+          <div class="text-sm text-gray-500">{{member.email}}</div>
+        </div>
+      </div>
+      <div class="text-sm text-gray-600">
+        {{teamRoleLabels[member.roleInTeam]}}
+      </div>
+    </div>
+  </div>
+</div>

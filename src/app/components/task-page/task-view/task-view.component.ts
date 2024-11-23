@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subject, takeUntil } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
@@ -14,11 +14,29 @@ import { Task } from 'src/app/shared/models/task/task.model'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { ScrollService } from 'src/app/core/util/scroll.service'
+import { TaskStatus } from 'src/app/shared/enums/task-status.enum'
+import { TaskFilterComponent } from '../task-filter/task-filter.component'
+
+interface TaskFilterOptions {
+  title?: string;
+  assigneeId?: string;
+  milestoneId?: string;
+  status?: TaskStatus;
+  isLate?: boolean;
+}
 
 @Component({
   selector: 'app-task-view',
   templateUrl: './task-view.component.html',
-  imports: [FilterBarComponent, TaskTableComponent, TaskListComponent, NzButtonModule, MatIconModule, NzModalModule],
+  imports: [
+    FilterBarComponent,
+    TaskTableComponent,
+    TaskListComponent,
+    NzButtonModule,
+    MatIconModule,
+    NzModalModule,
+    TaskFilterComponent
+  ],
   styleUrls: ['./task-view.component.scss'],
   standalone: true,
 })
@@ -26,6 +44,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
   private destroy$ = new Subject<void>()
   projectId = ''
+  filter: TaskFilterOptions = {};
+  @ViewChild(TaskFilterComponent) filterComponent!: TaskFilterComponent;
   taskList: Task[] = []
   size: number = 12
   page: number = 1
@@ -56,14 +76,23 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   onPaginationChanged(page: number) {
     this.page = page
-    this.isFetchAllTaskLoading = true
     this.fetchTasks(this.isDesktopView)
   }
 
   private fetchTasks(isDesktop: boolean) {
     //TODO: Add filter logic
+    this.isFetchAllTaskLoading = true
     this.taskService
-      .getTaskListForProject(this.projectId, this.page, this.size)
+      .getTaskListForProject(
+        this.projectId,
+        this.page,
+        this.size,
+        this.filter.title,
+        this.filter.status,
+        this.filter.isLate,
+        this.filter.assigneeId,
+        this.filter.milestoneId
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -109,7 +138,6 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
-    this.isFetchAllTaskLoading = true
     this.fetchTasks(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
@@ -123,5 +151,29 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   printSearchString = (searchString: string) => {
     console.log(searchString)
+  }
+
+  get filterData() {
+    return {
+      ...this.filter,
+      projectId: this.projectId
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.fetchTasks(this.isDesktopView)
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      title: searchText
+    };
+    this.fetchTasks(this.isDesktopView);
   }
 }

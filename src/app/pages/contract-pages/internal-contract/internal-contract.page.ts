@@ -23,8 +23,8 @@ import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
-import { MobileTitleBarComponent } from 'src/app/layouts/mobile-title-bar/mobile-title-bar.component';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
+import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 
 @Component({
   selector: 'app-internal-contract',
@@ -43,7 +43,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
     NzSelectModule,
     NzInputNumberModule,
     IonicModule,
-    MobileTitleBarComponent
+    TitleBarComponent
   ]
 })
 export class InternalContractPage implements OnInit {
@@ -90,7 +90,8 @@ export class InternalContractPage implements OnInit {
     });
 
     this.roleService.role$.subscribe(role => {
-      if (role !== TeamRole.LEADER) {
+      if (!role) return;
+      if (role.roleInTeam !== TeamRole.LEADER) {
         this.contractForm.disable();
       }
     });

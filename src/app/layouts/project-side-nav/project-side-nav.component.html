@@ -9,29 +9,38 @@
       </div>
 
       <hr class="mx-4" />
-      <div *ngIf="isUser" class="flex flex-col my-2">
-        @for (link of userSideNavLinks; track link.linkText) {
+      <div class="flex flex-col my-2">
+        @for (link of sharedSideNavLinks; track link.linkText) {
           <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
-        <div class="flex ml-4 my-1 cursor-pointer">
-          <mat-icon fontIcon="group_icon"></mat-icon>
-          <span class="text-lg mx-2">Thành Viên</span>
-        </div>
       </div>
-      <div *ngIf="!isUser" class="flex flex-col my-2">
+      <hr class="mx-4" />
+      <div *ngIf="role === teamRole.LEADER" class="flex flex-col my-2">
+        @for (link of leaderSideNavLinks; track link.linkText) {
+          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+            <mat-icon [fontIcon]="link.iconName"></mat-icon>
+            <span class="text-lg mx-2">{{ link.linkText }}</span>
+          </div>
+        } @empty { }
+      </div>
+      <div *ngIf="role === teamRole.MEMBER || role === teamRole.MENTOR" class="flex flex-col my-2">
+        @for (link of memberSideNavLinks; track link.linkText) {
+          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+            <mat-icon [fontIcon]="link.iconName"></mat-icon>
+            <span class="text-lg mx-2">{{ link.linkText }}</span>
+          </div>
+        } @empty { }
+      </div>
+      <div *ngIf="role === teamRole.INVESTOR" class="flex flex-col my-2">
         @for (link of investorSideNavLinks; track link.linkText) {
           <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
-        <div class="flex ml-4 my-1 cursor-pointer">
-          <mat-icon fontIcon="group_icon"></mat-icon>
-          <span class="text-lg mx-2">Thành Viên</span>
-        </div>
       </div>
     </div>
   </mat-drawer>
@@ -40,16 +49,22 @@
     <div class="flex h-full">
       @if (!opened) {
         <div class="flex flex-col bg-white border items-center">
-          <button class="mt-2 mb-5 mx-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
+          <button class="mt-2 mb-4 mx-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
             <mat-icon fontIcon="chevron_right"></mat-icon>
           </button>
-          @for (link of userSideNavLinks; track link.linkName) {
-            <mat-icon *ngIf="isUser" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          @for (link of sharedSideNavLinks; track link.linkName) {
+            <mat-icon [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          } @empty { }
+          <hr class="w-full my-2" />
+          @for (link of leaderSideNavLinks; track link.linkName) {
+            <mat-icon *ngIf="role === teamRole.LEADER" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          } @empty { }
+          @for (link of memberSideNavLinks; track link.linkName) {
+            <mat-icon *ngIf="role === teamRole.MEMBER || role === teamRole.MENTOR" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
           } @empty { }
           @for (link of investorSideNavLinks; track link.linkName) {
-            <mat-icon *ngIf="!isUser" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+            <mat-icon *ngIf="role === teamRole.INVESTOR" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
           } @empty { }
-          <mat-icon fontIcon="group_icon" class="my-[6px]"></mat-icon>
         </div>
       }
       <div class="max-h-[86vh] w-full overflow-y-scroll">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component'
 import { MilestoneTableComponent } from '../milestone-table/milestone-table.component'
 import { MilestoneListComponent } from '../milestone-list/milestone-list.component'
@@ -15,29 +15,36 @@ import { CreateMilestoneModalComponent } from '../create-milestone-modal/create-
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { HttpErrorResponse } from '@angular/common/http'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { MilestoneFilterComponent } from "../milestone-filter/milestone-filter.component";
+
+interface MilestoneFilterOptions {
+  title?: string;
+  phaseId?: string;
+}
 
 @Component({
   selector: 'app-milestone-view',
   templateUrl: './milestone-view.component.html',
   styleUrls: ['./milestone-view.component.scss'],
   standalone: true,
-  imports: [FilterBarComponent, MilestoneTableComponent, MilestoneListComponent, NzButtonModule, MatIconModule, NzModalModule],
+  imports: [FilterBarComponent, MilestoneTableComponent, MilestoneListComponent, NzButtonModule, MatIconModule, NzModalModule, MilestoneFilterComponent],
 })
-export class MilestoneViewComponent implements OnInit {
+export class MilestoneViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
   private destroy$ = new Subject<void>()
   projectId = ''
+  filter: MilestoneFilterOptions = {};
+  @ViewChild(MilestoneFilterComponent) filterComponent!: MilestoneFilterComponent;
   milestoneList: Milestone[] = []
   size: number = 12
   page: number = 1
   total: number = 0 //Total of tasks (filter or not)
-  isFetchAllTaskLoading: boolean = false
+  isFetchAllMilestonesLoading: boolean = false
 
   constructor(
     private viewMode: ViewModeConfigService,
     private modalService: NzModalService,
     private activatedRoute: ActivatedRoute,
-    private taskService: TaskService,
     private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService,
     private scrollService: ScrollService
@@ -56,13 +63,18 @@ export class MilestoneViewComponent implements OnInit {
 
   onPaginationChanged(page: number) {
     this.page = page
-    this.isFetchAllTaskLoading = true
     this.fetchMilestones(this.isDesktopView)
   }
 
   private fetchMilestones(isDesktop: boolean) {
     //TODO: Add filter logic
-    this.milestoneService.getMilestones(this.projectId, this.page, this.size)
+    this.isFetchAllMilestonesLoading = true
+    this.milestoneService.getMilestones(
+      this.projectId, 
+      this.page, 
+      this.size,
+      this.filter.title,
+      this.filter.phaseId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -72,10 +84,10 @@ export class MilestoneViewComponent implements OnInit {
             this.milestoneList = [...this.milestoneList, ...val.data]
           }
           this.total = val.total
-          this.isFetchAllTaskLoading = false
+          this.isFetchAllMilestonesLoading = false
         },
         error: (error: HttpErrorResponse) => {
-          this.isFetchAllTaskLoading = false
+          this.isFetchAllMilestonesLoading = false
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
@@ -92,7 +104,7 @@ export class MilestoneViewComponent implements OnInit {
 
   loadMore(): void {
     //Only in mobile load more and add to the task array
-    if (this.isDesktopView || this.isFetchAllTaskLoading || this.isEndOfList) return
+    if (this.isDesktopView || this.isFetchAllMilestonesLoading || this.isEndOfList) return
 
     this.page++
     this.fetchMilestones(false)
@@ -108,7 +120,6 @@ export class MilestoneViewComponent implements OnInit {
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
-    this.isFetchAllTaskLoading = true
     this.fetchMilestones(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
@@ -122,5 +133,29 @@ export class MilestoneViewComponent implements OnInit {
 
   printSearchString = (searchString: string) => {
     console.log(searchString)
+  }
+
+  get filterData() {
+    return {
+      ...this.filter,
+      projectId: this.projectId
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.fetchMilestones(this.isDesktopView)
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      title: searchText
+    };
+    this.fetchMilestones(this.isDesktopView);
   }
 }

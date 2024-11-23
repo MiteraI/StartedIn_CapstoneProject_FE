@@ -160,10 +160,19 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
       },
       {
+        path: 'payos',
+        canActivate: [UserGuard],
+        loadComponent: () => import('./pages/payment-pages/payos-setup/payos-setup.page').then( m => m.PayosSetupPage)
+      },
+      {
         path: '',
-        redirectTo: 'charter',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+      {
+        path: 'assets',
+        loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
+      }
     ],
   },
   {

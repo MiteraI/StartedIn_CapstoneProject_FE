@@ -69,7 +69,6 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   isLoading = false;
   isDesktopView = false;
-
   isLeader = false;
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
@@ -101,7 +100,7 @@ export class ContractListPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadMore();
       });
-    this.roleService.role$.subscribe(role => this.isLeader = (role === TeamRole.LEADER));
+    this.roleService.role$.subscribe(role => this.isLeader = (role?.roleInTeam === TeamRole.LEADER));
   }
 
   // filter stuff

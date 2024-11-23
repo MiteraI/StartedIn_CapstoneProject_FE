@@ -5,13 +5,13 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzTableModule } from 'ng-zorro-antd/table'
-import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { UpdateMilestoneModalComponent } from '../update-milestone-modal/update-milestone-modal.component'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { NzProgressModule } from 'ng-zorro-antd/progress'
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-milestone-table',
@@ -28,8 +28,6 @@ export class MilestoneTableComponent implements OnInit {
   @Input() total: number = 0
   @Input() size: number = 10
   @Input() page: number = 1
-
-  labels = PhaseStateLabels
 
   constructor(private modalService: NzModalService, private milestoneService: MilestoneService, private antdNoti: AntdNotificationService) {}
 
@@ -68,5 +66,8 @@ export class MilestoneTableComponent implements OnInit {
 
   onPageChange(page: number) {
     this.pageChanged.emit(page)
+  }
+  formatDate(dateStr: string): string {
+    return format(new Date(dateStr), 'dd/MM/yyyy');
   }
 }

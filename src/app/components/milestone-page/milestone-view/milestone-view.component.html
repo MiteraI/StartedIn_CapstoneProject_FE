@@ -1,6 +1,16 @@
-<app-filter-bar viewName="Tác Vụ" (searchString)="printSearchString($event)">
-  <div desktop>This should be rendered in header selection of ng-content</div>
-  <div mobile>This should be rendered in body selection of ng-content</div>
+<app-filter-bar viewName="Cột mốc" (searchString)="printSearchString($event)">
+  <div desktop class="p-4 min-w-[400px]">
+    <app-milestone-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-milestone-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-milestone-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-milestone-filter>
+  </div>
 </app-filter-bar>
 @if (isDesktopView) {
 <div class="flex flex-col w-full px-3 mt-4">
@@ -16,7 +26,7 @@
     [size]="size"
     [milestoneList]="milestoneList"
     [projectId]="projectId"
-    [isFetchAllTaskLoading]="isFetchAllTaskLoading"
+    [isFetchAllTaskLoading]="isFetchAllMilestonesLoading"
     (pageChanged)="onPaginationChanged($event)"
   ></app-milestone-table>
 </div>
@@ -25,6 +35,6 @@
   <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
     <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
   </div>
-  <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-milestone-list>
+  <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllMilestonesLoading"></app-milestone-list>
 </div>
 }
