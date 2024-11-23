@@ -172,7 +172,11 @@ export const routes: Routes = [
       {
         path: 'assets',
         loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
-      }
+      },
+      {
+        path: 'buy-assets',
+        loadComponent: () => import('./pages/asset-pages/buy-assets/buy-assets.page').then( m => m.BuyAssetsPage)
+      },
     ],
   },
   {

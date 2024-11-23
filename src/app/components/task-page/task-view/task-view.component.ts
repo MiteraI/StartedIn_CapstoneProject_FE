@@ -80,7 +80,6 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchTasks(isDesktop: boolean) {
-    //TODO: Add filter logic
     this.isFetchAllTaskLoading = true
     this.taskService
       .getTaskListForProject(

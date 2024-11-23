@@ -150,7 +150,6 @@ export class CreateTaskModalComponent implements OnInit {
 
   private fetchTasks() {
     this.isOtherTasksFetchLoading = true
-    //TODO: Add filter logic
     this.taskService
       .getTaskListForProject(this.nzModalData.projectId, this.otherTasksPage, this.otherTasksSize)
       .pipe(takeUntil(this.destroy$))
@@ -174,7 +173,6 @@ export class CreateTaskModalComponent implements OnInit {
 
   private fetchMilestones() {
     this.isMilestonesFetchLoading = true
-    //TODO: Add filter logic
     this.milestoneService
       .getMilestones(this.nzModalData.projectId, this.milestonesPage, this.milestonesSize)
       .pipe(takeUntil(this.destroy$))

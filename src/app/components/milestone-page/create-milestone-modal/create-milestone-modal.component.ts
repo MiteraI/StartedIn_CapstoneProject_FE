@@ -26,12 +26,12 @@ interface IModalData {
   styleUrls: ['./create-milestone-modal.component.scss'],
   standalone: true,
   imports: [
-    NzFormModule, 
-    NzInputModule, 
-    NzDatePickerModule, 
-    ReactiveFormsModule, 
-    NzButtonModule, 
-    NzSelectModule, 
+    NzFormModule,
+    NzInputModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzButtonModule,
+    NzSelectModule,
     NzIconModule],
 })
 export class CreateMilestoneModalComponent implements OnInit {
@@ -40,11 +40,11 @@ export class CreateMilestoneModalComponent implements OnInit {
   private destroy$ = new Subject<void>()
 
   constructor(
-    private fb: FormBuilder, 
-    private milestoneService: MilestoneService, 
+    private fb: FormBuilder,
+    private milestoneService: MilestoneService,
     private nzModalRef: NzModalRef,
-    private phaseService: PhaseService, 
-    private antdNoti: AntdNotificationService) 
+    private phaseService: PhaseService,
+    private antdNoti: AntdNotificationService)
     {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -107,10 +107,9 @@ export class CreateMilestoneModalComponent implements OnInit {
       })
     }
   }
-  
+
   private fetchPhases() {
     this.isPhasesFetchLoading = true
-    //TODO: Add filter logic
     this.phaseService
       .getPhases(this.nzModalData.projectId)
       .pipe(takeUntil(this.destroy$))
@@ -130,6 +129,6 @@ export class CreateMilestoneModalComponent implements OnInit {
         },
       })
   }
-  
+
   ngOnInit() {}
 }
