@@ -1,4 +1,4 @@
-import { PhaseState } from "../../enums/phase-status.enum"
+import { Phase } from "../phase/phase.model"
 import { Task } from "../task/task.model"
 
 export type MilestoneDetails = {
@@ -8,7 +8,7 @@ export type MilestoneDetails = {
   startDate: string
   endDate: string
   progress: number
-  phaseName: PhaseState
+  phase: Phase
   charterId: string
   assignedTasks: Task[]
 }
