@@ -12,10 +12,12 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzTableModule } from 'ng-zorro-antd/table'
+import { Subject, takeUntil } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
-import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
+import { PhaseService } from 'src/app/services/phase.service'
 import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
+import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { Task } from 'src/app/shared/models/task/task.model'
 
 interface IModalData {
@@ -44,28 +46,34 @@ interface IModalData {
 })
 export class UpdateMilestoneModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
-  milestoneForm: FormGroup
-
   taskStatusLabels = TaskStatusLabels
-
-  phaseNames: { label: string; value: number }[] = [
-    { value: 0, label: PhaseStateLabels[1] },
-    { value: 1, label: PhaseStateLabels[2] },
-    { value: 2, label: PhaseStateLabels[3] },
-    { value: 3, label: PhaseStateLabels[4] },
-  ]
+  milestoneForm: FormGroup
+  private destroy$ = new Subject<void>()
 
   assignedTasks: Task[] = []
-
+  
+  initialPhaseId: string = ''
+  initialPhase: Phase | null = null
+  phases: Phase[] = []
+  isPhasesFetched: boolean = false
+  isPhasesFetchLoading = false
+  
   isInfoChanged: boolean = false
+  
   isFetchMilestoneDetailLoading = false
 
-  constructor(private fb: FormBuilder, private antdNoti: AntdNotificationService, private nzModalRef: NzModalRef, private milestoneService: MilestoneService) {
+  constructor(
+    private fb: FormBuilder, 
+    private antdNoti: AntdNotificationService, 
+    private nzModalRef: NzModalRef, 
+    private milestoneService: MilestoneService,
+    private phaseService: PhaseService) {
     this.milestoneForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
+      phase: [null]
     })
   }
 
@@ -76,6 +84,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
         description: this.milestoneForm.value.description,
         startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
         endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
+        phaseId: this.milestoneForm.value.phase
       }
 
       if (new Date(milestone.startDate) > new Date(milestone.endDate)) {
@@ -101,6 +110,42 @@ export class UpdateMilestoneModalComponent implements OnInit {
     }
   }
 
+  handleOpenPhasesSelect() {
+    if (!this.isPhasesFetched) {
+      // Fetch milestones
+      this.isPhasesFetched = true
+      this.fetchPhases()
+    }
+  }
+
+  loadMorePhases() {
+    this.fetchPhases()
+  }
+
+  private fetchPhases() {
+    this.isPhasesFetchLoading = true
+    //TODO: Add filter logic
+    this.phaseService
+      .getPhases(this.nzModalData.projectId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (val) => {
+          const morePhases = val.filter((m) => m.id !== this.initialPhaseId && m.id)
+          this.phases = [...this.phases, ...morePhases]
+          this.isPhasesFetchLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isPhasesFetchLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
+  }
+
   handleDeleteMilestone() {
     this.milestoneService.deleteMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
       next: (response) => {
@@ -122,15 +167,17 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.isInfoChanged = true
   }
 
+
+
   ngOnInit() {
     this.isFetchMilestoneDetailLoading = true
     this.milestoneService.getMilestoneDetail(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
       next: (response) => {
-        this.milestoneForm.setValue({
+        this.milestoneForm.patchValue({
           title: response.title,
           description: response.description,
           startDate: response.startDate,
-          endDate: response.endDate,
+          endDate: response.endDate
         })
         this.assignedTasks = response.assignedTasks
         this.isFetchMilestoneDetailLoading = false
