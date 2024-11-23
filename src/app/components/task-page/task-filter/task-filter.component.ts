@@ -32,8 +32,7 @@ import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
     NzSelectModule,
     NzButtonModule,
     NzAvatarModule,
-    NzCheckboxModule,
-    InitialsOnlyPipe
+    NzCheckboxModule
   ]
 })
 export class TaskFilterComponent implements OnInit {

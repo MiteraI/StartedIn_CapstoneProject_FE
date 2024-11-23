@@ -29,7 +29,11 @@ export class MilestoneTableComponent implements OnInit {
   @Input() size: number = 10
   @Input() page: number = 1
 
-  constructor(private modalService: NzModalService, private milestoneService: MilestoneService, private antdNoti: AntdNotificationService) {}
+  constructor(
+    private modalService: NzModalService,
+    private milestoneService: MilestoneService,
+    private antdNoti: AntdNotificationService
+  ) {}
 
   ngOnInit() {}
 
