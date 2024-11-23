@@ -14,11 +14,6 @@ import { PhaseService } from 'src/app/services/phase.service';
 import { Phase } from 'src/app/shared/models/phase/phase.model';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 
-interface MilestoneFilterOptions 
-{
-  title?: string;
-  phaseId?: string;
-}
 
 @Component({
   selector: 'app-milestone-filter',
