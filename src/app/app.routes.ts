@@ -220,7 +220,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [AdminGuard],
-    loadComponent: () => import('./pages/admin-pages/admin/admin.page').then( m => m.AdminPage)
+    loadComponent: () => import('./pages/admin-pages/admin-home/admin-home.page').then( m => m.AdminHomePage)
   },
   {
     path: 'admin/projects',

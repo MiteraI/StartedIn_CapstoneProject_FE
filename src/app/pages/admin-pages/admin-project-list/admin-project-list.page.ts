@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
 import { catchError, Subject, takeUntil, throwError } from 'rxjs';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
-import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model';
 import { AdminService } from 'src/app/services/admin.service';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { ProjectStatus, ProjectStatusLabels } from 'src/app/shared/enums/project-status.enum';
@@ -27,7 +26,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
     MatIconModule,
     RouterModule,
     NzPaginationModule,
-    NzSpinModule
+    NzSpinModule,
+    RouterModule
   ]
 })
 export class AdminProjectListPage implements OnInit, OnDestroy {
