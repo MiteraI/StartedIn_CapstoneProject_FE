@@ -69,6 +69,10 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'invite/:projectId/:role',
+    loadComponent: () => import('./pages/project-invite-page/project-invite-page.component').then((m) => m.ProjectInvitePage),
+  },
+  {
     path: 'projects/:id',
     loadComponent: () => import('./pages/project-details/project-details.page').then((m) => m.ProjectDetailsPage),
     canActivate: [AuthenticatedGuard],
@@ -188,6 +192,10 @@ export const routes: Routes = [
         canActivate: [UserGuard],
         loadComponent: () => import('./pages/investment-call-page/investment-call-page.page').then((m) => m.InvestmentCallPagePage),
       },
+      {
+        path: 'recruitment-post',
+        loadComponent: () => import('./components/recruitment-page/recruitment-view/recruitment-view.component').then((m) => m.RecruitmentViewComponent),
+      }
     ],
   },
   {

@@ -1,0 +1,25 @@
+<p>2 button for list invite and list application</p>
+<form [formGroup]="recruitmentForm" class="ant-modal-body bg-white">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24">Tài liệu chứng minh</nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng tải lên tài liệu chứng minh!">
+        <nz-upload
+          ngDefaultControl
+          formControlName="files"
+          [(nzFileList)]="fileList"
+          [nzBeforeUpload]="beforeUpload"
+          [nzRemove]="removeUpload"
+          [nzMultiple]="true"
+          [nzShowUploadList]="true"
+          class="mb-2"
+        >
+          <button nz-button class="flex justify-center items-center">
+            <mat-icon fontIcon="file_upload"></mat-icon>
+            <span class="px-2">Tải lên tài liệu</span>
+          </button>
+        </nz-upload>
+      </nz-form-control>
+    </nz-form-item>
+</form>
+
+

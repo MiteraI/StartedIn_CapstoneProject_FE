@@ -25,14 +25,7 @@ interface IModalData {
   templateUrl: './create-milestone-modal.component.html',
   styleUrls: ['./create-milestone-modal.component.scss'],
   standalone: true,
-  imports: [
-    NzFormModule,
-    NzInputModule,
-    NzDatePickerModule,
-    ReactiveFormsModule,
-    NzButtonModule,
-    NzSelectModule,
-    NzIconModule],
+  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule],
 })
 export class CreateMilestoneModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
@@ -44,14 +37,14 @@ export class CreateMilestoneModalComponent implements OnInit {
     private milestoneService: MilestoneService,
     private nzModalRef: NzModalRef,
     private phaseService: PhaseService,
-    private antdNoti: AntdNotificationService)
-    {
+    private antdNoti: AntdNotificationService
+  ) {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      phase:[null],
+      phase: [null],
     })
   }
 
@@ -79,7 +72,7 @@ export class CreateMilestoneModalComponent implements OnInit {
         description: this.milestoneForm.value.description,
         startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
         endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
-        phaseId: this.milestoneForm.value.phase
+        phaseId: this.milestoneForm.value.phase,
       }
 
       //If start date is after end date, show error notification
@@ -99,7 +92,7 @@ export class CreateMilestoneModalComponent implements OnInit {
           } else if (error.status === 403) {
             this.antdNoti.openErrorNotification('Không thể tạo cột mốc', 'Bạn không có quyền tạo cột mốc cho dự án này')
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
             console.error('', error)
           }
@@ -123,7 +116,7 @@ export class CreateMilestoneModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
