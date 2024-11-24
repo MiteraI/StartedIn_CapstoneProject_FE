@@ -13,6 +13,8 @@ import { ProjectDisbursementDataResolver } from './shared/resolvers/project-disb
 import { InvestorDisbursementDataResolver } from './shared/resolvers/investor-disbursement-data.resolver'
 import { TransactionDataResolver } from './shared/resolvers/transaction-data.resolver'
 import { ProjectOverviewDataResolver } from './shared/resolvers/overview-projects-data.resolver'
+import { AdminGuard } from './shared/guards/admin.guard'
+import { AdminProjectDataResolver } from './shared/resolvers/admin-project-data.resolver'
 
 export const routes: Routes = [
   {
@@ -23,8 +25,8 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'projects',
-    pathMatch: 'full',
+    canActivate: [AuthenticatedGuard],
+    loadComponent: () => import('./pages/home-redirect/home-redirect.page').then( m => m.HomeRedirectPage)
   },
   {
     path: 'login',
@@ -186,6 +188,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/asset-pages/buy-assets/buy-assets.page').then((m) => m.BuyAssetsPage),
       },
       {
+        path: 'investment-call',
+        canActivate: [UserGuard],
+        loadComponent: () => import('./pages/investment-call-page/investment-call-page.page').then((m) => m.InvestmentCallPagePage),
+      },
+      {
         path: 'recruitment-post',
         loadComponent: () => import('./components/recruitment-page/recruitment-view/recruitment-view.component').then((m) => m.RecruitmentViewComponent),
       }
@@ -204,6 +211,7 @@ export const routes: Routes = [
   {
     path: 'projects/:projectId/create-deal',
     canActivate: [InvestorGuard],
+    resolve: { projectOverview: ProjectOverviewDataResolver },
     loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
   },
   {
@@ -222,5 +230,21 @@ export const routes: Routes = [
     canActivate: [InvestorGuard],
     resolve: { disbursement: InvestorDisbursementDataResolver },
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-detail/investor-disbursement-detail.page').then((m) => m.InvestorDisbursementDetailPage),
+  },
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    loadComponent: () => import('./pages/admin-pages/admin-home/admin-home.page').then( m => m.AdminHomePage)
+  },
+  {
+    path: 'admin/projects',
+    canActivate: [AdminGuard],
+    loadComponent: () => import('./pages/admin-pages/admin-project-list/admin-project-list.page').then( m => m.AdminProjectListPage)
+  },
+  {
+    path: 'admin/projects/:projectId',
+    canActivate: [AdminGuard],
+    resolve: { project: AdminProjectDataResolver },
+    loadComponent: () => import('./pages/admin-pages/admin-project-detail/admin-project-detail.page').then( m => m.AdminProjectDetailPage)
   },
 ]

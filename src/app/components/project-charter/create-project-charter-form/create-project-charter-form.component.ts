@@ -3,12 +3,12 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { ProjectCharterFormModel } from 'src/app/shared/models/project-charter/project-charter-create.model'
 import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule } from '@angular/material/form-field'
-import { MatIcon } from '@angular/material/icon'
+import { MatIcon, MatIconModule } from '@angular/material/icon'
 import { PhaseState, PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { CommonModule } from '@angular/common'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { catchError, tap } from 'rxjs'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { ProjectCharter } from 'src/app/shared/models/project-charter/project-charter.model'
@@ -18,12 +18,13 @@ import { ViewMilestoneModalComponent } from '../view-milestone-modal/view-milest
 import { ProjectCharterUpdateModel } from 'src/app/shared/models/project-charter/project-charter-update.model'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
+import { Phase } from 'src/app/shared/models/phase/phase.model'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
   styleUrls: ['./create-project-charter-form.component.scss'],
   standalone: true,
-  imports: [MatCardModule, MatFormFieldModule, MatIcon, ReactiveFormsModule, CommonModule, NzTableModule, NzButtonModule, NzModalModule, NzIconModule],
+  imports: [MatCardModule, MatFormFieldModule, MatIcon, ReactiveFormsModule, CommonModule, NzTableModule, NzButtonModule, NzModalModule, NzIconModule, MatIconModule],
 })
 export class CreateProjectCharterFormComponent implements OnInit {
   isLoading = true
@@ -57,17 +58,12 @@ export class CreateProjectCharterFormComponent implements OnInit {
       constraints: ['', Validators.required],
       assumptions: ['', Validators.required],
       deliverables: ['', Validators.required],
-      listMilestoneCreateDto: this.formBuilder.array([]),
+      listCreatePhaseDtos: this.formBuilder.array([]),
     })
   }
 
-  getPhaseLabel(phaseEnum: number): string {
-    const phase = this.phaseStates.find((state) => state.value === phaseEnum)
-    return phase ? phase.label : 'Unknown'
-  }
-
-  get listMilestoneCreateDto() {
-    return this.projectCharterForm.get('listMilestoneCreateDto') as FormArray
+  get listCreatePhaseDtos() {
+    return this.projectCharterForm.get('listCreatePhaseDtos') as FormArray
   }
 
   ngOnInit() {
@@ -85,13 +81,12 @@ export class CreateProjectCharterFormComponent implements OnInit {
   }
 
   addMilestone() {
-    const milestoneForm = this.formBuilder.group({
-      milstoneTitle: ['', Validators.required],
-      description: ['', Validators.required],
-      dueDate: ['', Validators.required],
-      phaseEnum: [0, Validators.required],
+    const phaseForm = this.formBuilder.group({
+      phaseName: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
     })
-    this.listMilestoneCreateDto.push(milestoneForm)
+    this.listCreatePhaseDtos.push(phaseForm)
     this.cdr.detectChanges()
   }
 
@@ -102,10 +97,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
     }
     const projectCharterRequest: ProjectCharterFormModel = this.projectCharterForm.getRawValue()
 
-    projectCharterRequest.listMilestoneCreateDto.forEach((milestone) => {
-      milestone.phaseEnum = Number(milestone.phaseEnum)
-    })
-
+    console.log(projectCharterRequest)
     this.projectCharterService
       .create(this.projectId, projectCharterRequest)
       .pipe(
@@ -127,7 +119,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
         const projectCharter = response as ProjectCharter
         if (projectCharter) {
           this.projectCharterForm.patchValue(projectCharter)
-          this.mapMilestonesToFormArray(projectCharter.milestones)
+          this.mapPhasesToFormArray(projectCharter.phases)
           this.isLoading = false
           this.isCharterExist = true
 
@@ -145,14 +137,13 @@ export class CreateProjectCharterFormComponent implements OnInit {
     })
   }
 
-  mapMilestonesToFormArray(milestones: Milestone[]) {
-    milestones.forEach((milestone) => {
-      this.listMilestoneCreateDto.push(
+  mapPhasesToFormArray(phases: Phase[]) {
+    phases.forEach((phase) => {
+      this.listCreatePhaseDtos.push(
         this.formBuilder.group({
-          milstoneTitle: [milestone.title, Validators.required],
-          description: [milestone.description, Validators.required],
-          dueDate: [milestone.endDate, Validators.required],
-          phaseEnum: [milestone.phaseName, Validators.required],
+          phaseName: [phase.phaseName, Validators.required],
+          startDate: [phase.startDate, Validators.required],
+          endDate: [phase.endDate, Validators.required],
         })
       )
     })
@@ -160,28 +151,13 @@ export class CreateProjectCharterFormComponent implements OnInit {
 
   showConfirmDelete(index: number) {
     this.modal.confirm({
-      nzTitle: '<i>Bạn có muốn xóa cột mốc này không</i>',
+      nzTitle: '<i>Bạn có muốn xóa giai đoạn này không</i>',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () => {
-        this.listMilestoneCreateDto.removeAt(index)
-        this.projectCharterForm.setControl('listMilestoneCreateDto', this.formBuilder.array(this.listMilestoneCreateDto.controls))
+        this.listCreatePhaseDtos.removeAt(index)
+        this.projectCharterForm.setControl('listCreatePhaseDtos', this.formBuilder.array(this.listCreatePhaseDtos.controls))
       },
-    })
-  }
-
-  openDetailModal(index: number) {
-    const milestone = this.listMilestoneCreateDto.at(index).value
-    console.log(milestone)
-
-    this.modal.create({
-      nzTitle: 'Milestone Details',
-      nzContent: ViewMilestoneModalComponent,
-      // pass data to modal
-      nzData: {
-        milestoneData: milestone,
-      },
-      nzFooter: null, // Use this to hide default footer buttons if not needed
     })
   }
 

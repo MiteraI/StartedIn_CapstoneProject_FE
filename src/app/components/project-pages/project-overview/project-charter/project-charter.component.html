@@ -44,7 +44,7 @@
       <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.startDate | date : 'dd-MM-yyyy' }}</div>
     </div>
     <div>
-      <label class="text-sm font-semibold text-gray-600">NGÀY KẾT THÚC</label>
+      <label class="text-sm font-semibold text-gray-600">NGÀY KẾT THÚC (DỰ KIẾN)</label>
       <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.endDate ? (projectOverview?.endDate | date : 'dd-MM-yyyy') : 'Chưa xác định' }}</div>
     </div>
   </div>
@@ -58,7 +58,7 @@
         <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.assumptions }}</div>
       </div>
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">BUSINESS CASE</label>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">BỐI CẢNH DỰ ÁN</label>
         <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.businessCase }}</div>
       </div>
       <div>
@@ -66,12 +66,20 @@
         <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.constraints }}</div>
       </div>
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">SẢN PHẨM</label>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC TIÊU</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.goal }}</div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">KẾT QUẢ ĐẦU RA</label>
         <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.deliverables }}</div>
       </div>
       <div>
-        <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC TIÊU</label>
-        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.goal }}</div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">PHẠM VI</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.scope }}</div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold bg-amber-100 p-2">MỤC ĐÍCH</label>
+        <div class="p-2 bg-gray-50 border rounded">{{ projectOverview?.projectCharterResponseDto?.objective }}</div>
       </div>
     </div>
   </section>
@@ -97,17 +105,18 @@
     <table class="w-full">
       <thead class="bg-gray-100">
         <tr>
-          <th class="text-left p-2 border">CỘT MỐC</th>
-          <th class="text-left p-2 border">GIAI ĐOẠN</th>
-          <th class="text-left p-2 border w-32">KẾT THÚC</th>
+          <th class="text-left p-2 border">TÊN GIAI ĐOẠN</th>
+          <th class="text-left p-2 border w-48">NGÀY BẮT ĐẦU</th>
+          <th class="text-left p-2 border w-48">NGÀY KẾT THÚC</th>
         </tr>
       </thead>
       <tbody>
-        @for (milestone of projectOverview?.projectCharterResponseDto?.milestones; track milestone.id) {
+        @for (phase of projectOverview?.projectCharterResponseDto?.phases; track phase.id) {
 
         <tr>
-          <td class="p-2 border">{{ milestone.title }}</td>
-          <td class="p-2 border">{{ milestone.startDate| date : 'dd-MM-yyyy' }}</td>
+          <td class="p-2 border">{{ phase.phaseName }}</td>
+          <td class="p-2 border">{{ phase.startDate | date : 'dd-MM-yyyy' }}</td>
+          <td class="p-2 border">{{ phase.endDate | date : 'dd-MM-yyyy' }}</td>
         </tr>
         }
       </tbody>
