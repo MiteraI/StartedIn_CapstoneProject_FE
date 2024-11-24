@@ -16,12 +16,12 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
   styleUrl: './project-side-nav.component.css',
 })
 export class ProjectSideNavComponent implements OnInit, OnDestroy {
-  @Input() opened = true;
-  @Input() currentId = '';
+  @Input() opened = true
+  @Input() currentId = ''
 
-  role: TeamRole | null = null;
-  teamRole = TeamRole;
-  private destroy$ = new Subject<void>();
+  role: TeamRole | null = null
+  teamRole = TeamRole
+  private destroy$ = new Subject<void>()
 
   constructor(private accountService: AccountService, private roleService: RoleInTeamService) {}
 
@@ -29,11 +29,11 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.roleService.role$
       .pipe(
         takeUntil(this.destroy$),
-        filter(role => role !== null)
+        filter((role) => role !== null)
       )
-      .subscribe(role => {
-        this.role = role!.roleInTeam;
-      });
+      .subscribe((role) => {
+        this.role = role!.roleInTeam
+      })
   }
 
   ngOnDestroy() {
@@ -59,7 +59,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
     //{ linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
     //{ linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
-  ];
+  ]
 
   leaderSideNavLinks: {
     linkName: string
@@ -70,22 +70,19 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
     { linkName: 'deals', iconName: 'request_quote_icon', linkText: 'Deals' },
     { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
-    //{ linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'investment-call', iconName: 'paid', linkText: 'Gọi Vốn' },
+    { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
   ]
 
   memberSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [
-    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
-  ]
+  }[] = [{ linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' }]
 
   investorSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [
-    { linkName: 'investor-disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
-  ];
+  }[] = [{ linkName: 'investor-disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' }]
 }

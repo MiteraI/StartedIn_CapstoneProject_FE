@@ -6,12 +6,14 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ActivatedRoute } from '@angular/router';
-import { IonicModule } from '@ionic/angular'
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { DealOfferCreateModel } from 'src/app/shared/models/deal-offer/deal-offer-create.model';
 import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
+import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-create-deal-offer',
@@ -25,11 +27,12 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
     NzFormModule,
     NzInputModule,
     NzInputNumberModule,
-    IonicModule
+    CommonModule
   ]
 })
 export class CreateDealOfferPage implements OnInit {
   dealOfferForm!: FormGroup;
+  projectInfo!: ProjectOveriewModel;
 
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
@@ -52,7 +55,10 @@ export class CreateDealOfferPage implements OnInit {
       equityShareOffer: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       termCondition: ['', [Validators.required]]
     });
-    // TODO get and display basic project info
+
+    this.route.data.subscribe(data => {
+      this.projectInfo = data['projectOverview'];
+    });
   }
 
   onSubmit(): void {

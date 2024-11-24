@@ -39,14 +39,6 @@ export class ProjectService {
     return this.http.get<TeamMemberModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/members`))
   }
 
-  inviteMembers(projectId: string, users: UserInviteModel[]): Observable<any> {
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/invite`),
-      users,
-      { responseType: 'text' as 'json' }
-    )
-  }
-
   createProject(projectForm: FormData): Observable<any> {
     return this.http.post(this.applicationConfigService.getEndpointFor('/api/projects'), projectForm)
   }

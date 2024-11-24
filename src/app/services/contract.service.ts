@@ -111,4 +111,19 @@ export class ContractService {
       null
     );
   }
+
+  expireContract(id: string, projectId: string): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/expiration`),
+      null,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
+  deleteContract(id: string, projectId: string): Observable<any> {
+    return this.http.delete(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}`),
+      { responseType: 'text' as 'json' }
+    );
+  }
 }

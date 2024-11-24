@@ -186,7 +186,10 @@ export class InvestmentContractPage implements OnInit {
   }
 
   save() {
-    this.createOrUpdateContract().subscribe(response => this.contractId = response.id);
+    this.createOrUpdateContract().subscribe(response => {
+      this.contractId = response.id
+      this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
+    });
   }
 
   saveAndSend() {
@@ -195,6 +198,7 @@ export class InvestmentContractPage implements OnInit {
     }
     this.createOrUpdateContract()
       .subscribe(response => {
+        this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
         this.contractId = response.id;
         this.contractService
           .sendContract(this.contractId!, this.project.id)
@@ -204,7 +208,10 @@ export class InvestmentContractPage implements OnInit {
               return throwError(() => new Error(error.error));
             })
           )
-          .subscribe(response => this.router.navigate(['projects', this.project.id, 'contracts']))
+          .subscribe(response => {
+            this.contractId = response.id
+            this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
+          })
       })
   }
 

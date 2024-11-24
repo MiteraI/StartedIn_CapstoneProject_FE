@@ -69,6 +69,10 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'invite/:projectId/:role',
+    loadComponent: () => import('./pages/project-invite-page/project-invite-page.component').then((m) => m.ProjectInvitePage),
+  },
+  {
     path: 'projects/:id',
     loadComponent: () => import('./pages/project-details/project-details.page').then((m) => m.ProjectDetailsPage),
     canActivate: [AuthenticatedGuard],
@@ -142,33 +146,33 @@ export const routes: Routes = [
       {
         path: 'investor-disbursements',
         canActivate: [InvestorGuard],
-        loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then( m => m.InvestorDisbursementListPage),
+        loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then((m) => m.InvestorDisbursementListPage),
       },
       {
         path: 'equity',
-        loadComponent: () => import('./pages/share-equities/share-equities.page').then( m => m.ShareEquitiesPage)
+        loadComponent: () => import('./pages/share-equities/share-equities.page').then((m) => m.ShareEquitiesPage),
       },
       {
         path: 'transactions',
-        loadComponent: () => import('./pages/transaction-pages/transactions/transactions.page').then( m => m.TransactionsPage)
+        loadComponent: () => import('./pages/transaction-pages/transactions/transactions.page').then((m) => m.TransactionsPage),
       },
       {
         path: 'transactions/:transactionId',
         resolve: { transaction: TransactionDataResolver },
-        loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then( m => m.TransactionDetailsPage)
+        loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then((m) => m.TransactionDetailsPage),
       },
       {
         path: 'create-transaction',
-        loadComponent: () => import('./pages/transaction-pages/create-transaction/create-transaction.page').then( m => m.CreateTransactionPage)
+        loadComponent: () => import('./pages/transaction-pages/create-transaction/create-transaction.page').then((m) => m.CreateTransactionPage),
       },
       {
         path: 'dashboard',
-        loadComponent: () => import('./pages/dashboard/dashboard.page').then( m => m.DashboardPage)
+        loadComponent: () => import('./pages/dashboard/dashboard.page').then((m) => m.DashboardPage),
       },
       {
         path: 'payos',
         canActivate: [UserGuard],
-        loadComponent: () => import('./pages/payment-pages/payos-setup/payos-setup.page').then( m => m.PayosSetupPage)
+        loadComponent: () => import('./pages/payment-pages/payos-setup/payos-setup.page').then((m) => m.PayosSetupPage),
       },
       {
         path: '',
@@ -177,12 +181,21 @@ export const routes: Routes = [
       },
       {
         path: 'assets',
-        loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then( m => m.AssetListPage)
+        loadComponent: () => import('./pages/asset-pages/asset-list/asset-list.page').then((m) => m.AssetListPage),
       },
       {
         path: 'buy-assets',
-        loadComponent: () => import('./pages/asset-pages/buy-assets/buy-assets.page').then( m => m.BuyAssetsPage)
+        loadComponent: () => import('./pages/asset-pages/buy-assets/buy-assets.page').then((m) => m.BuyAssetsPage),
       },
+      {
+        path: 'investment-call',
+        canActivate: [UserGuard],
+        loadComponent: () => import('./pages/investment-call-page/investment-call-page.page').then((m) => m.InvestmentCallPagePage),
+      },
+      {
+        path: 'recruitment-post',
+        loadComponent: () => import('./components/recruitment-page/recruitment-view/recruitment-view.component').then((m) => m.RecruitmentViewComponent),
+      }
     ],
   },
   {
@@ -198,6 +211,7 @@ export const routes: Routes = [
   {
     path: 'projects/:projectId/create-deal',
     canActivate: [InvestorGuard],
+    resolve: { projectOverview: ProjectOverviewDataResolver },
     loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
   },
   {
