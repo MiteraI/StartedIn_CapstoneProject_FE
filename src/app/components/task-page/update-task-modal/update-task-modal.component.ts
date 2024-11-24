@@ -142,7 +142,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -165,7 +165,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -196,7 +196,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -221,7 +221,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -240,7 +240,7 @@ export class UpdateTaskModalComponent implements OnInit {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+                this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
             } else {
             }
           },
@@ -260,7 +260,7 @@ export class UpdateTaskModalComponent implements OnInit {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+                this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
             } else {
             }
           },
@@ -284,7 +284,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -323,7 +323,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -339,7 +339,7 @@ export class UpdateTaskModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-          this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
         }
       },
@@ -377,7 +377,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
           this.isFetchTaskDetailsLoading = false
@@ -394,7 +394,7 @@ export class UpdateTaskModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-          this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
         }
       },

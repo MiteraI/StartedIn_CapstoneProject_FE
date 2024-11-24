@@ -15,11 +15,11 @@ import { CreateMilestoneModalComponent } from '../create-milestone-modal/create-
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { HttpErrorResponse } from '@angular/common/http'
 import { MilestoneService } from 'src/app/services/milestone.service'
-import { MilestoneFilterComponent } from "../milestone-filter/milestone-filter.component";
+import { MilestoneFilterComponent } from '../milestone-filter/milestone-filter.component'
 
 interface MilestoneFilterOptions {
-  title?: string;
-  phaseId?: string;
+  title?: string
+  phaseId?: string
 }
 
 @Component({
@@ -33,8 +33,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
   private destroy$ = new Subject<void>()
   projectId = ''
-  filter: MilestoneFilterOptions = {};
-  @ViewChild(MilestoneFilterComponent) filterComponent!: MilestoneFilterComponent;
+  filter: MilestoneFilterOptions = {}
+  @ViewChild(MilestoneFilterComponent) filterComponent!: MilestoneFilterComponent
   milestoneList: Milestone[] = []
   size: number = 12
   page: number = 1
@@ -68,12 +68,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
 
   private fetchMilestones(isDesktop: boolean) {
     this.isFetchAllMilestonesLoading = true
-    this.milestoneService.getMilestones(
-      this.projectId,
-      this.page,
-      this.size,
-      this.filter.title,
-      this.filter.phaseId)
+    this.milestoneService
+      .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -90,7 +86,7 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -137,24 +133,24 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   get filterData() {
     return {
       ...this.filter,
-      projectId: this.projectId
-    };
+      projectId: this.projectId,
+    }
   }
 
   onFilterApplied(filterResult: any) {
-    this.filter = {...filterResult};
+    this.filter = { ...filterResult }
     this.fetchMilestones(this.isDesktopView)
   }
 
   onFilterMenuOpened() {
-    this.filterComponent.updateForm(this.filter);
+    this.filterComponent.updateForm(this.filter)
   }
 
   onSearch(searchText: string) {
     this.filter = {
       ...this.filter,
-      title: searchText
-    };
-    this.fetchMilestones(this.isDesktopView);
+      title: searchText,
+    }
+    this.fetchMilestones(this.isDesktopView)
   }
 }
