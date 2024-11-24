@@ -1,4 +1,4 @@
-import { Milestone } from "../milestone/milestone.model"
+import { Phase } from '../phase/phase.model'
 
 export type ProjectCharter = {
   id: string
@@ -10,5 +10,5 @@ export type ProjectCharter = {
   constraints: string
   assumptions: string
   deliverables: string
-  milestones: Milestone[]
+  phases: Phase[]
 }
