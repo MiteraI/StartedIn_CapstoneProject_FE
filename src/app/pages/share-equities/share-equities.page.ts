@@ -106,7 +106,13 @@ export class ShareEquitiesPage implements OnInit {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'bottom',
+            labels: {
+              padding: 20,  // Padding between the legend and chart
+              font: {
+                size: 14  // Adjust the font size of the legend labels
+              }
+            }
           }
         }
       }

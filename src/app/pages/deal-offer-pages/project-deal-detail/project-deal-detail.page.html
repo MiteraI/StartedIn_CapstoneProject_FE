@@ -1,56 +1,71 @@
 <app-title-bar viewName="Chi tiết thỏa thuận"></app-title-bar>
-<ion-card class="max-w-3xl mx-auto my-4">
-  <ion-card-header>
-    <div class="flex justify-between items-center">
-      <div class="text-2xl font-medium text-black">Chi tiết thỏa thuận</div>
-      <div>
-        <span [ngClass]="{
-          'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
-          'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
-          'text-red-500': deal.dealStatus === dealStatuses.REJECTED
-        }">
-          ● {{ statusLabels[deal.dealStatus!] }}
-        </span>
-      </div>
-    </div>
-  </ion-card-header>
 
-  <ion-card-content class="space-y-6">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div>
-        <div class="text-gray-500 text-sm">Nhà đầu tư</div>
-        <div class="font-medium text-black">{{ deal.investorName }}</div>
-      </div>
-
-      <div>
-        <div class="text-gray-500 text-sm">Số tiền đầu tư</div>
-        <div class="font-medium text-black">{{ deal.amount | vndCurrency }}</div>
-      </div>
-
-      <div>
-        <div class="text-gray-500 text-sm">Tỉ lệ cổ phần</div>
-        <div class="font-medium text-black">{{ deal.equityShareOffer }}%</div>
+<div class="max-w-5xl mx-auto my-12 space-y-8">
+  <!-- Card Content -->
+  <div class="rounded-lg shadow-lg border border-gray-300">
+    <!-- Header -->
+    <div class="py-6 px-8 border-b border-gray-300">
+      <div class="flex justify-between items-center">
+        <div class="text-3xl font-bold text-gray-800">Chi tiết thỏa thuận</div>
+        <div>
+          <span [ngClass]="{
+            'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
+            'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
+            'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+          }" class="text-lg font-semibold">
+            ● {{ statusLabels[deal.dealStatus!] }}
+          </span>
+        </div>
       </div>
     </div>
 
-    <div>
-      <div class="text-gray-500 text-sm">Điều khoản</div>
-      <div class="mt-1 whitespace-pre-wrap text-black">{{ deal.termCondition }}</div>
-    </div>
+    <!-- Card Body -->
+    <div class="py-8 px-10 space-y-8">
+      <!-- Details Section -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
+        <div>
+          <div class="text-gray-500 text-sm uppercase">Nhà đầu tư</div>
+          <div class="font-medium text-gray-900 text-lg">{{ deal.investorName }}</div>
+        </div>
 
-    <div *ngIf="deal?.dealStatus === dealStatuses.WAITING" class="flex justify-end space-x-4">
-      <button (click)="rejectDeal()" class="text-red-500 hover:text-red-700 px-4 py-2 rounded-md border border-red-500 hover:border-red-700">
-        Từ chối
-      </button>
-      <button (click)="acceptDeal()" class="text-white bg-green-500 hover:bg-green-700 px-4 py-2 rounded-md">
-        Chấp nhận
-      </button>
-    </div>
+        <div>
+          <div class="text-gray-500 text-sm uppercase">Số tiền đầu tư</div>
+          <div class="font-medium text-gray-900 text-lg">{{ deal.amount | vndCurrency }}</div>
+        </div>
 
-    <div *ngIf="deal?.dealStatus === dealStatuses.ACCEPTED" class="flex justify-end">
-      <button (click)="navigateToCreateContract()" class="text-white bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-md">
-        Tạo hợp đồng
-      </button>
+        <div>
+          <div class="text-gray-500 text-sm uppercase">Tỉ lệ cổ phần</div>
+          <div class="font-medium text-gray-900 text-lg">{{ deal.equityShareOffer }}%</div>
+        </div>
+      </div>
+
+      <!-- Terms and Conditions Section -->
+      <div>
+        <div class="text-gray-500 text-sm uppercase">Điều khoản</div>
+        <div class="mt-4 whitespace-pre-wrap text-gray-800 text-base">{{ deal.termCondition }}</div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div *ngIf="deal?.dealStatus === dealStatuses.WAITING" class="flex justify-end space-x-4">
+        <button 
+          (click)="rejectDeal()" 
+          class="text-red-500 hover:text-red-700 px-6 py-3 rounded-md border border-red-500 hover:border-red-700">
+          Từ chối
+        </button>
+        <button 
+          (click)="acceptDeal()" 
+          class="text-white bg-green-500 hover:bg-green-700 px-6 py-3 rounded-md shadow-md">
+          Chấp nhận
+        </button>
+      </div>
+
+      <div *ngIf="deal?.dealStatus === dealStatuses.ACCEPTED" class="flex justify-end">
+        <button 
+          (click)="navigateToCreateContract()" 
+          class="text-white bg-blue-500 hover:bg-blue-700 px-6 py-3 rounded-md shadow-md">
+          Tạo hợp đồng
+        </button>
+      </div>
     </div>
-  </ion-card-content>
-</ion-card>
+  </div>
+</div>

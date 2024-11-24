@@ -8,10 +8,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
+import { Subject, takeUntil } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { PhaseService } from 'src/app/services/phase.service'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { CreateMilestone } from 'src/app/shared/models/milestone/milestone-create.model'
+import { Phase } from 'src/app/shared/models/phase/phase.model'
 
 interface IModalData {
   projectId: string
@@ -22,26 +25,50 @@ interface IModalData {
   templateUrl: './create-milestone-modal.component.html',
   styleUrls: ['./create-milestone-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule],
+  imports: [
+    NzFormModule,
+    NzInputModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzIconModule],
 })
 export class CreateMilestoneModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   milestoneForm: FormGroup
+  private destroy$ = new Subject<void>()
 
-  phaseNames: { label: string; value: number }[] = [
-    { value: 0, label: PhaseStateLabels[1] },
-    { value: 1, label: PhaseStateLabels[2] },
-    { value: 2, label: PhaseStateLabels[3] },
-    { value: 3, label: PhaseStateLabels[4] },
-  ]
-
-  constructor(private fb: FormBuilder, private milestoneService: MilestoneService, private nzModalRef: NzModalRef, private antdNoti: AntdNotificationService) {
+  constructor(
+    private fb: FormBuilder,
+    private milestoneService: MilestoneService,
+    private nzModalRef: NzModalRef,
+    private phaseService: PhaseService,
+    private antdNoti: AntdNotificationService)
+    {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
+      phase:[null],
     })
+  }
+
+  phases: Phase[] = []
+  isPhasesFetched: boolean = false
+  isPhasesFetchLoading = false
+
+  handleOpenPhasesSelect() {
+    if (!this.isPhasesFetched) {
+      // Fetch milestones
+      this.isPhasesFetched = true
+      this.fetchPhases()
+    }
+  }
+
+  loadMorePhases() {
+    this.fetchPhases()
   }
 
   onSubmit() {
@@ -52,6 +79,7 @@ export class CreateMilestoneModalComponent implements OnInit {
         description: this.milestoneForm.value.description,
         startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
         endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
+        phaseId: this.milestoneForm.value.phase
       }
 
       //If start date is after end date, show error notification
@@ -78,6 +106,28 @@ export class CreateMilestoneModalComponent implements OnInit {
         },
       })
     }
+  }
+
+  private fetchPhases() {
+    this.isPhasesFetchLoading = true
+    this.phaseService
+      .getPhases(this.nzModalData.projectId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (val) => {
+          this.phases = [...this.phases, ...val]
+          this.isPhasesFetchLoading = false
+        },
+        error: (error: HttpErrorResponse) => {
+          this.isPhasesFetchLoading = false
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Server Error', 'An error occurred on the server. Please try again later.')
+          } else {
+          }
+        },
+      })
   }
 
   ngOnInit() {}

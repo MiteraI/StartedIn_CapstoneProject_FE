@@ -53,7 +53,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'savings_icon', linkText: 'Chi tiêu' },
+    { linkName: 'transactions', iconName: 'savings_icon', linkText: 'Giao Dịch' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
     { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },

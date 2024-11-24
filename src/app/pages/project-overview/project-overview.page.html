@@ -3,62 +3,107 @@
     <p class="text-2xl font-bold">{{ projectOverview?.projectName }}</p>
   </div>
   <!-- Logo and gọi vốn -->
-  <div class="flex w-full mt-10">
-    <div class="w-2/3 h-1/2">
-      <img class="w-full h-[450px] object-fill" src="{{ projectOverview?.logoUrl }}" alt="project photo" />
+  <div class="flex flex-col lg:flex-row w-full mt-10 gap-10">
+    <!-- Project Logo -->
+    <div class="w-full lg:w-2/3">
+      <div class="aspect-w-16 aspect-h-9 h-full flex items-center justify-center">
+        <img
+          class="object-contain rounded-lg"
+          src="{{ projectOverview?.logoUrl }}"
+          alt="project photo"
+        />
+      </div>
     </div>
-    <div class="ml-10 w-1/3">
-      <div class="h-2 bg-green-600 w-full"></div>
-      <div class="mt-5">
-        <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.targetCall | number }}</strong> vnd</p>
-        <p class="text-base text-gray-500">
-          Cần thêm
-          <strong>{{ remainingAmount | number }}</strong>
-          vnd
-        </p>
-      </div>
-      <div class="mt-5 flex justify-between">
-        <div>
-          <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.equityShareCall | number }}</strong>%</p>
-          <p class="text-base text-gray-500">cổ phần</p>
-        </div>
-        <div>
-          <p class="text-2xl text-green-600"><strong>{{ projectOverview?.investmentCallResponseDto?.remainAvailableEquityShare | number }}</strong>%</p>
-          <p class="text-base text-gray-500">cổ phần còn lại</p>
-        </div>
-      </div>
-      <div class="mt-5">
-        <p class="text-2xl text-gray-500"><strong>{{ projectOverview?.investmentCallResponseDto?.totalInvestor }}</strong></p>
-        <p class="text-base text-gray-500">Nhà đầu tư</p>
-      </div>
-      <div class="mt-5 flex justify-between">
-        <div>
-          <p class="text-2xl text-gray-500"><strong>{{ projectOverview?.investmentCallResponseDto?.startDate | date : 'dd/MM/yyyy' }}</strong></p>
-          <p class="text-base text-gray-500">Ngày bắt đầu</p>
-        </div>
-        <div>
-          <p class="text-2xl text-gray-500">
-            <strong
-              >{{ projectOverview?.investmentCallResponseDto?.endDate ? (projectOverview?.investmentCallResponseDto?.endDate | date : 'dd/MM/yyyy') : 'Chưa xác định' }}</strong
-            >
+
+    <!-- Investment Call Information -->
+    <div class="w-full lg:w-1/3">
+      <div
+        *ngIf="projectOverview?.investmentCallResponseDto; else noCall"
+        class="p-6 rounded-lg flex flex-col h-full"
+      >
+        <!-- Progress Bar -->
+        <div class="h-2 bg-green-600 rounded-full w-full"></div>
+
+        <!-- Target and Remaining Amount -->
+        <div class="mt-5">
+          <p class="text-3xl font-bold text-green-600">
+            {{ projectOverview?.investmentCallResponseDto?.targetCall | number }} VND
           </p>
-          <p class="text-base text-gray-500">Ngày kết thúc</p>
+          <p class="text-base text-gray-600 mt-2">
+            Cần thêm 
+            <strong class="text-lg text-red-500">{{ remainingAmount | number }}</strong> VND
+          </p>
+        </div>
+
+        <!-- Equity Share Info -->
+        <div class="mt-5 flex justify-between">
+          <div>
+            <p class="text-2xl font-bold text-green-600">{{ projectOverview?.investmentCallResponseDto?.equityShareCall | number }}%</p>
+            <p class="text-sm text-gray-600">Cổ phần cho đợt gọi vốn</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-green-600">{{ projectOverview?.investmentCallResponseDto?.remainAvailableEquityShare | number }}%</p>
+            <p class="text-sm text-gray-600">Cổ phần còn lại có thể đầu tư</p>
+          </div>
+        </div>
+
+        <!-- Total Investors -->
+        <div class="mt-5">
+          <p class="text-2xl font-bold text-gray-600">{{ projectOverview?.investmentCallResponseDto?.totalInvestor }}</p>
+          <p class="text-sm text-gray-600">Nhà đầu tư tham gia trong đợt này</p>
+        </div>
+
+        <!-- Start and End Date -->
+        <div class="mt-5 flex justify-between">
+          <div>
+            <p class="text-lg font-semibold text-gray-600">{{ projectOverview?.investmentCallResponseDto?.startDate | date : 'dd/MM/yyyy' }}</p>
+            <p class="text-sm text-gray-500">Ngày bắt đầu</p>
+          </div>
+          <div>
+            <p class="text-lg font-semibold text-gray-600">
+              {{ projectOverview?.investmentCallResponseDto?.endDate ? (projectOverview?.investmentCallResponseDto?.endDate | date : 'dd/MM/yyyy') : 'Chưa xác định' }}
+            </p>
+            <p class="text-sm text-gray-500">Ngày kết thúc</p>
+          </div>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          <!-- Show "Đầu tư ngay" button when the status is 2 (open) -->
+          <button 
+            *ngIf="projectOverview?.investmentCallResponseDto?.status === 1; else closeCall"
+            class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700"
+            [routerLink]="['/projects', this.projectOverview!.id, 'create-deal']"
+          >
+            Đầu tư ngay
+          </button>
+        
+          <!-- Template for when the investment call is closed -->
+          <ng-template #closeCall>
+            <!-- Check if the status is closed, show the closed message -->
+            <div class="flex items-center justify-center h-full rounded-lg">
+              <p class="text-2xl font-semibold text-red-500">Đợt đầu tư đã đóng</p>
+            </div>
+          </ng-template>
+        
+          <!-- "Yêu thích" button always displayed -->
+          <button 
+            class="w-full text-black bg-slate-50 border-2 border-solid border-slate-300 py-3 rounded-lg transition duration-75 hover:border-slate-500"
+          >
+            Yêu thích
+          </button>
         </div>
       </div>
-      <div class="mt-5">
-        <button
-          class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700"
-          [routerLink]="['/projects', this.projectOverview!.id, 'create-deal']"
-        >
-          Đầu tư ngay
-        </button>
-      </div>
-      <div class="mt-5">
-        <button class="w-1/2 text-black bg-slate-50 border-2 border-solid border-slate-300 py-3 rounded-lg transition duration-75 hover:border-slate-500">Yêu thích</button>
-      </div>
     </div>
+
+    <!-- No Investment Call -->
+    <ng-template #noCall>
+      <div class="flex items-center justify-center h-full rounded-lg">
+        <p class="text-2xl font-semibold text-gray-500">Không có lời gọi vốn</p>
+      </div>
+    </ng-template>
   </div>
 </div>
+
 <div class="bg-orange-200 py-3">
   <div class="flex justify-around text-lg items-center">
     <div class="w-72">
@@ -87,17 +132,8 @@
         Điều lệ
       </button>
     </div>
-    <div class="flex gap-4">
-      <button
-        class="px-6 py-2 bg-green-600 text-white rounded-lg transition duration-75 hover:bg-green-700"
-        [routerLink]="['/projects', this.projectOverview!.id, 'create-deal']"
-      >
-        Đầu tư ngay
-      </button>
-      <button class="px-6 py-2 text-black">Yêu thích</button>
-    </div>
   </div>
 </div>
-<div class="mx-[10%] w-full max-w-4xl">
+<div class="justify-center mx-auto w-full max-w-4xl min-h-screen">
   <router-outlet></router-outlet>
 </div>

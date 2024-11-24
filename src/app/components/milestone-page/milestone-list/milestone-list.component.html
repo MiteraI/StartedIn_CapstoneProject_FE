@@ -1,3 +1,14 @@
-<p>
-  milestone-list works!
-</p>
+@if (isFetchAllTaskLoading) {
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  } @else { @if (milestoneList.length !== 0) { @for (milestone of milestoneList; track milestone.id) {
+  <app-milestone-list-item
+    [milestone]="milestone"
+    (click)="openUpdateMilestoneModal(milestone.id)"
+  ></app-milestone-list-item>
+  } } @else {
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+    <span>Không có cột mốc nào</span>
+  </div>
+  } }
