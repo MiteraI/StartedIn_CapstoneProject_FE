@@ -1,5 +1,5 @@
 <app-title-bar viewName="Cổ phần"></app-title-bar>
-<div class="max-w-7xl mx-auto p-4">
+<div class="min-h-[70vh] max-w-7xl mx-auto p-4">
   <!-- Flex container to arrange Chart and List side by side -->
   <div class="flex flex-wrap lg:flex-nowrap space-x-6">
     <!-- Chart Section (Left) -->
@@ -12,15 +12,15 @@
           [nzAllowClear]="false"
         ></nz-date-picker>
       </div>
-      <div class="aspect-square max-w-md mx-auto">
+      <div class="aspect-square max-w-md mx-auto pt-20">
         <canvas id="equityChart"></canvas>
       </div>
     </div>
 
     <!-- List Section (Right) -->
-    <div class="bg-white rounded-lg shadow-sm p-6 w-full lg:w-1/2">
+    <div class="min-h-[70vh] bg-white rounded-lg shadow-sm p-6 w-full lg:w-1/2">
       <div class="text-xl font-semibold mb-4">Danh sách cổ đông</div>
-      <div class="space-y-4">
+      <div class="space-y-4 overflow-y-auto pt-6" style="max-height: 1000px; padding-right: 20px;">
         <div *ngFor="let equity of equities" class="border-b pb-4">
           <div class="flex justify-between items-center">
             <div>
