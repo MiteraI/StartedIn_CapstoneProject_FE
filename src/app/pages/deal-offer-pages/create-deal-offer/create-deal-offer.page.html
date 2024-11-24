@@ -2,59 +2,56 @@
   [formGroup]="dealOfferForm"
   (ngSubmit)="onSubmit()"
   class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
-  <ion-card class="p-4">
-    <ion-card-header>
-      <div class="text-2xl font-medium mb-4">Tạo thỏa thuận đầu tư</div>
-    </ion-card-header>
-    <ion-card-content>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Số tiền</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền!">
-          <nz-input-number
-            class="w-full"
-            formControlName="amount"
-            [nzMin]="0"
-            [nzStep]="1000"
-            nzPlaceHolder="Nhập số tiền"
-            [nzFormatter]="vndFormatter"
-            [nzParser]="vndParser"
-          ></nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
+  <div class="p-4 md:p-8 bg-white rounded border">
+    <div class="text-2xl font-medium mb-6">Tạo thỏa thuận đầu tư</div>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
-          <nz-input-number
-            class="w-full"
-            formControlName="equityShareOffer"
-            [nzMin]="0"
-            [nzMax]="100"
-            [nzStep]="0.1"
-            nzPlaceHolder="Nhập tỉ lệ cổ phần"
-            [nzFormatter]="percentFormatter"
-            [nzParser]="percentParser"
-          ></nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Số tiền</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập số tiền!">
+        <nz-input-number
+          class="w-full"
+          formControlName="amount"
+          [nzMin]="0"
+          [nzStep]="1000"
+          nzPlaceHolder="Nhập số tiền"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="24">Điều khoản</nz-form-label>
-        <nz-form-control [nzSpan]="24" nzErrorTip="Bạn chưa nhập điều khoản!">
-          <textarea
-            nz-input
-            formControlName="termCondition"
-            placeholder="Nhập điều khoản"
-            [nzAutosize]="{ minRows: 8, maxRows: 12 }"
-          ></textarea>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
+        <nz-input-number
+          class="w-full"
+          formControlName="equityShareOffer"
+          [nzMin]="0"
+          [nzMax]="100"
+          [nzStep]="0.1"
+          nzPlaceHolder="Nhập tỉ lệ cổ phần"
+          [nzFormatter]="percentFormatter"
+          [nzParser]="percentParser"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
 
-      <div class="flex justify-end mt-6 space-x-4">
-        <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid">
-          Tạo
-        </button>
-      </div>
-    </ion-card-content>
-  </ion-card>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24">Điều khoản</nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Bạn chưa nhập điều khoản!">
+        <textarea
+          nz-input
+          formControlName="termCondition"
+          placeholder="Nhập điều khoản"
+          [nzAutosize]="{ minRows: 8, maxRows: 12 }"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="flex justify-end mt-6 space-x-4">
+      <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid">
+        Tạo
+      </button>
+    </div>
+  </div>
 </form>

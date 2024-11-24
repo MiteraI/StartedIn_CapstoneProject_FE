@@ -1,122 +1,118 @@
 <app-title-bar viewName="Chi tiết hợp đồng"></app-title-bar>
 
 <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
-  <ion-card class="md:p-4">
-    <ion-card-header>
-      <div class="font-bold text-3xl text-black">Chi tiết hợp đồng</div>
-    </ion-card-header>
+  <div class="p-4 md:p-8 bg-white rounded border">
+    <div class="font-bold text-3xl text-black mb-6">Chi tiết hợp đồng</div>
 
-    <ion-card-content>
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Mã số hợp đồng</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
-          <input nz-input formControlName="contractIdNumber" placeholder="Nhập mã số hợp đồng" />
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Mã số hợp đồng</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
+        <input nz-input formControlName="contractIdNumber" placeholder="Nhập mã số hợp đồng" />
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
-          <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
+        <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
-          <nz-input-number
-            formControlName="percentage"
-            [nzDisabled]="isFromDeal || isReadOnly"
-            [nzMin]="0"
-            [nzMax]="project.remainingPercentOfShares"
-            [nzStep]="0.01"
-            nzPlaceHolder="Nhập tỉ lệ cổ phần"
-            [nzFormatter]="percentFormatter"
-            [nzParser]="percentParser"
-            class="w-full">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
+        <nz-input-number
+          formControlName="percentage"
+          [nzDisabled]="isFromDeal || isReadOnly"
+          [nzMin]="0"
+          [nzMax]="project.remainingPercentOfShares"
+          [nzStep]="0.01"
+          nzPlaceHolder="Nhập tỉ lệ cổ phần"
+          [nzFormatter]="percentFormatter"
+          [nzParser]="percentParser"
+          class="w-full">
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Giá mua</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
-          <nz-input-number
-            formControlName="buyPrice"
-            [nzDisabled]="isFromDeal || isReadOnly"
-            [nzMin]="disbursementTotalAmount"
-            [nzStep]="1000"
-            nzPlaceHolder="Nhập giá mua"
-            [nzFormatter]="vndFormatter"
-            [nzParser]="vndParser"
-            class="w-full">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Giá mua</nz-form-label>
+      <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
+        <nz-input-number
+          formControlName="buyPrice"
+          [nzDisabled]="isFromDeal || isReadOnly"
+          [nzMin]="disbursementTotalAmount"
+          [nzStep]="1000"
+          nzPlaceHolder="Nhập giá mua"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          class="w-full">
+        </nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
-        </nz-form-control>
-      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
+      <nz-form-control [nzSpan]="18">
+        <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
+      </nz-form-control>
+    </nz-form-item>
 
-      <div class="mt-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
-          <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="openDisbursementModal()">
-            <i nz-icon nzType="plus"></i>
-          </button>
-        </div>
+    <div class="mt-6">
+      <div class="flex items-center justify-between mb-4">
+        <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
+        <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="openDisbursementModal()">
+          <i nz-icon nzType="plus"></i>
+        </button>
+      </div>
 
-        <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
-          <ng-template #disbursementItem let-item let-index="index">
-            <nz-list-item>
-              <div class="flex w-full items-center justify-between">
-                <div class="flex flex-col">
-                  <span class="font-medium">{{ item.title }}</span>
-                  <div class="text-sm text-gray-500">
-                    <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
-                    <span class="mx-2 hidden md:inline">•</span>
-                    <div class="md:inline">
-                      Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
-                    </div>
+      <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
+        <ng-template #disbursementItem let-item let-index="index">
+          <nz-list-item>
+            <div class="flex w-full items-center justify-between">
+              <div class="flex flex-col">
+                <span class="font-medium">{{ item.title }}</span>
+                <div class="text-sm text-gray-500">
+                  <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
+                  <span class="mx-2 hidden md:inline">•</span>
+                  <div class="md:inline">
+                    Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
                   </div>
                 </div>
-                <div class="flex gap-2">
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
-                    <i nz-icon nzType="edit"></i>
-                  </button>
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
-                    <i nz-icon nzType="delete"></i>
-                  </button>
-                </div>
               </div>
-            </nz-list-item>
-          </ng-template>
-        </nz-list>
-      </div>
+              <div class="flex gap-2">
+                <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
+                  <i nz-icon nzType="edit"></i>
+                </button>
+                <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
+                  <i nz-icon nzType="delete"></i>
+                </button>
+              </div>
+            </div>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </div>
 
-      <div *ngIf="!isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="default" (click)="save()">
-          Lưu
-        </button>
-        <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
-          Bản xem trước
-        </button>
-        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()">
-          Lưu & Gửi
-        </button>
-      </div>
+    <div *ngIf="!isReadOnly" class="mt-6 text-right">
+      <button nz-button nzType="default" (click)="save()">
+        Lưu
+      </button>
+      <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
+        Bản xem trước
+      </button>
+      <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()">
+        Lưu & Gửi
+      </button>
+    </div>
 
-      <div *ngIf="isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="download()">
-          Tải xuống
-        </button>
-        <button nz-button nzType="primary" (click)="navigateBack()">
-          Quay lại
-        </button>
-      </div>
-    </ion-card-content>
-  </ion-card>
+    <div *ngIf="isReadOnly" class="mt-6 text-right">
+      <button nz-button nzType="link" (click)="download()">
+        Tải xuống
+      </button>
+      <button nz-button nzType="primary" (click)="navigateBack()">
+        Quay lại
+      </button>
+    </div>
+  </div>
 </form>
