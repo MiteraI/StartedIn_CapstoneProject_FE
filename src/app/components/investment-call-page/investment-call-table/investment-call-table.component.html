@@ -1,0 +1,28 @@
+<nz-table #investmentCallTable nzSize="small" [nzFrontPagination]="false" [nzData]="listInvestmentCall" [nzLoading]="isFetchAllCallLoading">
+  <thead>
+    <tr>
+      <th>Mục Tiêu</th>
+      <th>Số Tiền Đã Gọi</th>
+      <th>Cổ Phần Cuộc Gọi</th>
+      <th>Cổ Phần Còn lại</th>
+      <th>Ngày Bắt Đầu</th>
+      <th>Ngày Kết Thúc</th>
+      <th>Trạng Thái</th>
+      <th>Tổng Số Nhà Đầu Tư</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of investmentCallTable.data; track data.id) {
+    <tr>
+      <td class="text-green-500">{{ data.targetCall | number }}</td>
+      <td class="text-green-500">{{ data.amountRaised | number }}</td>
+      <td>{{ data.equityShareCall / 100 | percent }}</td>
+      <td>{{ data.remainAvailableEquityShare / 100 | percent }}</td>
+      <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, Y") }}</td>
+      <td>{{ data.endDate === null ? 'Không Có Ngày kết thúc' : (data.endDate | date : "d 'tháng' M, Y") }}</td>
+      <td [ngClass]="{ 'text-red-500': data.status === 2, 'text-green-500': data.status === 1 }">{{ getStatusLabel(data.status) }}</td>
+      <td>{{ data.totalInvestor }}</td>
+    </tr>
+    }
+  </tbody>
+</nz-table>
