@@ -90,17 +90,17 @@ export class ContractListPage implements OnInit, OnDestroy {
         return;
       }
       this.projectId = map.get('id')!;
-      this.filterContracts();
+      this.roleService.role$.subscribe(role => {
+        this.isLeader = (role?.roleInTeam === TeamRole.LEADER);
+        this.filterContracts();
+      });
     });
     this.viewMode.isDesktopView$.subscribe(isDesktop => {
       this.isDesktopView = isDesktop;
     });
     this.scrollService.scroll$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.loadMore();
-      });
-    this.roleService.role$.subscribe(role => this.isLeader = (role?.roleInTeam === TeamRole.LEADER));
+      .subscribe(() => this.loadMore());
   }
 
   // filter stuff
@@ -229,7 +229,10 @@ export class ContractListPage implements OnInit, OnDestroy {
           return throwError(() => new Error(error.error));
         })
       )
-      .subscribe(result => contract.contractStatus = this.contractStatuses.SENT);
+      .subscribe(result => {
+        contract.contractStatus = this.contractStatuses.SENT;
+        this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
+      });
   }
 
   // delete stuff
@@ -239,17 +242,52 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   deleteSelected() {
     this.selectedContracts.forEach(c => this.deleteContract(c));
-    this.groupContracts();
   }
 
   deleteSingle(contract: ContractListItemModel) {
     this.deleteContract(contract);
-    this.groupContracts();
   }
 
   deleteContract(contract: ContractListItemModel) {
-    // TODO call be
-    this.contracts = this.contracts.filter(c => c.id !== contract.id);
+    this.contractService
+      .deleteContract(contract.id, this.projectId)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Không thể xóa hợp đồng!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(() => {
+        this.contracts = this.contracts.filter(c => c.id !== contract.id);
+        this.groupContracts();
+        this.notification.success("Thành công", "Xóa hợp đồng thành công!", { nzDuration: 2000 });
+      });
+  }
+
+  // expire stuff
+  get canExpireSelected() {
+    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.COMPLETED);
+  }
+
+  expireSelected() {
+    this.selectedContracts.forEach(c => this.expireContract(c));
+  }
+
+  expireContract(contract: ContractListItemModel) {
+    this.contractService
+      .expireContract(contract.id, this.projectId)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Không thể kết thúc hợp đồng!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(() => {
+        contract.contractStatus = this.contractStatuses.EXPIRED;
+        contract.lastUpdatedTime = new Date().toISOString();
+        this.groupContracts();
+        this.notification.success("Thành công", "Kết thúc hợp đồng thành công!", { nzDuration: 2000 });
+      });
   }
 
   // add stuff

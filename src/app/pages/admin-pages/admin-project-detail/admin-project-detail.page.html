@@ -1,0 +1,119 @@
+<div class="mx-4 md:mx-10 my-4 md:my-10">
+  <!-- Project Info Card -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Logo Section -->
+      <div class="lg:w-1/3">
+        <div class="aspect-w-16 aspect-h-9">
+          <img class="object-contain rounded-lg w-full h-full" [src]="project.logoUrl" [alt]="project.projectName" />
+        </div>
+      </div>
+
+      <!-- Project Details Section -->
+      <div class="lg:w-2/3 space-y-6">
+        <div class="flex items-center text-3xl font-bold text-gray-800">
+          {{ project.projectName }}
+          <!-- Project Status Badge -->
+          <span
+            class="ml-4 px-3 py-1.5 rounded-full text-sm inline-flex items-center"
+            [ngClass]="{
+              'bg-yellow-100 text-yellow-800': project.projectStatus === projectStatus.CONSTRUCTING,
+              'bg-green-100 text-green-800': project.projectStatus === projectStatus.ACTIVE,
+              'bg-red-100 text-red-800': project.projectStatus === projectStatus.CLOSED
+            }"
+          >
+            {{ statusLabels[project.projectStatus] }}
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <div class="text-gray-600 font-semibold">Trưởng nhóm</div>
+            <div class="text-xl">{{ project.leaderFullName }}</div>
+          </div>
+
+          <div>
+            <div class="text-gray-600 font-semibold">Cổ phần còn lại</div>
+            <div class="text-xl">{{ project.remainingPercentOfShares }}%</div>
+          </div>
+
+          <div>
+            <div class="text-gray-600 font-semibold">Ngày bắt đầu</div>
+            <div class="text-xl">{{ project.startDate | date:'dd/MM/yyyy' }}</div>
+          </div>
+
+          <div>
+            <div class="text-gray-600 font-semibold">Ngày kết thúc</div>
+            <div class="text-xl">
+              {{ project.endDate ? (project.endDate | date:'dd/MM/yyyy') : 'Chưa xác định' }}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-gray-600 font-semibold">Mô tả</div>
+          <div class="text-gray-800 mt-2">{{ project.description }}</div>
+        </div>
+
+        <div *ngIf="project?.projectStatus === projectStatus.CONSTRUCTING">
+          <button (click)="verifyProject()"
+            class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">
+            Xác nhận dự án
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Charter Section -->
+  <div class="mt-10 bg-white rounded-lg shadow-lg p-6">
+    <div class="text-2xl font-bold text-blue-600 mb-6">Điều lệ dự án</div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <div class="font-semibold text-gray-600">BUSINESS CASE</div>
+        <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+          {{ project.projectCharterResponseDto?.businessCase }}
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold text-gray-600">MỤC TIÊU</div>
+        <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+          {{ project.projectCharterResponseDto?.goal }}
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold text-gray-600">GIẢ ĐỊNH</div>
+        <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+          {{ project.projectCharterResponseDto?.assumptions }}
+        </div>
+      </div>
+
+      <div>
+        <div class="font-semibold text-gray-600">HẠN CHẾ</div>
+        <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+          {{ project.projectCharterResponseDto?.constraints }}
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <div class="font-semibold text-gray-600">SẢN PHẨM</div>
+        <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+          {{ project.projectCharterResponseDto?.deliverables }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contract Section -->
+  <div *ngIf="project?.newestInternalContractId" class="mt-10 bg-white rounded-lg shadow-lg p-6">
+    <div class="text-2xl font-bold text-blue-600 mb-6">Hợp đồng nội bộ</div>
+    <button (click)="downloadContract(project.newestInternalContractId!)"
+      class="flex items-center space-x-2 text-green-600 hover:text-green-800">
+      <mat-icon>file_download</mat-icon>
+      <span>Tải xuống hợp đồng</span>
+    </button>
+  </div>
+</div>
