@@ -69,6 +69,6 @@ export class AdminProjectDetailPage implements OnInit {
         return throwError(() => new Error(error.error));
       })
     )
-    .subscribe(url => window.open(url, '_blank'));
+    .subscribe(response => window.open(response.downLoadUrl, '_blank'));
   }
 }
