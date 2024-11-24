@@ -1,0 +1,89 @@
+<div class="p-4 max-w-7xl mx-auto max-h-[79vh] overflow-y-auto">
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table border">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left w-40"></th>
+        <th class="p-4 text-left">Dự án</th>
+        <th class="p-4 text-left">Mô tả</th>
+        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-left w-24"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let project of projects" class="border-b hover:bg-gray-50">
+        <td class="p-4">
+          <img [src]="project.logoUrl" [alt]="project.projectName" class="w-32 h-32 object-cover rounded-lg">
+        </td>
+        <td class="p-4">
+          <div class="font-medium">{{ project.projectName }}</div>
+          <div class="text-sm text-gray-500">{{ project.leaderFullName }}</div>
+        </td>
+        <td class="p-4">
+          <div>{{ project.description.length > 100 ? project.description.substring(0, 100) + '...' : project.description }}</div>
+        </td>
+        <td class="p-4">
+          <span
+            class="px-2 py-1 rounded-full text-sm"
+            [ngClass]="{
+              'bg-yellow-100 text-yellow-800': project.projectStatus === projectStatus.CONSTRUCTING,
+              'bg-green-100 text-green-800': project.projectStatus === projectStatus.ACTIVE,
+              'bg-red-100 text-red-800': project.projectStatus === projectStatus.CLOSED
+            }"
+          >
+            {{ statusLabels[project.projectStatus] }}
+          </span>
+        </td>
+        <td *ngIf="project.projectStatus === projectStatus.CONSTRUCTING" class="p-4">
+          <button (click)="verifyProject(project)" class="text-green-500 hover:text-green-700">
+            <mat-icon fontIcon="check_circle"></mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Desktop Pagination -->
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <div *ngFor="let project of projects" class="bg-white rounded-lg shadow">
+      <div class="p-4">
+        <div class="flex items-start">
+          <img [src]="project.logoUrl" [alt]="project.projectName" class="w-24 h-24 object-cover rounded-lg">
+          <div class="ml-4 flex-1">
+            <div class="font-medium">{{ project.projectName }}</div>
+            <div class="text-sm text-gray-500">{{ project.leaderFullName }}</div>
+            <div class="mt-2">
+              <span class="px-2 py-1 rounded-full text-sm bg-yellow-100 text-yellow-800">
+                Chờ xác nhận
+              </span>
+            </div>
+          </div>
+          <button (click)="verifyProject(project)" class="text-green-500 hover:text-green-700">
+            <mat-icon fontIcon="check_circle"></mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Loading Spinner -->
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các dự án!
+  </div>
+</div>

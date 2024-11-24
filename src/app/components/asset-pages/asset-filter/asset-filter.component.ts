@@ -34,7 +34,6 @@ import { VndCurrencyPipe } from "src/app/shared/pipes/vnd-currency.pipe";
     NzButtonModule,
     NzIconModule,
     NzAvatarModule,
-    InitialsOnlyPipe,
     NzInputNumberModule
   ]
 })

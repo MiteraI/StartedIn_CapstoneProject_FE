@@ -2,15 +2,15 @@ import { ResolveFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { catchError, first, of } from 'rxjs';
 import { ProjectModel } from '../models/project/project.model';
-import { ProjectService } from 'src/app/services/project.service';
+import { AdminService } from 'src/app/services/admin.service';
 
-export const ProjectDataResolver: ResolveFn<ProjectModel | null> = (route, state) => {
-  const projectService = inject(ProjectService);
-  const projectId = route.parent?.paramMap.get('id');
+export const AdminProjectDataResolver: ResolveFn<ProjectModel | null> = (route, state) => {
+  const adminService = inject(AdminService);
+  const projectId = route.paramMap.get('projectId');
   if (!projectId) {
     return of(null);
   }
-  return projectService
+  return adminService
     .getProject(projectId)
     .pipe(
       first(),
