@@ -72,10 +72,24 @@
         </nz-form-item>
 
         <nz-form-item>
+          <nz-form-label>Ngày Bắt Đầu</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker
+              formControlName="startDate"
+              [nzShowTime]="{ nzFormat: 'HH' }"
+              nzFormat="yyyy-MM-dd HH:00:00"
+              nzPlaceHolder="Chọn hạn chót"
+              (nzOnOk)="handleInfoChanged()"
+            >
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
           <nz-form-label>Hạn Chót</nz-form-label>
           <nz-form-control>
             <nz-date-picker
-              formControlName="deadline"
+              formControlName="endDate"
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
               nzPlaceHolder="Chọn hạn chót"
@@ -140,6 +154,7 @@
               <tr>
                 <th>Tên Tác Vụ</th>
                 <th>Trạng Thái</th>
+                <th>Ngày Bắt Đầu</th>
                 <th>Hạn Chót</th>
                 <th>Người Tạo</th>
               </tr>
@@ -149,7 +164,8 @@
               <tr>
                 <td>{{ data.title }}</td>
                 <td>{{ taskStatusLabels[data.status] }}</td>
-                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate| date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.createdBy }}</td>
               </tr>
               }

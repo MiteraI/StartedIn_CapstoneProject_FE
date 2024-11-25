@@ -50,7 +50,8 @@ export class CreateTaskModalComponent implements OnInit {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
-      deadline: [null],
+      startDate: [null],
+      endDate: [null],
       milestone: [null],
       assignees: [[]],
       manHour: [0],
@@ -103,15 +104,21 @@ export class CreateTaskModalComponent implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid) {
-      let deadline = this.taskForm.value.deadline
-      if (deadline) {
-        deadline = deadline instanceof Date ? deadline : new Date(deadline)
-        deadline = new Date(deadline.getFullYear(), deadline.getMonth(), deadline.getDate(), deadline.getHours(), 0, 0).toISOString()
+      let startDate = this.taskForm.value.startDate
+      if (startDate) {
+        startDate = startDate instanceof Date ? startDate : new Date(startDate)
+        startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), 0, 0).toISOString()
+      }
+      let endDate = this.taskForm.value.endDate
+      if (endDate) {
+        endDate = endDate instanceof Date ? endDate : new Date(endDate)
+        endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), 0, 0).toISOString()
       }
 
       const taskData = {
         ...this.taskForm.value,
-        deadline: deadline,
+        startDate: startDate,
+        endDate: endDate,
       }
 
       this.taskService.createTask(this.nzModalData.projectId, taskData).subscribe({

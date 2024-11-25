@@ -33,11 +33,20 @@
         </nz-select>
       </nz-form-control>
     </nz-form-item>
+  </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <nz-form-item>
+      <nz-form-label>Ngày Bắt Đầu</nz-form-label>
+      <nz-form-control>
+        <nz-date-picker formControlName="startDate" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Chọn ngày bắt đầu"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
+    
     <nz-form-item>
       <nz-form-label>Hạn Chót</nz-form-label>
       <nz-form-control>
-        <nz-date-picker formControlName="deadline" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Chọn hạn chót"></nz-date-picker>
+        <nz-date-picker formControlName="endDate" [nzShowTime]="{ nzFormat: 'HH' }" nzFormat="yyyy-MM-dd HH:00:00" nzPlaceHolder="Chọn hạn chót"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
   </div>

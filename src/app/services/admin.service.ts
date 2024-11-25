@@ -64,4 +64,11 @@ export class AdminService {
       { responseType: 'text' as 'json' }
     );
   }
+  
+  toggleUser(userId: string) : Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/admin/toggle-status/${userId}`),
+      null
+    );
+  }
 }
