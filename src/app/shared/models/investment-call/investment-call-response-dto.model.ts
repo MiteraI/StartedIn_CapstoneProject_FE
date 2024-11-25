@@ -1,3 +1,5 @@
+import { InvestmentCallStatus } from '../../enums/investment-call-status.enum'
+
 export type InvestmentCallResponseDto = {
   id: string
   projectId: string
@@ -7,6 +9,6 @@ export type InvestmentCallResponseDto = {
   equityShareCall: number
   startDate: string
   endDate: string
-  status: number
+  status: InvestmentCallStatus
   totalInvestor: number
 }
