@@ -44,7 +44,7 @@ export class AppComponent {
         const currentUrl = event.url
         this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
         this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
-        this.inProjectDetails = /\/projects\/\d+/.test(currentUrl)
+        this.inProjectDetails = /\/projects\//.test(currentUrl)
       }
     })
 

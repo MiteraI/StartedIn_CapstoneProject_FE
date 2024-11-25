@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { MatMenuModule } from '@angular/material/menu'
 import { AccountService } from '../../../core/auth/account.service'
 import { Account } from '../../../core/auth/account.model'
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router'
   templateUrl: './profile-dropdown.component.html',
   styleUrl: './profile-dropdown.component.css',
 })
-export class ProfileDropdownComponent {
+export class ProfileDropdownComponent implements OnInit, OnDestroy {
   account: Account | null = null
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1)
 

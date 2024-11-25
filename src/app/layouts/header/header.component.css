@@ -1,10 +1,5 @@
 input.remove-highlight:focus {
-    outline-width: 0;
-}
-
-.app-icon {
-    max-height: 35px;
-    max-width: 35px;
+  outline-width: 0;
 }
 
 .active-link {
