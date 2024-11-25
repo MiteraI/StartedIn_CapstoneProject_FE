@@ -48,14 +48,6 @@ export class AdminService {
     );
   }
 
-  getContractDownloadUrl(projectId: string, contractId: string) : Observable<any> {
-    const url = `/api/admin/projects/${projectId}/internal-contract/${contractId}/download`;
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(url),
-      null
-    );
-  }
-
   getUserList(
     pageIndex: number,
     pageSize: number

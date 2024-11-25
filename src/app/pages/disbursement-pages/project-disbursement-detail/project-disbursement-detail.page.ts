@@ -30,6 +30,7 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
   ]
 })
 export class ProjectDisbursementDetailPage implements OnInit {
+  projectId!: string;
   disbursement!: DisbursementDetailModel;
   disbursementStatuses = DisbursementStatus;
   statusLabels = DisbursementStatusLabels;
@@ -43,6 +44,7 @@ export class ProjectDisbursementDetailPage implements OnInit {
 
   ngOnInit() {
     this.disbursement = this.route.snapshot.data['disbursement'];
+    this.route.parent?.params.subscribe(params => this.projectId = params['id']);
   }
 
   formatDate(dateStr: string): string {
@@ -70,7 +72,7 @@ export class ProjectDisbursementDetailPage implements OnInit {
       nzOkType: 'primary',
       nzOnOk: () => {
         this.disbursementService
-          .confirmDisbursement(this.disbursement.id, this.disbursement.projectId!)
+          .confirmDisbursement(this.disbursement.id, this.projectId)
           .pipe(
             catchError(error => {
               this.notification.error("Lỗi", "Xác nhận giải ngân thất bại!", { nzDuration: 2000 });
