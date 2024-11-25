@@ -34,8 +34,6 @@ export class AdminProjectDetailPage implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => this.project = data['project']);
-    console.log(this.project);
-
   }
 
   verifyProject() {
@@ -59,16 +57,5 @@ export class AdminProjectDetailPage implements OnInit {
           });
       }
     });
-  }
-
-  downloadContract(contractId: string) {
-    this.adminService.getContractDownloadUrl(this.project.id, contractId)
-    .pipe(
-      catchError(error => {
-        this.notification.error("Lỗi", "Không thể tải hợp đồng!", { nzDuration: 2000 });
-        return throwError(() => new Error(error.error));
-      })
-    )
-    .subscribe(response => window.open(response.downLoadUrl, '_blank'));
   }
 }
