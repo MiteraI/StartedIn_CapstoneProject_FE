@@ -1,12 +1,14 @@
+import { CommonModule } from '@angular/common'
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { filter, Subject, takeUntil } from 'rxjs'
+import { AccountService } from 'src/app/core/auth/account.service'
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [RouterModule, MatIconModule],
+  imports: [RouterModule, MatIconModule, CommonModule],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.css',
 })
@@ -16,10 +18,17 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   projectId = ''
   private destroy$ = new Subject<void>()
-
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+  isInvestor = false;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit() {
+    this.accountService.identity().subscribe(account => {
+      this.isInvestor = account?.authorities.includes('Investor') ?? false
+    })
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

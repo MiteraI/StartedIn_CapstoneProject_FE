@@ -12,21 +12,30 @@
         <!-- Navigation Links -->
         <div class="flex items-center space-x-8">
           <a
-            [routerLink]="['/projects']"
+            routerLink="/projects"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
             Dự án
           </a>
           <a
-            [routerLink]="['/recruitment']"
+            *ngIf="!isInvestor"
+            routerLink="/recruitment"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
             Tìm nhóm
           </a>
           <a
-            [routerLink]="['/about-us']"
+            *ngIf="isInvestor"
+            routerLink="/explore"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Khám phá
+          </a>
+          <a
+            routerLink="/about-us"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >

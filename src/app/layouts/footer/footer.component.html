@@ -13,7 +13,7 @@
       <!-- Navigation Links -->
       <div class="flex items-center space-x-8 px-4 py-1">
         <a
-          [routerLink]="['/projects', projectId, 'tasks']"
+          routerLink="/projects/{{ projectId }}/tasks"
           routerLinkActive="text-purple-600"
           class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
         >
@@ -46,21 +46,30 @@
       <!-- Navigation Links -->
       <div class="flex items-center space-x-8 px-4 py-1">
         <a
-          [routerLink]="['/projects']"
+          routerLink="/projects"
           routerLinkActive="text-purple-600"
           class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
         >
           Dự án
         </a>
         <a
-          [routerLink]="['/recruitment']"
+          *ngIf="!isInvestor"
+          routerLink="/recruitment"
           routerLinkActive="text-purple-600"
           class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
         >
           Tìm nhóm
         </a>
         <a
-          [routerLink]="['/about-us']"
+          *ngIf="isInvestor"
+          routerLink="/explore"
+          routerLinkActive="text-purple-600"
+          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
+        >
+          Khám phá
+        </a>
+        <a
+          routerLink="/about-us"
           routerLinkActive="text-purple-600"
           class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
         >
