@@ -1,4 +1,51 @@
-<p>
-  project-invite-page works!
-  <button (click)="inviteAccept()">Accept Invite</button>
-</p>
+<div class="flex justify-center pt-20">
+  <div class="p-12 bg-white rounded-lg shadow-lg max-w-4xl">
+    <!-- Project Logo -->
+    <div class="flex justify-center mb-6">
+      <img
+        [src]="projectOverview?.logoUrl"
+        alt="Project Logo"
+        class="w-32 h-32 object-cover rounded-full"
+      />
+    </div>
+    <!-- Project Name -->
+    <p
+      class="text-3xl sm:text-4xl font-bold text-center text-orange-500 mb-4 pt-5"
+    >
+      {{ projectOverview?.projectName }}
+    </p>
+    <p class="text-xl sm:text-2xl font-bold text-center mb-4">{{projectOverview.leader.fullName}} đã mời bạn vào dự án</p>
+    <!-- Hiển thị nếu chưa đăng nhập -->
+    <ng-container *ngIf="!isAuthen; else projectInfo">
+      <!-- Thông báo chưa đăng nhập -->
+      <p class="text-xl text-center text-gray-600 mb-4">
+        Vui lòng đăng nhập để phản hồi lời mời
+      </p>
+      <!-- Nút điều hướng đến trang đăng nhập -->
+      <div class="flex justify-center">
+        <button
+          (click)="redirectToLogin()"
+          class="mt-6 bg-orange-600 hover:bg-orange-600 text-white font-bold text-lg py-3 px-10 rounded focus:outline-none focus:shadow-outline"
+        >
+          Đăng nhập ngay
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Hiển thị thông tin dự án nếu đã đăng nhập -->
+    <ng-template #projectInfo>
+      <!-- Call-to-Action -->
+      <p class="text-xl text-center text-gray-600 mb-4">
+        Bấm vào nút bên dưới để tham gia vào dự án
+      </p>
+      <div class="flex justify-center">
+        <button
+          (click)="inviteAccept()"
+          class="mt-6 w-1/2 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg py-3 px-10 rounded focus:outline-none focus:shadow-outline"
+        >
+          Tham gia ngay
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
