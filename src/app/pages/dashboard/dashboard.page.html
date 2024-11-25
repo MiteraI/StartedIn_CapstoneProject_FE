@@ -3,10 +3,10 @@
   <div *ngIf="dashboard" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Budget Section -->
     <div class="bg-white rounded-lg shadow p-6">
-      <div class="text-xl md:text-2xl font-semibold mb-16">Tổng ngân sách</div>
+      <div class="text-xl md:text-2xl font-semibold mb-16">Tổng ngân sách hiện tại</div>
       <div class="text-center text-3xl md:text-5xl font-bold mb-20">{{ dashboard.currentBudget | vndCurrency }}</div>
       <div class="space-y-4">
-        <div class="text-xl md:text-2xl font-semibold">Trong 30 ngày vừa qua</div>
+        <div class="text-xl md:text-2xl font-semibold">Dòng tiền trong tháng này</div>
         <div class="flex justify-between items-center text-green-600">
           <span>Tiền vào:</span>
           <span class="font-semibold">+{{ dashboard.inAmount | vndCurrency }}</span>
