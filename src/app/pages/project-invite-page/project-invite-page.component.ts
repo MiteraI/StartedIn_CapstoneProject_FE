@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { AccountService } from 'src/app/core/auth/account.service';
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service';
 import { RecruitInviteService } from 'src/app/services/recruit-invite.service';
 import { ApplicationType } from 'src/app/shared/enums/application-type.enum';
@@ -11,16 +13,20 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
   templateUrl: './project-invite-page.component.html',
   styleUrls: ['./project-invite-page.component.scss'],
   standalone: true,
+  imports: [CommonModule],
 })
 export class ProjectInvitePage implements OnInit {
   projectId: string = '';
   role: any;
   projectOverview: any; // Property to store project invite overview data
+  isAuthen: boolean = false;
 
   constructor(
     private recruitInviteService: RecruitInviteService,
     private route: ActivatedRoute,
-    private antdNoti: AntdNotificationService
+    private antdNoti: AntdNotificationService,
+    private accountService: AccountService,
+    private router: Router
   ) {}
 
   inviteAccept() {
@@ -42,10 +48,18 @@ export class ProjectInvitePage implements OnInit {
     }
   }
 
+  redirectToLogin()
+  {
+    this.router.navigate(['/login'])
+  }
+
   ngOnInit() {
     this.projectId = this.route.snapshot.params['projectId'];
     this.role = TeamRole[this.route.snapshot.params['role'].toUpperCase()];
-
+    this.accountService.isAuthenticated$.subscribe(data => {
+      this.isAuthen = data;
+      console.log(data);
+    })
     this.recruitInviteService.getProjectInviteOverview(this.projectId).subscribe({
       next: (data) => {
         this.projectOverview = data;
