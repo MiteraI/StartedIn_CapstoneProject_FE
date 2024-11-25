@@ -247,4 +247,9 @@ export const routes: Routes = [
     resolve: { project: AdminProjectDataResolver },
     loadComponent: () => import('./pages/admin-pages/admin-project-detail/admin-project-detail.page').then( m => m.AdminProjectDetailPage)
   },
+  {
+    path: 'admin/users',
+    canActivate: [AdminGuard],
+    loadComponent: () => import('./pages/admin-pages/admin-user-list/admin-user-list.page').then( m => m.AdminUserListPage)
+  },
 ]
