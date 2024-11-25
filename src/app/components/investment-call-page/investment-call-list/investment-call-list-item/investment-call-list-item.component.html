@@ -1,2 +1,49 @@
-<p>investment-call-list-item works!</p>
 <!-- TODO: item comp for investment call mobile view -->
+<div class="flex bg-white my-3 p-3 rounded-lg gap-4">
+  <nz-progress
+    nz-tooltip
+    [nzTooltipTitle]="getAmountDetail()"
+    [nzPercent]="(investmentCall.amountRaised / investmentCall.targetCall) * 100"
+    nzType="circle"
+    [nzWidth]="80"
+    [nzStatus]="investmentCall.status === 2 ? 'exception' : undefined"
+  ></nz-progress>
+  <div class="w-full">
+    <div class="flex justify-end ml-auto">
+      <div
+        class="px-2 py-1 rounded-full text-xs font-medium"
+        [ngClass]="{
+          'bg-green-100 text-gray-800': investmentCall.status === 1,
+          'bg-red-100 text-blue-800': investmentCall.status === 2,
+        }"
+      >
+        {{ investmentCallLabels[investmentCall.status || 1] }}
+      </div>
+    </div>
+    <!-- Metadata Row -->
+    <div class="flex justify-between mt-2">
+      <!-- Left side info -->
+      <div class="flex flex-col">
+        <span class="text-gray-600 mb-1">
+          Người đầu tư: <strong class="text-green-300">{{ investmentCall.totalInvestor }}</strong></span
+        >
+        <div>
+          Cổ Phần:
+          <span class="text-sm text-green-600 mb-1">{{ investmentCall.remainAvailableEquityShare / 100 | percent }}</span
+          >/
+          <span class="text-sm text-gray-600 mb-1">{{ investmentCall.equityShareCall / 100 | percent }}</span>
+        </div>
+      </div>
+
+      <!-- Right side info -->
+      <div class="flex flex-col items-end mr-1">
+        <div class="text-sm text-gray-500 mb-1">
+          {{ investmentCall.startDate === null ? 'Không ngày bắt đầu' : 'Bắt đầu: ' + (investmentCall.startDate | date : 'd/M/YY') }}
+        </div>
+        <div class="text-sm text-gray-500 mb-1">
+          {{ investmentCall.endDate === null ? 'Không hạn chót' : 'Kết thúc: ' + (investmentCall.endDate | date : 'd/M/YY') }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
