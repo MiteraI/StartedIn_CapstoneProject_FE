@@ -55,7 +55,7 @@
           <div class="w-16 h-16 relative">
             <canvas [id]="'milestone-' + milestone.id"></canvas>
             <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-sm font-semibold">{{ milestone.progress }}%</span>
+              <span class="text-sm font-semibold">{{ milestone.progress ?? 0 }}%</span>
             </div>
           </div>
         </div>

@@ -53,7 +53,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
     { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'savings_icon', linkText: 'Giao Dịch' },
+    { linkName: 'transactions', iconName: 'swap_horiz_icon', linkText: 'Giao Dịch' },
     { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
     { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
     { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
@@ -67,10 +67,10 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     linkText: string
   }[] = [
     { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
-    { linkName: 'disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' },
-    { linkName: 'deals', iconName: 'request_quote_icon', linkText: 'Deals' },
+    { linkName: 'disbursements', iconName: 'account_balance_icon', linkText: 'Giải Ngân' },
+    { linkName: 'investment-call', iconName: 'local_atm_icon', linkText: 'Gọi Vốn' },
+    { linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
     { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
-    { linkName: 'investment-call', iconName: 'paid', linkText: 'Gọi Vốn' },
     { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
   ]
 
@@ -84,5 +84,5 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [{ linkName: 'investor-disbursements', iconName: 'local_atm_icon', linkText: 'Giải Ngân' }]
+  }[] = [{ linkName: 'investor-disbursements', iconName: 'account_balance_icon', linkText: 'Giải Ngân' }]
 }

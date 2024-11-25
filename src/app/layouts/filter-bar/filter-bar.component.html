@@ -1,69 +1,68 @@
-@if (isDesktopView) {
-<div class="flex items-center justify-between border-b-[1px] min-h-[57px] px-3 bg-white sticky top-0 z-50">
-  <div>
-    <span class="text-xl">{{ viewName }}</span>
-  </div>
-  <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-5/12">
-    <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full" />
-    <mat-icon (click)="onSearchClick()" fontIcon="search_icon" class="cursor-pointer"></mat-icon>
-  </div>
-  <div class="flex items-center space-x-3">
-    <button
-      [matMenuTriggerFor]="filterMenu"
-      [matMenuTriggerRestoreFocus]="false"
-      nz-button
-      nzType="default"
-      class="flex items-center space-x-2 cursor-pointer pr-6"
-      (click)="onMenuOpened()"
-    >
-      <mat-icon fontIcon="filter_alt_icon"></mat-icon>
-      Lọc
-    </button>
-    <mat-menu #filterMenu="matMenu">
-      <div (click)="$event.stopPropagation()">
-        <ng-content select="[desktop]"></ng-content>
-      </div>
-    </mat-menu>
-    <button
-      *ngIf="projectId"
-      nz-button
-      nzType="default"
-      class="flex items-center space-x-2"
-      (click)="openMembersModal()"
-    >
-      <mat-icon fontIcon="group"></mat-icon>
-      Thành viên
-    </button>
-  </div>
-</div>
-} @else {
-<div class="flex items-center w-full justify-between min-h-[7vh] sticky top-0 border-2 bg-white z-10">
-  <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
-  @if (!isSearching) {
-    <span>{{ viewName }}</span>
-  } @else {
+<div class="flex items-center justify-center bg-white sticky top-0 z-50 w-full min-h-[7vh] border-b">
+  <div *ngIf="isDesktopView" class="flex items-center justify-between px-3 max-w-6xl mx-auto w-full">
     <div>
-      <input class="rounded-lg " #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" />
+      <span class="text-xl">{{ viewName }}</span>
     </div>
-  }
-  <div class="flex items-center space-x-3 mr-2">
-    @if (isSearching) {
-      <mat-icon (click)="onSearchClick()" fontIcon="search_icon"></mat-icon>
+    <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-5/12">
+      <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full" />
+      <mat-icon (click)="onSearchClick()" fontIcon="search_icon" class="cursor-pointer"></mat-icon>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button
+        [matMenuTriggerFor]="filterMenu"
+        [matMenuTriggerRestoreFocus]="false"
+        nz-button
+        nzType="default"
+        class="flex items-center space-x-2 cursor-pointer pr-6"
+        (click)="onMenuOpened()"
+      >
+        <mat-icon fontIcon="filter_alt_icon"></mat-icon>
+        Lọc
+      </button>
+      <mat-menu #filterMenu="matMenu">
+        <div (click)="$event.stopPropagation()">
+          <ng-content select="[desktop]"></ng-content>
+        </div>
+      </mat-menu>
+      <button
+        *ngIf="projectId"
+        nz-button
+        nzType="default"
+        class="flex items-center space-x-2"
+        (click)="openMembersModal()"
+      >
+        <mat-icon fontIcon="group"></mat-icon>
+        Thành viên
+      </button>
+    </div>
+  </div>
+  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between border-2">
+    <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
+    @if (!isSearching) {
+      <span>{{ viewName }}</span>
     } @else {
-      <mat-icon (click)="openSearchBarMobile()" fontIcon="search_icon"></mat-icon>
-    }
-    <mat-icon
-      [matMenuTriggerFor]="mobileMenu"
-      [matMenuTriggerRestoreFocus]="false"
-      fontIcon="more_horiz_icon"
-      (click)="onMenuOpened()"
-    ></mat-icon>
-    <mat-menu #mobileMenu="matMenu">
-      <div (click)="$event.stopPropagation()">
-        <ng-content select="[mobile]"></ng-content>
+      <div>
+        <input class="rounded-lg " #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" />
       </div>
-    </mat-menu>
-    <app-profile-dropdown></app-profile-dropdown>
+    }
+    <div class="flex items-center space-x-3 mr-2">
+      @if (isSearching) {
+        <mat-icon (click)="onSearchClick()" fontIcon="search_icon"></mat-icon>
+      } @else {
+        <mat-icon (click)="openSearchBarMobile()" fontIcon="search_icon"></mat-icon>
+      }
+      <mat-icon
+        [matMenuTriggerFor]="mobileMenu"
+        [matMenuTriggerRestoreFocus]="false"
+        fontIcon="more_horiz_icon"
+        (click)="onMenuOpened()"
+      ></mat-icon>
+      <mat-menu #mobileMenu="matMenu">
+        <div (click)="$event.stopPropagation()">
+          <ng-content select="[mobile]"></ng-content>
+        </div>
+      </mat-menu>
+      <app-profile-dropdown></app-profile-dropdown>
+    </div>
   </div>
 </div>
-}

@@ -1,7 +1,7 @@
   <div class="flex flex-col max-w-6xl mx-auto p-6 md:py-12">
     @if ((userProjects?.listOwnProject?.length ?? 0) > 0 && !isInvestor) {
       <div class="text-2xl font-medium mb-8">Dự án của tôi</div>
-      <div>
+      <div class="mb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
           <app-project-card
             class="cursor-pointer"
@@ -14,7 +14,7 @@
     }
     <!-- Dự án đang tham gia -->
     @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
-      <div class="text-2xl font-medium mb-8 mt-8">Dự án đang tham gia</div>
+      <div class="text-2xl font-medium mb-8">Dự án đang tham gia</div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
         <app-project-card
           class="cursor-pointer"
@@ -26,7 +26,7 @@
     }
     <div
       *ngIf="(userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) === 0"
-      class="text-gray-500 mt-8"
+      class="text-gray-500 text-xl"
     >
       Bạn không có dự án nào.
       <a class="ml-2" (click)="openCreateProjectModal()" nz-button nzType="link">Thêm dự án mới!</a>

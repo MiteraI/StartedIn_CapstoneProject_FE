@@ -1,5 +1,5 @@
 <app-filter-bar
-  viewName="Deal List"
+  viewName="Danh sách thỏa thuận đầu tư"
   [searchValue]="filter.projectName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
@@ -18,7 +18,7 @@
   </div>
 
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table max-h-[79vh] overflow-y-auto">
+  <table class="w-full hidden md:table overflow-y-auto">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left w-12">
