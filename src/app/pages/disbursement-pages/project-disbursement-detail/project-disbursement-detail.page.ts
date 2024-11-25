@@ -45,7 +45,6 @@ export class ProjectDisbursementDetailPage implements OnInit {
   ngOnInit() {
     this.disbursement = this.route.snapshot.data['disbursement'];
     this.route.parent?.params.subscribe(params => this.projectId = params['id']);
-    console.log(this.disbursement);
   }
 
   formatDate(dateStr: string): string {
