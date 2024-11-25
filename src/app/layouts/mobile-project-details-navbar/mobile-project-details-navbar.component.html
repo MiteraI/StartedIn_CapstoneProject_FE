@@ -1,12 +1,75 @@
-<p>
-  mobile-project-details-navbar works!
-</p>
-<p>
-  mobile-project-details-navbar works!
-</p>
-<p>
-  mobile-project-details-navbar works!
-</p>
-<p>
-  mobile-project-details-navbar works!
-</p>
+<div class="flex flex-col h-full bg-white">
+  <!-- Header -->
+  <div class="flex justify-between items-center px-4 py-3 border-b">
+    <span class="text-xl font-semibold">Menu dự án</span>
+    <button (click)="navigateBack()" class="p-2">
+      <mat-icon fontIcon="close"></mat-icon>
+    </button>
+  </div>
+
+  <!-- Navigation Links -->
+  <div class="flex-1 overflow-y-auto">
+    <!-- Shared Links -->
+    <div class="flex flex-col py-2">
+      @for (link of sharedSideNavLinks; track link.linkText) {
+        <a
+          [routerLink]="['/projects', currentId, link.linkName]"
+          routerLinkActive="text-purple-600 bg-purple-50"
+          class="flex items-center px-4 py-3 space-x-3 hover:bg-gray-50"
+        >
+          <mat-icon [fontIcon]="link.iconName"></mat-icon>
+          <span>{{ link.linkText }}</span>
+        </a>
+      }
+    </div>
+
+    <!-- Role-specific Links -->
+    <ng-container *ngIf="role === teamRole.LEADER">
+      <div class="border-t"></div>
+      <div class="flex flex-col py-2">
+        @for (link of leaderSideNavLinks; track link.linkText) {
+          <a
+            [routerLink]="['/projects', currentId, link.linkName]"
+            routerLinkActive="text-purple-600 bg-purple-50"
+            class="flex items-center px-4 py-3 space-x-3 hover:bg-gray-50"
+          >
+            <mat-icon [fontIcon]="link.iconName"></mat-icon>
+            <span>{{ link.linkText }}</span>
+          </a>
+        }
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="role === teamRole.MEMBER || role === teamRole.MENTOR">
+      <div class="border-t"></div>
+      <div class="flex flex-col py-2">
+        @for (link of memberSideNavLinks; track link.linkText) {
+          <a
+            [routerLink]="['/projects', currentId, link.linkName]"
+            routerLinkActive="text-purple-600 bg-purple-50"
+            class="flex items-center px-4 py-3 space-x-3 hover:bg-gray-50"
+          >
+            <mat-icon [fontIcon]="link.iconName"></mat-icon>
+            <span>{{ link.linkText }}</span>
+          </a>
+        }
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="role === teamRole.INVESTOR">
+      <div class="border-t"></div>
+      <div class="flex flex-col py-2">
+        @for (link of investorSideNavLinks; track link.linkText) {
+          <a
+            [routerLink]="['/projects', currentId, link.linkName]"
+            routerLinkActive="text-purple-600 bg-purple-50"
+            class="flex items-center px-4 py-3 space-x-3 hover:bg-gray-50"
+          >
+            <mat-icon [fontIcon]="link.iconName"></mat-icon>
+            <span>{{ link.linkText }}</span>
+          </a>
+        }
+      </div>
+    </ng-container>
+  </div>
+</div>
