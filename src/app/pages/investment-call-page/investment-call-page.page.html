@@ -9,7 +9,7 @@
   <app-investment-call-table [projectId]="projectId" [listInvestmentCall]="listInvestmentCall" [isFetchAllCallLoading]="isFetchAllCallLoading"></app-investment-call-table>
 </div>
 } @else {
-<div class="overflow-y-auto max-h-[79vh]">
+<div class="overflow-y-auto">
   <div (click)="openCreateInvestmentCallModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
     <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
   </div>

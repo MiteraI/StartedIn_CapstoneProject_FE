@@ -4,6 +4,7 @@ import { ApplicationConfigService } from "../core/config/application-config.serv
 import { Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { ProjectModel } from "../shared/models/project/project.model";
+import { FullProfile } from "../shared/models/user/full-profile.model";
 
 @Injectable({
   providedIn: 'root',
@@ -52,6 +53,23 @@ export class AdminService {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(url),
       null
+    );
+  }
+
+  getUserList(
+    pageIndex: number,
+    pageSize: number
+  ) : Observable<SearchResponseModel<FullProfile>> {
+    const query = `page=${pageIndex}&size=${pageSize}`;
+    return this.http.get<SearchResponseModel<FullProfile>>(
+      this.applicationConfigService.getEndpointFor(`/api/admin/users?${query}`),
+    );
+  }
+
+  deleteUser(userId: string) : Observable<any> {
+    return this.http.delete(
+      this.applicationConfigService.getEndpointFor(`/api/admin/users/${userId}`),
+      { responseType: 'text' as 'json' }
     );
   }
 }

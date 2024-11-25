@@ -1,0 +1,36 @@
+<form [formGroup]="importForm" class="space-y-4 ant-modal-body">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">File Excel (.xlsx)</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng chọn file Excel!">
+      <nz-upload
+        ngDefaultControl
+        formControlName="file"
+        [(nzFileList)]="fileList"
+        [nzBeforeUpload]="beforeUpload"
+        [nzRemove]="removeFile"
+        [nzMultiple]="false"
+        [nzShowUploadList]="true"
+        class="w-full"
+      >
+        <button nz-button class="w-full flex justify-center items-center">
+          <mat-icon fontIcon="file_upload"></mat-icon>
+          <span class="ml-2">Chọn file Excel</span>
+        </button>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="flex justify-end space-x-2">
+    <button nz-button (click)="closeModal()">Hủy</button>
+    <button
+      nz-button
+      nzType="primary"
+      [disabled]="importForm.invalid || fileList.length === 0"
+      [nzLoading]="isUploading"
+      (click)="handleImport()"
+    >
+      Import
+    </button>
+  </div>
+</form>
+

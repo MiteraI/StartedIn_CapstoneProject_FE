@@ -1,0 +1,109 @@
+<div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div class="flex flex-col justify-end md:flex-row mb-4">
+    <div class="flex flex-col md:flex-row gap-3">
+      <button
+        (click)="openImportModal()"
+        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+      >
+        <mat-icon fontIcon="file_upload" class="mr-2"></mat-icon>
+        Import người dùng
+      </button>
+    </div>
+  </div>
+  <!-- Desktop Table View -->
+  <table class="w-full hidden md:table border bg-white">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left w-16"></th>
+        <th class="p-4 text-left">Thông tin người dùng</th>
+        <th class="p-4 text-left">Vai trò</th>
+        <th class="p-4 text-left w-16"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users" class="border-b hover:bg-purple-50">
+        <td class="p-4">
+          <nz-avatar
+            [nzSrc]="user.profilePicture"
+            [nzText]="user.fullName | initialsOnly"
+            [nzSize]="40"
+            class="bg-blue-500"
+          ></nz-avatar>
+        </td>
+        <td class="p-4">
+          <div class="font-medium">{{ user.fullName }}</div>
+          <div class="text-sm text-gray-500">{{ user.email }}</div>
+          <div class="text-sm text-gray-500">{{ user.phoneNumber }}</div>
+        </td>
+        <td class="p-4">
+          <div class="space-x-2">
+            <span
+              *ngFor="let role of user.authorities"
+              class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
+            >
+              {{ role }}
+            </span>
+          </div>
+        </td>
+        <td class="p-4">
+          <button (click)="deleteUser(user.id)" class="text-red-500 hover:text-red-700">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Desktop Pagination -->
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <div *ngFor="let user of users" class="bg-white rounded-lg shadow">
+      <div class="p-4">
+        <div class="flex items-start space-x-4">
+          <nz-avatar
+            [nzSrc]="user.profilePicture"
+            [nzText]="user.fullName | initialsOnly"
+            [nzSize]="40"
+            class="bg-blue-500"
+          ></nz-avatar>
+          <div class="flex-1">
+            <div class="font-medium">{{ user.fullName }}</div>
+            <div class="text-sm text-gray-500">{{ user.email }}</div>
+            <div class="text-sm text-gray-500">{{ user.phoneNumber }}</div>
+            <div class="mt-2 space-x-2">
+              <span
+                *ngFor="let role of user.authorities"
+                class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
+              >
+                {{ role }}
+              </span>
+            </div>
+          </div>
+          <button (click)="deleteUser(user.id)" class="text-red-500 hover:text-red-700">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Loading Spinner -->
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết danh sách người dùng!
+  </div>
+</div>
