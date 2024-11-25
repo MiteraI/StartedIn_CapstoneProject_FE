@@ -1,6 +1,7 @@
 export type UpdateTaskInfo = {
   title: string
   description: string
-  deadline: string
+  startDate: string
+  endDate: string
   manHour: number
 }
