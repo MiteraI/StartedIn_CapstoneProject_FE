@@ -52,7 +52,7 @@
             </div>
           </div>
         </td>
-        <td class="p-4 min-w-32">{{ transaction.lastUpdatedTime | slice:0:10 }}</td>
+        <td class="p-4 min-w-32">{{ transaction.lastUpdatedTime | slice:0:10 | date:'dd/MM/yyyy' }}</td>
         <td class="p-4 max-w-80">{{ processContent(transaction.content) || 'Không có nội dung' }}</td>
         <td
           class="p-4 font-bold"

@@ -156,7 +156,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     const date = new Date(dateStr);
     if (isToday(date)) return 'Today';
     if (isYesterday(date)) return 'Yesterday';
-    return format(date, 'yyyy/MM/dd');
+    return format(date, 'dd/MM/yyyy');
   }
 
   formatDate(dateStr: string): string {
