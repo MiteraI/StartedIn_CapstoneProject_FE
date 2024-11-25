@@ -1,25 +1,62 @@
-@if (isDesktopView) {
-<div class="border-padding flex min-h-[7vh] flex-1 items-center justify-between bg-orange-400">
-  <div [routerLink]="['']" class="flex items-center border-purple-400 bg-white rounded-sm cursor-pointer">
-    <img src="../../../assets/img/android-chrome-192x192.png" class="h-[40px]" />
-    <span class="text-purple-400 text-3xl ml-1 pr-2">tartedIn</span>
-  </div>
-  <div class="flex justify-between w-72">
-    <span [routerLink]="['/projects']" class="text-white cursor-pointer text-xl">Dự Án</span>
-    <span [routerLink]="['/recruitment']" class="text-white cursor-pointer text-xl">Tìm Nhóm</span>
-  </div>
-  <div>
-    <app-profile-dropdown></app-profile-dropdown>
-  </div>
-</div>
-} @else { @if (inProjectDetails) {} @else {
-<div class="border-padding flex min-h-[7vh] flex-1 items-center justify-between bg-orange-400">
-  <div class="flex items-center border-purple-400 bg-white rounded-sm">
-    <img src="../../../assets/img/android-chrome-192x192.png" class="h-[40px]" />
-    <span class="text-purple-400 text-3xl ml-1 pr-2">tartedIn</span>
-  </div>
-  <div>
-    <app-profile-dropdown></app-profile-dropdown>
-  </div>
-</div>
-} }
+<nav class="bg-white shadow-sm">
+  @if (isDesktopView) {
+    <!-- Desktop Header -->
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex justify-between h-16">
+        <!-- Logo Section -->
+        <div class="flex items-center cursor-pointer" routerLink="/">
+          <img src="../../../assets/img/android-chrome-192x192.png" class="h-8 w-auto" alt="Logo" />
+          <span class="text-purple-600 text-2xl font-semibold ml-1">tartedIn</span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex items-center space-x-8">
+          <a
+            [routerLink]="['/projects']"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Dự án
+          </a>
+          <a
+            [routerLink]="['/recruitment']"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Tìm nhóm
+          </a>
+          <a
+            [routerLink]="['/about-us']"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Về chúng tôi
+          </a>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="flex items-center">
+          <app-profile-dropdown></app-profile-dropdown>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <!-- Mobile Header -->
+    @if (!inProjectDetails) {
+      <div class="px-10">
+        <div class="flex justify-between h-14">
+          <!-- Logo -->
+          <div class="flex items-center">
+            <img src="../../../assets/img/android-chrome-192x192.png" class="h-7 w-auto" alt="Logo" />
+            <span class="text-purple-600 text-xl font-semibold ml-1">tartedIn</span>
+          </div>
+
+          <!-- Profile Dropdown -->
+          <div class="flex items-center">
+            <app-profile-dropdown></app-profile-dropdown>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</nav>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
-import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model'
 import { CommonModule } from '@angular/common'
 import { UserProjectsModel } from 'src/app/shared/models/project/user-projects.model'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -18,8 +17,6 @@ import { AccountService } from 'src/app/core/auth/account.service'
 })
 export class ProjectListPage implements OnInit {
   userProjects: UserProjectsModel | undefined;
-  ownProjects: ExploreProjectsListItemModel[] = [];
-  participatedProjects: ExploreProjectsListItemModel[] = [];
 
   isInvestor = true;
 
