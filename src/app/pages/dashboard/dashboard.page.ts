@@ -149,7 +149,7 @@ export class DashboardPage implements OnInit {
         type: 'doughnut',
         data: {
           datasets: [{
-            data: [milestone.progress, 100 - milestone.progress],
+            data: [milestone.progress ?? 0, 100 - (milestone.progress ?? 0)],
             backgroundColor: ['#4F46E5', '#E5E7EB']
           }]
         },

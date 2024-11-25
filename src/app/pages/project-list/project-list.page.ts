@@ -45,6 +45,6 @@ export class ProjectListPage implements OnInit {
   }
 
   navigateToProject(id: string) {
-    this.router.navigate(['/projects', id, this.isInvestor ? 'charter' : 'tasks']);
+    this.router.navigate(['/projects', id, this.isInvestor ? 'dashboard' : 'tasks']);
   }
 }
