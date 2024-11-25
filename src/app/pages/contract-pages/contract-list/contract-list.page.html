@@ -197,7 +197,8 @@
               <button
                 *ngIf="contract.contractStatus === contractStatuses.COMPLETED"
                 (click)="$event.stopPropagation(); expireContract(contract)"
-                class="text-green-500 hover:text-green-700">
+                class="text-yellow-500 hover:text-yellow-700"
+              >
                 <mat-icon fontIcon="timer_off"></mat-icon>
               </button>
             </div>
