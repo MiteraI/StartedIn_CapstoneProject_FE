@@ -19,6 +19,7 @@ import { TransactionType, TransactionTypeLabels } from 'src/app/shared/enums/tra
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { TransactionTypeModalComponent } from 'src/app/components/transaction-pages/transaction-type-modal/transaction-type-modal.component';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 interface FilterOptions {
   name?: string;
@@ -61,9 +62,13 @@ export class TransactionsPage implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   isLeader = false;
 
+  currentBudget: number = 0;
+  inAmount: number = 0;
+  outAmount: number = 0;
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    private dashboardService: DashboardService,
     private transactionService: TransactionService,
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
@@ -76,6 +81,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
     this.route.parent?.paramMap.subscribe(map => {
       if (!map.get('id')) return;
       this.projectId = map.get('id')!;
+      this.loadTransactionSummary();
       this.filterTransactions();
     });
 
@@ -159,5 +165,21 @@ export class TransactionsPage implements OnInit, OnDestroy {
       nzFooter: null,
       nzData: this.projectId
     });
+  }
+
+  private loadTransactionSummary() {
+    this.dashboardService
+      .getDashboard(this.projectId)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Lấy thông tin tổng quan thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(summary => {
+        this.currentBudget = summary.currentBudget;
+        this.inAmount = summary.inAmount;
+        this.outAmount = summary.outAmount;
+      });
   }
 }
