@@ -1,25 +1,46 @@
 <p>2 button for list invite and list application</p>
-<form [formGroup]="recruitmentForm" class="ant-modal-body bg-white">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="24">Tài liệu chứng minh</nz-form-label>
-      <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng tải lên tài liệu chứng minh!">
-        <nz-upload
-          ngDefaultControl
-          formControlName="files"
-          [(nzFileList)]="fileList"
-          [nzBeforeUpload]="beforeUpload"
-          [nzRemove]="removeUpload"
-          [nzMultiple]="true"
-          [nzShowUploadList]="true"
-          class="mb-2"
-        >
-          <button nz-button class="flex justify-center items-center">
-            <mat-icon fontIcon="file_upload"></mat-icon>
-            <span class="px-2">Tải lên tài liệu</span>
-          </button>
-        </nz-upload>
-      </nz-form-control>
-    </nz-form-item>
+<form [formGroup]="recruitmentForm" nz-form nzLayout="vertical" class="bg-white mx-8 p-4">
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
+    <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
+      <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Description Field -->
+  <nz-form-item>
+    <nz-form-label>Nội dung bài đăng</nz-form-label>
+    <nz-form-control>
+      <textarea nz-input formControlName="content" placeholder="Nhập thông tin tác vụ" class="w-full"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Tài liệu chứng minh</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng tải lên tài liệu chứng minh!">
+      <nz-upload
+        ngDefaultControl
+        formControlName="files"
+        [(nzFileList)]="fileList"
+        [nzBeforeUpload]="beforeUpload"
+        [nzRemove]="removeUpload"
+        [nzMultiple]="true"
+        [nzShowUploadList]="true"
+        class="mb-2"
+      >
+        <button nz-button class="flex justify-center items-center">
+          <mat-icon fontIcon="file_upload"></mat-icon>
+          <span class="px-2">Tải lên tài liệu</span>
+        </button>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control>
+      <div class="flex items-center justify-end">
+        <button nz-button nzType="default" [disabled]="recruitmentForm.invalid">Cập Nhật</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
 </form>
-
-

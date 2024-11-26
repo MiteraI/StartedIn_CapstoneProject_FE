@@ -15,3 +15,12 @@ export const TaskStatusLabels: Record<TaskStatus, string> = {
   [TaskStatus.OPEN]: 'Mở Lại',
   [TaskStatus.DONE]: 'Hoàn Thành',
 }
+
+export const TaskStatusColors: Record<TaskStatus, string> = {
+  [TaskStatus.NOT_STARTED]: 'gray',
+  [TaskStatus.IN_PROGRESS]: 'blue',
+  [TaskStatus.PENDING]: 'orange',
+  [TaskStatus.REVIEW]: 'purple',
+  [TaskStatus.OPEN]: 'geekblue',
+  [TaskStatus.DONE]: 'green',
+}

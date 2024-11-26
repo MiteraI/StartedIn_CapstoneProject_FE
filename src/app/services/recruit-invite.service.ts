@@ -22,4 +22,20 @@ export class RecruitInviteService {
   acceptProjectInvite(acceptInvitation: AcceptInvite, projectId: string): Observable<any> {
     return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/accept-invite`), acceptInvitation, { responseType: 'text' as 'json' })
   }
+
+  updateProjectRecruitmentInfo(projectId: string, recruitmentInfo: any): Observable<any> {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-info`), recruitmentInfo)
+  }
+
+  updateProjectRecruitmentStatus(projectId: string, status: string): Observable<any> {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-status`), { status })
+  }
+
+  updateAddRecruitmentImage(projectId: string, image: any): Observable<any> {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-image`), image)
+  }
+
+  updateRemoveRecruitmentImage(projectId: string): Observable<any> {
+    return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-image`))
+  }
 }

@@ -1,5 +1,7 @@
 import { TaskStatus } from '../../enums/task-status.enum'
 import { Milestone } from '../milestone/milestone.model'
+import { TaskAttachment } from '../task-attachment/task-attachment.model'
+import { TaskComment } from '../task-comment/task-comment.model'
 import { TeamMemberModel } from '../user/team-member.model'
 import { Task } from './task.model'
 
@@ -15,4 +17,6 @@ export type TaskDetails = {
   milestone: Milestone
   assignees: TeamMemberModel[]
   subTasks: Task[]
+  taskComments: TaskComment[]
+  taskAttachments: TaskAttachment[]
 }
