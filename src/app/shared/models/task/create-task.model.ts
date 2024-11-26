@@ -1,5 +1,6 @@
 export type CreateTask = {
   title: string
   description: string
-  deadline: string
+  startDate: string
+  endDate: string
 }

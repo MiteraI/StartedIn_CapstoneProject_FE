@@ -65,6 +65,7 @@
               <tr>
                 <th>Tên Tác Vụ</th>
                 <th>Trạng Thái</th>
+                <th>Ngày Bắt Đầu</th>
                 <th>Hạn Chót</th>
                 <th>Người Tạo</th>
               </tr>
@@ -74,7 +75,8 @@
               <tr>
                 <td>{{ data.title }}</td>
                 <td>{{ taskStatusLabels[data.status] }}</td>
-                <td>{{ data.deadline === null ? 'Không Có Hạn Chót' : (data.deadline | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.createdBy }}</td>
               </tr>
               }

@@ -6,7 +6,8 @@ import { Task } from './task.model'
 export type TaskDetails = {
   title: string
   description: string
-  deadline: string
+  startDate: string
+  endDate: string
   status: TaskStatus
   isLate: boolean
   manHour: number

@@ -7,4 +7,5 @@ export type FullProfile = {
   phoneNumber: string
   email: string
   fullName: string
+  isActive: boolean
 }

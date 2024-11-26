@@ -48,14 +48,6 @@ export class AdminService {
     );
   }
 
-  getContractDownloadUrl(projectId: string, contractId: string) : Observable<any> {
-    const url = `/api/admin/projects/${projectId}/internal-contract/${contractId}/download`;
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(url),
-      null
-    );
-  }
-
   getUserList(
     pageIndex: number,
     pageSize: number
@@ -70,6 +62,13 @@ export class AdminService {
     return this.http.delete(
       this.applicationConfigService.getEndpointFor(`/api/admin/users/${userId}`),
       { responseType: 'text' as 'json' }
+    );
+  }
+  
+  toggleUser(userId: string) : Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/admin/toggle-status/${userId}`),
+      null
     );
   }
 }
