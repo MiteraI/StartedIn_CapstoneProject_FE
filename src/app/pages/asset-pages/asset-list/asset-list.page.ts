@@ -19,6 +19,9 @@ import { AssetModel } from "src/app/shared/models/asset/asset.model";
 import { InitialsOnlyPipe } from "src/app/shared/pipes/initials-only.pipe";
 import { format } from 'date-fns';
 import { VndCurrencyPipe } from "../../../shared/pipes/vnd-currency.pipe";
+import { RoleInTeamService } from "src/app/core/auth/role-in-team.service";
+import { TeamRole } from "src/app/shared/enums/team-role.enum";
+import { CreateAssetModalComponent } from "src/app/components/asset-pages/create-asset-modal/create-asset-modal.component";
 
 interface FilterOptions {
   assetName?: string;
@@ -78,6 +81,7 @@ export class AssetListPage implements OnInit, OnDestroy {
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +100,10 @@ export class AssetListPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadMore();
       });
+    this.roleService.role$.subscribe(role => {
+      this.isLeader = (role?.roleInTeam === TeamRole.LEADER);
+      this.filterAssets();
+    });
   }
   filterAssets(append: boolean = false) {
     this.isLoading = true;
@@ -149,6 +157,15 @@ export class AssetListPage implements OnInit, OnDestroy {
 
   get isEndOfList(): boolean {
     return this.pageIndex * this.pageSize >= this.totalRecords
+  }
+
+  openAddModal() {
+    this.modalService.create({
+      nzTitle: 'Tài sản mới',
+      nzContent: CreateAssetModalComponent,
+      nzFooter: null,
+      nzData: this.projectId
+    });
   }
 
   formatDate(dateStr: string): string {
