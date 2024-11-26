@@ -1,7 +1,7 @@
 <form [formGroup]="investmentCallForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4 py-2">
   <!-- Target Call Field -->
   <nz-form-item>
-    <nz-form-label [nzRequired]="true">Mục Tiêu Cuộc Gọi</nz-form-label>
+    <nz-form-label [nzRequired]="true">Số tiền muốn gọi</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập mục tiêu cuộc gọi'">
       <input nz-input formControlName="targetCall" type="number" placeholder="Nhập mục tiêu cuộc gọi" />
     </nz-form-control>
@@ -9,7 +9,7 @@
 
   <!-- Equity Share Call Field -->
   <nz-form-item>
-    <nz-form-label [nzRequired]="true">Cổ Phần Cuộc Gọi</nz-form-label>
+    <nz-form-label [nzRequired]="true">Số cổ phần muốn bán</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cuộc gọi'">
       <input nz-input formControlName="equityShareCall" type="number" placeholder="Nhập cổ phần cuộc gọi" />
     </nz-form-control>

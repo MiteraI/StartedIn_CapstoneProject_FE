@@ -1,50 +1,5 @@
-<mat-card class="p-6 max-w-4xl mx-auto">
-  <!------------------------------>
-  <!-- Project Detail ------------>
-  <!------------------------------>
-
-  <!-- <div>
-    <div class="border-b border-gray-300 pb-4 mb-4"></div>
-    <p class="font-semibold text-xl text-gray-600">THÔNG TIN DỰ ÁN</p>
-    <div class="space-y-4 mt-2">
-      <div class="sm:grid sm:grid-cols-3 gap-4 items-center">
-        <label class="text-gray-600">TÊN DỰ ÁN</label>
-        <input
-          disabled
-          type="text"
-          class="col-span-2 border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-      <div class="sm:grid sm:grid-cols-3 gap-4 items-center">
-        <label class="text-gray-600">MIÊU TẢ</label>
-        <input
-          disabled
-          type="text"
-          class="col-span-2 border border-gray-300 rounded p-2 w-full"
-        />
-      </div>
-      <div class="sm:flex sm:justify-between sm:gap-4">
-        <div class="sm:flex-1 sm:grid sm:grid-cols-2 gap-4 items-center">
-          <label class="text-gray-600">NGÀY BẮT ĐẦU</label>
-          <input
-            disabled
-            type="text"
-            class="border border-gray-300 rounded p-2 w-full"
-          />
-        </div>
-        <div
-          class="sm:flex-1 sm:mt-0 sm:grid sm:grid-cols-2 gap-4 items-center mt-4"
-        >
-          <label class="text-gray-600">NGÀY HOÀN THÀNH</label>
-          <input
-            disabled
-            type="text"
-            class="border border-gray-300 rounded p-2 w-full"
-          />
-        </div>
-      </div>
-    </div>
-  </div> -->
+<mat-card class="p-6 max-w-4xl min-h-screen mx-auto">
+  @if (!isLoading) {
   <!--------------------------------->
   <!-- Create Project Charter Form -->
   <!--------------------------------->
@@ -120,17 +75,17 @@
           <div class="sm:grid sm:grid-cols-4 w-full gap-4">
             <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center">
               <label class="col-span-1 text-gray-600">NGÀY BẮT ĐẦU</label>
-              <input formControlName="startDate" [min]="minDate" type="date" class="rounded w-full ml-1" />
+              <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu" class="rounded w-full ml-1" />
             </div>
             <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center mt-4 sm:mt-0">
               <label class="col-span-1 text-gray-600">NGÀY KẾT THÚC</label>
-              <input formControlName="endDate" [min]="minDate" type="date" class="rounded w-full" />
+              <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc" class="rounded w-full" />
             </div>
           </div>
         </div>
         }
       </div>
-      <ng-container *ngIf="!isLoading && isCharterExist" class="mt-5">
+      <ng-container *ngIf="isCharterExist" class="mt-5">
         <nz-table [nzShowPagination]="false" [nzBordered]="false" nzSize="small" [nzData]="listCreatePhaseDtos.controls" [nzBordered]="true">
           <thead>
             <tr>
@@ -165,4 +120,9 @@
       </div>
     </div>
   </form>
+  } @else {
+  <div class="flex items-center justify-center">
+    <nz-spin nzSimple nzSize="large"></nz-spin>
+  </div>
+  }
 </mat-card>

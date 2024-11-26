@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ProjectOverviewService } from 'src/app/services/project-overview.service';
-import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model';
-import { PhaseState } from 'src/app/shared/enums/phase-status.enum';
-import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum';
+import { Component, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ProjectOverviewService } from 'src/app/services/project-overview.service'
+import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
+import { PhaseState } from 'src/app/shared/enums/phase-status.enum'
+import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 
 @Component({
   selector: 'app-project-charter',

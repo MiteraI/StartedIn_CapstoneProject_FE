@@ -7,32 +7,38 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { ProjectCreateModalComponent } from 'src/app/components/project-pages/project-create-modal/project-create-modal.component'
 import { AccountService } from 'src/app/core/auth/account.service'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { ProjectService } from 'src/app/services/project.service'
+import { switchMap } from 'rxjs'
 
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.page.html',
   styleUrls: ['./project-list.page.scss'],
   standalone: true,
-  imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule],
+  imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule, NzSpinModule],
 })
 export class ProjectListPage implements OnInit {
-  userProjects: UserProjectsModel | undefined;
-
-  isInvestor = true;
+  userProjects: UserProjectsModel | undefined
+  isInvestor = true
 
   constructor(
     private modalService: NzModalService,
     private route: ActivatedRoute,
     private accountService: AccountService,
-    private router: Router
+    private router: Router,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {
-    this.userProjects = this.route.snapshot.data['userProjects'];
-    this.accountService.identity().subscribe(account => {
+    this.userProjects = this.route.snapshot.data['userProjects']
+    this.accountService.identity().subscribe((account) => {
       if (account) {
-        this.isInvestor = account.authorities.includes('Investor');
+        this.isInvestor = account.authorities.includes('Investor')
       }
+    })
+    this.projectService.refreshProject$.pipe(switchMap(() => this.projectService.getUserProjects())).subscribe((userProjects) => {
+      this.userProjects = userProjects
     })
   }
 
@@ -45,6 +51,6 @@ export class ProjectListPage implements OnInit {
   }
 
   navigateToProject(id: string) {
-    this.router.navigate(['/projects', id, this.isInvestor ? 'dashboard' : 'tasks']);
+    this.router.navigate(['/projects', id, this.isInvestor ? 'dashboard' : 'tasks'])
   }
 }
