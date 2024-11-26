@@ -34,7 +34,7 @@
       <td>
         <button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Chi Tiết</button>
         <nz-divider nzType="vertical"></nz-divider>
-        <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
+        <button nz-button nzType="primary" nzDanger (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
       </td>
     </tr>
     }

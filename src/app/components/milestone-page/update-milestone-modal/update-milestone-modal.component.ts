@@ -129,7 +129,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
-          const morePhases = val.filter((m) => m.id !== this.initialPhaseId && m.id)
+          const morePhases = val.filter((p) => p.id !== this.initialPhaseId)
           this.phases = [...this.phases, ...morePhases]
           this.isPhasesFetchLoading = false
         },
@@ -166,8 +166,6 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.isInfoChanged = true
   }
 
-
-
   ngOnInit() {
     this.isFetchMilestoneDetailLoading = true
     this.milestoneService.getMilestoneDetail(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
@@ -176,8 +174,11 @@ export class UpdateMilestoneModalComponent implements OnInit {
           title: response.title,
           description: response.description,
           startDate: response.startDate,
-          endDate: response.endDate
+          endDate: response.endDate,
+          phase: response.phase?.id
         })
+        this.initialPhaseId = response.phase?.id || ''
+        this.initialPhase = response.phase || null
         this.assignedTasks = response.assignedTasks
         this.isFetchMilestoneDetailLoading = false
       },
