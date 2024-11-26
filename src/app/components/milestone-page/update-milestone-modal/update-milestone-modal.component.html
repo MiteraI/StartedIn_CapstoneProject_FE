@@ -27,14 +27,14 @@
         <nz-form-item>
           <nz-form-label>Ngày Bắt Đầu</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
-            <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
+            <nz-date-picker class="w-full" formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label>Ngày Kết Thúc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
-            <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
+            <nz-date-picker class="w-full" formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -44,6 +44,9 @@
         <nz-form-control>
           <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
             <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
+            @if (initialPhaseId) {
+            <nz-option [nzValue]="initialPhaseId" [nzLabel]="initialPhase!.phaseName"></nz-option>
+            }
             @for (phase of phases; track $index) {
             <nz-option [nzValue]="phase.id" [nzLabel]="phase.phaseName"></nz-option>
             } @if (isPhasesFetchLoading) {
@@ -66,7 +69,7 @@
                 <th>Tên Tác Vụ</th>
                 <th>Trạng Thái</th>
                 <th>Ngày Bắt Đầu</th>
-                <th>Hạn Chót</th>
+                <th>Ngày Kết thúc</th>
                 <th>Người Tạo</th>
               </tr>
             </thead>
@@ -90,7 +93,7 @@
 
   }
   <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
-    <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteMilestone()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Cột Mốc</button>
+    <button nz-button nzType="primary" nzDanger (nzOnConfirm)="handleDeleteMilestone()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Cột Mốc</button>
     <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="milestoneForm.invalid || !isInfoChanged">Cập Nhật</button>
   </div>
 </div>

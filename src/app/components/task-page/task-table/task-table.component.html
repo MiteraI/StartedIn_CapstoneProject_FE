@@ -14,7 +14,7 @@
       <th>Tên Tác Vụ</th>
       <th>Trạng Thái</th>
       <th>Ngày Bắt Đầu</th>
-      <th>Hạn Chót</th>
+      <th>Ngày Kết Thúc</th>
       <th>Người Tạo</th>
       <th>Hành Động</th>
     </tr>
@@ -23,14 +23,18 @@
     @for (data of basicTable.data; track data.id) {
     <tr>
       <td>{{ data.title }}</td>
-      <td>{{ labels[data.status] }}</td>
+      <td>
+        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false">
+          {{ labels[data.status] }}
+        </nz-tag>
+      </td>
       <td>{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
-      <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
       <td>{{ data.createdBy }}</td>
       <td>
         <button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Chi Tiết</button>
         <nz-divider nzType="vertical"></nz-divider>
-        <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
+        <button nz-button nzType="primary" nzDanger (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
       </td>
     </tr>
     }

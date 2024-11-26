@@ -9,7 +9,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { InvestmentCallResponseDto } from 'src/app/shared/models/investment-call/investment-call-response-dto.model'
 import { InvestmentCallLabel } from 'src/app/shared/enums/investment-call-status.enum'
 import { InvestmentCallStatus } from 'src/app/shared/enums/investment-call-status.enum'
-
+import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.enum'
 
 @Component({
   selector: 'app-investment-call-table',
@@ -29,5 +29,9 @@ export class InvestmentCallTableComponent implements OnInit {
 
   getStatusLabel(status: InvestmentCallStatus): string {
     return InvestmentCallLabel[status]
+  }
+
+  getDealStatusLabel(status: DealStatus): string {
+    return DealStatusLabels[status]
   }
 }
