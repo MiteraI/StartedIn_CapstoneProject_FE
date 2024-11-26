@@ -8,7 +8,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { Subject, takeUntil } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ActivatedRoute } from '@angular/router'
-import { TaskService } from 'src/app/services/task.service'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { CreateMilestoneModalComponent } from '../create-milestone-modal/create-milestone-modal.component'
@@ -16,6 +15,9 @@ import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { HttpErrorResponse } from '@angular/common/http'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { MilestoneFilterComponent } from '../milestone-filter/milestone-filter.component'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
+import { CommonModule } from '@angular/common'
 
 interface MilestoneFilterOptions {
   title?: string
@@ -27,7 +29,16 @@ interface MilestoneFilterOptions {
   templateUrl: './milestone-view.component.html',
   styleUrls: ['./milestone-view.component.scss'],
   standalone: true,
-  imports: [FilterBarComponent, MilestoneTableComponent, MilestoneListComponent, NzButtonModule, MatIconModule, NzModalModule, MilestoneFilterComponent],
+  imports: [
+    FilterBarComponent,
+    MilestoneTableComponent,
+    MilestoneListComponent,
+    NzButtonModule,
+    MatIconModule,
+    NzModalModule,
+    MilestoneFilterComponent,
+    CommonModule,
+  ],
 })
 export class MilestoneViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
@@ -40,15 +51,41 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   page: number = 1
   total: number = 0 //Total of tasks (filter or not)
   isFetchAllMilestonesLoading: boolean = false
-
+  isLeader: boolean = false
   constructor(
     private viewMode: ViewModeConfigService,
     private modalService: NzModalService,
     private activatedRoute: ActivatedRoute,
     private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private roleService: RoleInTeamService
   ) {}
+
+  ngOnInit() {
+    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
+    if (this.isDesktopView) {
+      this.size = 8
+    } else {
+      this.size = 12
+    }
+    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+      this.projectId = value.get('id')!
+      this.roleService.role$.subscribe(response => {
+        if (!response) return;
+        this.isLeader = response.roleInTeam === TeamRole.LEADER;
+      })
+    })
+    this.fetchMilestones(this.isDesktopView)
+    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.loadMore()
+    })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
@@ -103,27 +140,6 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
 
     this.page++
     this.fetchMilestones(false)
-  }
-
-  ngOnInit() {
-    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
-    if (this.isDesktopView) {
-      this.size = 8
-    } else {
-      this.size = 12
-    }
-    this.activatedRoute.parent?.paramMap.subscribe((value) => {
-      this.projectId = value.get('id')!
-    })
-    this.fetchMilestones(this.isDesktopView)
-    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.loadMore()
-    })
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next()
-    this.destroy$.complete()
   }
 
   printSearchString = (searchString: string) => {

@@ -20,11 +20,12 @@ import { format } from 'date-fns';
   standalone: true,
   imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule],
 })
-export class MilestoneTableComponent implements OnInit {
+export class MilestoneTableComponent {
   @Output() pageChanged = new EventEmitter<number>()
   @Input({ required: true }) milestoneList: Milestone[] = []
   @Input({ required: true }) projectId: string = ''
   @Input({ required: true }) isFetchAllTaskLoading: boolean = false
+  @Input() isLeader: boolean = false
   @Input() total: number = 0
   @Input() size: number = 10
   @Input() page: number = 1
@@ -34,8 +35,6 @@ export class MilestoneTableComponent implements OnInit {
     private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService
   ) {}
-
-  ngOnInit() {}
 
   openUpdateMilestoneModal(milestoneId: string) {
     const modalRef = this.modalService.create({

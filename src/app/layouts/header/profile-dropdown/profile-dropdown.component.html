@@ -1,9 +1,9 @@
 <div>
-  <img [matMenuTriggerFor]="profileMenu" class="max-w-9 max-h-9 rounded-full cursor-pointer" src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar.png" />
-  <mat-menu #profileMenu="matMenu">
+  <img [matMenuTriggerFor]="profileMenu" class="max-w-9 max-h-9 rounded-full cursor-pointer" [src]="account?.profilePicture" />
+  <mat-menu #profileMenu="matMenu" xPosition="before">
     <div class="flex w-full px-3">
-      <div class="w-1/5">
-        <img class="h-[40px] mt-2 rounded-full cursor-pointer" src="https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar.png" />
+      <div>
+        <img class="h-10 w-10 mt-2 rounded-full cursor-pointer object-cover" [src]="account?.profilePicture" />
       </div>
       <div class="ml-3 w-auto">
         <p class="mb-1 font-['Inter'] text-lg font-semibold">

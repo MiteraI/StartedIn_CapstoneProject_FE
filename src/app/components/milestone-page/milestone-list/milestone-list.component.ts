@@ -12,19 +12,21 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
   standalone: true,
   imports: [MilestoneListItemComponent, NzModalModule, NzSpinModule],
 })
-export class MilestoneListComponent implements OnInit {
+export class MilestoneListComponent {
   @Input({ required: true }) milestoneList: Milestone[] = []
   @Input({ required: true }) projectId: string = ''
   @Input({ required: true }) isFetchAllTaskLoading: boolean = false
+  @Input() isLeader: boolean = false
   @Input() total: number = 0
   @Input() size: number = 10
   @Input() page: number = 1
 
   constructor(private modalService: NzModalService) {}
 
-  ngOnInit() {}
-
   openUpdateMilestoneModal(milestoneId: string) {
+    if (!this.isLeader) {
+      return;
+    }
     const modalRef = this.modalService.create({
       nzTitle: 'Thông Tin Cột Mốc',
       nzStyle: { top: '20px' },
@@ -35,6 +37,6 @@ export class MilestoneListComponent implements OnInit {
         projectId: this.projectId,
       },
       nzFooter: null,
-    })
+    });
   }
 }
