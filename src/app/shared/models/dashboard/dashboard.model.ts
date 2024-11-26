@@ -2,8 +2,8 @@ import { MilestoneProgressModel } from "../milestone/milestone-progress.model";
 
 export type DashboardModel = {
   currentBudget: number;
-  inAmount: number; // tiền vào trong tháng trước
-  outAmount: number; // tiền ra trong tháng trước
+  inAmount: number; // tiền vào trong tháng
+  outAmount: number; // tiền ra trong tháng
   remainingDisbursement: number;
   disbursedAmount: number;
   // % cổ phần của login user

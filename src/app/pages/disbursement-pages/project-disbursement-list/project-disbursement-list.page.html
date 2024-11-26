@@ -1,5 +1,5 @@
 <app-filter-bar
-  viewName="Danh sách giải ngân"
+  viewName="Giải ngân"
   [searchValue]="filter.name ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
@@ -22,9 +22,20 @@
   </div>
 </app-filter-bar>
 
+<div *ngIf="monthlyInfo.length > 0" class="p-4 max-w-7xl mx-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div *ngFor="let info of monthlyInfo; let i = index" class="bg-white rounded-lg shadow p-4">
+      <canvas [id]="'monthlyChart' + i"></canvas>
+      <div class="mt-2 text-center text-sm text-gray-500">
+        Tổng: {{ (info.disbursedAmount + info.remainingDisbursement) | vndCurrency }}
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border">
+  <table class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Tiêu đề</th>
@@ -41,14 +52,14 @@
       <ng-container *ngFor="let group of disbursementGroups; index as i">
         <!-- Date Header Row -->
         <tr class="bg-gray-100">
-          <td colspan="7" class="px-3 py-1 font-medium">
+          <td colspan="8" class="px-3 py-1 font-medium">
             {{ formatGroupHeader(keys[i]) }}
           </td>
         </tr>
         <!-- Disbursement Rows -->
         <tr
           *ngFor="let disbursement of group"
-          class="border-b hover:bg-gray-50 cursor-pointer"
+          class="border-b hover:bg-purple-50 cursor-pointer"
           [routerLink]="[disbursement.id]"
         >
           <td class="p-4">

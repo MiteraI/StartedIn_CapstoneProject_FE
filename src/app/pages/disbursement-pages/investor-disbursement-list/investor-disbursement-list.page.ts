@@ -152,8 +152,8 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
 
   formatGroupHeader(dateStr: string): string {
     const date = new Date(dateStr);
-    if (isToday(date)) return 'Today';
-    if (isYesterday(date)) return 'Yesterday';
+    if (isToday(date)) return 'Hôm nay';
+    if (isYesterday(date)) return 'Hôm qua';
     return format(date, 'dd/MM/yyyy');
   }
 

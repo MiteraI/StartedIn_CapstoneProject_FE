@@ -19,6 +19,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
+import { Chart } from 'chart.js/auto';
+import { DisbursementMonthlyInfoModel } from 'src/app/shared/models/disbursement/disbursement-monthly-info.model';
 
 interface FilterOptions {
   name?: string;
@@ -72,6 +74,9 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
 
   @ViewChild('filterComponent') filterComponent!: DisbursementFilterComponent;
 
+  monthlyInfo: DisbursementMonthlyInfoModel[] = [];
+  private monthlyCharts: Chart[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private modalService: NzModalService,
@@ -99,9 +104,12 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       .subscribe(() => {
         this.loadMore();
       });
+
+    this.loadMonthlyInfo();
   }
 
   ngOnDestroy() {
+    this.monthlyCharts.forEach(chart => chart.destroy());
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -154,8 +162,8 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
 
   formatGroupHeader(dateStr: string): string {
     const date = new Date(dateStr);
-    if (isToday(date)) return 'Today';
-    if (isYesterday(date)) return 'Yesterday';
+    if (isToday(date)) return 'Hôm nay';
+    if (isYesterday(date)) return 'Hôm qua';
     return format(date, 'dd/MM/yyyy');
   }
 
@@ -227,5 +235,77 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     this.pageSize = pageSize;
     this.pageIndex = 1;
     this.filterDisbursements();
+  }
+
+  private loadMonthlyInfo(): void {
+    this.disbursementService.getDisbursementMonthlyInfo(this.projectId)
+      .subscribe(info => {
+        this.monthlyInfo = info;
+        setTimeout(() => {
+          this.createMonthlyCharts();
+        });
+      });
+  }
+
+  private createMonthlyCharts(): void {
+    // Clean up existing charts
+    this.monthlyCharts.forEach(chart => chart.destroy());
+    this.monthlyCharts = [];
+
+    this.monthlyInfo.forEach((info, index) => {
+      const canvas = document.getElementById(`monthlyChart${index}`) as HTMLCanvasElement;
+      if (!canvas) return;
+
+      const chart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: [''],
+          datasets: [
+            {
+              label: 'Đã giải ngân',
+              data: [info.disbursedAmount / 1000000],
+              backgroundColor: '#10B981',
+              borderRadius: 4
+            },
+            {
+              label: 'Chưa giải ngân',
+              data: [info.remainingDisbursement / 1000000],
+              backgroundColor: '#4F46E5',
+              borderRadius: 4
+            }
+          ]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: index === 0 ?
+                'Số tiền giải ngân tháng này (tính theo hạn chót)' :
+                'Số tiền giải ngân tháng sau (tính theo hạn chót)'
+            },
+            legend: {
+              position: 'bottom'
+            }
+          },
+          scales: {
+            x: {
+              stacked: true,
+              title: {
+                display: true,
+                text: '(triệu đồng)'
+              }
+            },
+            y: {
+              stacked: true,
+              display: false
+            }
+          }
+        }
+      });
+
+      this.monthlyCharts.push(chart);
+    });
   }
 }
