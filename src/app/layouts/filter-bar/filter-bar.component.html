@@ -36,7 +36,7 @@
       </button>
     </div>
   </div>
-  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between border-2">
+  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between">
     <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
     @if (!isSearching) {
       <span>{{ viewName }}</span>

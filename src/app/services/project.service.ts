@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { ContractPartyModel } from '../shared/models/contract/contract-party.model'
 import { ExploreProjectsListItemModel } from '../shared/models/project/explore-projects-list-item.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
@@ -16,6 +16,7 @@ import { PayosInfoModel } from '../shared/models/project/payos-info.model'
   providedIn: 'root',
 })
 export class ProjectService {
+  refreshProject$ = new BehaviorSubject<boolean>(true)
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getProject(id: string): Observable<ProjectModel> {

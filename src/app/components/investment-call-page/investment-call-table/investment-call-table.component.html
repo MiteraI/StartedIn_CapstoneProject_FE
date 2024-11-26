@@ -1,6 +1,7 @@
-<nz-table #investmentCallTable nzSize="small" [nzFrontPagination]="false" [nzData]="listInvestmentCall" [nzLoading]="isFetchAllCallLoading">
+<nz-table #investmentCallTable nzSize="small" [nzFrontPagination]="false" [nzData]="listInvestmentCall" [nzLoading]="isFetchAllCallLoading" [nzBordered]="true">
   <thead>
     <tr>
+      <th></th>
       <th>Mục tiêu</th>
       <th>Số tiền đã gọi</th>
       <th>Cổ phần cần gọi</th>
@@ -14,6 +15,7 @@
   <tbody>
     @for (data of investmentCallTable.data; track data.id) {
     <tr>
+      <td [(nzExpand)]="data.expand"></td>
       <td class="text-green-500">{{ data.targetCall | number }}</td>
       <td class="text-green-500">{{ data.amountRaised | number }}</td>
       <td>{{ data.equityShareCall / 100 | percent }}</td>
@@ -22,6 +24,34 @@
       <td>{{ data.endDate === null ? 'Không Có Ngày kết thúc' : (data.endDate | date : "d 'tháng' M, Y") }}</td>
       <td [ngClass]="{ 'text-red-500': data.status === 2, 'text-green-500': data.status === 1 }">{{ getStatusLabel(data.status) }}</td>
       <td>{{ data.totalInvestor }}</td>
+    </tr>
+    <tr [nzExpand]="data.expand">
+      <nz-table #innerTable [nzData]="data.dealOffers" nzSize="small" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>Tên Dự Án</th>
+            <th>Trưởng Nhóm</th>
+            <th>Số Tiền Kêu Gọi</th>
+            <th>Số Cổ Phần</th>
+            <th>Điều Khoản</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (data of innerTable.data; track data) {
+          <tr>
+            <td>{{ data.projectName }}</td>
+            <td>{{ data.leaderName }}</td>
+            <td>{{ data.amount | number }}</td>
+            <td>{{ data.equityShareOffer / 100 | percent }}</td>
+            <td>{{ data.termCondition }}</td>
+            <td [ngClass]="{ 'text-red-500': data.dealStatus === 3, 'text-green-500': data.dealStatus === 2, 'text-gray-500': data.dealStatus === 1 }">
+              {{ getDealStatusLabel(data.dealStatus) }}
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
     </tr>
     }
   </tbody>

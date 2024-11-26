@@ -9,14 +9,14 @@
   [nzPageSize]="size"
   (nzPageIndexChange)="onPageChange($event)"
 >
-  <thead>
+  <thead class="ant-table-thead">
     <tr>
       <th>Tên Tác Vụ</th>
       <th>Ngày Bắt Đầu</th>
       <th>Ngày Kết Thúc</th>
       <th>Giai đoạn</th>
       <th>Tiến Độ</th>
-      <th>Hành Động</th>
+      <th *ngIf="isLeader">Hành Động</th>
     </tr>
   </thead>
   <tbody>
@@ -33,7 +33,7 @@
         <span>Hiện không có tác vụ</span>
         }
       </td>
-      <td>
+      <td *ngIf="isLeader">
         <button nz-button nzType="primary" (click)="openUpdateMilestoneModal(data.id)">Chi Tiết</button>
         <nz-divider nzType="vertical"></nz-divider>
         <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteMilestone(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa cột mốc này không?">Xóa</button>

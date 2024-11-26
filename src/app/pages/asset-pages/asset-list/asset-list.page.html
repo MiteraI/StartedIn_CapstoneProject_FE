@@ -10,6 +10,7 @@
       (filterApplied)="onFilterApplied($event)"
     ></app-asset-filter>
   </div>
+
   <div mobile class="p-4">
     <app-asset-filter
       [data]="filterData"
@@ -17,6 +18,19 @@
     ></app-asset-filter>
   </div>
 </app-filter-bar>
+
+<div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <!-- Desktop Selection Actions -->
+  <div class="flex flex-col justify-end md:flex-row mb-4">
+    <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
+      <button (click)="openAddModal()"
+        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+      >
+        <mat-icon fontIcon="add" class="mr-2"></mat-icon>
+        Tạo tài sản
+      </button>
+    </div>
+  </div>
 
   <!-- Desktop Table View -->
   <table class="w-full hidden md:table border">
@@ -35,27 +49,35 @@
         *ngFor="let asset of assets"
         class="border-b hover:bg-gray-50 cursor-pointer"
       >
-          <td class="p-4">
-            <div class="font-medium hover:font-bold">{{asset.assetName}}</div>
-          </td>
-          <td class="p-4">
-            <div class="text-gray-600">{{asset.serialNumber}}</div>
-          </td>
-          <td class="p-4">
-            <div class="text-gray-600">{{asset.quantity}}</div>
-          </td>
-          <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
-          <td class="p-4 text-gray-600">{{formatDate(asset.purchaseDate)}}</td>
-          <td class="p-4">
-            <span [ngClass]="{
-              'text-green-500': asset.status === assetStatuses.AVAILABLE,
-              'text-red-500': asset.status === assetStatuses.SOLD,
-              'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
-            }">
-              ● {{statusLabels[asset.status]}}
-            </span>
-          </td>
-        </tr>
+        <td class="p-4">
+          <div class="font-medium hover:font-bold">{{asset.assetName}}</div>
+        </td>
+        <td class="p-4">
+          <div class="text-gray-600">{{asset.serialNumber}}</div>
+        </td>
+        <td class="p-4">
+          <div class="text-gray-600">{{asset.quantity}}</div>
+        </td>
+        <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
+        <td class="p-4 text-gray-600">{{formatDate(asset.purchaseDate)}}</td>
+        <td class="p-4">
+          <span [ngClass]="{
+            'text-green-500': asset.status === assetStatuses.AVAILABLE,
+            'text-red-500': asset.status === assetStatuses.SOLD,
+            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
+          }">
+            ● {{statusLabels[asset.status]}}
+          </span>
+        </td>
+        <td class="p-4 space-x-2 h-6">
+          <button (click)="$event.stopPropagation()" class="text-yellow-500 hover:text-green-700">
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button (click)="$event.stopPropagation()" class="text-red-500 hover:text-yellow-700">
+            <mat-icon fontIcon="delete"></mat-icon>
+          </button>
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -71,3 +93,41 @@
       (nzPageSizeChange)="onPageSizeChange($event)"
     ></nz-pagination>
   </div>
+
+  <!--Mobile View-->
+  <div class="md:hidden space-y-4">
+    <div
+      *ngFor="let asset of assets"
+      class="border p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white"
+    >
+      <div class="font-medium text-xl">{{ asset.assetName }}</div>
+      <div class="text-md text-gray-600">Số seri: {{ asset.serialNumber }}</div>
+      <div class="text-md text-gray-600">Số lượng: {{ asset.quantity }}</div>
+      <div class="text-md text-gray-600">
+        Giá: {{ asset.price | vndCurrency }}
+      </div>
+      <div class="text-md text-gray-600">
+        Ngày mua: {{ formatDate(asset.purchaseDate) }}
+      </div>
+      <div class="text-md">
+        <span
+          [ngClass]="{
+            'text-green-500': asset.status === assetStatuses.AVAILABLE,
+            'text-red-500': asset.status === assetStatuses.SOLD,
+            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
+          }"
+        >
+          ● {{ statusLabels[asset.status] }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Loading Spinner -->
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các tài sản!
+  </div>
+</div>

@@ -43,7 +43,7 @@ export class CreateInvestmentCallModalComponent implements OnInit {
 
   disabledStartDate = (current: Date): boolean => {
     const endDate = this.investmentCallForm.get('endDate')?.value
-    return current < new Date() || (endDate && current > new Date(endDate)) // Disable dates before today and after the selected end date
+    return current < new Date(new Date().setHours(0, 0, 0, 0)) || (endDate && current > new Date(endDate)) // Disable dates before today and after the selected end date
   }
 
   disabledEndDate = (current: Date): boolean => {
@@ -71,6 +71,7 @@ export class CreateInvestmentCallModalComponent implements OnInit {
       this.investmentCallService.createInvestmentCall(this.nzModalData.projectId, investmentCallData).subscribe({
         next: () => {
           this.antdNoti.openSuccessNotification('Tạo Cuộc Gọi Đầu Tư Thành Công', '')
+          this.investmentCallService.refreshInvestmentCall$.next(true)
           this.nzModalRef.close()
         },
         error: (error) => {

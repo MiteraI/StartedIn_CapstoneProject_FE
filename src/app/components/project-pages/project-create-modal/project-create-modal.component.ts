@@ -8,6 +8,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { CommonModule, DatePipe } from '@angular/common'
 import { ProjectService } from 'src/app/services/project.service'
+import { NzModalRef } from 'ng-zorro-antd/modal'
 
 @Component({
   selector: 'app-project-create-modal',
@@ -23,12 +24,11 @@ export class ProjectCreateModalComponent implements OnInit {
   previewUrl: string | ArrayBuffer | null = null
   projectForm: FormGroup
 
-  constructor(private fb: FormBuilder, private datePipe: DatePipe, private messageService: NzMessageService, private projectService: ProjectService) {
+  constructor(private fb: FormBuilder, private datePipe: DatePipe, private messageService: NzMessageService, private projectService: ProjectService, private modalRef: NzModalRef) {
     this.projectForm = this.fb.group({
       projectName: ['', [Validators.required]],
       description: ['', [Validators.required]],
       logoFile: [null, [Validators.required]],
-      totalShares: [0],
       startDate: [null, [Validators.required]],
       endDate: [null],
     })
@@ -60,7 +60,6 @@ export class ProjectCreateModalComponent implements OnInit {
       formData.append('ProjectName', this.projectForm.get('projectName')?.value)
       formData.append('Description', this.projectForm.get('description')?.value)
       formData.append('LogoFile', this.selectedFile!)
-      formData.append('TotalShares', this.projectForm.get('totalShares')!.value)
 
       const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'yyyy-MM-dd')
       const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'yyyy-MM-dd')
@@ -75,14 +74,17 @@ export class ProjectCreateModalComponent implements OnInit {
       for (let pair of (formData as any).entries()) {
         console.log(`${pair[0]}: ${pair[1]}`)
       }
-      console.log(formData.getAll('ProjectName'))
       this.projectService.createProject(formData).subscribe({
         next: (response) => {
           this.messageService.success('Project created successfully')
+          this.projectService.refreshProject$.next(true)
+          this.modalRef.close()
         },
         error: (error) => {
           this.messageService.error(error.error)
           console.error('Error creating project', error.error)
+          this.projectService.refreshProject$.next(true)
+          this.modalRef.close()
         },
       })
     }
