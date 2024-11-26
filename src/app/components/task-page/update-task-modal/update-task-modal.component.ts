@@ -25,10 +25,12 @@ import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 import { NzTagModule } from 'ng-zorro-antd/tag'
-import { presetColors } from 'ng-zorro-antd/core/color'
 import { TaskComment } from 'src/app/shared/models/task-comment/task-comment.model'
 import { TaskAttachment } from 'src/app/shared/models/task-attachment/task-attachment.model'
 import { TaskCommentService } from 'src/app/services/task-comment.service'
+import { NzUploadModule, NzUploadFile } from 'ng-zorro-antd/upload'
+import { MatIconModule } from '@angular/material/icon'
+import { TaskAttachmentService } from 'src/app/services/task-attachment.service'
 
 interface IModalData {
   taskId: string
@@ -51,9 +53,10 @@ interface IModalData {
     NzTableModule,
     NzSpinModule,
     NzPopconfirmModule,
-    NzIconModule,
     NzInputNumberModule,
     NzTagModule,
+    NzUploadModule,
+    MatIconModule,
   ],
   providers: [DatePipe],
 })
@@ -106,6 +109,7 @@ export class UpdateTaskModalComponent implements OnInit {
   milestonesTotal = 0
 
   // Attachments handling vars
+  fileList: NzUploadFile[] = []
   attachmentList: TaskAttachment[] = []
 
   // Comments handling vars
@@ -121,6 +125,7 @@ export class UpdateTaskModalComponent implements OnInit {
     private antdNoti: AntdNotificationService,
     private projectService: ProjectService,
     private taskCommentService: TaskCommentService,
+    private taskAttachmentService: TaskAttachmentService,
     private nzModalRef: NzModalRef
   ) {
     this.taskForm = this.fb.group({
@@ -360,6 +365,64 @@ export class UpdateTaskModalComponent implements OnInit {
     this.taskService.deleteTask(this.nzModalData.projectId, this.nzModalData.taskId).subscribe({
       next: (res) => {
         this.antdNoti.openSuccessNotification('', 'Xóa tác vụ thành công')
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
+  }
+
+  // Attachments handling
+
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.taskForm.get('files')?.setErrors(null)
+    this.fileList = this.fileList.concat(file)
+    return false
+  }
+
+  removeUpload = (file: NzUploadFile): boolean => {
+    if (this.fileList.length <= 1) {
+      this.taskForm.get('files')?.setErrors({ emptyList: true })
+    }
+    return true
+  }
+
+  uploadAttachment() {
+    // Get file from taskForm and forEach to upload
+    this.fileList.forEach((file) => {
+      this.taskAttachmentService.uploadFile(this.nzModalData.projectId, this.nzModalData.taskId, file).subscribe({
+        next: (res) => {
+          this.antdNoti.openSuccessNotification('', 'Tải lên tệp đính kèm thành công')
+          // Remove this file from the fileList
+          this.fileList = this.fileList.filter((f) => f.uid !== file.uid)
+          console.log(res);
+          console.log(this.attachmentList);
+          
+          
+          this.attachmentList.push(res)
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          } else {
+          }
+        },
+      })
+    })
+  }
+
+  deleteAttachment(attachmentId: string) {
+    this.taskAttachmentService.deleteAttachment(this.nzModalData.projectId, this.nzModalData.taskId, attachmentId).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Xóa tệp đính kèm thành công')
+        this.attachmentList = this.attachmentList.filter((a) => a.id !== attachmentId)
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
