@@ -4,13 +4,14 @@ import { ProjectOverviewService } from 'src/app/services/project-overview.servic
 import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
 import { PhaseState } from 'src/app/shared/enums/phase-status.enum'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
+import { NzTableModule } from 'ng-zorro-antd/table'
 
 @Component({
   selector: 'app-project-charter',
   templateUrl: './project-charter.component.html',
   styleUrls: ['./project-charter.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NzTableModule],
 })
 export class ProjectCharterComponent implements OnInit {
   projectOverview: ProjectOveriewModel | undefined

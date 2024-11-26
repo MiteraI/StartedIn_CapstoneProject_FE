@@ -6,8 +6,6 @@
       <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listOwnProject" [project]="project" />
     </div>
   </div>
-  } @else {
-  <nz-spin nzSimple nzSize="large"></nz-spin>
   }
   <!-- Dự án đang tham gia -->
   @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
@@ -15,12 +13,9 @@
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
     <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
   </div>
-  } @else {
-  <nz-spin nzSimple nzSize="large"></nz-spin>
   }
   <div *ngIf="(userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) === 0" class="text-gray-500 text-xl">
     Bạn không có dự án nào.
     <a class="ml-2" (click)="openCreateProjectModal()" nz-button nzType="link">Thêm dự án mới!</a>
   </div>
 </div>
-

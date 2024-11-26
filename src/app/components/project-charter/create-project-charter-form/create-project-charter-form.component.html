@@ -86,20 +86,46 @@
         }
       </div>
       <ng-container *ngIf="isCharterExist" class="mt-5">
-        <nz-table [nzShowPagination]="false" [nzBordered]="false" nzSize="small" [nzData]="listCreatePhaseDtos.controls" [nzBordered]="true">
+        <nz-table #nestedTable [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
           <thead>
             <tr>
+              <th></th>
               <th>Giai Đoạn</th>
               <th>Ngày Bắt Đầu</th>
               <th>Ngày Kết Thúc</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let phase of listCreatePhaseDtos.controls; let i = index" [formGroupName]="i">
-              <td>{{ phase.get('phaseName')!.value }}</td>
-              <td>{{ phase.get('startDate')!.value }}</td>
-              <td>{{ phase.get('endDate')!.value }}</td>
+            @for (data of nestedTable.data; track data) {
+            <tr [formGroupName]="$index">
+              <td [(nzExpand)]="data.expand"></td>
+              <td>{{ data.phaseName }}</td>
+              <td>{{ data.startDate }}</td>
+              <td>{{ data.endDate }}</td>
             </tr>
+            <tr [nzExpand]="data.expand">
+              <nz-table #innerTable [nzData]="data.milestones" nzSize="small" [nzShowPagination]="false">
+                <thead>
+                  <tr>
+                    <th>Cột Mốc</th>
+                    <th>Miêu Tả</th>
+                    <th>Bắt Đầu</th>
+                    <th>Kết Thúc</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (data of innerTable.data; track data) {
+                  <tr>
+                    <td>{{ data.title }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.startDate }}</td>
+                    <td>{{ data.endDate }}</td>
+                  </tr>
+                  }
+                </tbody>
+              </nz-table>
+            </tr>
+            }
           </tbody>
         </nz-table>
       </ng-container>

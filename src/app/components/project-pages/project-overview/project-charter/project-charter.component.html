@@ -60,28 +60,50 @@
     </div>
   </section>
 
-
   <!-- Schedule -->
   <section>
     <h2 class="text-xl font-semibold mb-4">LỊCH TRÌNH DỰ ÁN</h2>
-    <table class="w-full">
+    <nz-table #nestedTable class="w-full" [nzShowPagination]="false" [nzData]="projectOverview?.projectCharterResponseDto?.phases!" [nzBordered]="true">
       <thead class="bg-gray-100">
         <tr>
-          <th class="text-left p-2 border">TÊN GIAI ĐOẠN</th>
-          <th class="text-left p-2 border w-48">NGÀY BẮT ĐẦU</th>
-          <th class="text-left p-2 border w-48">NGÀY KẾT THÚC</th>
+          <th></th>
+          <th class="">TÊN GIAI ĐOẠN</th>
+          <th class=" ">NGÀY BẮT ĐẦU</th>
+          <th class="">NGÀY KẾT THÚC</th>
         </tr>
       </thead>
       <tbody>
-        @for (phase of projectOverview?.projectCharterResponseDto?.phases; track phase.id) {
-
+        @for (data of nestedTable.data; track data) {
         <tr>
-          <td class="p-2 border">{{ phase.phaseName }}</td>
-          <td class="p-2 border">{{ phase.startDate | date : 'dd-MM-yyyy' }}</td>
-          <td class="p-2 border">{{ phase.endDate | date : 'dd-MM-yyyy' }}</td>
+          <td [(nzExpand)]="data.expand"></td>
+          <td class="">{{ data.phaseName }}</td>
+          <td class="">{{ data.startDate | date : 'dd-MM-yyyy' }}</td>
+          <td class="">{{ data.endDate | date : 'dd-MM-yyyy' }}</td>
+        </tr>
+        <tr [nzExpand]="data.expand">
+          <nz-table #innerTable [nzData]="data.milestones" nzSize="small" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th>Cột Mốc</th>
+                <th>Miêu Tả</th>
+                <th>Bắt Đầu</th>
+                <th>Kết Thúc</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of innerTable.data; track data) {
+              <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ data.description }}</td>
+                <td>{{ data.startDate }}</td>
+                <td>{{ data.endDate }}</td>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
         </tr>
         }
       </tbody>
-    </table>
+    </nz-table>
   </section>
 </div>

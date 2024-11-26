@@ -21,6 +21,7 @@ import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { NzListModule } from 'ng-zorro-antd/list'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
@@ -39,6 +40,7 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
     MatIconModule,
     NzSpinModule,
     NzDatePickerModule,
+    NzListModule,
   ],
   providers: [DatePipe],
 })
@@ -49,6 +51,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
   projectId = ''
   minDate = new Date().toISOString().split('T')[0]
   projectCharterForm: FormGroup
+  projectCharter: ProjectCharter | undefined
 
   phaseStates = Object.keys(PhaseState)
     .filter((key) => !isNaN(Number(PhaseState[key as any]))) // Filters out non-numeric keys
@@ -149,10 +152,10 @@ export class CreateProjectCharterFormComponent implements OnInit {
   getProjectCharter() {
     this.projectCharterService.get(this.projectId).subscribe({
       next: (response) => {
-        const projectCharter = response as ProjectCharter
-        if (projectCharter) {
-          this.projectCharterForm.patchValue(projectCharter)
-          this.mapPhasesToFormArray(projectCharter.phases)
+        this.projectCharter = response as ProjectCharter
+        if (this.projectCharter) {
+          this.projectCharterForm.patchValue(this.projectCharter)
+          this.mapPhasesToFormArray(this.projectCharter.phases)
           this.isLoading = false
           this.isCharterExist = true
 
