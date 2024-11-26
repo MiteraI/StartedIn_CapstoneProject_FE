@@ -10,7 +10,7 @@ import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { TaskService } from 'src/app/services/task.service'
-import { TaskStatus, TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
+import { TaskStatus, TaskStatusColors, TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { UpdateTaskInfo } from 'src/app/shared/models/task/update-task.model'
 import { Task } from 'src/app/shared/models/task/task.model'
 import { ProjectService } from 'src/app/services/project.service'
@@ -24,6 +24,11 @@ import { Subject, takeUntil } from 'rxjs'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { presetColors } from 'ng-zorro-antd/core/color'
+import { TaskComment } from 'src/app/shared/models/task-comment/task-comment.model'
+import { TaskAttachment } from 'src/app/shared/models/task-attachment/task-attachment.model'
+import { TaskCommentService } from 'src/app/services/task-comment.service'
 
 interface IModalData {
   taskId: string
@@ -48,25 +53,30 @@ interface IModalData {
     NzPopconfirmModule,
     NzIconModule,
     NzInputNumberModule,
+    NzTagModule,
   ],
   providers: [DatePipe],
 })
 export class UpdateTaskModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   taskStatusLabels = TaskStatusLabels
-  statuses: { label: string; value: number }[] = [
-    { value: 1, label: TaskStatusLabels[1] },
-    { value: 2, label: TaskStatusLabels[2] },
-    { value: 3, label: TaskStatusLabels[3] },
-    { value: 4, label: TaskStatusLabels[4] },
-    { value: 5, label: TaskStatusLabels[5] },
-    { value: 6, label: TaskStatusLabels[6] },
+  statuses: { label: string; value: number; color: string }[] = [
+    { value: 1, label: TaskStatusLabels[1], color: TaskStatusColors[1] },
+    { value: 2, label: TaskStatusLabels[2], color: TaskStatusColors[2] },
+    { value: 3, label: TaskStatusLabels[3], color: TaskStatusColors[3] },
+    { value: 4, label: TaskStatusLabels[4], color: TaskStatusColors[4] },
+    { value: 5, label: TaskStatusLabels[5], color: TaskStatusColors[5] },
+    { value: 6, label: TaskStatusLabels[6], color: TaskStatusColors[6] },
   ]
+
+  getStatusColor(status: TaskStatus): string {
+    return TaskStatusColors[status]
+  }
+
   taskForm: FormGroup
   private destroy$ = new Subject<void>()
 
   subTasks: Task[] = []
-  comments: { content: string; author: string; date: string }[] = []
   isInfoChanged: boolean = false
   initialStatus: TaskStatus = 1
 
@@ -95,6 +105,12 @@ export class UpdateTaskModalComponent implements OnInit {
   milestonesSize = 10
   milestonesTotal = 0
 
+  // Attachments handling vars
+  attachmentList: TaskAttachment[] = []
+
+  // Comments handling vars
+  commentList: TaskComment[] = []
+
   isFetchTaskDetailsLoading: boolean = false
 
   constructor(
@@ -104,6 +120,7 @@ export class UpdateTaskModalComponent implements OnInit {
     private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService,
     private projectService: ProjectService,
+    private taskCommentService: TaskCommentService,
     private nzModalRef: NzModalRef
   ) {
     this.taskForm = this.fb.group({
@@ -116,6 +133,7 @@ export class UpdateTaskModalComponent implements OnInit {
       parentTask: [''],
       milestone: [null],
       assignees: [[]],
+      taskComment: [''],
     })
   }
 
@@ -132,7 +150,6 @@ export class UpdateTaskModalComponent implements OnInit {
         endDate = endDate instanceof Date ? endDate : new Date(endDate)
         endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), endDate.getHours(), 0, 0).toISOString()
       }
-      
 
       const taskData: UpdateTaskInfo = {
         title: this.taskForm.value.title,
@@ -151,7 +168,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -174,7 +191,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -205,7 +222,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -230,7 +247,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -249,7 +266,7 @@ export class UpdateTaskModalComponent implements OnInit {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
-                this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
             } else {
             }
           },
@@ -269,7 +286,7 @@ export class UpdateTaskModalComponent implements OnInit {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
             } else if (error.status === 500) {
-                this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
             } else {
             }
           },
@@ -293,7 +310,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -332,7 +349,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -348,7 +365,25 @@ export class UpdateTaskModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
+  }
+
+  createComment() {
+    this.taskCommentService.createComment(this.nzModalData.projectId, this.nzModalData.taskId, { content: this.taskForm.value.taskComment }).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Bình luận thành công')
+        this.taskForm.patchValue({ taskComment: '' })
+        this.commentList.push(res)
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
         }
       },
@@ -367,6 +402,8 @@ export class UpdateTaskModalComponent implements OnInit {
           this.initialMilestoneId = task.milestone === null ? '' : task.milestone.id
           this.initialMilestone = task.milestone
           this.subTasks = task.subTasks
+          this.commentList = task.taskComments
+          this.attachmentList = task.taskAttachments
           this.taskForm.setValue(
             {
               title: task.title,
@@ -378,6 +415,7 @@ export class UpdateTaskModalComponent implements OnInit {
               parentTask: task.parentTask === null ? '' : task.parentTask.id,
               milestone: task.milestone === null ? '' : task.milestone.id,
               assignees: task.assignees.map((user) => user.id),
+              taskComment: '',
             },
             { emitEvent: false }
           )
@@ -387,7 +425,7 @@ export class UpdateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
           this.isFetchTaskDetailsLoading = false
@@ -404,7 +442,7 @@ export class UpdateTaskModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
         }
       },

@@ -34,6 +34,7 @@ export class ProjectInvitePage implements OnInit {
       this.recruitInviteService.acceptProjectInvite({ role: this.role, type: ApplicationType.INVITE }, this.projectId).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Bạn đã chấp nhận lời mời dự án', '')
+          this.router.navigate(['/projects'])
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {

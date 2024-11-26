@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { MatIconModule } from '@angular/material/icon'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
@@ -10,7 +11,7 @@ import { AntdNotificationService } from 'src/app/core/util/antd-notification.ser
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, ReactiveFormsModule],
+  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule],
 })
 export class RecruitmentViewComponent implements OnInit {
   recruitmentForm: FormGroup

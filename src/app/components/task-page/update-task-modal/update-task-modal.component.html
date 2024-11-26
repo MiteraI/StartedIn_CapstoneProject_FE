@@ -1,4 +1,4 @@
-<div class="flex flex-col h-[80vh]">
+<div class="flex flex-col h-[85vh]">
   @if (isFetchTaskDetailsLoading) {
   <div class="min-h-[74vh]"></div>
   <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
@@ -56,11 +56,20 @@
         <nz-form-item>
           <nz-form-label>Trạng Thái</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)">
+            <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
               @for (status of statuses; track $index) {
-              <nz-option [nzValue]="status.value" [nzLabel]="status.label"></nz-option>
+              <nz-option nzCustomContent [nzValue]="status.value" [nzLabel]="status.label">
+                <nz-tag [nzColor]="status.color" [nzBordered]="false">
+                  {{ status.label }}
+                </nz-tag>
+              </nz-option>
               }
             </nz-select>
+            <ng-template #selectedTemplate let-selected>
+              <nz-tag [nzColor]="getStatusColor(selected.nzValue)" [nzBordered]="false">
+                {{ selected.nzLabel }}
+              </nz-tag>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
 
@@ -86,13 +95,13 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Hạn Chót</nz-form-label>
+          <nz-form-label>Ngày kết thúc</nz-form-label>
           <nz-form-control>
             <nz-date-picker
               formControlName="endDate"
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
-              nzPlaceHolder="Chọn hạn chót"
+              nzPlaceHolder="Chọn ngày kết thúc"
               (nzOnOk)="handleInfoChanged()"
             >
             </nz-date-picker>
@@ -164,7 +173,7 @@
               <tr>
                 <td>{{ data.title }}</td>
                 <td>{{ taskStatusLabels[data.status] }}</td>
-                <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate| date : "d 'tháng' M, h:mm a") }}</td>
+                <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.createdBy }}</td>
               </tr>
@@ -179,18 +188,25 @@
       <nz-form-item>
         <nz-form-label>Ghi Chú</nz-form-label>
         <nz-form-control>
-          <div class="mb-4">
-            <div *ngFor="let comment of comments" class="mb-3 p-3 bg-gray-50 rounded">
-              <div class="flex justify-between items-center mb-2">
-                <span class="font-medium">{{ comment.author }}</span>
-                <span class="text-gray-500 text-sm">{{ comment.date | date : 'short' }}</span>
+          <div class="flex gap-2">
+            <input nz-input placeholder="Để lại ý kiến" class="flex-grow" placeholder="Để lại góp ý" formControlName="taskComment" />
+            <button nz-button nzType="primary" (click)="createComment()">Bình Luận</button>
+          </div>
+          <div class="mt-4">
+            @for (comment of commentList; track comment.id) {
+            <div class="mb-3 p-3 bg-gray-50 rounded">
+              <div class="flex flex-col items-start mb-2">
+                <div class="flex justify-between items-center w-full">
+                  <div class="flex items-center space-x-2">
+                    <img [src]="comment.user.profilePicture" class="w-8 h-8 rounded-full" />
+                    <span class="font-medium">{{ comment.user.fullName }}</span>
+                  </div>
+                  <span class="text-gray-500 text-sm block">{{ comment.createdTime | date : 'short' }}</span>
+                </div>
               </div>
               <p class="text-gray-700">{{ comment.content }}</p>
             </div>
-          </div>
-          <div class="flex gap-2">
-            <input nz-input placeholder="Để lại ý kiến" class="flex-grow" />
-            <button nz-button nzType="primary">Comment</button>
+            }
           </div>
         </nz-form-control>
       </nz-form-item>
