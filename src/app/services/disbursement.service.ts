@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { ApplicationConfigService } from "../core/config/application-config.service";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, map, Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { DisbursementItemModel } from "../shared/models/disbursement/disbursement-item.model";
 import { DisbursementStatus } from "../shared/enums/disbursement-status.enum";
@@ -150,20 +150,6 @@ export class DisbursementService {
   }
 
   getDisbursementMonthlyInfo(projectId: string): Observable<DisbursementMonthlyInfoModel[]> {
-    return new BehaviorSubject<DisbursementMonthlyInfoModel[]>(
-      // Sample response for GET /api/projects/{projectId}/disbursements/project-info
-      [
-        {
-          // Current month
-          disbursedAmount: 2500000000, // 2.5 billion VND
-          remainingDisbursement: 1500000000 // 1.5 billion VND
-        },
-        {
-          // Next month
-          disbursedAmount: 1000000000, // 1 billion VND
-          remainingDisbursement: 3000000000 // 3 billion VND
-        }
-      ]);
     return this.http.get<DisbursementMonthlyInfoModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/project-info`)
     ).pipe(
