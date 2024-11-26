@@ -29,9 +29,8 @@
       <nz-table #innerTable [nzData]="data.dealOffers" nzSize="small" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th>Tên Dự Án</th>
-            <th>Trưởng Nhóm</th>
-            <th>Số Tiền Kêu Gọi</th>
+            <th>Nhà Đầu Tư</th>
+            <th>Số Tiền Đầu Tư</th>
             <th>Số Cổ Phần</th>
             <th>Điều Khoản</th>
             <th>Trạng Thái</th>
@@ -40,9 +39,8 @@
         <tbody>
           @for (data of innerTable.data; track data) {
           <tr>
-            <td>{{ data.projectName }}</td>
-            <td>{{ data.leaderName }}</td>
-            <td>{{ data.amount | number }}</td>
+            <td>{{ data.investorName }}</td>
+            <td class="text-green-500">{{ data.amount | number }}</td>
             <td>{{ data.equityShareOffer / 100 | percent }}</td>
             <td>{{ data.termCondition }}</td>
             <td [ngClass]="{ 'text-red-500': data.dealStatus === 3, 'text-green-500': data.dealStatus === 2, 'text-gray-500': data.dealStatus === 1 }">
