@@ -52,6 +52,10 @@ export class ProjectService {
   }
 
   updatePayosInfo(projectId: string, payosInfo: PayosInfoModel): Observable<any> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/payment-gateway`), payosInfo)
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/payment-gateway`),
+      payosInfo,
+      { responseType: 'text' as 'json' },
+    )
   }
 }

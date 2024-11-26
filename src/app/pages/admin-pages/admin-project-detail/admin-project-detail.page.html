@@ -55,6 +55,16 @@
           <div class="text-gray-800 mt-2">{{ project.description }}</div>
         </div>
 
+        <div
+          class="text-lg font-bold text-blue-600"
+          [ngClass]="{
+            'text-red-600': !project.isSignedInternalContract,
+            'text-green-600': project.isSignedInternalContract
+          }"
+        >
+          {{ project.isSignedInternalContract ? 'Đã ký' : 'Chưa ký' }} hợp đồng nội bộ
+        </div>
+
         <div *ngIf="project?.projectStatus === projectStatus.CONSTRUCTING">
           <button (click)="verifyProject()"
             class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">
@@ -105,5 +115,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Contract Section -->
+  <div class="mt-10 bg-white rounded-lg shadow-lg p-6">
+
   </div>
 </div>

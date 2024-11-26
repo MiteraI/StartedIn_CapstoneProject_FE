@@ -13,5 +13,5 @@ export type ProjectModel = {
   startDate: string
   endDate?: string
   projectCharterResponseDto?: ProjectCharter
-  newestInternalContractId?: string
+  isSignedInternalContract?: string
 }

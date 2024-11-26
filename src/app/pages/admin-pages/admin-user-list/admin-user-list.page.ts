@@ -87,26 +87,36 @@ export class AdminUserListPage implements OnInit, OnDestroy {
       });
   }
 
-  deleteUser(userId: string) {
+  toggleUser(user: FullProfile) {
     this.modalService.confirm({
-      nzTitle: 'Xóa người dùng',
-      nzContent: 'Bạn có chắc chắn muốn xóa người dùng này?',
-      nzOkText: 'Xóa',
+      nzTitle: user.isActive ? 'Vô hiệu hóa người dùng' : 'Kích hoạt người dùng',
+      nzContent: user.isActive ?
+        'Người dùng này sẽ không thể đăng nhập vào hệ thống.' :
+        'Người dùng này sẽ có thể đăng nhập vào hệ thống.',
+      nzOkText: user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.adminService
-          .deleteUser(userId)
+          .toggleUser(user.id)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Xóa người dùng thất bại!", { nzDuration: 2000 });
+              this.notification.error(
+                "Lỗi",
+                user.isActive ? "Vô hiệu hóa người dùng thất bại!" : "Kích hoạt người dùng thất bại!",
+                { nzDuration: 2000 }
+              );
               return throwError(() => new Error(error.error));
             })
           )
           .subscribe(() => {
             this.fetchUsers();
-            this.notification.success("Thành công", "Xóa người dùng thành công!", { nzDuration: 2000 });
+            this.notification.success(
+              "Thành công",
+              user.isActive ? "Vô hiệu hóa người dùng thành công!" : "Kích hoạt người dùng thành công!",
+              { nzDuration: 2000 }
+            );
           });
       }
     });
