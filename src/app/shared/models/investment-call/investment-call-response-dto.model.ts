@@ -1,5 +1,5 @@
 import { InvestmentCallStatus } from '../../enums/investment-call-status.enum'
-import { InvestorDealItem } from '../deal-offer/investor-deal-item.model'
+import { ProjectDealItem } from '../deal-offer/project-deal-item.model'
 
 export type InvestmentCallResponseDto = {
   id: string
@@ -13,5 +13,5 @@ export type InvestmentCallResponseDto = {
   status: InvestmentCallStatus
   totalInvestor: number
   expand: boolean
-  dealOffers: InvestorDealItem[]
+  dealOffers: ProjectDealItem[]
 }
