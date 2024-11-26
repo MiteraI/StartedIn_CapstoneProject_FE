@@ -35,6 +35,22 @@
             Khám phá
           </a>
           <a
+            *ngIf="isInvestor"
+            routerLink="/disbursements/overview"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Giải ngân
+          </a>
+          <a
+            *ngIf="isInvestor"
+            routerLink="/deals"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Thỏa thuận
+          </a>
+          <a
             routerLink="/about-us"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"

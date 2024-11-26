@@ -226,6 +226,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-list/investor-disbursement-list.page').then((m) => m.InvestorDisbursementListPage),
   },
   {
+    path: 'disbursements/overview',
+    canActivate: [InvestorGuard],
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-overview/investor-disbursement-overview.page').then( m => m.InvestorDisbursementOverviewPage)
+  },
+  {
     path: 'disbursements/:disbursementId',
     canActivate: [InvestorGuard],
     resolve: { disbursement: InvestorDisbursementDataResolver },

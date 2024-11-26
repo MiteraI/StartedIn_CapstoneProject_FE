@@ -17,6 +17,7 @@
         <th class="p-4 text-left w-16"></th>
         <th class="p-4 text-left">Thông tin người dùng</th>
         <th class="p-4 text-left">Vai trò</th>
+        <th class="p-4 text-left w-80">Trạng thái</th>
         <th class="p-4 text-left w-16"></th>
       </tr>
     </thead>
@@ -46,8 +47,25 @@
           </div>
         </td>
         <td class="p-4">
-          <button (click)="deleteUser(user.id)" class="text-red-500 hover:text-red-700">
-            <mat-icon fontIcon="delete"></mat-icon>
+          <div
+            class="text-sm font-medium"
+            [ngClass]="{
+              'text-green-600': user.isActive,
+              'text-red-600': !user.isActive
+            }"
+          >
+            ● {{ user.isActive ? 'Hoạt động' : 'Bị vô hiệu hóa' }}
+          </div>
+        </td>
+        <td class="p-4">
+          <button
+            (click)="$event.stopPropagation(); toggleUser(user)"
+            [ngClass]="{
+              'text-red-500 hover:text-red-700': user.isActive,
+              'text-green-500 hover:text-green-700': !user.isActive
+            }"
+          >
+            <mat-icon [fontIcon]="user.isActive ? 'person_off' : 'person_add'"></mat-icon>
           </button>
         </td>
       </tr>
@@ -90,9 +108,24 @@
                 {{ role }}
               </span>
             </div>
+            <div
+              class="mt-2 text-sm font-medium"
+              [ngClass]="{
+                'text-green-600': user.isActive,
+                'text-red-600': !user.isActive
+              }"
+            >
+              ● {{ user.isActive ? 'Hoạt động' : 'Bị vô hiệu hóa' }}
+            </div>
           </div>
-          <button (click)="deleteUser(user.id)" class="text-red-500 hover:text-red-700">
-            <mat-icon fontIcon="delete"></mat-icon>
+          <button
+            (click)="$event.stopPropagation(); toggleUser(user)"
+            [ngClass]="{
+              'text-red-500 hover:text-red-700': user.isActive,
+              'text-green-500 hover:text-green-700': !user.isActive
+            }"
+          >
+            <mat-icon [fontIcon]="user.isActive ? 'person_off' : 'person_add'"></mat-icon>
           </button>
         </div>
       </div>

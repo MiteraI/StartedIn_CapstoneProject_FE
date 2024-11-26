@@ -5,6 +5,7 @@ import { AssetStatus } from "../shared/enums/asset-status.enum";
 import { Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { AssetModel } from "../shared/models/asset/asset.model";
+import { AssetCreateModel } from "../shared/models/asset/asset-create.model";
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,9 @@ export class AssetService {
     return this.http.get<SearchResponseModel<AssetModel>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${id}/assets?${query}`),
     );
+  }
+
+  createNewAsset(projectId: string, createAsset: AssetCreateModel) {
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets`), createAsset)
   }
 }

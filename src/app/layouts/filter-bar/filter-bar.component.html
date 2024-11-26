@@ -1,7 +1,7 @@
 <div class="flex items-center justify-center bg-white sticky top-0 z-50 w-full min-h-[7vh] border-b">
   <div *ngIf="isDesktopView" class="flex items-center justify-between px-3 max-w-6xl mx-auto w-full">
     <div>
-      <span class="text-xl">{{ viewName }}</span>
+      <span class="text-xl font-medium">{{ viewName }}</span>
     </div>
     <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-5/12">
       <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full" />
@@ -36,7 +36,7 @@
       </button>
     </div>
   </div>
-  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between border-2">
+  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between">
     <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
     @if (!isSearching) {
       <span>{{ viewName }}</span>

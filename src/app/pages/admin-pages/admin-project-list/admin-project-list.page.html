@@ -36,7 +36,7 @@
         </td>
         <td *ngIf="project.projectStatus === projectStatus.CONSTRUCTING" class="p-4">
           <button (click)="$event.stopPropagation(); verifyProject(project)" class="text-green-500 hover:text-green-700">
-            <mat-icon fontIcon="check_circle"></mat-icon>
+            <mat-icon fontIcon="verified"></mat-icon>
           </button>
         </td>
       </tr>

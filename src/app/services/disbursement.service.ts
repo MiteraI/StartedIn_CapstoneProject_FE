@@ -6,6 +6,8 @@ import { SearchResponseModel } from "../shared/models/search-response.model";
 import { DisbursementItemModel } from "../shared/models/disbursement/disbursement-item.model";
 import { DisbursementStatus } from "../shared/enums/disbursement-status.enum";
 import { DisbursementDetailModel } from "../shared/models/disbursement/disbursement-detail.model";
+import { DisbursementMonthlyInfoModel } from "../shared/models/disbursement/disbursement-monthly-info.model";
+import { DisbursementForProjectModel } from "../shared/models/disbursement/disbursement-for-project.model";
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +22,14 @@ export class DisbursementService {
     return {
       ...disbursement,
       amount: typeof disbursement.amount === 'string' ? parseFloat(disbursement.amount) : disbursement.amount
+    };
+  }
+
+  private parseMonthlyInfo(info: DisbursementMonthlyInfoModel): DisbursementMonthlyInfoModel {
+    return {
+      ...info,
+      disbursedAmount: typeof info.disbursedAmount === 'string' ? parseFloat(info.disbursedAmount) : info.disbursedAmount,
+      remainingDisbursement: typeof info.remainingDisbursement === 'string' ? parseFloat(info.remainingDisbursement) : info.remainingDisbursement
     };
   }
 
@@ -136,6 +146,32 @@ export class DisbursementService {
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/${id}`)
     ).pipe(
       map(disbursement => this.parseNumericFields(disbursement))
+    );
+  }
+
+  getDisbursementMonthlyInfo(projectId: string): Observable<DisbursementMonthlyInfoModel[]> {
+    return this.http.get<DisbursementMonthlyInfoModel[]>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/project-info`)
+    ).pipe(
+      map(info => info.map(item => this.parseMonthlyInfo(item)))
+    );
+  }
+
+  getProjectDisbursementInfoForInvestor(
+    pageIndex: number,
+    pageSize: number
+  ): Observable<SearchResponseModel<DisbursementForProjectModel>> {
+    const query = `page=${pageIndex}&size=${pageSize}`;
+    return this.http.get<SearchResponseModel<DisbursementForProjectModel>>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/investor-info?${query}`)
+    ).pipe(
+      map(response => ({
+        ...response,
+        data: response.data.map(item => ({
+          ...item,
+          disbursementInfo: item.disbursementInfo.map(info => this.parseMonthlyInfo(info))
+        }))
+      }))
     );
   }
 }
