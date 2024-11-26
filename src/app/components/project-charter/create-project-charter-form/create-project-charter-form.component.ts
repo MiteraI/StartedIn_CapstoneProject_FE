@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatIcon, MatIconModule } from '@angular/material/icon'
 import { PhaseState, PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
-import { CommonModule } from '@angular/common'
+import { CommonModule, DatePipe } from '@angular/common'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { catchError, tap } from 'rxjs'
 import { ActivatedRoute } from '@angular/router'
@@ -19,20 +19,39 @@ import { ProjectCharterUpdateModel } from 'src/app/shared/models/project-charter
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { Phase } from 'src/app/shared/models/phase/phase.model'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { NzListModule } from 'ng-zorro-antd/list'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
   styleUrls: ['./create-project-charter-form.component.scss'],
   standalone: true,
-  imports: [MatCardModule, MatFormFieldModule, MatIcon, ReactiveFormsModule, CommonModule, NzTableModule, NzButtonModule, NzModalModule, NzIconModule, MatIconModule],
+  imports: [
+    MatCardModule,
+    MatFormFieldModule,
+    MatIcon,
+    ReactiveFormsModule,
+    CommonModule,
+    NzTableModule,
+    NzButtonModule,
+    NzModalModule,
+    NzIconModule,
+    MatIconModule,
+    NzSpinModule,
+    NzDatePickerModule,
+    NzListModule,
+  ],
+  providers: [DatePipe],
 })
 export class CreateProjectCharterFormComponent implements OnInit {
-  isLoading = true
+  isLoading = false
   isCharterExist = false
   isEditable = true
   projectId = ''
   minDate = new Date().toISOString().split('T')[0]
   projectCharterForm: FormGroup
+  projectCharter: ProjectCharter | undefined
 
   phaseStates = Object.keys(PhaseState)
     .filter((key) => !isNaN(Number(PhaseState[key as any]))) // Filters out non-numeric keys
@@ -47,7 +66,8 @@ export class CreateProjectCharterFormComponent implements OnInit {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private datePipe: DatePipe
   ) {
     this.projectCharterForm = this.formBuilder.group({
       projectId: [''],
@@ -67,6 +87,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoading = true
     this.projectId = this.route.parent?.snapshot.paramMap.get('id')!
     this.getProjectCharter()
   }
@@ -91,21 +112,36 @@ export class CreateProjectCharterFormComponent implements OnInit {
   }
 
   createProjectCharter() {
+    this.isLoading = true
     if (this.projectCharterForm.invalid) {
       console.log('Form is invalid')
       return
     }
     const projectCharterRequest: ProjectCharterFormModel = this.projectCharterForm.getRawValue()
 
-    console.log(projectCharterRequest)
+    // format the date before call api
+    projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
+      if (phase.startDate) {
+        phase.startDate = this.datePipe.transform(phase.startDate, 'yyyy-MM-dd') || ''
+      }
+      if (phase.endDate) {
+        phase.endDate = this.datePipe.transform(phase.endDate, 'yyyy-MM-dd') || ''
+      }
+    })
+
+    console.log(projectCharterRequest.listCreatePhaseDtos)
+
     this.projectCharterService
       .create(this.projectId, projectCharterRequest)
       .pipe(
         tap((response) => {
           this.notification.success('Thành công', 'Tạo điều lệ dự án thành công', { nzDuration: 2000 })
+          this.getProjectCharter()
         }),
         catchError((error) => {
           this.notification.error('Thành công', 'Tạo điều lệ dự án thất bại', { nzDuration: 2000 })
+          this.getProjectCharter()
+
           console.error(error)
           throw error
         })
@@ -116,10 +152,10 @@ export class CreateProjectCharterFormComponent implements OnInit {
   getProjectCharter() {
     this.projectCharterService.get(this.projectId).subscribe({
       next: (response) => {
-        const projectCharter = response as ProjectCharter
-        if (projectCharter) {
-          this.projectCharterForm.patchValue(projectCharter)
-          this.mapPhasesToFormArray(projectCharter.phases)
+        this.projectCharter = response as ProjectCharter
+        if (this.projectCharter) {
+          this.projectCharterForm.patchValue(this.projectCharter)
+          this.mapPhasesToFormArray(this.projectCharter.phases)
           this.isLoading = false
           this.isCharterExist = true
 
