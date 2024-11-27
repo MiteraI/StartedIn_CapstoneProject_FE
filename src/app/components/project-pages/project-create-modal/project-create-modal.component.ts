@@ -9,13 +9,14 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { CommonModule, DatePipe } from '@angular/common'
 import { ProjectService } from 'src/app/services/project.service'
 import { NzModalRef } from 'ng-zorro-antd/modal'
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 @Component({
   selector: 'app-project-create-modal',
   templateUrl: './project-create-modal.component.html',
   styleUrls: ['./project-create-modal.component.scss'],
   standalone: true,
-  imports: [NzIconModule, NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, CommonModule, NzButtonModule],
+  imports: [NzIconModule, NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, CommonModule, NzButtonModule, NzInputNumberModule],
   providers: [DatePipe],
 })
 export class ProjectCreateModalComponent implements OnInit {
@@ -31,7 +32,9 @@ export class ProjectCreateModalComponent implements OnInit {
       logoFile: [null, [Validators.required]],
       startDate: [null, [Validators.required]],
       endDate: [null],
-    })
+      minMember: [0, [Validators.required, Validators.min(1)]],
+      maxMember: [0, [Validators.required, Validators.min(1)]]
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -69,6 +72,8 @@ export class ProjectCreateModalComponent implements OnInit {
       if (formattedEndDate) {
         formData.append('EndDate', formattedEndDate)
       }
+      formData.append('MinMember',this.projectForm.get('minMember')?.value)
+      formData.append('MaxMember',this.projectForm.get('maxMember')?.value)
 
       this.projectService.createProject(formData).subscribe({
         next: (response) => {

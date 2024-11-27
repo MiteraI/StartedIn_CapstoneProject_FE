@@ -100,8 +100,8 @@
             <tr [formGroupName]="$index">
               <td [(nzExpand)]="data.expand"></td>
               <td>{{ data.phaseName }}</td>
-              <td>{{ data.startDate }}</td>
-              <td>{{ data.endDate }}</td>
+              <td>{{ data.startDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ data.endDate | date: 'dd/MM/yyyy'}}</td>
             </tr>
             <tr [nzExpand]="data.expand">
               <nz-table #innerTable [nzData]="data.milestones" nzSize="small" [nzShowPagination]="false">
@@ -118,8 +118,8 @@
                   <tr>
                     <td>{{ data.title }}</td>
                     <td>{{ data.description }}</td>
-                    <td>{{ data.startDate }}</td>
-                    <td>{{ data.endDate }}</td>
+                    <td>{{ data.startDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ data.endDate | date: 'dd/MM/yyyy' }}</td>
                   </tr>
                   }
                 </tbody>
