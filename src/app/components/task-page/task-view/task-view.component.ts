@@ -161,6 +161,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.page = 1;
     this.fetchTasks(this.isDesktopView)
   }
 
