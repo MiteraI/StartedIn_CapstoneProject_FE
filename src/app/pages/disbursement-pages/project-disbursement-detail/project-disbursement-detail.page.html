@@ -8,12 +8,14 @@
           <nz-avatar
             [nzSize]="64"
             [nzText]="disbursement.investorName | initialsOnly"
-            class="bg-orange-600 text-3xl"
+            [nzSrc]="disbursement.investorProfilePicture"
+            class="bg-orange-600 text-3xl cursor-pointer"
+            [routerLink]="['/users', disbursement.investorId]"
           ></nz-avatar>
           <div class="flex-1">
             <div class="text-2xl font-bold">{{ disbursement.title }}</div>
             <div class="mt-1 text-gray-500 flex items-center md:space-x-2">
-              <span class="hidden md:inline">{{ disbursement.investorName }}</span>
+              <span class="hidden md:inline cursor-pointer" [routerLink]="['/users', disbursement.investorId]">{{ disbursement.investorName }}</span>
               <span class="hidden md:inline">•</span>
               <span>{{ disbursement.contractIdNumber }}</span>
             </div>
@@ -58,12 +60,13 @@
         </div>
 
         <!-- Investor Info -->
-        <div class="bg-gray-50 p-4 rounded-lg">
+        <div class="bg-gray-50 p-4 rounded-lg cursor-pointer" [routerLink]="['/users', disbursement.investorId]">
           <div class="text-sm font-medium text-gray-500 mb-2">Nhà đầu tư</div>
           <div class="flex items-center space-x-3">
             <nz-avatar
               [nzSize]="40"
               [nzText]="disbursement.investorName | initialsOnly"
+              [nzSrc]="disbursement.investorProfilePicture"
               class="bg-orange-600 text-xl"
             ></nz-avatar>
             <div>

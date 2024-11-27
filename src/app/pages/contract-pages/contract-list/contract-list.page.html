@@ -104,6 +104,7 @@
             <div class="flex">
               <nz-avatar
                 *ngFor="let party of contract.parties"
+                [nzSrc]="party.profilePicture"
                 [nzText]="party.fullName | initialsOnly"
                 [nzSize]="32"
                 class="-mr-2 bg-orange-600 ring-2 ring-white"
@@ -226,6 +227,7 @@
             <div class="flex">
               <nz-avatar
                 *ngFor="let party of contract.parties"
+                [nzSrc]="party.profilePicture"
                 [nzText]="party.fullName | initialsOnly"
                 [nzSize]="24"
                 class="-mr-1 bg-orange-600 ring-2 ring-white"

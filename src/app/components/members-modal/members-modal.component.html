@@ -30,8 +30,12 @@
 
   <div class="text-sm font-medium text-gray-500 mb-4">Danh sách thành viên</div>
 
-  <div class="space-y-3 overflow-y-auto">
-    <div *ngFor="let member of members" class="flex items-center justify-between">
+  <div class="space-y-3 max-h-[50vh] overflow-y-auto">
+    <div
+      *ngFor="let member of members"
+      class="flex items-center justify-between cursor-pointer hover:bg-gray-100 rounded-lg p-2"
+      (click)="navigateToUser(member.id)"
+    >
       <div class="flex items-center space-x-3">
         <nz-avatar
           [nzText]="member.fullName | initialsOnly"

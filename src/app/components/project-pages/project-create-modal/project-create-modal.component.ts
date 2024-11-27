@@ -70,10 +70,6 @@ export class ProjectCreateModalComponent implements OnInit {
         formData.append('EndDate', formattedEndDate)
       }
 
-      // console log the form data
-      for (let pair of (formData as any).entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`)
-      }
       this.projectService.createProject(formData).subscribe({
         next: (response) => {
           this.messageService.success('Project created successfully')

@@ -400,10 +400,6 @@ export class UpdateTaskModalComponent implements OnInit {
           this.antdNoti.openSuccessNotification('', 'Tải lên tệp đính kèm thành công')
           // Remove this file from the fileList
           this.fileList = this.fileList.filter((f) => f.uid !== file.uid)
-          console.log(res);
-          console.log(this.attachmentList);
-          
-          
           this.attachmentList.push(res)
         },
         error: (error: HttpErrorResponse) => {

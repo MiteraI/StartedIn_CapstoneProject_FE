@@ -1,0 +1,43 @@
+<div class="ant-modal-body">
+  <div class="text-xl font-semibold mb-6">Cập nhật thông tin</div>
+
+  <form [formGroup]="profileForm" (ngSubmit)="submitForm()" nz-form nzLayout="vertical">
+    <!-- Bio Field -->
+    <nz-form-item>
+      <nz-form-label>Giới thiệu</nz-form-label>
+      <nz-form-control nzErrorTip="Giới thiệu không được vượt quá 500 ký tự">
+        <textarea
+          nz-input
+          formControlName="bio"
+          [nzAutosize]="{ minRows: 3, maxRows: 5 }"
+          placeholder="Viết gì đó về bản thân bạn"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Phone Number Field -->
+    <nz-form-item>
+      <nz-form-label>Số điện thoại</nz-form-label>
+      <nz-form-control nzErrorTip="Vui lòng nhập số điện thoại hợp lệ (10 số)">
+        <input
+          nz-input
+          formControlName="phoneNumber"
+          placeholder="Nhập số điện thoại"
+        />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end space-x-2 mt-6">
+      <button nz-button (click)="cancel()">Hủy</button>
+      <button
+        nz-button
+        nzType="primary"
+        type="submit"
+        [disabled]="profileForm.invalid"
+      >
+        Cập nhật
+      </button>
+    </div>
+  </form>
+</div>
