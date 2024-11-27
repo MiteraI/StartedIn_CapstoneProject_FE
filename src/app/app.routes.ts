@@ -15,6 +15,8 @@ import { TransactionDataResolver } from './shared/resolvers/transaction-data.res
 import { ProjectOverviewDataResolver } from './shared/resolvers/overview-projects-data.resolver'
 import { AdminGuard } from './shared/guards/admin.guard'
 import { AdminProjectDataResolver } from './shared/resolvers/admin-project-data.resolver'
+import { UserDataResolver } from './shared/resolvers/user-data.resolver'
+import { ProfileDataResolver } from './shared/resolvers/profile-data.resolver'
 
 export const routes: Routes = [
   {
@@ -256,5 +258,17 @@ export const routes: Routes = [
     path: 'admin/users',
     canActivate: [AdminGuard],
     loadComponent: () => import('./pages/admin-pages/admin-user-list/admin-user-list.page').then( m => m.AdminUserListPage)
+  },
+  {
+    path: 'profile',
+    canActivate: [AuthenticatedGuard],
+    resolve: { profile: ProfileDataResolver },
+    loadComponent: () => import('./pages/user-pages/profile/profile.page').then( m => m.ProfilePage)
+  },
+  {
+    path: 'users/:userId',
+    canActivate: [AuthenticatedGuard],
+    resolve: { user: UserDataResolver },
+    loadComponent: () => import('./pages/user-pages/user-detail/user-detail.page').then( m => m.UserDetailPage)
   },
 ]

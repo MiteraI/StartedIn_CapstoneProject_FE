@@ -22,7 +22,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users" class="border-b hover:bg-purple-50">
+      <tr *ngFor="let user of users" class="border-b hover:bg-purple-50" [routerLink]="['/users', user.id]">
         <td class="p-4">
           <nz-avatar
             [nzSrc]="user.profilePicture"
@@ -87,7 +87,7 @@
 
   <!-- Mobile View -->
   <div class="md:hidden space-y-4">
-    <div *ngFor="let user of users" class="bg-white rounded-lg shadow">
+    <div *ngFor="let user of users" class="bg-white rounded-lg shadow" [routerLink]="['/users', user.id]">
       <div class="p-4">
         <div class="flex items-start space-x-4">
           <nz-avatar

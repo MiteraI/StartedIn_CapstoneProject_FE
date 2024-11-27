@@ -8,8 +8,10 @@ export type TransactionModel = {
   amount: number;
   fromID: string;
   fromUserName: string;
+  fromUserProfilePicture: string;
   toID: string;
   toUserName: string;
+  toUserProfilePicture: string;
   type: TransactionType;
   content: string;
   evidenceUrl: string;

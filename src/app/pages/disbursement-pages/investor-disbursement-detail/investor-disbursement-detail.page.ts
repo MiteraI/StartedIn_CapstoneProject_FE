@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DisbursementDetailModel } from 'src/app/shared/models/disbursement/disbursement-detail.model';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
 import { format } from 'date-fns';
@@ -26,7 +26,8 @@ import { DisbursementService } from 'src/app/services/disbursement.service';
     NzAvatarModule,
     InitialsOnlyPipe,
     MatIconModule,
-    NzModalModule
+    NzModalModule,
+    RouterModule
   ]
 })
 export class InvestorDisbursementDetailPage implements OnInit {

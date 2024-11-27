@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe'
 import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model'
@@ -8,7 +8,7 @@ import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/expl
 @Component({
   selector: 'app-project-card',
   standalone: true,
-  imports: [CommonModule, NzAvatarModule, InitialsOnlyPipe],
+  imports: [CommonModule, NzAvatarModule, InitialsOnlyPipe, RouterModule],
   templateUrl: 'project-card.component.html',
   styleUrls: ['project-card.component.scss'],
 })

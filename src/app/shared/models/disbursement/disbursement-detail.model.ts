@@ -14,6 +14,7 @@ export type DisbursementDetailModel = {
   logoUrl: string;
   investorId: string;
   investorName: string;
+  investorProfilePicture: string;
   contractId: string;
   contractIdNumber: string;
   declineReason: string;

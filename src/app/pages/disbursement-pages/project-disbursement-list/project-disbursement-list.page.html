@@ -65,7 +65,14 @@
           <td class="p-4">
             <div class="font-medium">{{ disbursement.title }}</div>
           </td>
-          <td class="p-4">{{ disbursement.investorName }}</td>
+          <td class="p-4">
+            <nz-avatar
+              [nzText]="disbursement.investorName | initialsOnly"
+              [nzSrc]="disbursement.investorProfilePicture"
+              [nzSize]="32"
+              class="bg-orange-600 ring-2 ring-white"
+            ></nz-avatar>
+          </td>
           <td class="p-4">{{ disbursement.contractIdNumber }}</td>
           <td class="p-4 text-center">{{ formatDate(disbursement.startDate) }}</td>
           <td class="p-4 text-center" >{{ formatDate(disbursement.endDate) }}</td>
@@ -147,6 +154,7 @@
               <div class="flex">
                 <nz-avatar
                   [nzText]="disbursement.investorName | initialsOnly"
+                  [nzSrc]="disbursement.investorProfilePicture"
                   [nzSize]="32"
                   class="bg-orange-600 ring-2 ring-white"
                 ></nz-avatar>
