@@ -8,6 +8,7 @@ export type ProjectModel = {
   projectStatus: ProjectStatus
   leaderId: string
   leaderFullName: string
+  leaderProfilePicture: string
   logoUrl: string
   remainingPercentOfShares: number
   startDate: string

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DisbursementService } from 'src/app/services/disbursement.service';
 import { DisbursementDetailModel } from 'src/app/shared/models/disbursement/disbursement-detail.model';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
@@ -26,7 +26,8 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
     InitialsOnlyPipe,
     MatIconModule,
     NzModalModule,
-    TitleBarComponent
+    TitleBarComponent,
+    RouterModule
   ]
 })
 export class ProjectDisbursementDetailPage implements OnInit {

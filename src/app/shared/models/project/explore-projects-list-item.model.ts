@@ -5,5 +5,6 @@ export interface ExploreProjectsListItemModel {
   logoUrl: string;
   leaderId: string;
   leaderFullName: string;
+  leaderProfilePicture: string;
 }
 

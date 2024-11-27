@@ -75,10 +75,6 @@ export class ProjectCreateModalComponent implements OnInit {
       formData.append('MinMember',this.projectForm.get('minMember')?.value)
       formData.append('MaxMember',this.projectForm.get('maxMember')?.value)
 
-      // console log the form data
-      for (let pair of (formData as any).entries()) {
-        console.log(`${pair[0]}: ${pair[1]}`)
-      }
       this.projectService.createProject(formData).subscribe({
         next: (response) => {
           this.messageService.success('Project created successfully')

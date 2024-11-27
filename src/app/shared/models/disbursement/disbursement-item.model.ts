@@ -8,6 +8,7 @@ export type DisbursementItemModel = {
   amount: number;
   disbursementStatus: DisbursementStatus;
   investorName: string;
+  investorProfilePicture: string;
   projectName: string;
   projectLogoUrl: string;
   contractIdNumber: string;

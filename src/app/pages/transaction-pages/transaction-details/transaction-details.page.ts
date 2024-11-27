@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionModel } from 'src/app/shared/models/transaction/transaction.model';
 import { TransactionType, TransactionTypeLabels } from 'src/app/shared/enums/transaction-type.enum';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,13 +29,13 @@ export class TransactionDetailsPage implements OnInit {
   typeLabels = TransactionTypeLabels;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.transaction = this.route.snapshot.data['transaction'];
     console.log(this.transaction);
-
   }
 
   downloadFile(url: string, fileName: string) {
@@ -45,5 +45,11 @@ export class TransactionDetailsPage implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  navigateToUser(userId?: string) {
+    if (userId) {
+      this.router.navigate(['/users', userId]);
+    }
   }
 }
