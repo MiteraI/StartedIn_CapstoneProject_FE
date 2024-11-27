@@ -54,7 +54,7 @@ export class CreateAssetModalComponent  implements OnInit {
   ) { 
     this.assetForm = this.fb.group({
       assetName: ['',[Validators.required]],
-      price: [null],
+      price: [0, [Validators.required,Validators.min(0)]],
       purchaseDate: [null],
       quantity: [1, [Validators.required, Validators.min(1)]],
       serialNumber: [null]

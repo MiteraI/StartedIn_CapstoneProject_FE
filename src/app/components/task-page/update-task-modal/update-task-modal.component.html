@@ -56,7 +56,7 @@
         <nz-form-item>
           <nz-form-label>Trạng Thái</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
+            <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
               @for (status of statuses; track $index) {
               <nz-option nzCustomContent [nzValue]="status.value" [nzLabel]="status.label">
                 <nz-tag [nzColor]="status.color" [nzBordered]="false">
@@ -76,7 +76,7 @@
         <nz-form-item>
           <nz-form-label>Công Số</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" [nzStep]="1" (ngModelChange)="handleInfoChanged()"></nz-input-number>
+            <nz-input-number class="w-full" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" [nzStep]="1" (ngModelChange)="handleInfoChanged()"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
 
@@ -84,6 +84,7 @@
           <nz-form-label>Ngày Bắt Đầu</nz-form-label>
           <nz-form-control>
             <nz-date-picker
+              class="w-full"
               formControlName="startDate"
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
@@ -98,6 +99,7 @@
           <nz-form-label>Ngày kết thúc</nz-form-label>
           <nz-form-control>
             <nz-date-picker
+              class="w-full"
               formControlName="endDate"
               [nzShowTime]="{ nzFormat: 'HH' }"
               nzFormat="yyyy-MM-dd HH:00:00"
@@ -115,6 +117,7 @@
           <nz-form-label>Tác Vụ Mẹ</nz-form-label>
           <nz-form-control>
             <nz-select
+              class="w-full"
               formControlName="parentTask"
               nzPlaceHolder="Chọn tác vụ mẹ"
               (ngModelChange)="handleSelectParentTask($event)"
@@ -140,6 +143,7 @@
           <nz-form-label>Người Làm</nz-form-label>
           <nz-form-control>
             <nz-select
+              class="w-full"
               formControlName="assignees"
               [nzMode]="'multiple'"
               nzPlaceHolder="Chọn người thực hiện"
@@ -249,7 +253,7 @@
   </div>
   }
   <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
-    <button nz-button nzType="primary" (nzOnConfirm)="handleDeleteTask()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Tác Vụ</button>
+    <button nz-button nzType="primary" nzDanger="" (nzOnConfirm)="handleDeleteTask()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa Tác Vụ</button>
     <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || !isInfoChanged">Cập Nhật</button>
   </div>
 </div>
