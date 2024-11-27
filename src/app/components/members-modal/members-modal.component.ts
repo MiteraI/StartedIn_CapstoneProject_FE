@@ -9,17 +9,25 @@ import { ProjectService } from 'src/app/services/project.service'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum'
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe'
-import { NZ_MODAL_DATA } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { catchError, throwError } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { RecruitInviteService } from 'src/app/services/recruit-invite.service'
+import { Router, RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-members-modal',
   templateUrl: './members-modal.component.html',
   styleUrls: ['./members-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzButtonModule, NzSelectModule, NzAvatarModule, InitialsOnlyPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzAvatarModule,
+    InitialsOnlyPipe
+  ],
 })
 export class MembersModalComponent implements OnInit {
   members: TeamMemberModel[] = []
@@ -28,7 +36,14 @@ export class MembersModalComponent implements OnInit {
   teamRoles = TeamRole
   teamRoleLabels = TeamRoleLabels
 
-  constructor(private projectService: ProjectService, private recruitInviteService: RecruitInviteService  ,private notification: NzNotificationService, @Inject(NZ_MODAL_DATA) private projectId: string) {}
+  constructor(
+    private modal: NzModalRef,
+    private projectService: ProjectService,
+    private recruitInviteService: RecruitInviteService,
+    private notification: NzNotificationService,
+    @Inject(NZ_MODAL_DATA) private projectId: string,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.loadMembers()
@@ -70,5 +85,10 @@ export class MembersModalComponent implements OnInit {
         this.emailsToInvite = []
         this.loadMembers()
       })
+  }
+
+  navigateToUser(userId: string) {
+    this.modal.close();
+    this.router.navigate(['/users', userId])
   }
 }

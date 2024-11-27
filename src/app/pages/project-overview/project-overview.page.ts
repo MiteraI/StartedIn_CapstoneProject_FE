@@ -20,7 +20,6 @@ export class ProjectOverviewPage implements OnInit {
     this.route.data.subscribe((data) => {
       this.projectOverview = data['projectOverview']
       this.projectOverviewService.setProjectOverview(this.projectOverview)
-      console.log(this.projectOverview)
     })
   }
 }

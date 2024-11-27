@@ -1,0 +1,39 @@
+<div class="ant-modal-body">
+  <div class="text-xl font-semibold mb-6">
+    {{ data.type === 'profile' ? 'Cập nhật ảnh đại diện' : 'Cập nhật ảnh bìa' }}
+  </div>
+
+  <!-- Image Preview -->
+  <div *ngIf="previewImage" class="mb-6">
+    <img
+      [src]="previewImage"
+      [class]="data.type === 'profile' ? 'w-32 h-32 rounded-full mx-auto object-cover' : 'w-full h-40 object-cover rounded-lg'"
+      [alt]="data.type === 'profile' ? 'Ảnh đại diện' : 'Ảnh bìa'"
+    >
+  </div>
+
+  <nz-upload
+    class="w-full"
+    [nzBeforeUpload]="beforeUpload"
+    [nzFileList]="fileList"
+    [nzAccept]="'image/*'"
+    [nzMultiple]="false"
+  >
+    <button nz-button class="w-full flex items-center justify-center">
+      <mat-icon fontIcon="photo"></mat-icon>
+      <span class="mx-2">{{ previewImage ? 'Chọn ảnh khác' : 'Chọn ảnh' }}</span>
+    </button>
+  </nz-upload>
+
+  <div class="flex justify-end space-x-2 mt-6">
+    <button nz-button (click)="cancel()">Hủy</button>
+    <button
+      nz-button
+      nzType="primary"
+      (click)="submitForm()"
+      [disabled]="fileList.length === 0"
+    >
+      Cập nhật
+    </button>
+  </div>
+</div>
