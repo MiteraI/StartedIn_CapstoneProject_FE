@@ -22,6 +22,20 @@
   </nz-form-item>
 
   <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember">Thành viên <br/> tối thiểu</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối thiểu">
+      <nz-input-number formControlName="minMember" [nzMin]="1" [nzStep]="1" id="minMember"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+  
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="maxMember">Thành viên <br/> tối đa</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối đa">
+      <nz-input-number formControlName="maxMember" [nzMin]="1" [nzStep]="1" id="maxMember"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy chọn ngày bắt đầu">
       <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy"></nz-date-picker>

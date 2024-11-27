@@ -131,6 +131,19 @@
     </div>
   </div>
 </div>
-<div class="justify-center mx-auto w-full max-w-4xl min-h-screen">
-  <router-outlet></router-outlet>
+<div class="flex justify-center mx-auto w-full min-h-screen">
+  <!-- Left Banner (hidden on mobile) -->
+  <div class="w-1/5 text-white text-center py-4 hidden md:block min-h-screen">
+    <img src="../../../assets/img/startedIn-banner.jpeg" class="h-full w-full object-cover" alt="Logo" />
+  </div>
+
+  <!-- Content Section (router-outlet) -->
+  <div class="flex w-4/6 justify-center">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- Right Banner (hidden on mobile) -->
+  <div class="w-1/5 text-white text-center py-4 hidden md:block min-h-screen">
+    <img src="../../../assets/img/startedIn-banner.jpeg" class="h-full w-full object-cover" alt="Logo" />
+  </div>
 </div>
