@@ -34,13 +34,18 @@ export class CreateInvestmentCallModalComponent implements OnInit {
     private datePipe: DatePipe
   ) {
     this.investmentCallForm = this.fb.group({
-      targetCall: [0, [Validators.required]],
-      equityShareCall: [0, [Validators.required]],
+      targetCall: [1, [Validators.required]],
+      equityShareCall: [1, [Validators.required]],
       startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
     })
   }
 
+  formatterNumber = (value: number): string => value.toLocaleString()
+  parserNumber = (value: string): string => value.replace(/,/g, '') 
+  
+  formatterPercent = (value: number): string => `${value} %`
+  parserPercent = (value: string): string => value.replace(' %', '')
   disabledStartDate = (current: Date): boolean => {
     const endDate = this.investmentCallForm.get('endDate')?.value
     return current < new Date(new Date().setHours(0, 0, 0, 0)) || (endDate && current > new Date(endDate)) // Disable dates before today and after the selected end date

@@ -7,6 +7,9 @@
     </div>
   </div>
   }
+  <div *ngIf="(userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) !== 0" class="text-gray-500 text-xl">
+    <a (click)="openCreateProjectModal()" nz-button nzType="link">Thêm dự án mới!</a>
+  </div>
   <!-- Dự án đang tham gia -->
   @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
   <div class="text-2xl font-medium mb-8">Dự án đang tham gia</div>

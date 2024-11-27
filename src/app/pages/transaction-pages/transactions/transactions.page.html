@@ -6,6 +6,25 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <!-- Transaction Summary -->
+  <div class="bg-white rounded-lg shadow p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <div class="text-xl md:text-2xl font-semibold mb-6 text-center">Tổng ngân sách hiện tại</div>
+      <div class="text-center text-3xl md:text-5xl font-bold mb-6">{{ currentBudget | vndCurrency }}</div>
+    </div>
+    <div class="space-y-4">
+      <div class="text-xl md:text-2xl font-semibold">Dòng tiền trong tháng này</div>
+      <div class="flex justify-between items-center text-green-600">
+        <span>Tiền vào:</span>
+        <span class="font-semibold">+{{ inAmount | vndCurrency }}</span>
+      </div>
+      <div class="flex justify-between items-center text-red-600">
+        <span>Tiền ra:</span>
+        <span class="font-semibold">-{{ outAmount | vndCurrency }}</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Desktop Selection Actions -->
   <div class="flex flex-col justify-end md:flex-row mb-4">
     <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">

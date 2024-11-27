@@ -155,6 +155,7 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
 
   onFilterApplied(filterResult: any) {
     this.filter = { ...filterResult }
+    this.page = 1
     this.fetchMilestones(this.isDesktopView)
   }
 

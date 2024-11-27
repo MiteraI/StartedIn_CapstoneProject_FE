@@ -188,6 +188,41 @@
       </nz-form-item>
       }
 
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24">Tài liệu tác vụ</nz-form-label>
+        @for (attachment of attachmentList; track attachment.id) {
+        <div>
+          <nz-tag [nzColor]="'blue'" class="flex mb-2 py-1 space-x-2 items-center">
+            <a [href]="attachment.attachmentUrl" target="_blank">{{ attachment.fileName }}</a>
+            <mat-icon fontIcon="delete" class="cursor-pointer" (click)="deleteAttachment(attachment.id)"></mat-icon>
+          </nz-tag>
+        </div>
+        }
+        <nz-form-control [nzSpan]="24">
+          <nz-upload
+            ngDefaultControl
+            [(nzFileList)]="fileList"
+            [nzBeforeUpload]="beforeUpload"
+            [nzRemove]="removeUpload"
+            [nzMultiple]="true"
+            [nzShowUploadList]="true"
+            class="mb-2 upload-container"
+          >
+            <div class="flex justify-between w-full">
+              <button nz-button class="flex justify-center items-center">
+                <mat-icon fontIcon="file_upload"></mat-icon>
+                <span class="px-2">Tải lên tài liệu</span>
+              </button>
+              @if (fileList.length > 0) {
+              <button nz-button nzType="primary" class="flex justify-center items-center" (click)="$event.stopPropagation(); uploadAttachment()">
+                <span class="px-2">Lưu tài liệu</span>
+              </button>
+              }
+            </div>
+          </nz-upload>
+        </nz-form-control>
+      </nz-form-item>
+
       <!-- Comment Section -->
       <nz-form-item>
         <nz-form-label>Ghi Chú</nz-form-label>

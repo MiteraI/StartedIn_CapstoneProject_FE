@@ -3,7 +3,8 @@
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Số vốn cần gọi</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
-      <input nz-input formControlName="targetCall" type="number" placeholder="Nhập mục tiêu cuộc gọi" />
+      <!-- <input nz-input formControlName="targetCall" type="number" placeholder="Nhập mục tiêu cuộc gọi" /> -->
+      <nz-input-number class="w-60" formControlName="targetCall" [nzMin]="1000" [nzStep]="100000" [nzFormatter]="formatterNumber" [nzParser]="parserNumber" />
     </nz-form-control>
   </nz-form-item>
 
@@ -11,7 +12,8 @@
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Cổ phần cần gọi</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
-      <input nz-input formControlName="equityShareCall" type="number" placeholder="Nhập cổ phần cuộc gọi" />
+      <!-- <input nz-input formControlName="equityShareCall" type="number" placeholder="Nhập cổ phần cuộc gọi" /> -->
+      <nz-input-number formControlName="equityShareCall" [nzMin]="1" [nzMax]="100" [nzStep]="1" [nzFormatter]="formatterPercent" [nzParser]="parserPercent" />
     </nz-form-control>
   </nz-form-item>
 
