@@ -59,7 +59,9 @@
           <div class="text-gray-600">{{asset.quantity}}</div>
         </td>
         <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
-        <td class="p-4 text-gray-600">{{formatDate(asset.purchaseDate)}}</td>
+        <td class="p-4 text-gray-600">
+          {{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}
+        </td>
         <td class="p-4">
           <span [ngClass]="{
             'text-green-500': asset.status === assetStatuses.AVAILABLE,

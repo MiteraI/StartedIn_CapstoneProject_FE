@@ -16,7 +16,7 @@ export class DealOfferService {
     private http: HttpClient,
     private applicationConfigService: ApplicationConfigService
   ) {}
-
+  
   private parseNumericFields<T extends InvestorDealItem | ProjectDealItem>(deal: T): T {
     return {
       ...deal,

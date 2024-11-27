@@ -64,7 +64,8 @@
           <span [ngClass]="{
             'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
             'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
-            'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+            'text-red-500': deal.dealStatus === dealStatuses.REJECTED,
+            'text-orange-700': deal.dealStatus === dealStatuses.CONTRACTCREATED
           }">
             ● {{ statusLabels[deal.dealStatus] }}
           </span>
@@ -146,7 +147,8 @@
           <span [ngClass]="{
             'text-blue-500': deal.dealStatus === dealStatuses.WAITING,
             'text-green-500': deal.dealStatus === dealStatuses.ACCEPTED,
-            'text-red-500': deal.dealStatus === dealStatuses.REJECTED
+            'text-red-500': deal.dealStatus === dealStatuses.REJECTED,
+            'text-orange-700': deal.dealStatus === dealStatuses.CONTRACTCREATED
           }">
             ● {{ statusLabels[deal.dealStatus] }}
           </span>
