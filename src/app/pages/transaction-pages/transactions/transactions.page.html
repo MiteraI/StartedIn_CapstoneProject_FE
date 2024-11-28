@@ -114,7 +114,7 @@
             <div
               class="text-lg font-medium"
               [ngClass]="{'text-green-500': transaction.isInFlow, 'text-red-500': !transaction.isInFlow}"
-            >{{ transaction.amount | vndCurrency }}</div>
+            >{{ transaction.isInFlow ? '+' : '-' }}{{ transaction.amount | vndCurrency }}</div>
           </div>
         </a>
       </div>
