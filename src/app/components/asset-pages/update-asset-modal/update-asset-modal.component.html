@@ -1,0 +1,126 @@
+<div class="flex flex-col h-full">
+  @if (isFetchAssetDetailLoading) {
+    <div class="min-h-[74vh]"></div>
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  } 
+  @else {
+    <div class="flex-1 overflow-auto p-4">
+      <form [formGroup]="assetForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
+        <div class="grid grid-cols-1 gap-4">
+          <!-- Asset Name and Serial Number Fields -->
+          <nz-row [nzGutter]="16">
+            <nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Tên Tài sản</nz-form-label>
+                <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tài sản'" class="text-sm">
+                  <input
+                    nz-input
+                    formControlName="assetName"
+                    class="py-2 px-3 text-sm"
+                    placeholder="Nhập tên tài sản"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+            <nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label class="text-lg font-semibold">Số serial</nz-form-label>
+                <nz-form-control [nzErrorTip]="'Vui lòng nhập số serial'" class="text-sm">
+                  <input
+                    nz-input
+                    formControlName="serialNumber"
+                    class="py-2 px-3 text-sm"
+                    placeholder="Nhập số serial"
+                  />
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+          </nz-row>
+
+          <!-- Price and Quantity Fields -->
+          <nz-row [nzGutter]="16">
+            <nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Giá</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number
+                    class="w-full py-2 text-sm"
+                    formControlName="price"
+                    [nzStep]="1000"
+                    [nzFormatter]="vndFormatter"
+                    [nzParser]="vndParser"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+
+            <nz-col [nzSpan]="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Số lượng</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number
+                    class="w-full py-2 text-sm"
+                    formControlName="quantity"
+                    [nzMin]="1"
+                    [nzPrecision]="1"
+                    [nzStep]="1"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </nz-col>
+          </nz-row>
+
+          <!-- Purchase Date Field -->
+          <nz-form-item>
+            <nz-form-label class="text-lg font-semibold">Ngày Mua</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày mua'" class="text-sm">
+              <nz-date-picker
+                class="w-full py-2 text-sm"
+                formControlName="purchaseDate"
+                nzPlaceHolder="Chọn ngày mua"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Status Field -->
+          <nz-form-item>
+            <nz-form-label>Trạng Thái</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                [nzOptions]="statusOptions"
+                formControlName="status"
+                nzPlaceHolder="Trạng thái"
+                class="small-input"
+              >
+                <nz-option
+                  *ngFor="let option of statusOptions"
+                  [nzValue]="option.value"
+                  [nzLabel]="option.label"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <!-- Submit Button -->
+        <nz-form-item>
+          <nz-form-control>
+            <div class="flex justify-end">
+              <button
+                nz-button
+                nzType="primary"
+                class="py-4 px-8 text-lg font-semibold flex items-center justify-center"
+                [disabled]="assetForm.invalid"
+              >
+                Cập nhật
+              </button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  }
+</div>

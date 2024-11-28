@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { AssetModel } from '../shared/models/asset/asset.model'
 import { AssetCreateModel } from '../shared/models/asset/asset-create.model'
+import { AssetUpdateModel } from '../shared/models/asset/asset-update.model'
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +44,14 @@ export class AssetService {
 
   deleteAsset(projectId: string, assetId: string) {
     return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`), { responseType: 'text' })
+  }
+
+  updateAsset(projectId: string, assetId: string, asset: AssetUpdateModel) : Observable<any>
+  {
+    return this.http.put<AssetUpdateModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`), asset)
+  }
+  getAssetDetail(projectId:string, assetId: string) : Observable<AssetModel>
+  {
+    return this.http.get<AssetModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`))
   }
 }
