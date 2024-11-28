@@ -43,27 +43,43 @@
           </div>
 
           <div>
-            <div class="text-gray-600 font-semibold">Ngày kết thúc</div>
+            <div class="text-gray-600 font-semibold">Ngày kết thúc (dự kiến)</div>
             <div class="text-xl">
               {{ project.endDate ? (project.endDate | date:'dd/MM/yyyy') : 'Chưa xác định' }}
             </div>
           </div>
         </div>
 
-        <div>
-          <div class="text-gray-600 font-semibold">Mô tả</div>
-          <div class="text-gray-800 mt-2">{{ project.description }}</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+
+            <div>
+              <div class="text-gray-600 font-semibold">Mô tả</div>
+              <div class="text-gray-800 mt-2">{{ project.description }}</div>
+            </div>
+            
+            <div
+              class="text-lg font-bold text-blue-600 pt-5"
+              [ngClass]="{
+                'text-red-600': !project.isSignedInternalContract,
+                'text-green-600': project.isSignedInternalContract
+              }"
+            >
+            {{ project.isSignedInternalContract ? 'Đã ký' : 'Chưa ký' }} hợp đồng nội bộ
+            </div>
+          </div>
+
+          <div>
+            <div class="text-gray-600 font-semibold mt-2">Số thành viên tối thiểu: {{project.minMember}}</div>
+            <div class="text-gray-600 font-semibold mt-2">Số thành viên tối đa: {{project.maxMember}}</div>
+            <div class="text-gray-600 font-semibold mt-2">Số thành viên hiện tại: {{project.currentMember}}</div>
+          </div>
+          
+          
         </div>
 
-        <div
-          class="text-lg font-bold text-blue-600"
-          [ngClass]="{
-            'text-red-600': !project.isSignedInternalContract,
-            'text-green-600': project.isSignedInternalContract
-          }"
-        >
-          {{ project.isSignedInternalContract ? 'Đã ký' : 'Chưa ký' }} hợp đồng nội bộ
-        </div>
+
+        
 
         <div *ngIf="project?.projectStatus === projectStatus.CONSTRUCTING">
           <button (click)="verifyProject()"
