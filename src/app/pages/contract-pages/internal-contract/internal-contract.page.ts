@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
@@ -14,7 +14,7 @@ import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 import { ShareEquityCreateUpdateModel } from 'src/app/shared/models/share-equity/share-equity-create-update.model';
 import { InternalContractCreateUpdateModel } from 'src/app/shared/models/contract/internal-contract-create-update.model';
@@ -43,25 +43,26 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
     NzSelectModule,
     NzInputNumberModule,
     IonicModule,
-    TitleBarComponent
-  ]
+    TitleBarComponent,
+  ],
 })
-export class InternalContractPage implements OnInit {
-  isReadOnly = false;
+export class InternalContractPage implements OnInit, OnDestroy {
+  isReadOnly = false
+  private destroy$ = new Subject<void>()
 
-  project!: ProjectModel;
-  contract: InternalContractDetailModel | null = null;
-  contractId: string | null = null;
-  memberList: TeamMemberModel[] = [];
-  selectedMemberId: string | null = null;
+  project!: ProjectModel
+  contract: InternalContractDetailModel | null = null
+  contractId: string | null = null
+  memberList: TeamMemberModel[] = []
+  selectedMemberId: string | null = null
 
-  contractForm!: FormGroup;
-  percentFormatter = (value: number) => `${value}%`;
-  percentParser = (value: string) => value.replace('%', '');
+  contractForm!: FormGroup
+  percentFormatter = (value: number) => `${value}%`
+  percentParser = (value: string) => value.replace('%', '')
 
-  shareTotal: number = 0;
+  shareTotal: number = 0
 
-  private currentUserId: string | null = null;
+  private currentUserId: string | null = null
 
   constructor(
     private route: ActivatedRoute,
@@ -80,135 +81,129 @@ export class InternalContractPage implements OnInit {
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
       contractIdNumber: ['', [Validators.required]],
-      shares: this.fb.array([])
-    });
+      shares: this.fb.array([]),
+    })
 
-    this.accountService.account$.subscribe(account => {
+    this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       if (account) {
-        this.currentUserId = account.id;
+        this.currentUserId = account.id
       }
-    });
+    })
 
-    this.roleService.role$.subscribe(role => {
-      if (!role) return;
+    this.roleService.role$.subscribe((role) => {
+      if (!role) return
       if (role.roleInTeam !== TeamRole.LEADER) {
-        this.contractForm.disable();
+        this.contractForm.disable()
       }
-    });
+    })
 
-    this.route.data.subscribe(data => {
-      this.project = data['project'];
+    this.route.data.subscribe((data) => {
+      this.project = data['project']
       this.projectService
         .getMembers(this.project.id)
         .pipe(
-          catchError(error => {
-            this.notification.error("Lỗi", "Lấy danh sách thành viên thất bại!", { nzDuration: 2000 });
-            return throwError(() => new Error(error.error));
+          catchError((error) => {
+            this.notification.error('Lỗi', 'Lấy danh sách thành viên thất bại!', { nzDuration: 2000 })
+            return throwError(() => new Error(error.error))
           })
         )
-        .subscribe(response => this.memberList = response.filter(m => m.roleInTeam !== TeamRole.INVESTOR));
+        .subscribe((response) => (this.memberList = response.filter((m) => m.roleInTeam !== TeamRole.INVESTOR)))
 
-      this.contract = data['contract'];
+      this.contract = data['contract']
       if (this.contract) {
         // import data
-        this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT);
+        this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT)
 
         if (this.isReadOnly) {
-          this.contractForm.disable();
+          this.contractForm.disable()
         }
-        this.contractId = this.contract.id;
+        this.contractId = this.contract.id
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
           contractIdNumber: this.contract.contractIdNumber,
         })
-        this.contract.shareEquities.forEach(share => this.addShare(share));
+        this.contract.shareEquities.forEach((share) => this.addShare(share))
       } else {
         this.addShare({
           userId: this.currentUserId!,
           percentage: 0,
-          buyPrice: 0
+          buyPrice: 0,
         })
       }
-    });
+    })
   }
 
   get sharesFormArray() {
-    return this.contractForm.get('shares') as FormArray;
+    return this.contractForm.get('shares') as FormArray
   }
 
   addShare(share?: ShareEquityCreateUpdateModel) {
     const shareForm = this.fb.group({
       userId: [share?.userId || '', Validators.required],
-      percentage: [share?.percentage || 0, [Validators.required, Validators.min(0), Validators.max(100)]]
-    });
+      percentage: [share?.percentage || 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+    })
 
-    this.sharesFormArray.push(shareForm);
-    this.updateTotalShares();
+    this.sharesFormArray.push(shareForm)
+    this.updateTotalShares()
   }
 
   removeShare(index: number) {
     if (this.sharesFormArray.length <= 1) {
-      return;
+      return
     }
-    this.sharesFormArray.removeAt(index);
-    this.updateTotalShares();
+    this.sharesFormArray.removeAt(index)
+    this.updateTotalShares()
   }
 
   private updateTotalShares() {
-    this.shareTotal = this.sharesFormArray.controls.reduce(
-      (total, control) => total + (control.get('percentage')?.value || 0),
-      0
-    );
+    this.shareTotal = this.sharesFormArray.controls.reduce((total, control) => total + (control.get('percentage')?.value || 0), 0)
   }
 
   save() {
-    this.createOrUpdateContract().subscribe(response => {
+    this.createOrUpdateContract().subscribe((response) => {
       this.contractId = response.id
-      this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
-    });
+      this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 })
+    })
   }
 
   saveAndSend() {
     if (!this.contractForm.valid) {
-      return;
+      return
     }
-    this.createOrUpdateContract()
-      .subscribe(response => {
-        this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
-        this.contractId = response.id;
-        this.contractService
-          .sendContract(this.contractId!, this.project.id)
-          .pipe(
-            catchError(error => {
-              this.notification.error("Lỗi", "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
-              return throwError(() => new Error(error.error));
-            })
-          )
-          .subscribe(response => {
-            this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
-            this.router.navigate(['projects', this.project.id, 'contracts']);
+    this.createOrUpdateContract().subscribe((response) => {
+      this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 })
+      this.contractId = response.id
+      this.contractService
+        .sendContract(this.contractId!, this.project.id)
+        .pipe(
+          catchError((error) => {
+            this.notification.error('Lỗi', 'Gửi thỏa thuận thất bại!', { nzDuration: 2000 })
+            return throwError(() => new Error(error.error))
           })
-      })
+        )
+        .subscribe((response) => {
+          this.notification.success('Thành công', 'Gửi hợp đồng thành công!', { nzDuration: 2000 })
+          this.router.navigate(['projects', this.project.id, 'contracts'])
+        })
+    })
   }
 
   createOrUpdateContract(): Observable<any> {
-    var o: Observable<any>;
+    var o: Observable<any>
     if (!this.contractId) {
       // Create contract
-      o = this.contractService
-          .createInternalContract(this.project.id, this.contractModel)
+      o = this.contractService.createInternalContract(this.project.id, this.contractModel)
     } else {
       // Update contract
-      o = this.contractService
-        .updateInternalContract(this.contractId, this.project.id, this.contractModel)
+      o = this.contractService.updateInternalContract(this.contractId, this.project.id, this.contractModel)
     }
     return o.pipe(
-      catchError(error => {
-        this.notification.error("Lỗi", "Lưu dữ liệu thỏa thuận thất bại!", { nzDuration: 2000 });
-        return throwError(() => new Error(error.error));
+      catchError((error) => {
+        this.notification.error('Lỗi', 'Lưu dữ liệu thỏa thuận thất bại!', { nzDuration: 2000 })
+        return throwError(() => new Error(error.error))
       })
-    );
+    )
   }
 
   get contractModel(): InternalContractCreateUpdateModel {
@@ -216,31 +211,36 @@ export class InternalContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
-        contractIdNumber: this.contractForm.value.contractIdNumber || ''
+        contractIdNumber: this.contractForm.value.contractIdNumber || '',
       },
-      shareEquitiesOfMembers: this.sharesFormArray.value
-    };
+      shareEquitiesOfMembers: this.sharesFormArray.value,
+    }
   }
 
   showPreview() {
-    alert('not implemented');
+    alert('not implemented')
   }
 
   download() {
     this.contractService
       .downloadContract(this.contractId!, this.project.id)
       .pipe(
-        catchError(error => {
-          this.notification.error("Lỗi", "Tải hợp đồng thất bại!", { nzDuration: 2000 });
-          return throwError(() => new Error(error.error));
+        catchError((error) => {
+          this.notification.error('Lỗi', 'Tải hợp đồng thất bại!', { nzDuration: 2000 })
+          return throwError(() => new Error(error.error))
         })
       )
-      .subscribe(response => {
-        window.open(response.downLoadUrl, '_blank');
-      });
+      .subscribe((response) => {
+        window.open(response.downLoadUrl, '_blank')
+      })
   }
 
   navigateBack() {
-    this.location.back();
+    this.location.back()
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

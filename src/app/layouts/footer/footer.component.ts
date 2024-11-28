@@ -18,15 +18,11 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   projectId = ''
   private destroy$ = new Subject<void>()
-  isInvestor = false;
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private accountService: AccountService
-  ) {}
+  isInvestor = false
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.identity().subscribe(account => {
+    this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.isInvestor = account?.authorities.includes('Investor') ?? false
     })
     this.router.events

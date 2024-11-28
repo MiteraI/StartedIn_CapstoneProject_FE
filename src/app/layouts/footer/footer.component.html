@@ -1,114 +1,66 @@
 <div class="flex flex-wrap justify-center min-h-[7vh] bg-white border-t border-gray-200">
   @if (isDesktopView) {
-    <div class="max-w-6xl mx-auto px-6 w-full">
-      <div class="flex justify-between h-16 items-center">
-        <!-- Copyright Section -->
-        <div class="text-gray-700">
-          <p>© 2024 StartedIn. All rights reserved.</p>
-        </div>
+  <div class="max-w-6xl mx-auto px-6 w-full">
+    <div class="flex justify-between h-16 items-center">
+      <!-- Copyright Section -->
+      <div class="text-gray-700">
+        <p>© 2024 StartedIn. All rights reserved.</p>
       </div>
     </div>
-  } @else {
-    @if (inProjectDetails) {
-      <!-- Navigation Links -->
-      <div class="flex items-center space-x-8 px-4 py-1">
-        <a
-          routerLink="/projects/{{ projectId }}/tasks"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Tác vụ
-        </a>
-        <a
-          [routerLink]="['/projects', projectId, 'contracts']"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Hợp đồng
-        </a>
-        <a
-          [routerLink]="['/projects', projectId, 'transactions']"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Giao dịch
-        </a>
-        <a
-          [routerLink]="['/projects', projectId, 'others']"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center"
-        >
-          Thêm
-          <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
-        </a>
-      </div>
-    } @else {
-      <!-- Navigation Links -->
-      <div class="flex items-center space-x-8 px-4 py-1">
-        <a
-          routerLink="/projects"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Dự án
-        </a>
-        <a
-          *ngIf="!isInvestor"
-          routerLink="/recruitment"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Tìm nhóm
-        </a>
-        <a
-          *ngIf="isInvestor"
-          routerLink="/explore"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Khám phá
-        </a>
-        <div *ngIf="isInvestor" class="relative group">
-          <button
-            class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center"
-          >
-            Thêm
-            <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
-          </button>
-          <!-- Dropdown Menu -->
-          <div class="absolute bottom-full left-0 mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block">
-            <a
-              routerLink="/disbursements/overview"
-              routerLinkActive="text-purple-600 bg-purple-50"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              Giải ngân
-            </a>
-            <a
-              routerLink="/deals"
-              routerLinkActive="text-purple-600 bg-purple-50"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              Thỏa thuận
-            </a>
-            <a
-              routerLink="/about-us"
-              routerLinkActive="text-purple-600 bg-purple-50"
-              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-            >
-              Về chúng tôi
-            </a>
-          </div>
-        </div>
-        <a
-          *ngIf="!isInvestor"
-          routerLink="/about-us"
-          routerLinkActive="text-purple-600"
-          class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
-        >
-          Về chúng tôi
-        </a>
-      </div>
+  </div>
+  } @else { @if (inProjectDetails) {
+  <!-- Navigation Links -->
+  <div class="flex items-center space-x-8 px-4 py-1">
+    @if (!isInvestor) {
+    <a routerLink="/projects/{{ projectId }}/tasks" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors">
+      Tác vụ
+    </a>
     }
-  }
+    <a
+      [routerLink]="['/projects', projectId, 'contracts']"
+      routerLinkActive="text-purple-600"
+      class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
+    >
+      Hợp đồng
+    </a>
+    <a
+      [routerLink]="['/projects', projectId, 'transactions']"
+      routerLinkActive="text-purple-600"
+      class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
+    >
+      Giao dịch
+    </a>
+    <a
+      [routerLink]="['/projects', projectId, 'others']"
+      routerLinkActive="text-purple-600"
+      class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center"
+    >
+      Thêm
+      <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
+    </a>
+  </div>
+  } @else {
+  <!-- Navigation Links -->
+  <div class="flex items-center space-x-8 px-4 py-1">
+    <a routerLink="/projects" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Dự án </a>
+    @if (isInvestor) {
+    <a routerLink="/explore" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Khám phá </a>
+    <div class="relative group">
+      <button class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center">
+        Thêm
+        <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
+      </button>
+      <!-- Dropdown Menu -->
+      <div class="absolute bottom-full left-0 mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block">
+        <a routerLink="/disbursements/overview" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Giải ngân </a>
+        <a routerLink="/deals" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Thỏa thuận </a>
+        <a routerLink="/about-us" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Về chúng tôi </a>
+      </div>
+    </div>
+    } @else {
+    <a routerLink="/recruitment" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Tìm nhóm </a>
+    <a routerLink="/about-us" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Về chúng tôi </a>
+    }
+  </div>
+  } }
 </div>
