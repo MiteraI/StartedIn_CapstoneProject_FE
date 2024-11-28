@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { RouterModule } from '@angular/router'
 import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component'
 import { AccountService } from '../../core/auth/account.service'
 import { CommonModule } from '@angular/common'
+import { Subject, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-header',
@@ -12,16 +13,22 @@ import { CommonModule } from '@angular/common'
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Input({ required: true }) isDesktopView: boolean = false
   @Input({ required: true }) inProjectDetails: boolean = false
-  isInvestor = false;
+  isInvestor = false
+  private destroy$ = new Subject<void>()
 
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.identity().subscribe(account => {
+    this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.isInvestor = account?.authorities.includes('Investor') ?? false
     })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }
