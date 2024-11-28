@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
 import { CommonModule } from '@angular/common'
@@ -9,7 +9,7 @@ import { ProjectCreateModalComponent } from 'src/app/components/project-pages/pr
 import { AccountService } from 'src/app/core/auth/account.service'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { ProjectService } from 'src/app/services/project.service'
-import { switchMap } from 'rxjs'
+import { Subject, switchMap, takeUntil } from 'rxjs'
 
 @Component({
   selector: 'app-project-list',
@@ -18,9 +18,10 @@ import { switchMap } from 'rxjs'
   standalone: true,
   imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule, NzSpinModule],
 })
-export class ProjectListPage implements OnInit {
+export class ProjectListPage implements OnInit, OnDestroy {
   userProjects: UserProjectsModel | undefined
   isInvestor = true
+  private destroy$ = new Subject<void>()
 
   constructor(
     private modalService: NzModalService,
@@ -32,10 +33,8 @@ export class ProjectListPage implements OnInit {
 
   ngOnInit() {
     this.userProjects = this.route.snapshot.data['userProjects']
-    this.accountService.identity().subscribe((account) => {
-      if (account) {
-        this.isInvestor = account.authorities.includes('Investor')
-      }
+    this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
+      this.isInvestor = account?.authorities.includes('Investor') ?? false
     })
     this.projectService.refreshProject$.pipe(switchMap(() => this.projectService.getUserProjects())).subscribe((userProjects) => {
       this.userProjects = userProjects
@@ -52,5 +51,10 @@ export class ProjectListPage implements OnInit {
 
   navigateToProject(id: string) {
     this.router.navigate(['/projects', id, this.isInvestor ? 'dashboard' : 'tasks'])
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }
