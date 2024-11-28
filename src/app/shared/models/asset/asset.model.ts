@@ -1,7 +1,7 @@
-import { AssetStatus } from "../../enums/asset-status.enum";
+import { AssetStatus } from '../../enums/asset-status.enum'
 
 export type AssetModel = {
-  id: string;
+  id: string
   projectId: string
   assetName: string
   price: number
@@ -10,4 +10,5 @@ export type AssetModel = {
   status: AssetStatus
   serialNumber: string
   remainQuantity: number
+  transactionId: string
 }
