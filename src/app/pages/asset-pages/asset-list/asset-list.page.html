@@ -59,7 +59,9 @@
           <div class="text-gray-600">{{asset.quantity}}</div>
         </td>
         <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
-        <td class="p-4 text-gray-600">{{formatDate(asset.purchaseDate)}}</td>
+        <td class="p-4 text-gray-600">
+          {{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}
+        </td>
         <td class="p-4">
           <span [ngClass]="{
             'text-green-500': asset.status === assetStatuses.AVAILABLE,
@@ -70,10 +72,10 @@
           </span>
         </td>
         <td class="p-4 space-x-2 h-6">
-          <button (click)="$event.stopPropagation()" class="text-yellow-500 hover:text-green-700">
+          <button (click)="$event.stopPropagation()" class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
-          <button (click)="$event.stopPropagation()" class="text-red-500 hover:text-yellow-700">
+          <button (click)="$event.stopPropagation()" class="text-red-500 hover:text-red-700">
             <mat-icon fontIcon="delete"></mat-icon>
           </button>
         </td>

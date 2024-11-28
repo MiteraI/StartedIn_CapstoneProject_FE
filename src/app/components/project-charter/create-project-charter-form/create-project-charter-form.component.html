@@ -69,16 +69,16 @@
             <mat-icon (click)="showConfirmDelete(i)" class="text-right cursor-pointer text-red-500">delete</mat-icon>
           </div>
           <div class="sm:grid sm:grid-cols-4 items-center">
-            <label class="text-gray-600">GIAI ĐOẠN</label>
+            <label class="text-gray-600 pl-12">GIAI ĐOẠN</label>
             <input placeholder="Nhập giai đoạn" formControlName="phaseName" type="text" class="col-span-3 rounded w-full" />
           </div>
           <div class="sm:grid sm:grid-cols-4 w-full gap-4">
             <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center">
-              <label class="col-span-1 text-gray-600">NGÀY BẮT ĐẦU</label>
+              <label class="col-span-1 text-gray-600 pl-12">NGÀY BẮT ĐẦU</label>
               <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu" class="rounded w-full ml-1" />
             </div>
-            <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center mt-4 sm:mt-0">
-              <label class="col-span-1 text-gray-600">NGÀY KẾT THÚC</label>
+            <div class="sm:col-span-2 sm:grid sm:grid-cols-2 items-center mt-4 sm:mt-0 sm:justify-end">
+              <label class="col-span-1 text-gray-600 pl-12">NGÀY KẾT THÚC</label>
               <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc" class="rounded w-full" />
             </div>
           </div>
@@ -100,8 +100,8 @@
             <tr [formGroupName]="$index">
               <td [(nzExpand)]="data.expand"></td>
               <td>{{ data.phaseName }}</td>
-              <td>{{ data.startDate }}</td>
-              <td>{{ data.endDate }}</td>
+              <td>{{ data.startDate | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ data.endDate | date: 'dd/MM/yyyy'}}</td>
             </tr>
             <tr [nzExpand]="data.expand">
               <nz-table #innerTable [nzData]="data.milestones" nzSize="small" [nzShowPagination]="false">
@@ -118,8 +118,8 @@
                   <tr>
                     <td>{{ data.title }}</td>
                     <td>{{ data.description }}</td>
-                    <td>{{ data.startDate }}</td>
-                    <td>{{ data.endDate }}</td>
+                    <td>{{ data.startDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>{{ data.endDate | date: 'dd/MM/yyyy' }}</td>
                   </tr>
                   }
                 </tbody>

@@ -61,31 +61,33 @@ export class CreateAssetModalComponent  implements OnInit {
     })
   }
 
-  onSubmit(){
+  onSubmit() {
     if (this.assetForm.valid) {
       const assetData: AssetCreateModel = {
         assetName: this.assetForm.value.assetName,
         price: this.assetForm.value.price,
-        purchaseDate: new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0],
+        purchaseDate: this.assetForm.value.purchaseDate
+          ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0] 
+          : null,
         quantity: this.assetForm.value.quantity,
         serialNumber: this.assetForm.value.serialNumber
-      }
-
+      };
+  
       this.assetService.createNewAsset(this.projectId, assetData).subscribe({
         next: (response) => {
-          this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '')
-          this.nzModalRef.close()
+          this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '');
+          this.nzModalRef.close();
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error)
+            this.antdNoti.openErrorNotification('', error.error);
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau');
           } else {
-            console.error('', error)
+            console.error('', error);
           }
         },
-      })
+      });
     }
   }
   ngOnInit() {}
