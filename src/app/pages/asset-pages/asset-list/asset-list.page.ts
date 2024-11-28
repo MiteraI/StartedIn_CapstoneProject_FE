@@ -22,6 +22,7 @@ import { VndCurrencyPipe } from '../../../shared/pipes/vnd-currency.pipe'
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { CreateAssetModalComponent } from 'src/app/components/asset-pages/create-asset-modal/create-asset-modal.component'
+import { UpdateAssetModalComponent } from 'src/app/components/asset-pages/update-asset-modal/update-asset-modal.component'
 
 interface FilterOptions {
   assetName?: string
@@ -199,6 +200,21 @@ export class AssetListPage implements OnInit, OnDestroy {
       nzOnOk: () => this.deleteAsset(asset),
       nzCancelText: 'Không',
       nzOnCancel: () => console.log(this.assets),
+    })
+  }
+
+  openUpdateAssetModel(assetId: string) {
+    const modalRef = this.modalService.create({
+      nzTitle: 'Thông Tin Tài sản',
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
+      nzContent: UpdateAssetModalComponent,
+      nzData: {
+        assetId: assetId ,
+        projectId: this.projectId,
+        assetList: this.assets,
+      },
+      nzFooter: null,
     })
   }
 
