@@ -1,103 +1,109 @@
 <form [formGroup]="filterForm" class="ant-modal-body">
-  <!-- Asset Name -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Tên tài sản</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-input-group>
-        <input
-          nz-input
-          formControlName="assetName"
-          placeholder="Nhập tên tài sản"
-        />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
+  <nz-row [nzGutter]="8">
+    <nz-col [nzSpan]="8">
+      <!-- Asset Name -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="mb-1">Tên tài sản</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input
+            nz-input
+            formControlName="assetName"
+            placeholder="Nhập tên tài sản"
+            class="small-input"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
 
-  <!-- Serial Number -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Số Serial</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-input-group>
-        <input
-          nz-input
-          formControlName="serialNumber"
-          placeholder="Nhập số serial"
-        />
-      </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
+    <nz-col [nzSpan]="8">
+      <!-- Serial Number -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="mb-1">Số Serial</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <input
+            nz-input
+            formControlName="serialNumber"
+            placeholder="Nhập số serial"
+            class="small-input"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+
+    <nz-col [nzSpan]="8">
+      <!-- Status -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="mb-1">Trạng thái</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-select
+            formControlName="status"
+            nzPlaceHolder="Trạng thái"
+            class="small-input"
+          >
+            <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+            <nz-option
+              *ngFor="let option of statusOptions"
+              [nzValue]="option.value"
+              [nzLabel]="option.label"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+  </nz-row>
 
   <!-- Date Range -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Thời gian mua</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-range-picker
-        class="w-full"
-        formControlName="dateRange"
-        nzFormat="yyyy-MM-dd"
-      ></nz-range-picker>
-    </nz-form-control>
-  </nz-form-item>
+  <nz-row [nzGutter]="8">
+    <nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="mb-1">Thời gian mua</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <nz-range-picker
+            formControlName="dateRange"
+            nzFormat="yyyy-MM-dd"
+            class="small-input w-full"
+          ></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
 
-  <!-- Amount Range -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Số tiền</nz-form-label>
-    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
-      <div class="flex items-center gap-2">
-        <nz-input-number
-          class="w-full"
-          formControlName="fromPrice"
-          [nzMin]="0"
-          [nzStep]="1000000"
-          [nzFormatter]="vndFormatter"
-          [nzParser]="vndParser"
-          nzPlaceHolder="Từ"
-          (ngModelChange)="validateAmountRange()"
-        ></nz-input-number>
-        <span>-</span>
-        <nz-input-number
-          class="w-full"
-          formControlName="toPrice"
-          [nzMin]="0"
-          [nzStep]="1000000"
-          [nzFormatter]="vndFormatter"
-          [nzParser]="vndParser"
-          nzPlaceHolder="Đến"
-          (ngModelChange)="validateAmountRange()"
-        ></nz-input-number>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
-
-  <!-- Status -->
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="status"
-        nzPlaceHolder="Chọn trạng thái"
-      >
-        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of statusOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
+    <nz-col [nzSpan]="12">
+      <!-- Amount Range -->
+      <nz-form-item>
+        <nz-form-label [nzSpan]="24" class="mb-1">Số tiền</nz-form-label>
+        <nz-form-control [nzSpan]="24">
+          <div class="flex items-center gap-1">
+            <nz-input-number
+              formControlName="fromPrice"
+              [nzMin]="0"
+              [nzStep]="1000000"
+              [nzFormatter]="vndFormatter"
+              [nzParser]="vndParser"
+              nzPlaceHolder="Từ"
+              class="small-input w-full"
+            ></nz-input-number>
+            <span>-</span>
+            <nz-input-number
+              formControlName="toPrice"
+              [nzMin]="0"
+              [nzStep]="1000000"
+              [nzFormatter]="vndFormatter"
+              [nzParser]="vndParser"
+              nzPlaceHolder="Đến"
+              class="small-input w-full"
+            ></nz-input-number>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-col>
+  </nz-row>
 </form>
 
 <div class="ant-modal-footer">
-  <button nz-button (click)="resetFilters()">
-    Đặt lại bộ lọc
+  <button nz-button class="small-btn" (click)="resetFilters()">
+    Đặt lại
   </button>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="applyFilters()"
-  >
+  <button nz-button nzType="primary" class="small-btn" (click)="applyFilters()">
     Lọc
   </button>
 </div>
