@@ -1,6 +1,6 @@
 import { DatePipe } from "@angular/common"
 import { HttpErrorResponse } from "@angular/common/http"
-import { Component, Inject, OnInit, inject } from "@angular/core"
+import { Component, Inject, inject } from "@angular/core"
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms"
 import { NzButtonModule } from "ng-zorro-antd/button"
 import { NzDatePickerModule } from "ng-zorro-antd/date-picker"
@@ -15,8 +15,6 @@ import { AssetService } from "src/app/services/asset.service"
 import { AssetCreateModel } from "src/app/shared/models/asset/asset-create.model"
 import { VndCurrencyPipe } from "src/app/shared/pipes/vnd-currency.pipe"
 
-
-
 interface IModalData {
   nzData: { projectId: any }
 }
@@ -27,18 +25,17 @@ interface IModalData {
   styleUrls: ['./create-asset-modal.component.scss'],
   standalone: true,
   imports: [
-    NzFormModule, 
-    NzInputModule, 
-    NzDatePickerModule, 
-    ReactiveFormsModule, 
-    NzButtonModule, 
-    NzSelectModule, 
-    NzIconModule, 
-    NzInputNumberModule,
-    VndCurrencyPipe],
-  providers:[DatePipe]
+    NzFormModule,
+    NzInputModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzIconModule,
+    NzInputNumberModule
+  ]
 })
-export class CreateAssetModalComponent  implements OnInit {
+export class CreateAssetModalComponent {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   assetForm: FormGroup
   vndCurrencyPipe = new VndCurrencyPipe();
@@ -46,12 +43,11 @@ export class CreateAssetModalComponent  implements OnInit {
   vndParser = (value: string) => value.replace(/\D/g,'');
   constructor(
     private fb: FormBuilder,
-    private datePipe: DatePipe,
     private assetService: AssetService,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef,
     @Inject(NZ_MODAL_DATA) private projectId: string,
-  ) { 
+  ) {
     this.assetForm = this.fb.group({
       assetName: ['',[Validators.required]],
       price: [0, [Validators.required,Validators.min(0)]],
@@ -67,12 +63,12 @@ export class CreateAssetModalComponent  implements OnInit {
         assetName: this.assetForm.value.assetName,
         price: this.assetForm.value.price,
         purchaseDate: this.assetForm.value.purchaseDate
-          ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0] 
+          ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0]
           : null,
         quantity: this.assetForm.value.quantity,
         serialNumber: this.assetForm.value.serialNumber
       };
-  
+
       this.assetService.createNewAsset(this.projectId, assetData).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '');
@@ -90,6 +86,4 @@ export class CreateAssetModalComponent  implements OnInit {
       });
     }
   }
-  ngOnInit() {}
-
 }
