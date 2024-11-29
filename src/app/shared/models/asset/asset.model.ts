@@ -10,5 +10,5 @@ export type AssetModel = {
   status: AssetStatus
   serialNumber: string
   remainQuantity: number
-  transactionId: string
+  transactionId: string | null
 }
