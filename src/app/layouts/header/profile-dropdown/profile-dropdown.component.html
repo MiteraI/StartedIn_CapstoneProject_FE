@@ -37,6 +37,7 @@
         Lịch sử giao dịch
       </div>
       <div
+        *ngIf="account?.authorities?.includes('Investor')"
         routerLink="/disbursements/history"
         class="m-3 w-auto cursor-pointer rounded-lg px-2 font-['Inter'] text-sm hover:bg-gray-200"
       >
