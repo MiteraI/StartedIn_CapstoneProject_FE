@@ -29,7 +29,7 @@
     class="absolute left-0 right-0 bottom-px -z-10 group-hover/card:z-10 opacity-0 group-hover/card:opacity-100 translate-y-full transition-all duration-200 ease-in-out"
   >
     <div class="bg-white rounded-b-2xl shadow-md border border-gray-100 p-4">
-      <p class="text-sm text-gray-600">{{ project.description }}</p>
+      <p class="text-sm text-gray-600">{{ project.description.length > 100 ? (project.description | slice:0:100) + '...' : project.description }}</p>
     </div>
   </div>
 </div>

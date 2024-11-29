@@ -75,6 +75,72 @@ export class CreateTaskModalComponent implements OnInit {
   milestonesSize = 10
   milestonesTotal = 0
 
+  disableStartDate = (startDate: Date): boolean => {
+    const endDate = this.taskForm.get('endDate')?.value;
+    const parentTask = this.otherTasks.find(t => t.id === this.taskForm.get('parentTask')?.value);
+
+    if (parentTask) {
+      const parentTaskStart = new Date(parentTask.startDate);
+      const parentTaskEnd = new Date(parentTask.endDate);
+
+      // Start date should be within parent task dates
+      if (startDate < parentTaskStart || startDate > parentTaskEnd) {
+        return true;
+      }
+    }
+
+    const milestone = this.milestones.find(m => m.id === this.taskForm.get('milestone')?.value);
+
+    if (milestone) {
+      const milestoneStart = new Date(milestone.startDate);
+      const milestoneEnd = new Date(milestone.endDate);
+
+      // Start date should be within milestone dates
+      if (startDate < milestoneStart || startDate > milestoneEnd) {
+        return true;
+      }
+    }
+
+    // Start date cannot be after end date
+    return !!endDate && startDate > new Date(endDate);
+  };
+
+  disableEndDate = (endDate: Date): boolean => {
+    const startDate = this.taskForm.get('startDate')?.value;
+    const parentTask = this.otherTasks.find(t => t.id === this.taskForm.get('parentTask')?.value);
+
+    if (parentTask) {
+      const parentTaskStart = new Date(parentTask.startDate);
+      const parentTaskEnd = new Date(parentTask.endDate);
+
+      // End date should be within parent task dates
+      if (endDate < parentTaskStart || endDate > parentTaskEnd) {
+        return true;
+      }
+    }
+
+    const milestone = this.milestones.find(m => m.id === this.taskForm.get('milestone')?.value);
+
+    if (milestone) {
+      const milestoneStart = new Date(milestone.startDate);
+      const milestoneEnd = new Date(milestone.endDate);
+
+      // End date should be within milestone dates
+      if (endDate < milestoneStart || endDate > milestoneEnd) {
+        return true;
+      }
+    }
+
+    // End date cannot be before start date
+    return !!startDate && endDate < new Date(startDate);
+  };
+
+  handleSelectParentTask(parentTaskId: string) {
+    if (parentTaskId) {
+      this.taskForm.get('milestone')?.setValue(null);
+    }
+  }
+
   handleOpenParentTask() {
     if (!this.isOtherTasksFetched) {
       this.isOtherTasksFetched = true
@@ -86,6 +152,39 @@ export class CreateTaskModalComponent implements OnInit {
     if (this.otherTasksPage * this.otherTasksSize >= this.otherTasksTotal) return
     this.otherTasksPage = this.otherTasksPage + 1
     this.fetchTasks()
+  }
+
+  handleSelectMilestone(milestoneId: string) {
+    if (milestoneId) {
+      this.taskForm.get('parentTask')?.setValue(null);
+
+      const milestone = this.milestones.find(m => m.id === milestoneId);
+      if (milestone) {
+        const startDate = this.taskForm.get('startDate')?.value;
+        const endDate = this.taskForm.get('endDate')?.value;
+
+        // Check if current dates are within milestone range
+        if (startDate) {
+          const taskStart = new Date(startDate);
+          const milestoneStart = new Date(milestone.startDate);
+          const milestoneEnd = new Date(milestone.endDate);
+
+          if (taskStart < milestoneStart || taskStart > milestoneEnd) {
+            this.taskForm.patchValue({ startDate: null });
+          }
+        }
+
+        if (endDate) {
+          const taskEnd = new Date(endDate);
+          const milestoneStart = new Date(milestone.startDate);
+          const milestoneEnd = new Date(milestone.endDate);
+
+          if (taskEnd < milestoneStart || taskEnd > milestoneEnd) {
+            this.taskForm.patchValue({ endDate: null });
+          }
+        }
+      }
+    }
   }
 
   handleOpenMilestoneSelect() {
