@@ -62,7 +62,8 @@
           class="w-full"
           formControlName="amount"
           [nzMin]="1000"
-          [nzStep]="1000"
+          [nzStep]="10000000"
+          [nzPrecision]="3"
           [nzFormatter]="vndFormatter"
           [nzParser]="vndParser"
         ></nz-input-number>

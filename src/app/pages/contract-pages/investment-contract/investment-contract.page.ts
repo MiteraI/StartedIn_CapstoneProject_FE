@@ -15,7 +15,7 @@ import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contr
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -61,7 +61,7 @@ export class InvestmentContractPage implements OnInit {
   contractForm!: FormGroup;
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
-  vndCurrencyPipe!: VndCurrencyPipe;
+  vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
@@ -70,7 +70,6 @@ export class InvestmentContractPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private location: Location,
     private fb: FormBuilder,
     private modalService: NzModalService,
@@ -80,13 +79,12 @@ export class InvestmentContractPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.vndCurrencyPipe = new VndCurrencyPipe();
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
       contractIdNumber: ['', [Validators.required]],
       percentage: [0, [Validators.required]],
-      buyPrice: [0, [Validators.required]]
+      buyPrice: [100000000, [Validators.required]]
     });
 
     this.roleService.role$.subscribe(role => {
@@ -146,12 +144,10 @@ export class InvestmentContractPage implements OnInit {
     this.modalService.create({
       nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
       nzContent: CreateDisbursementFormComponent,
-      nzData: isEdit ? {...disbursement} : {
-        title: '',
-        startDate: null,
-        endDate: null,
-        amount: null,
-        condition: ''
+      nzData: {
+        disbursement,
+        projectStartDate: new Date(this.project.startDate),
+        projectEndDate: this.project.endDate ? new Date(this.project.endDate) : null
       },
       nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {

@@ -47,7 +47,8 @@
                   class="w-full"
                   formControlName="price"
                   [nzMin]="1000"
-                  [nzStep]="1000"
+                  [nzStep]="1000000"
+                  [nzPrecision]="3"
                   [nzFormatter]="vndFormatter"
                   [nzParser]="vndParser"
                 ></nz-input-number>
@@ -59,7 +60,7 @@
                   class="w-full"
                   formControlName="quantity"
                   [nzMin]="1"
-                  [nzStep]="1"
+                  [nzPrecision]="0"
                 ></nz-input-number>
               </div>
             </div>

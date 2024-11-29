@@ -9,6 +9,12 @@ import { DisbursementCreateModel } from "src/app/shared/models/disbursement/disb
 import { NZ_MODAL_DATA } from "ng-zorro-antd/modal";
 import { VndCurrencyPipe } from "src/app/shared/pipes/vnd-currency.pipe";
 
+interface IModalData {
+  disbursement?: any;
+  projectStartDate?: Date;
+  projectEndDate?: Date;
+}
+
 @Component({
   selector: 'app-create-disbursement-form',
   templateUrl: './create-disbursement-form.component.html',
@@ -33,28 +39,43 @@ export class CreateDisbursementFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    @Inject(NZ_MODAL_DATA) public data: DisbursementCreateModel
+    @Inject(NZ_MODAL_DATA) public data: IModalData
   ) {}
 
   ngOnInit() {
-    this.disbursement = {
-      ...this.data
-    };
+    this.disbursement = this.data.disbursement
     this.disbursementForm = this.fb.group({
       title: [this.disbursement?.title || '', [Validators.required]],
       startDate: [this.disbursement?.startDate ? new Date(this.disbursement.startDate) : null, [Validators.required]],
       endDate: [this.disbursement?.endDate ? new Date(this.disbursement.endDate) : null, [Validators.required]],
-      amount: [this.disbursement?.amount || null, [Validators.required, Validators.min(1)]],
+      amount: [this.disbursement?.amount || 100000000, [Validators.required, Validators.min(1000)]],
       condition: [this.disbursement?.condition || '', [Validators.required]]
     });
+    console.log(this.data);
   }
 
   disableStartDate = (startDate: Date): boolean => {
+    if (this.data.projectStartDate && startDate < this.data.projectStartDate) {
+      return true;
+    }
+
+    if (this.data.projectEndDate && startDate > this.data.projectEndDate) {
+      return true;
+    }
+
     const endDate = this.disbursementForm.get('endDate')?.value;
     return !!endDate && startDate > endDate;
   };
 
   disableEndDate = (endDate: Date): boolean => {
+    if (this.data.projectStartDate && endDate < this.data.projectStartDate) {
+      return true;
+    }
+
+    if (this.data.projectEndDate && endDate > this.data.projectEndDate) {
+      return true;
+    }
+
     const startDate = this.disbursementForm.get('startDate')?.value;
     return !!startDate && endDate < startDate;
   };

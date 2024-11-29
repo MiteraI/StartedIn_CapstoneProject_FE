@@ -59,7 +59,7 @@
               formControlName="percentage"
               [nzMin]="0"
               [nzMax]="100"
-              [nzStep]="0.01"
+              [nzPrecision]="-2"
               [nzFormatter]="percentFormatter"
               [nzParser]="percentParser"
               [nzDisabled]="isReadOnly"

@@ -75,7 +75,7 @@ export class CreateTransactionPage implements OnInit {
       fromName: [''],
       toId: [''],
       toName: [''],
-      amount: [0, [Validators.required, Validators.min(1000)]],
+      amount: [10000000, [Validators.required, Validators.min(1000)]],
       isInFlow: [false, Validators.required],
       content: ['', Validators.required]
     });
