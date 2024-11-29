@@ -19,7 +19,7 @@
                     nz-input
                     formControlName="assetName"
                     class="py-2 px-3 text-sm"
-                    placeholder="Nhập tên tài sản"
+                    placeholder="Nhập tên tài sản" (ngModelChange)="handleInfoChanged()"
                   />
                 </nz-form-control>
               </nz-form-item>
@@ -33,7 +33,7 @@
                     nz-input
                     formControlName="serialNumber"
                     class="py-2 px-3 text-sm"
-                    placeholder="Nhập số serial"
+                    placeholder="Nhập số serial" (ngModelChange)="handleInfoChanged()"
                   />
                 </nz-form-control>
               </nz-form-item>
@@ -52,7 +52,8 @@
                     [nzStep]="1000000"
                     [nzPrecision]="3"
                     [nzFormatter]="vndFormatter"
-                    [nzParser]="vndParser"
+                    [nzParser]="vndParser" (ngModelChange)="handleInfoChanged()"
+                    [nzDisabled]="isFromTransaction"
                   ></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
@@ -67,11 +68,28 @@
                     formControlName="quantity"
                     [nzMin]="1"
                     [nzPrecision]="0"
+                    [nzStep]="1" (ngModelChange)="handleInfoChanged()"
+                    [nzDisabled]="isFromTransaction"
                   ></nz-input-number>
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
           </nz-row>
+
+          <nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Còn lại</nz-form-label>
+              <nz-form-control>
+                <nz-input-number
+                  class="w-full py-2 text-sm"
+                  formControlName="remainQuantity" (ngModelChange)="handleInfoChanged()"
+                  [nzMin]="0"
+                  [nzPrecision]="1"
+                  [nzStep]="1"
+                ></nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-col>
 
           <!-- Purchase Date Field -->
           <nz-form-item>
@@ -80,20 +98,20 @@
               <nz-date-picker
                 class="w-full py-2 text-sm"
                 formControlName="purchaseDate"
-                nzPlaceHolder="Chọn ngày mua"
+                nzPlaceHolder="Chọn ngày mua" (ngModelChange)="handleInfoChanged()"
               ></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
 
           <!-- Status Field -->
           <nz-form-item>
-            <nz-form-label>Trạng Thái</nz-form-label>
+            <nz-form-label class="text-lg font-semibold">Trạng Thái</nz-form-label>
             <nz-form-control>
               <nz-select
                 [nzOptions]="statusOptions"
                 formControlName="status"
                 nzPlaceHolder="Trạng thái"
-                class="small-input"
+                class="small-input" (ngModelChange)="handleInfoChanged()"
               >
                 <nz-option
                   *ngFor="let option of statusOptions"

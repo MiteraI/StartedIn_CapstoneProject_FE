@@ -16,6 +16,7 @@ import { AssetService } from 'src/app/services/asset.service';
 import { AssetStatus, AssetStatusLabels } from 'src/app/shared/enums/asset-status.enum';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { AssetModel } from 'src/app/shared/models/asset/asset.model';
 interface IModalData {
   assetId: string
   projectId: string
@@ -43,6 +44,7 @@ interface IModalData {
 export class UpdateAssetModalComponent  implements OnInit {
 
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
+  
   statusOptions = Object.values(AssetStatus)
     .filter(value => typeof value === 'number')
     .map(value => ({
@@ -55,6 +57,8 @@ export class UpdateAssetModalComponent  implements OnInit {
   vndParser = (value: string) => value.replace(/\D/g,'');
   isInfoChanged: boolean = false
   isFetchAssetDetailLoading = false
+  isFromTransaction: boolean = false
+  asset: AssetModel | null = null;
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -69,6 +73,7 @@ export class UpdateAssetModalComponent  implements OnInit {
       price:[0, [Validators.required,Validators.min(0)]],
       purchaseDate: [null],
       quantity: [1, [Validators.required, Validators.min(1)]],
+      remainQuantity: [0, [Validators.required, Validators.min(0)]],
       serialNumber: [null],
       status:[null]
     })    
@@ -84,6 +89,7 @@ export class UpdateAssetModalComponent  implements OnInit {
           ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0] 
           : null,
         quantity: this.assetForm.value.quantity,
+        remainQuantity: this.assetForm.value.remainQuantity,
         serialNumber: this.assetForm.value.serialNumber,
         status: this.assetForm.value.status
       }
@@ -111,26 +117,44 @@ export class UpdateAssetModalComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.isFetchAssetDetailLoading = true
+    this.isFetchAssetDetailLoading = true;
+  
+    // Fetch asset details
     this.assetService.getAssetDetail(this.nzModalData.projectId, this.nzModalData.assetId)
-    .subscribe({
-      next:(response) => {
-        this.assetForm.patchValue({
-          assetName: response.assetName,
-          price: response.price,
-          purchaseDate: response.purchaseDate,
-          quantity: response.quantity,
-          serialNumber: response.serialNumber,
-          status:response.status
-        })
-        this.isFetchAssetDetailLoading = false
-      },
-      error: (error) => {
-        this.antdNoti.openErrorNotification('Lỗi', 'Không thể lấy thông tin tài sản')
-        this.nzModalRef.close()
-      },
-    })
-
+      .subscribe({
+        next: (response) => {
+          this.assetForm.patchValue({
+            assetName: response.assetName,
+            price: response.price,
+            purchaseDate: response.purchaseDate,
+            quantity: response.quantity,
+            remainQuantity: response.remainQuantity,
+            serialNumber: response.serialNumber,
+            status: response.status
+          });
+  
+          this.isFetchAssetDetailLoading = false;
+          this.isFromTransaction = !!response.transactionId;
+  
+          // Disable the status field if remainQuantity is 0
+          if (response.remainQuantity === 0) {
+            this.assetForm.get('status')?.disable();
+          }
+  
+          // Listen for remainQuantity changes
+          this.assetForm.get('remainQuantity')?.valueChanges.subscribe((value) => {
+            if (value === 0) {
+              this.assetForm.get('status')?.disable();
+            } else {
+              this.assetForm.get('status')?.enable();
+            }
+          });
+        },
+        error: (error) => {
+          this.antdNoti.openErrorNotification('Lỗi', 'Không thể lấy thông tin tài sản');
+          this.nzModalRef.close();
+        },
+      });
   }
 
 }
