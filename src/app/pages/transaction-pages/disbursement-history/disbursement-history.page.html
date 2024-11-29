@@ -1,0 +1,134 @@
+<app-filter-bar
+  viewName="Lịch sử giải ngân"
+  [searchValue]="filter.fromName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-transaction-filter
+      [data]="filter"
+      [isDisbursementHistory]="true"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-transaction-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-transaction-filter
+      [data]="filter"
+      [isDisbursementHistory]="true"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-transaction-filter>
+  </div>
+</app-filter-bar>
+
+<div class="border-b border-gray-300">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex">
+      <a
+        routerLink="/disbursements/overview"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+        [class.border-transparent]="true"
+        [class.text-gray-500]="true"
+      >
+        <mat-icon fontIcon="home"></mat-icon>
+        <span class="hidden md:inline ml-1">Tổng quan</span>
+      </a>
+      <a
+        routerLink="/disbursements"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+        [class.border-transparent]="true"
+        [class.text-gray-500]="true"
+      >
+        <mat-icon fontIcon="list"></mat-icon>
+        <span class="hidden md:inline ml-1">Danh sách giải ngân</span>
+      </a>
+      <a
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="history"></mat-icon>
+        <span class="hidden md:inline ml-1">Lịch sử giải ngân</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="p-4 max-w-7xl mx-auto">
+  <!-- Grid Layout for Both Desktop and Mobile -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let transaction of transactions"
+         class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+         [routerLink]="[transaction.id]">
+      <!-- Card Header -->
+      <div class="p-4 border-b border-gray-100">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="p-2 rounded-lg bg-green-100 h-10 w-10">
+              <mat-icon fontIcon="account_balance_icon" class="text-gray-600"></mat-icon>
+            </div>
+            <div>
+              <div class="font-semibold text-gray-900">{{ typeLabels[transaction.type] }}</div>
+              <div class="text-sm text-gray-500">{{ transaction.lastUpdatedTime | slice:0:10 | date:'dd/MM/yyyy' }}</div>
+            </div>
+          </div>
+          <div class="text-lg font-bold text-blue-600">
+            {{ transaction.amount | vndCurrency }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Content -->
+      <div class="p-4 space-y-3">
+        <!-- Transaction Flow -->
+        <div class="flex items-center space-x-2 font-medium">
+          <span>{{ transaction.fromUserName }}</span>
+          <mat-icon fontIcon="arrow_forward"></mat-icon>
+          <span>{{ transaction.toUserName }}</span>
+        </div>
+
+        <!-- Content -->
+        <div class="text-gray-700">
+          <span class="text-sm font-medium text-gray-500">Nội dung:</span>
+          <p class="mt-1">{{ processContent(transaction.content) || 'Không có nội dung' }}</p>
+        </div>
+
+        <!-- Disbursement Info (if available) -->
+        <div *ngIf="transaction.disbursement" class="mt-4 pt-4 border-t border-gray-100">
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Số hợp đồng:</span>
+              <span class="font-medium">{{ transaction.disbursement.contractIdNumber }}</span>
+            </div>
+            <div class="text-sm text-gray-500">Điều kiện giải ngân:</div>
+            <div>
+              {{ transaction.disbursement.condition.length > 100
+                ? (transaction.disbursement.condition | slice:0:100) + '...'
+                : transaction.disbursement.condition }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-6 flex justify-center md:justify-end">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[10, 20, 50]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+
+  <!-- End of List Message -->
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các giao dịch!
+  </div>
+</div>

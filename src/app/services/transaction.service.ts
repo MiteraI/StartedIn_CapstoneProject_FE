@@ -34,6 +34,7 @@ export class TransactionService {
     fromName?: string,
     toName?: string,
     type?: TransactionType,
+    isInFlow?: boolean,
     dateFrom?: Date,
     dateTo?: Date,
     amountFrom?: number,
@@ -42,6 +43,7 @@ export class TransactionService {
     const query = (fromName?.trim() ? `fromName=${fromName}&` : '')
       + (toName?.trim() ? `toName=${toName}&` : '')
       + (type ? `type=${type}&` : '')
+      + (isInFlow ? `isInFlow=${isInFlow}&` : '')
       + (dateFrom ? `dateFrom=${dateFrom.toISOString().split('T')[0]}&` : '')
       + (dateTo ? `dateTo=${dateTo.toISOString().split('T')[0]}&` : '')
       + (amountFrom ? `amountFrom=${amountFrom}&` : '')
@@ -76,6 +78,34 @@ export class TransactionService {
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/transactions/${id}/evidence`),
       formdata,
       { responseType: 'text' as 'json' }
+    );
+  }
+
+  getSelfTransactionList(
+    page: number,
+    size: number,
+    fromName?: string,
+    toName?: string,
+    type?: TransactionType,
+    isInFlow?: boolean,
+    dateFrom?: Date,
+    dateTo?: Date,
+    amountFrom?: number,
+    amountTo?: number
+  ): Observable<SearchResponseModel<TransactionModel>> {
+    const query = (fromName?.trim() ? `fromName=${fromName}&` : '')
+      + (toName?.trim() ? `toName=${toName}&` : '')
+      + (type ? `type=${type}&` : '')
+      + (isInFlow ? `isInFlow=${isInFlow}&` : '')
+      + (dateFrom ? `dateFrom=${dateFrom.toISOString().split('T')[0]}&` : '')
+      + (dateTo ? `dateTo=${dateTo.toISOString().split('T')[0]}&` : '')
+      + (amountFrom ? `amountFrom=${amountFrom}&` : '')
+      + (amountTo ? `amountTo=${amountTo}&` : '')
+      + `page=${page}&size=${size}`;
+    return this.http.get<SearchResponseModel<TransactionModel>>(
+      this.applicationConfigService.getEndpointFor(`/api/transactions?${query}`)
+    ).pipe(
+      map(response => this.parseSearchResponse(response))
     );
   }
 }

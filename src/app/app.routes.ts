@@ -233,6 +233,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-overview/investor-disbursement-overview.page').then( m => m.InvestorDisbursementOverviewPage)
   },
   {
+    path: 'disbursements/history',
+    canActivate: [InvestorGuard],
+    loadComponent: () => import('./pages/transaction-pages/disbursement-history/disbursement-history.page').then( m => m.DisbursementHistoryPage)
+  },
+  {
     path: 'disbursements/:disbursementId',
     canActivate: [InvestorGuard],
     resolve: { disbursement: InvestorDisbursementDataResolver },
@@ -270,5 +275,10 @@ export const routes: Routes = [
     canActivate: [AuthenticatedGuard],
     resolve: { user: UserDataResolver },
     loadComponent: () => import('./pages/user-pages/user-detail/user-detail.page').then( m => m.UserDetailPage)
+  },
+  {
+    path: 'transactions',
+    canActivate: [AuthenticatedGuard],
+    loadComponent: () => import('./pages/transaction-pages/self-transactions/self-transactions.page').then( m => m.SelfTransactionsPage)
   },
 ]
