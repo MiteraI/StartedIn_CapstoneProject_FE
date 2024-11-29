@@ -1,22 +1,20 @@
 <form [formGroup]="assetForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
   <div class="grid grid-cols-1">
     <div>
-      <nz-row [nzGutter]="16">
-        <!-- Asset Name Field -->
-        <nz-col [nzSpan]="12">
-          <nz-form-item>
-            <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Tên Tài sản</nz-form-label>
-            <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tài sản'" class="text-sm">
-              <input
-                nz-input
-                formControlName="assetName"
-                class="py-2 px-3 text-sm"
-                placeholder="Nhập tên tài sản"
-              />
-            </nz-form-control>
-          </nz-form-item>
-        </nz-col>
 
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Tên Tài sản</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tài sản'" class="text-sm">
+          <input
+            nz-input
+            formControlName="assetName"
+            class="py-2 px-3 text-sm"
+            placeholder="Nhập tên tài sản"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-row [nzGutter]="16">
         <!-- Serial Number Field -->
         <nz-col [nzSpan]="12">
           <nz-form-item>
@@ -28,6 +26,19 @@
                 class="py-2 px-3 text-sm"
                 placeholder="Nhập số serial"
               />
+            </nz-form-control>
+          </nz-form-item>
+        </nz-col>
+        <nz-col [nzSpan]="12">
+          <!-- Purchase Date Field -->
+          <nz-form-item>
+            <nz-form-label class="text-lg font-semibold">Ngày Mua</nz-form-label>
+            <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày mua'" class="text-sm">
+              <nz-date-picker
+                class="w-full py-2 text-sm"
+                formControlName="purchaseDate"
+                nzPlaceHolder="Chọn ngày mua"
+              ></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
@@ -44,8 +55,7 @@
               <nz-input-number
                 class="w-full py-2 text-sm"
                 formControlName="price"
-                [nzStep]="1000000"
-                [nzPrecision]="3"
+                [nzStep]="1000"
                 [nzFormatter]="vndFormatter"
                 [nzParser]="vndParser"
               ></nz-input-number>
@@ -62,26 +72,18 @@
                 class="w-full py-2 text-sm"
                 formControlName="quantity"
                 [nzMin]="1"
-                [nzPrecision]="0"
+                [nzPrecision]="1"
+                [nzStep]="1"
               ></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
       </nz-row>
     </div>
-
-    <!-- Purchase Date Field -->
-    <nz-form-item>
-      <nz-form-label class="text-lg font-semibold">Ngày Mua</nz-form-label>
-      <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày mua'" class="text-sm">
-        <nz-date-picker
-          class="w-full py-2 text-sm"
-          formControlName="purchaseDate"
-          nzPlaceHolder="Chọn ngày mua"
-        ></nz-date-picker>
-      </nz-form-control>
-    </nz-form-item>
+    
+    
   </div>
+  
   <!-- Submit Button -->
   <nz-form-item>
     <nz-form-control>
