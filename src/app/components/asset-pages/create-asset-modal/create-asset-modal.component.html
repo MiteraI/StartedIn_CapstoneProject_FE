@@ -55,7 +55,8 @@
               <nz-input-number
                 class="w-full py-2 text-sm"
                 formControlName="price"
-                [nzStep]="1000"
+                [nzStep]="1000000"
+                [nzPrecision]="3"
                 [nzFormatter]="vndFormatter"
                 [nzParser]="vndParser"
               ></nz-input-number>
