@@ -10,13 +10,21 @@ import { ScrollService } from 'src/app/core/util/scroll.service';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-investor-disbursement-overview',
   templateUrl: './investor-disbursement-overview.page.html',
   styleUrls: ['./investor-disbursement-overview.page.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, TitleBarComponent, NzSpinModule, VndCurrencyPipe]
+  imports: [
+    CommonModule,
+    RouterModule,
+    TitleBarComponent,
+    NzSpinModule,
+    VndCurrencyPipe,
+    MatIconModule
+  ]
 })
 export class InvestorDisbursementOverviewPage implements OnInit, OnDestroy {
   projects: DisbursementForProjectModel[] = [];

@@ -24,7 +24,7 @@
   </nz-form-item>
 
   <!-- Transaction Type -->
-  <nz-form-item>
+  <nz-form-item *ngIf="!isDisbursementHistory">
     <nz-form-label [nzSpan]="24">Loại giao dịch</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
@@ -88,7 +88,7 @@
   </nz-form-item>
 
   <!-- Transaction Flow -->
-  <nz-form-item>
+  <nz-form-item *ngIf="!isDisbursementHistory">
     <nz-form-label [nzSpan]="24">Dòng tiền</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
