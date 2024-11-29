@@ -51,7 +51,7 @@ export class CreateDealOfferPage implements OnInit {
   ngOnInit() {
     this.vndCurrencyPipe = new VndCurrencyPipe();
     this.dealOfferForm = this.fb.group({
-      amount: [0, [Validators.required, Validators.min(0)]],
+      amount: [10000000, [Validators.required, Validators.min(1000)]],
       equityShareOffer: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       termCondition: ['', [Validators.required]]
     });

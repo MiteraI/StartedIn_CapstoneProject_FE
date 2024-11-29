@@ -1,63 +1,42 @@
 <form [formGroup]="filterForm" class="ant-modal-body">
-  <!-- Name -->
+  <!-- From Name -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Tiêu đề giải ngân</nz-form-label>
+    <nz-form-label [nzSpan]="24">Người gửi</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <input
         nz-input
-        formControlName="name"
-        placeholder="Nhập tiêu đề giải ngân"
+        formControlName="fromName"
+        placeholder="Nhập tên người gửi"
       />
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Investor Select -->
-  <nz-form-item *ngIf="showInvestorSelect">
-    <nz-form-label [nzSpan]="24">Nhà đầu tư</nz-form-label>
+  <!-- To Name -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Người nhận</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="investorId"
-        nzShowSearch
-        nzServerSearch
-        nzPlaceHolder="Chọn nhà đầu tư"
-        [nzShowArrow]="false"
-        [nzFilterOption]="nzFilterOption"
-        (nzOnSearch)="onInvestorSearch($event)"
-      >
-        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let investor of filteredInvestors"
-          [nzValue]="investor.id"
-          [nzLabel]="investor.fullName"
-          nzCustomContent
-        >
-          <span class="font-medium">{{ investor.fullName }}</span>
-          <span class="text-xs opacity-50">{{ investor.email }}</span>
-        </nz-option>
-      </nz-select>
+      <input
+        nz-input
+        formControlName="toName"
+        placeholder="Nhập tên người nhận"
+      />
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Project Select -->
-  <nz-form-item *ngIf="showProjectSelect">
-    <nz-form-label [nzSpan]="24">Dự án</nz-form-label>
+  <!-- Transaction Type -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Loại giao dịch</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
         class="w-full"
-        formControlName="projectId"
-        nzShowSearch
-        nzServerSearch
-        nzPlaceHolder="Chọn dự án"
-        [nzShowArrow]="false"
-        [nzFilterOption]="nzFilterOption"
-        (nzOnSearch)="onProjectSearch($event)"
+        formControlName="type"
+        nzPlaceHolder="Chọn loại giao dịch"
       >
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
         <nz-option
-          *ngFor="let project of filteredProjects"
-          [nzValue]="project.id"
-          [nzLabel]="project.projectName"
+          *ngFor="let option of transactionTypeOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
         ></nz-option>
       </nz-select>
     </nz-form-control>
@@ -71,6 +50,7 @@
         class="w-full"
         formControlName="dateRange"
         nzFormat="yyyy-MM-dd"
+        [nzPlaceHolder]="['Từ', 'Đến']"
       ></nz-range-picker>
     </nz-form-control>
   </nz-form-item>
@@ -107,21 +87,18 @@
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Status -->
+  <!-- Transaction Flow -->
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
+    <nz-form-label [nzSpan]="24">Dòng tiền</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
         class="w-full"
-        formControlName="status"
-        nzPlaceHolder="Chọn trạng thái"
+        formControlName="isInFlow"
+        nzPlaceHolder="Chọn dòng tiền"
       >
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of disbursementStatusOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
+        <nz-option [nzValue]="true" nzLabel="Tiền vào"></nz-option>
+        <nz-option [nzValue]="false" nzLabel="Tiền ra"></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>

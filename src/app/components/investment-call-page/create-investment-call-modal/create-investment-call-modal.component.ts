@@ -12,16 +12,26 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzFormModule } from 'ng-zorro-antd/form'
+import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
 
 @Component({
   selector: 'app-create-investment-call-modal',
   templateUrl: './create-investment-call-modal.component.html',
   styleUrls: ['./create-investment-call-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzInputNumberModule],
+  imports: [
+    NzFormModule,
+    NzInputModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzIconModule,
+    NzInputNumberModule,
+  ],
   providers: [DatePipe],
 })
-export class CreateInvestmentCallModalComponent implements OnInit {
+export class CreateInvestmentCallModalComponent {
   readonly nzModalData: any = inject(NZ_MODAL_DATA)
 
   investmentCallForm: FormGroup
@@ -41,9 +51,10 @@ export class CreateInvestmentCallModalComponent implements OnInit {
     })
   }
 
-  formatterNumber = (value: number): string => value.toLocaleString()
-  parserNumber = (value: string): string => value.replace(/,/g, '') 
-  
+  vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
+  vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
+  vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
+
   formatterPercent = (value: number): string => `${value} %`
   parserPercent = (value: string): string => value.replace(' %', '')
   disabledStartDate = (current: Date): boolean => {
@@ -85,6 +96,4 @@ export class CreateInvestmentCallModalComponent implements OnInit {
       })
     }
   }
-
-  ngOnInit() {}
 }

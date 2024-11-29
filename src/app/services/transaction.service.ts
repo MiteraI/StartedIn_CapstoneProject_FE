@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { TransactionModel } from '../shared/models/transaction/transaction.model'
 import { TransactionCreateModel } from '../shared/models/transaction/transaction-create.model'
+import { TransactionType } from '../shared/enums/transaction-type.enum'
 
 @Injectable({
   providedIn: 'root',
@@ -29,9 +30,23 @@ export class TransactionService {
   getTransactionList(
     projectId: string,
     page: number,
-    size: number
+    size: number,
+    fromName?: string,
+    toName?: string,
+    type?: TransactionType,
+    dateFrom?: Date,
+    dateTo?: Date,
+    amountFrom?: number,
+    amountTo?: number
   ): Observable<SearchResponseModel<TransactionModel>> {
-    const query = `page=${page}&size=${size}`;
+    const query = (fromName?.trim() ? `fromName=${fromName}&` : '')
+      + (toName?.trim() ? `toName=${toName}&` : '')
+      + (type ? `type=${type}&` : '')
+      + (dateFrom ? `dateFrom=${dateFrom.toISOString().split('T')[0]}&` : '')
+      + (dateTo ? `dateTo=${dateTo.toISOString().split('T')[0]}&` : '')
+      + (amountFrom ? `amountFrom=${amountFrom}&` : '')
+      + (amountTo ? `amountTo=${amountTo}&` : '')
+      + `page=${page}&size=${size}`;
     return this.http.get<SearchResponseModel<TransactionModel>>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/transactions?${query}`)
     ).pipe(

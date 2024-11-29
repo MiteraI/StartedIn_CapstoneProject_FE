@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { TransactionModel } from 'src/app/shared/models/transaction/transaction.model';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,10 +20,17 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { TransactionTypeModalComponent } from 'src/app/components/transaction-pages/transaction-type-modal/transaction-type-modal.component';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { TransactionFilterComponent } from 'src/app/components/transaction-pages/transaction-filter-component/transaction-filter-component.component';
 
 interface FilterOptions {
-  name?: string;
+  fromName?: string;
+  toName?: string;
   type?: TransactionType;
+  dateFrom?: Date;
+  dateTo?: Date;
+  amountFrom?: number;
+  amountTo?: number;
+  isInFlow?: boolean;
 }
 
 @Component({
@@ -41,7 +48,8 @@ interface FilterOptions {
     NzPaginationModule,
     NzSpinModule,
     NzButtonModule,
-    NzModalModule
+    NzModalModule,
+    TransactionFilterComponent
   ]
 })
 export class TransactionsPage implements OnInit, OnDestroy {
@@ -59,12 +67,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   isLoading = false;
   isDesktopView = false;
-  private destroy$ = new Subject<void>();
   isLeader = false;
 
   currentBudget: number = 0;
   inAmount: number = 0;
   outAmount: number = 0;
+
+  @ViewChild(TransactionFilterComponent) filterComponent!: TransactionFilterComponent;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -108,7 +118,18 @@ export class TransactionsPage implements OnInit, OnDestroy {
   filterTransactions(append: boolean = false) {
     this.isLoading = true;
     this.transactionService
-      .getTransactionList(this.projectId, this.pageIndex, this.pageSize)
+      .getTransactionList(
+        this.projectId,
+        this.pageIndex,
+        this.pageSize,
+        this.filter.fromName,
+        this.filter.toName,
+        this.filter.type,
+        this.filter.dateFrom,
+        this.filter.dateTo,
+        this.filter.amountFrom,
+        this.filter.amountTo
+      )
       .pipe(
         catchError(error => {
           this.notification.error("Lỗi", "Lấy danh sách giao dịch thất bại!", { nzDuration: 2000 });
@@ -122,18 +143,27 @@ export class TransactionsPage implements OnInit, OnDestroy {
       });
   }
 
-  processContent(content: string) : string {
-    if (!content || !content.length) return '';
-    if (content.length <= 80) return content;
-    return content.slice(0, 80) + '...';
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.filterTransactions();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
   }
 
   onSearch(searchText: string) {
     this.filter = {
       ...this.filter,
-      name: searchText
+      fromName: searchText
     };
     this.filterTransactions();
+  }
+
+  processContent(content: string) : string {
+    if (!content || !content.length) return '';
+    if (content.length <= 80) return content;
+    return content.slice(0, 80) + '...';
   }
 
   get isEndOfList(): boolean {

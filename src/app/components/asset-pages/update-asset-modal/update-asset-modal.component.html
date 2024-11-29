@@ -4,7 +4,7 @@
     <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
       <nz-spin nzSimple></nz-spin>
     </div>
-  } 
+  }
   @else {
     <div class="flex-1 overflow-auto p-4">
       <form [formGroup]="assetForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical">
@@ -49,7 +49,8 @@
                   <nz-input-number
                     class="w-full py-2 text-sm"
                     formControlName="price"
-                    [nzStep]="1000"
+                    [nzStep]="1000000"
+                    [nzPrecision]="3"
                     [nzFormatter]="vndFormatter"
                     [nzParser]="vndParser" (ngModelChange)="handleInfoChanged()"
                     [nzDisabled]="isFromTransaction"
@@ -66,7 +67,7 @@
                     class="w-full py-2 text-sm"
                     formControlName="quantity"
                     [nzMin]="1"
-                    [nzPrecision]="1"
+                    [nzPrecision]="0"
                     [nzStep]="1" (ngModelChange)="handleInfoChanged()"
                     [nzDisabled]="isFromTransaction"
                   ></nz-input-number>
