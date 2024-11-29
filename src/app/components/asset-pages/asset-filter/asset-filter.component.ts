@@ -100,12 +100,15 @@ export class AssetFilterComponent implements OnInit {
   }
 
   updateForm(filterData: any) {
+    const dateRange = (filterData.fromDate || filterData.toDate)
+      ? [filterData.fromDate || null, filterData.toDate || null]
+      : null;
     if (this.filterForm) {
       this.filterForm.patchValue({
         assetName: filterData.assetNameName || '',
         status: filterData.status || '',
         serialNumber: filterData.serialNumber || '',
-        dateRange: [filterData.fromDate, filterData.toDate] || [],
+        dateRange: dateRange,
         fromPrice: filterData.fromPrice || null,
         toPrice: filterData.toPrice || null
       });
