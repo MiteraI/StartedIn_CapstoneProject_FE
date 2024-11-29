@@ -19,7 +19,6 @@ import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
-import { NzIconModule } from 'ng-zorro-antd/icon'
 import { Subject, takeUntil } from 'rxjs'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { MilestoneService } from 'src/app/services/milestone.service'
@@ -142,6 +141,64 @@ export class UpdateTaskModalComponent implements OnInit {
     })
   }
 
+  disableStartDate = (startDate: Date): boolean => {
+    const endDate = this.taskForm.get('endDate')?.value;
+    const parentTask = this.otherTasks.find(t => t.id === this.initialParentTaskId) ?? this.initialParentTask;
+
+    if (parentTask) {
+      const parentTaskStart = new Date(parentTask.startDate);
+      const parentTaskEnd = new Date(parentTask.endDate);
+
+      // Start date should be within parent task dates
+      if (startDate < parentTaskStart || startDate > parentTaskEnd) {
+        return true;
+      }
+    }
+
+    const milestone = this.milestones.find(m => m.id === this.initialMilestoneId) ?? this.initialMilestone;
+    if (milestone) {
+      const milestoneStart = new Date(milestone.startDate);
+      const milestoneEnd = new Date(milestone.endDate);
+
+      // Start date should be within milestone dates
+      if (startDate < milestoneStart || startDate > milestoneEnd) {
+        return true;
+      }
+    }
+
+    // Start date cannot be after end date
+    return !!endDate && startDate > new Date(endDate);
+  };
+
+  disableEndDate = (endDate: Date): boolean => {
+    const startDate = this.taskForm.get('startDate')?.value;
+    const parentTask = this.otherTasks.find(t => t.id === this.initialParentTaskId) ?? this.initialParentTask;
+
+    if (parentTask) {
+      const parentTaskStart = new Date(parentTask.startDate);
+      const parentTaskEnd = new Date(parentTask.endDate);
+
+      // End date should be within parent task dates
+      if (endDate < parentTaskStart || endDate > parentTaskEnd) {
+        return true;
+      }
+    }
+
+    const milestone = this.milestones.find(m => m.id === this.initialMilestoneId) ?? this.initialMilestone;
+    if (milestone) {
+      const milestoneStart = new Date(milestone.startDate);
+      const milestoneEnd = new Date(milestone.endDate);
+
+      // End date should be within milestone dates
+      if (endDate < milestoneStart || endDate > milestoneEnd) {
+        return true;
+      }
+    }
+
+    // End date cannot be before start date
+    return !!startDate && endDate < new Date(startDate);
+  };
+
   onSubmit() {
     if (this.taskForm.valid && this.isInfoChanged) {
       let startDate = this.taskForm.value.startDate
@@ -204,6 +261,15 @@ export class UpdateTaskModalComponent implements OnInit {
     }
   }
 
+  private handleMutualExclusion(milestoneSelected: boolean, value: string) {
+    if (!value) return;
+    if (milestoneSelected) {
+      this.taskForm.patchValue({ parentTask: '' })
+    } else {
+      this.taskForm.patchValue({ milestone: '' })
+    }
+  }
+
   handleOpenParentTask() {
     if (!this.isOtherTasksFetched) {
       this.isOtherTasksFetched = true
@@ -218,21 +284,37 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   handleSelectParentTask(parentTaskId: string) {
-    if (parentTaskId !== this.initialParentTaskId) {
-      this.taskService.updateParentTask(this.nzModalData.projectId, this.nzModalData.taskId, { parentTaskId: parentTaskId }).subscribe({
-        next: (res) => {
-          this.initialParentTaskId = parentTaskId
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error)
-          } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else {
-          }
-        },
-      })
+    if (!parentTaskId) {
+      this.updateParentTask(
+        '',
+        () => this.updateMilestone(this.taskForm.get('milestone')?.value)
+      );
+      return;
     }
+
+    this.handleMutualExclusion(false, parentTaskId);
+  }
+
+  updateParentTask(parentTaskId: string, callback: () => void = () => {}) {
+    if (parentTaskId === this.initialParentTaskId) {
+      callback();
+      return;
+    }
+    this.taskService.updateParentTask(this.nzModalData.projectId, this.nzModalData.taskId, { parentTaskId: parentTaskId }).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Cập nhật tác vụ mẹ thành công')
+        this.initialParentTaskId = parentTaskId
+        callback()
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
   }
 
   private fetchTasks() {
@@ -246,6 +328,7 @@ export class UpdateTaskModalComponent implements OnInit {
           this.otherTasks = [...this.otherTasks, ...tasks]
           this.otherTasksTotal = val.total
           this.isOtherTasksFetchLoading = false
+          console.log(this.otherTasks);
         },
         error: (error: HttpErrorResponse) => {
           this.isOtherTasksFetchLoading = false
@@ -305,22 +388,66 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   handleSelectMilestone(milestoneId: string) {
-    if (milestoneId !== this.initialParentTaskId) {
-      this.taskService.updateTaskMilestone(this.nzModalData.projectId, this.nzModalData.taskId, { milestoneId: milestoneId }).subscribe({
-        next: (res) => {
-          this.antdNoti.openSuccessNotification('', 'Cập nhật cột mốc thành công')
-          this.initialMilestoneId = milestoneId
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error)
-          } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else {
-          }
-        },
-      })
+    if (!milestoneId) {
+      this.updateMilestone(
+        '',
+        () => this.updateParentTask(this.taskForm.get('parentTask')?.value)
+      );
+      return;
     }
+
+    this.handleMutualExclusion(true, milestoneId);
+
+    if (milestoneId) {
+      const milestone = this.milestones.find(m => m.id === milestoneId);
+      if (milestone) {
+        const startDate = this.taskForm.get('startDate')?.value;
+        const endDate = this.taskForm.get('endDate')?.value;
+
+        // Check if current dates are within milestone range
+        if (startDate) {
+          const taskStart = new Date(startDate);
+          const milestoneStart = new Date(milestone.startDate);
+          const milestoneEnd = new Date(milestone.endDate);
+
+          if (taskStart < milestoneStart || taskStart > milestoneEnd) {
+            this.taskForm.patchValue({ startDate: null });
+          }
+        }
+
+        if (endDate) {
+          const taskEnd = new Date(endDate);
+          const milestoneStart = new Date(milestone.startDate);
+          const milestoneEnd = new Date(milestone.endDate);
+
+          if (taskEnd < milestoneStart || taskEnd > milestoneEnd) {
+            this.taskForm.patchValue({ endDate: null });
+          }
+        }
+      }
+    }
+  }
+
+  updateMilestone(milestoneId: string, callback: () => void = () => {}) {
+    if (milestoneId === this.initialMilestoneId) {
+      callback();
+      return;
+    }
+    this.taskService.updateTaskMilestone(this.nzModalData.projectId, this.nzModalData.taskId, { milestoneId: milestoneId }).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Cập nhật cột mốc thành công')
+        this.initialMilestoneId = milestoneId
+        callback()
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
   }
 
   handleOpenMilestoneSelect() {
@@ -348,6 +475,7 @@ export class UpdateTaskModalComponent implements OnInit {
           this.milestones = [...this.milestones, ...moreMilestones]
           this.milestonesTotal = val.total
           this.isMilestonesFetchLoading = false
+          console.log(this.milestones);
         },
         error: (error: HttpErrorResponse) => {
           this.isMilestonesFetchLoading = false
