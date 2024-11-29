@@ -164,12 +164,15 @@ export class DisbursementFilterComponent implements OnInit {
   }
 
   updateForm(filterData: any) {
+    const dateRange = (filterData.periodFrom || filterData.periodTo)
+      ? [filterData.periodFrom || null, filterData.periodTo || null]
+      : null;
     if (this.filterForm) {
       this.filterForm.patchValue({
         name: filterData.name || '',
         investorId: filterData.investorId || '',
         projectId: filterData.projectId || '',
-        dateRange: [filterData.periodFrom, filterData.periodTo] || [],
+        dateRange: dateRange,
         amountFrom: filterData.amountFrom || null,
         amountTo: filterData.amountTo || null,
         status: filterData.status || ''

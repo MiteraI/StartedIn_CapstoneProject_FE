@@ -145,12 +145,15 @@ export class ContractFilterComponent implements OnInit {
   }
 
   updateForm(filterData: any) {
+    const dateRange = (filterData.lastUpdatedStartDate || filterData.lastUpdatedEndDate)
+      ? [filterData.lastUpdatedStartDate || null, filterData.lastUpdatedEndDate || null]
+      : null;
     if (this.filterForm) {
       this.filterForm.patchValue({
         contractName: filterData.contractName || '',
         contractType: filterData.contractType || '',
         parties: filterData.parties || [],
-        dateRange: [filterData.lastUpdatedStartDate, filterData.lastUpdatedEndDate] || [],
+        dateRange: dateRange,
         contractStatus: filterData.contractStatus || ''
       });
     }

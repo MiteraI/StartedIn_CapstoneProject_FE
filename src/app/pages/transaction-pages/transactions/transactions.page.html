@@ -1,8 +1,21 @@
 <app-filter-bar
   viewName="Lịch sử giao dịch"
-  [searchValue]="filter.name ?? ''"
+  [searchValue]="filter.fromName ?? ''"
   (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
 >
+  <div desktop class="p-4 min-w-[400px]">
+    <app-transaction-filter
+      [data]="filter"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-transaction-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-transaction-filter
+      [data]="filter"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-transaction-filter>
+  </div>
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
