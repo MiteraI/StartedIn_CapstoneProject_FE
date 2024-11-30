@@ -5,15 +5,17 @@
   <!-- Logo and gọi vốn -->
   <div class="flex flex-col lg:flex-row w-full mt-10 gap-10">
     <!-- Project Logo -->
-    <div class="w-full lg:w-2/3">
-      <div class="aspect-w-16 aspect-h-9 h-full flex items-center justify-center">
-        <img class="object-contain rounded-lg" src="{{ projectOverview?.logoUrl }}" alt="project photo" />
+    <div class="w-full lg:w-1/2 flex items-center justify-center">
+      <!-- Circular Container -->
+      <div class="w-[500px] h-[500px] rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
+        <!-- Logo inside the circle -->
+        <img class="object-cover w-full h-full" src="{{ projectOverview?.logoUrl }}" alt="project photo" />
       </div>
     </div>
 
     <!-- Investment Call Information -->
-    <div class="w-full lg:w-1/3">
-      <div *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-6 rounded-lg flex flex-col h-full">
+    <div class="w-full lg:w-1/2" *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-6 rounded-lg flex flex-col h-full">
+      <div class="bg-white px-8 py-8 rounded-lg">
         <!-- Progress Bar -->
         <div class="h-2 bg-green-600 rounded-full w-full"></div>
 
