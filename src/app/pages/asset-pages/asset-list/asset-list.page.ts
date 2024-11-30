@@ -7,7 +7,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
-import { catchError, Subject, takeUntil, throwError } from 'rxjs'
+import { catchError, finalize, Subject, switchMap, takeUntil, throwError } from 'rxjs'
 import { AssetFilterComponent } from 'src/app/components/asset-pages/asset-filter/asset-filter.component'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ScrollService } from 'src/app/core/util/scroll.service'
@@ -99,6 +99,10 @@ export class AssetListPage implements OnInit, OnDestroy {
       this.isLeader = role?.roleInTeam === TeamRole.LEADER
       this.filterAssets()
     })
+    this.assetService.refreshAsset$.pipe()
+    .subscribe(() => {
+      this.filterAssets();
+    });
   }
   filterAssets(append: boolean = false) {
     this.isLoading = true

@@ -122,6 +122,7 @@
                     formControlName="purchaseDate"
                     nzPlaceHolder="Chọn ngày mua"
                     (ngModelChange)="handleInfoChanged()"
+                    [nzDisabled]="isFromTransaction"
                   ></nz-date-picker>
                 </nz-form-control>
               </nz-form-item>

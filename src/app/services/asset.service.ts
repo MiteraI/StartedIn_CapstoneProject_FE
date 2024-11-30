@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { AssetStatus } from '../shared/enums/asset-status.enum'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { AssetModel } from '../shared/models/asset/asset.model'
 import { AssetCreateModel } from '../shared/models/asset/asset-create.model'
@@ -12,8 +12,10 @@ import { AssetUpdateModel } from '../shared/models/asset/asset-update.model'
   providedIn: 'root',
 })
 export class AssetService {
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
+  refreshAsset$ = new BehaviorSubject<boolean>(true)
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  
   getAssetListForProject(
     id: string,
     pageIndex: number,

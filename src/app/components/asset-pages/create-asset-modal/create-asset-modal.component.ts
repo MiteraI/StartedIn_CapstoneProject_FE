@@ -72,6 +72,7 @@ export class CreateAssetModalComponent {
       this.assetService.createNewAsset(this.projectId, assetData).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '');
+          this.assetService.refreshAsset$.next(true)
           this.nzModalRef.close();
         },
         error: (error: HttpErrorResponse) => {
