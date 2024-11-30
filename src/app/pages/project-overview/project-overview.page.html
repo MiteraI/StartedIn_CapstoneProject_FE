@@ -1,11 +1,11 @@
 <div class="mx-[10%] my-10">
   <div class="text-center gap-y-1">
-    <p class="text-2xl font-bold">{{ projectOverview?.projectName }}</p>
+    <p class="text-4xl font-bold">{{ projectOverview?.projectName }}</p>
   </div>
   <!-- Logo and gọi vốn -->
   <div class="flex flex-col lg:flex-row w-full mt-10 gap-10">
     <!-- Project Logo -->
-    <div class="w-full lg:w-1/2 flex items-center justify-center">
+    <div class="w-full lg:w-1/2 flex items-center justify-end pr-5">
       <!-- Circular Container -->
       <div class="w-[500px] h-[500px] rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
         <!-- Logo inside the circle -->
@@ -14,8 +14,8 @@
     </div>
 
     <!-- Investment Call Information -->
-    <div class="w-full lg:w-1/2" *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-6 rounded-lg flex flex-col h-full">
-      <div class="bg-white px-8 py-8 rounded-lg">
+    <div class="w-full lg:w-1/2" *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-3 rounded-lg flex flex-col w-[550px] h-full bg-green-600 justify-left">
+      <div class="bg-white px-6 py-6 w-full rounded-lg">
         <!-- Progress Bar -->
         <div class="h-2 bg-green-600 rounded-full w-full"></div>
 
