@@ -5,6 +5,7 @@ import { Observable } from "rxjs";
 import { SearchResponseModel } from "../shared/models/search-response.model";
 import { ProjectModel } from "../shared/models/project/project.model";
 import { FullProfile } from "../shared/models/user/full-profile.model";
+import { ProjectStatus } from "../shared/enums/project-status.enum";
 
 @Injectable({
   providedIn: 'root',
@@ -27,9 +28,17 @@ export class AdminService {
 
   getProjectList(
     pageIndex: number,
-    pageSize: number
+    pageSize: number,
+    projectName?: string,
+    description?: string,
+    leaderFullName?: string,
+    projectStatus?: ProjectStatus
   ) : Observable<SearchResponseModel<ProjectModel>> {
-    const query = `page=${pageIndex}&size=${pageSize}`;
+    const query = (projectName?.trim() ? `projectName=${projectName.trim()}&` : '') +
+      (description?.trim() ? `description=${description.trim()}&` : '') +
+      (leaderFullName?.trim() ? `leaderFullName=${leaderFullName.trim()}&` : '') +
+      (projectStatus ? `projectStatus=${projectStatus}&` : '') +
+      `page=${pageIndex}&size=${pageSize}`;
     return this.http.get<SearchResponseModel<ProjectModel>>(
       this.applicationConfigService.getEndpointFor(`/api/admin/projects?${query}`),
     );
@@ -50,9 +59,19 @@ export class AdminService {
 
   getUserList(
     pageIndex: number,
-    pageSize: number
+    pageSize: number,
+    fullName?: string,
+    email?: string,
+    phoneNumber?: string,
+    authorities?: 'Admin' | 'User' | 'Investor' | 'Mentor',
+    isActive?: boolean
   ) : Observable<SearchResponseModel<FullProfile>> {
-    const query = `page=${pageIndex}&size=${pageSize}`;
+    const query = (fullName?.trim() ? `fullName=${fullName.trim()}&` : '') +
+      (email?.trim() ? `email=${email.trim()}&` : '') +
+      (phoneNumber?.trim() ? `phoneNumber=${phoneNumber.trim()}&` : '') +
+      (authorities ? `authorities=${authorities}&` : '') +
+      (isActive ? `isActive=${isActive}&` : '') +
+      `page=${pageIndex}&size=${pageSize}`;
     return this.http.get<SearchResponseModel<FullProfile>>(
       this.applicationConfigService.getEndpointFor(`/api/admin/users?${query}`),
     );

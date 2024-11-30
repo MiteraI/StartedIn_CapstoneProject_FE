@@ -53,7 +53,7 @@ export class DisbursementService {
     investorId?: string,
     contractId?: string
   ): Observable<SearchResponseModel<DisbursementItemModel>> {
-    const query = (name?.trim() ? `title=${name}&` : '')
+    const query = (name?.trim() ? `title=${name.trim()}&` : '')
       + (periodFrom ? `periodFrom=${periodFrom.toISOString().split('T')[0]}&` : '')
       + (periodTo ? `periodTo=${periodTo.toISOString().split('T')[0]}&` : '')
       + (amountFrom ? `amountFrom=${amountFrom}&` : '')

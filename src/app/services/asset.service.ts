@@ -27,7 +27,7 @@ export class AssetService {
     toDate?: Date
   ): Observable<SearchResponseModel<AssetModel>> {
     const query =
-      (assetName?.trim() ? `assetName=${assetName}&` : '') +
+      (assetName?.trim() ? `assetName=${assetName.trim()}&` : '') +
       (status ? `status=${status}&` : '') +
       (fromPrice ? `fromPrice=${fromPrice}&` : '') +
       (toPrice ? `toPrice=${toPrice}&` : '') +

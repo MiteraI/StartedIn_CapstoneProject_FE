@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -15,6 +15,16 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { FullProfile } from 'src/app/shared/models/user/full-profile.model';
 import { ImportUsersModalComponent } from 'src/app/components/admin-pages/import-users-modal/import-users-modal.component';
+import { UserFilterComponent } from 'src/app/components/admin-pages/user-filter/user-filter.component';
+import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
+
+interface FilterOptions {
+  fullName?: string;
+  email?: string;
+  phoneNumber?: string;
+  authorities?: 'Admin' | 'User' | 'Investor' | 'Mentor';
+  isActive?: boolean;
+}
 
 @Component({
   selector: 'app-admin-user-list',
@@ -30,7 +40,9 @@ import { ImportUsersModalComponent } from 'src/app/components/admin-pages/import
     RouterModule,
     NzPaginationModule,
     NzSpinModule,
-    InitialsOnlyPipe
+    InitialsOnlyPipe,
+    UserFilterComponent,
+    FilterBarComponent
   ]
 })
 export class AdminUserListPage implements OnInit, OnDestroy {
@@ -38,6 +50,9 @@ export class AdminUserListPage implements OnInit, OnDestroy {
   pageIndex: number = 1;
   pageSize: number = 20;
   totalRecords: number = 200;
+
+  filter: FilterOptions = {};
+  @ViewChild('filterComponent') filterComponent!: UserFilterComponent;
 
   isLoading = false;
   isDesktopView = false;
@@ -73,7 +88,15 @@ export class AdminUserListPage implements OnInit, OnDestroy {
   fetchUsers(append: boolean = false) {
     this.isLoading = true;
     this.adminService
-      .getUserList(this.pageIndex, this.pageSize)
+      .getUserList(
+        this.pageIndex,
+        this.pageSize,
+        this.filterData.fullName,
+        this.filterData.email,
+        this.filterData.phoneNumber,
+        this.filterData.authorities,
+        this.filterData.isActive
+      )
       .pipe(
         catchError(error => {
           this.notification.error("Lỗi", "Lấy danh sách người dùng thất bại!", { nzDuration: 2000 });
@@ -157,5 +180,31 @@ export class AdminUserListPage implements OnInit, OnDestroy {
         this.fetchUsers();
       }
     });
+  }
+
+
+  get filterData() {
+    return {
+      ...this.filter
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.pageIndex = 1;
+    this.fetchUsers();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      fullName: searchText
+    };
+    this.pageIndex = 1;
+    this.fetchUsers();
   }
 }

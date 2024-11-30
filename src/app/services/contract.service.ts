@@ -32,7 +32,7 @@ export class ContractService {
     lastUpdatedEndDate?: Date,
     contractStatus?: ContractStatus
   ): Observable<SearchResponseModel<ContractListItemModel>> {
-    const query = (contractName?.trim() ? `contractName=${contractName}&` : '')
+    const query = (contractName?.trim() ? `contractName=${contractName.trim()}&` : '')
       + (contractType ? `contractTypeEnum=${contractType}&` : '')
       + (!!parties && parties.length > 0 ? `parties=${parties?.join("&parties=")}&` : '')
       + (lastUpdatedStartDate ? `lastUpdatedStartDate=${lastUpdatedStartDate.toISOString().split('T')[0]}&` : '')

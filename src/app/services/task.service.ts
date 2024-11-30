@@ -34,7 +34,7 @@ export class TaskService {
     milestoneId?: string
   ): Observable<Pagination<Task>> {
     const query =
-      (title?.trim() ? `title=${title}&` : '') +
+      (title?.trim() ? `title=${title.trim()}&` : '') +
       (status ? `status=${status}&` : '') +
       (late !== undefined ? `late=${late}&` : '') +
       (assigneeId ? `assigneeId=${assigneeId}&` : '') +
