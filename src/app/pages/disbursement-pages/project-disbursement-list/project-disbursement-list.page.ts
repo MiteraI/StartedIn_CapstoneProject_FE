@@ -200,6 +200,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.pageIndex = 1;
     this.filterDisbursements();
   }
 
@@ -212,6 +213,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       ...this.filter,
       name: searchText
     };
+    this.pageIndex = 1;
     this.filterDisbursements();
   }
 

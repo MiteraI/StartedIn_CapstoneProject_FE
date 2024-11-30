@@ -1,0 +1,35 @@
+<app-filter-bar
+  viewName="Khám phá"
+  [searchValue]="filter.projectName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-startup-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-startup-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-startup-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-startup-filter>
+  </div>
+</app-filter-bar>
+
+<div class="p-4 max-w-6xl mx-auto">
+  <!-- Grid layout for startup cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <app-startup-card
+      *ngFor="let project of projects"
+      [project]="project"
+      [routerLink]="['/project-overview', project.id]"
+    ></app-startup-card>
+  </div>
+
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="flex justify-center p-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+</div>

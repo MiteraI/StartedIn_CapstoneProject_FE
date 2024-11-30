@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { catchError, Subject, takeUntil, throwError } from 'rxjs';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -44,7 +44,7 @@ interface FilterOptions {
     NzSpinModule
   ]
 })
-export class InvestorDealListPage implements OnInit {
+export class InvestorDealListPage implements OnInit, OnDestroy {
   searchResult: SearchResponseModel<InvestorDealItem> = {
     data: [],
     page: 1,
@@ -166,11 +166,13 @@ export class InvestorDealListPage implements OnInit {
       ...this.filter,
       projectName: searchText
     };
+    this.pageIndex = 1;
     this.filterOffers();
   }
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.pageIndex = 1;
     this.filterOffers();
   }
 

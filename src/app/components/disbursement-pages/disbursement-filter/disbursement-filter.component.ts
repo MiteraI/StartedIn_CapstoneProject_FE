@@ -12,11 +12,11 @@ import { ProjectService } from 'src/app/services/project.service';
 import { catchError, throwError } from 'rxjs';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
-import { ExploreProjectsListItemModel } from 'src/app/shared/models/project/explore-projects-list-item.model';
 import { MenuStateService } from 'src/app/core/util/menu-state.service';
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
+import { ProjectModel } from 'src/app/shared/models/project/project.model';
 
 @Component({
   selector: 'app-disbursement-filter',
@@ -53,8 +53,8 @@ export class DisbursementFilterComponent implements OnInit {
 
   investors: TeamMemberModel[] = [];
   filteredInvestors: TeamMemberModel[] = [];
-  projects: ExploreProjectsListItemModel[] = [];
-  filteredProjects: ExploreProjectsListItemModel[] = [];
+  projects: ProjectModel[] = [];
+  filteredProjects: ProjectModel[] = [];
 
   vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
   vndFormatter = (value: number) => (!!value ? this.vndCurrencyPipe.transform(value) : value);
