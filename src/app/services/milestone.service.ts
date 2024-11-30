@@ -15,7 +15,7 @@ export class MilestoneService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getMilestones(projectId: string, page: number, size: number, title?: string, phaseId?: string): Observable<Pagination<Milestone>> {
-    const query = (title?.trim() ? `title=${title}&` : '')
+    const query = (title?.trim() ? `title=${title.trim()}&` : '')
     + (phaseId ? `phaseId=${phaseId}&` : '')
     + `page=${page}&size=${size}`
     return this.http.get<Pagination<Milestone>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones?${query}`))

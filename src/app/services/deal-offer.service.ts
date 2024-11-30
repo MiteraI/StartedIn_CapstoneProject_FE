@@ -16,7 +16,7 @@ export class DealOfferService {
     private http: HttpClient,
     private applicationConfigService: ApplicationConfigService
   ) {}
-  
+
   private parseNumericFields<T extends InvestorDealItem | ProjectDealItem>(deal: T): T {
     return {
       ...deal,
@@ -46,7 +46,7 @@ export class DealOfferService {
     minEquity?: number,
     maxEquity?: number
   ): Observable<SearchResponseModel<InvestorDealItem>> {
-    const query = (projectName?.trim() ? `projectName=${projectName}&` : '')
+    const query = (projectName?.trim() ? `projectName=${projectName.trim()}&` : '')
       + (dealStatus ? `dealStatus=${dealStatus}&` : '')
       + (minAmount ? `minAmount=${minAmount}&` : '')
       + (maxAmount ? `maxAmount=${maxAmount}&` : '')
