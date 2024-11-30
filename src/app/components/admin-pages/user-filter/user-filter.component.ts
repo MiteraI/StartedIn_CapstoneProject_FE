@@ -35,11 +35,6 @@ export class UserFilterComponent implements OnInit {
     { value: 'Mentor', label: 'Cố vấn' }
   ];
 
-  statusOptions = [
-    { value: true, label: 'Hoạt động' },
-    { value: false, label: 'Bị vô hiệu hóa' }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private menuState: MenuStateService

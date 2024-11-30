@@ -86,7 +86,14 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
   fetchProjects(append: boolean = false) {
     this.isLoading = true;
     this.adminService
-      .getProjectList(this.pageIndex, this.pageSize)
+      .getProjectList(
+        this.pageIndex, 
+        this.pageSize,
+        this.filter.projectName,
+        this.filter.description,
+        this.filter.leaderFullName,
+        this.filter.projectStatus
+      )
       .pipe(
         catchError(error => {
           this.notification.error("Lỗi", "Lấy danh sách dự án thất bại!", { nzDuration: 2000 });
