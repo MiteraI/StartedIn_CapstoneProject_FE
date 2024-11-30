@@ -22,6 +22,9 @@ import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzListModule } from 'ng-zorro-antd/list'
+import { NzMessageService } from 'ng-zorro-antd/message'
+import { ProjectModel } from 'src/app/shared/models/project/project.model'
+import { ProjectService } from 'src/app/services/project.service'
 @Component({
   selector: 'app-create-project-charter-form',
   templateUrl: './create-project-charter-form.component.html',
@@ -51,6 +54,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
   projectId = ''
   minDate = new Date().toISOString().split('T')[0]
   projectCharterForm: FormGroup
+  currentProject: ProjectModel | undefined
   projectCharter: ProjectCharter | undefined
 
   phaseStates = Object.keys(PhaseState)
@@ -67,7 +71,9 @@ export class CreateProjectCharterFormComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private modal: NzModalService,
     private notification: NzNotificationService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private messageService: NzMessageService,
+    private projectService: ProjectService
   ) {
     this.projectCharterForm = this.formBuilder.group({
       projectId: [''],
@@ -90,6 +96,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
     this.isLoading = true
     this.projectId = this.route.parent?.snapshot.paramMap.get('id')!
     this.getProjectCharter()
+    this.getCurrentProject()
   }
 
   // Create project charter
@@ -104,8 +111,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
   addMilestone() {
     const phaseForm = this.formBuilder.group({
       phaseName: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      startEndDate: [[null], Validators.required],
     })
     this.listCreatePhaseDtos.push(phaseForm)
     this.cdr.detectChanges()
@@ -121,32 +127,28 @@ export class CreateProjectCharterFormComponent implements OnInit {
 
     // format the date before call api
     projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
-      if (phase.startDate) {
-        phase.startDate = this.datePipe.transform(phase.startDate, 'yyyy-MM-dd') || ''
-      }
-      if (phase.endDate) {
-        phase.endDate = this.datePipe.transform(phase.endDate, 'yyyy-MM-dd') || ''
-      }
+      projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
+        if (phase.startEndDate && phase.startEndDate.length === 2) {
+          phase.startDate = this.datePipe.transform(phase.startEndDate[0], 'yyyy-MM-dd') || ''
+          phase.endDate = this.datePipe.transform(phase.startEndDate[1], 'yyyy-MM-dd') || ''
+        }
+      })
     })
 
-    console.log(projectCharterRequest.listCreatePhaseDtos)
+    console.log(projectCharterRequest)
 
-    this.projectCharterService
-      .create(this.projectId, projectCharterRequest)
-      .pipe(
-        tap((response) => {
-          this.notification.success('Thành công', 'Tạo điều lệ dự án thành công', { nzDuration: 2000 })
-          this.getProjectCharter()
-        }),
-        catchError((error) => {
-          this.notification.error('Thành công', 'Tạo điều lệ dự án thất bại', { nzDuration: 2000 })
-          this.getProjectCharter()
+    this.projectCharterService.create(this.projectId, projectCharterRequest).subscribe({
+      next: (response) => {
+        this.messageService.success('Tạo điều lệ dự án thành công')
+        this.getProjectCharter()
+      },
+      error: (error) => {
+        this.messageService.error(error.error)
+        this.getProjectCharter()
 
-          console.error(error)
-          throw error
-        })
-      )
-      .subscribe()
+        console.error(error)
+      },
+    })
   }
 
   getProjectCharter() {
@@ -167,6 +169,7 @@ export class CreateProjectCharterFormComponent implements OnInit {
       },
 
       error: (error) => {
+        this.messageService.error(error.error)
         this.isLoading = false
         this.cdr.detectChanges()
       },
@@ -239,5 +242,27 @@ export class CreateProjectCharterFormComponent implements OnInit {
       )
       .subscribe()
     console.log(projectCharterEditForm)
+  }
+
+  private getCurrentProject() {
+    this.projectService.getProject(this.projectId).subscribe({
+      next: (response) => {
+        this.currentProject = response
+        console.log(this.currentProject)
+      },
+      error: (error) => {
+        console.error(error)
+      },
+    })
+  }
+
+  disabledDate = (current: Date): boolean => {
+    if (!current) {
+      return false
+    }
+    // Replace with your actual project object or reference
+    const startDate = this.currentProject?.startDate ? new Date(this.currentProject.startDate) : null
+    const endDate = this.currentProject?.endDate ? new Date(this.currentProject.endDate) : null
+    return (startDate !== null && current < startDate) || (endDate !== null && current > endDate)
   }
 }
