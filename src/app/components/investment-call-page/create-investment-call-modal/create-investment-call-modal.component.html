@@ -9,7 +9,7 @@
         formControlName="targetCall"
         [nzMin]="1000"
         [nzStep]="10000000"
-        [nzPrecision]="3"
+        [nzPrecision]="-3"
         [nzFormatter]="vndFormatter"
         [nzParser]="vndParser" />
     </nz-form-control>
@@ -24,7 +24,7 @@
         formControlName="equityShareCall"
         [nzMin]="1"
         [nzMax]="100"
-        [nzPrecision]="-2"
+        [nzPrecision]="2"
         [nzFormatter]="formatterPercent"
         [nzParser]="parserPercent" />
     </nz-form-control>

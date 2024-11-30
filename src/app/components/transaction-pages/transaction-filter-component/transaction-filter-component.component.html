@@ -24,7 +24,7 @@
   </nz-form-item>
 
   <!-- Transaction Type -->
-  <nz-form-item>
+  <nz-form-item *ngIf="!isDisbursementHistory">
     <nz-form-label [nzSpan]="24">Loại giao dịch</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select
@@ -65,7 +65,7 @@
           formControlName="amountFrom"
           [nzMin]="0"
           [nzStep]="10000000"
-          [nzPrecision]="3"
+          [nzPrecision]="-3"
           [nzFormatter]="vndFormatter"
           [nzParser]="vndParser"
           nzPlaceHolder="Từ"
@@ -77,7 +77,7 @@
           formControlName="amountTo"
           [nzMin]="0"
           [nzStep]="10000000"
-          [nzPrecision]="3"
+          [nzPrecision]="-3"
           [nzFormatter]="vndFormatter"
           [nzParser]="vndParser"
           nzPlaceHolder="Đến"
@@ -88,7 +88,7 @@
   </nz-form-item>
 
   <!-- Transaction Flow -->
-  <nz-form-item>
+  <nz-form-item *ngIf="!isDisbursementHistory">
     <nz-form-label [nzSpan]="24">Dòng tiền</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-select

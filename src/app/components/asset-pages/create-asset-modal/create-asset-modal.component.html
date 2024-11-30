@@ -56,7 +56,7 @@
                 class="w-full py-2 text-sm"
                 formControlName="price"
                 [nzStep]="1000000"
-                [nzPrecision]="3"
+                [nzPrecision]="-3"
                 [nzFormatter]="vndFormatter"
                 [nzParser]="vndParser"
               ></nz-input-number>
@@ -74,17 +74,14 @@
                 formControlName="quantity"
                 [nzMin]="1"
                 [nzPrecision]="0"
-                [nzStep]="1"
               ></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </nz-col>
       </nz-row>
     </div>
-    
-    
   </div>
-  
+
   <!-- Submit Button -->
   <nz-form-item>
     <nz-form-control>

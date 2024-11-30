@@ -30,6 +30,7 @@ import { TransactionType, TransactionTypeLabels } from 'src/app/shared/enums/tra
 })
 export class TransactionFilterComponent implements OnInit {
   @Input() data: any;
+  @Input() isDisbursementHistory: boolean = false;
   @Output() filterApplied = new EventEmitter<any>();
 
   filterForm!: FormGroup;
