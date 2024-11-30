@@ -142,6 +142,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.pageIndex = 1;
     this.filterContracts();
   }
 
@@ -154,6 +155,7 @@ export class ContractListPage implements OnInit, OnDestroy {
       ...this.filter,
       contractName: searchText
     };
+    this.pageIndex = 1;
     this.filterContracts();
   }
 

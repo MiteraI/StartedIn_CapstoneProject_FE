@@ -8,6 +8,7 @@ import { AccountService } from './core/auth/account.service'
 import { HeaderComponent } from './layouts/header/header.component'
 import { FooterComponent } from './layouts/footer/footer.component'
 import { ViewModeConfigService } from './core/config/view-mode-config.service'
+import { ScrollService } from './core/util/scroll.service'
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,7 @@ export class AppComponent {
     private stateStorage: StateStorageService,
     private accountService: AccountService,
     private viewMode: ViewModeConfigService,
+    private scrollService: ScrollService
   ) {
     if (stateStorage.getRefreshToken()) {
       authJwt
@@ -44,12 +46,20 @@ export class AppComponent {
         const currentUrl = event.url
         this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
         this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
-        this.inProjectDetails = /\/projects\//.test(currentUrl)
+        // workaround for now
+        this.inProjectDetails = /\/projects\//.test(currentUrl) || /\/explore/.test(currentUrl)
       }
     })
 
     viewMode.isDesktopView$.subscribe((val) => {
       this.isDesktopView = val
     })
+  }
+
+  onScroll(event: any) {
+    const element = event.target;
+    if (element.scrollHeight - element.scrollTop <= element.clientHeight + 100) {
+      this.scrollService.emitScroll();
+    }
   }
 }

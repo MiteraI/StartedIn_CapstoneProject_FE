@@ -239,6 +239,7 @@ export class ProjectDealListPage implements OnInit {
       ...this.filter,
       investorName: searchText
     };
+    this.pageIndex = 1;
     this.filterDeals();
   }
 
@@ -251,6 +252,7 @@ export class ProjectDealListPage implements OnInit {
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.pageIndex = 1;
     this.filterDeals();
   }
 
@@ -280,6 +282,7 @@ export class ProjectDealListPage implements OnInit {
     this.pageIndex++;
     this.filterDeals(true);
   }
+
   onPageIndexChange(index: number): void {
     this.pageIndex = index;
     this.filterDeals();
