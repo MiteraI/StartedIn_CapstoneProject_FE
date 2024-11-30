@@ -203,7 +203,7 @@ export const routes: Routes = [
   {
     path: 'explore',
     canActivate: [InvestorGuard],
-    loadComponent: () => import('./pages/investor-explore-projects/investor-explore-projects.page').then((m) => m.InvestorExploreProjectsPage),
+    loadComponent: () => import('./pages/explore/explore.page').then((m) => m.InvestorExploreProjectsPage),
   },
   {
     path: 'deals',

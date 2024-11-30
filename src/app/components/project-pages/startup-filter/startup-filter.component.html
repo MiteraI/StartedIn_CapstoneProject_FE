@@ -1,0 +1,123 @@
+<form [formGroup]="filterForm" class="ant-modal-body">
+  <!-- Project Name -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Tên dự án</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input nz-input formControlName="projectName" placeholder="Nhập tên dự án" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Status -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái">
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option *ngFor="let option of statusOptions" [nzValue]="option.value" [nzLabel]="option.label">
+        </nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Target Amount Range -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Mục tiêu gọi vốn</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="targetFrom"
+          [nzMin]="0"
+          [nzMax]="1000000000000"
+          [nzStep]="1000000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Từ"
+          (ngModelChange)="validateTargetRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="targetTo"
+          [nzMin]="0"
+          [nzMax]="1000000000000"
+          [nzStep]="1000000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Đến"
+          (ngModelChange)="validateTargetRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Raised Amount Range -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số tiền đã gọi được</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="raisedFrom"
+          [nzMin]="0"
+          [nzMax]="1000000000000"
+          [nzStep]="1000000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Từ"
+          (ngModelChange)="validateRaisedRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="raisedTo"
+          [nzMin]="0"
+          [nzMax]="1000000000000"
+          [nzStep]="1000000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Đến"
+          (ngModelChange)="validateRaisedRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Available Share Range -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Cổ phần khả dụng (%)</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng phần trăm không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="availableShareFrom"
+          [nzMin]="0"
+          [nzMax]="50"
+          [nzPrecision]="2"
+          nzPlaceholder="Từ"
+          (ngModelChange)="validateShareRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="availableShareTo"
+          [nzMin]="0"
+          [nzMax]="50"
+          [nzPrecision]="2"
+          nzPlaceholder="Đến"
+          (ngModelChange)="validateShareRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end gap-2 mt-4">
+    <button nz-button (click)="resetFilters()">Đặt lại</button>
+    <button nz-button nzType="primary" (click)="applyFilters()">Áp dụng</button>
+  </div>
+</form>

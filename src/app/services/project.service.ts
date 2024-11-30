@@ -1,16 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject, delay, map, Observable, of } from 'rxjs'
 import { ContractPartyModel } from '../shared/models/contract/contract-party.model'
-import { ExploreProjectsListItemModel } from '../shared/models/project/explore-projects-list-item.model'
+import { StartupModel } from '../shared/models/project/startup.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { ProjectModel } from '../shared/models/project/project.model'
 import { UserProjectsModel } from '../shared/models/project/user-projects.model'
 import { TeamMemberModel } from '../shared/models/user/team-member.model'
 import { ProjectOveriewModel } from '../shared/models/project/project-overview.model'
-import { UserInviteModel } from '../shared/models/user/user-invite.model'
 import { PayosInfoModel } from '../shared/models/project/payos-info.model'
+import { InvestmentCallStatus } from '../shared/enums/investment-call-status.enum'
+import { simulateStartupAPI } from '../shared/mocks/startup-samples'
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,26 @@ import { PayosInfoModel } from '../shared/models/project/payos-info.model'
 export class ProjectService {
   refreshProject$ = new BehaviorSubject<boolean>(true)
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+
+  private parseNumericFields<T extends StartupModel>(startup: T): T {
+    return {
+      ...startup,
+      investmentCall: {
+        ...startup.investmentCall,
+        targetCall: typeof startup.investmentCall.targetCall === 'string' ? parseInt(startup.investmentCall.targetCall) : startup.investmentCall.targetCall,
+        amountRaised: typeof startup.investmentCall.amountRaised === 'string' ? parseInt(startup.investmentCall.amountRaised) : startup.investmentCall.amountRaised,
+        remainAvailableEquityShare: typeof startup.investmentCall.remainAvailableEquityShare === 'string' ? parseFloat(startup.investmentCall.remainAvailableEquityShare) : startup.investmentCall.remainAvailableEquityShare,
+        equityShareCall: typeof startup.investmentCall.equityShareCall === 'string' ? parseFloat(startup.investmentCall.equityShareCall) : startup.investmentCall.equityShareCall,
+      }
+    };
+  }
+
+  private parseSearchResponse<T extends StartupModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
+    return {
+      ...response,
+      data: response.data.map(item => this.parseNumericFields(item))
+    };
+  }
 
   getProject(id: string): Observable<ProjectModel> {
     return this.http.get<ProjectModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${id}`))
@@ -27,9 +48,44 @@ export class ProjectService {
     return this.http.get<ContractPartyModel[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${id}/parties`))
   }
 
-  getProjectsToExplore(pageIndex: number, pageSize: number): Observable<any> {
-    const query = `page=${pageIndex}&size=${pageSize}`
-    return this.http.get<SearchResponseModel<ExploreProjectsListItemModel>>(this.applicationConfigService.getEndpointFor(`/api/startups?${query}`))
+  getStartups(
+    pageIndex: number,
+    pageSize: number,
+    projectName?: string,
+    status?: InvestmentCallStatus,
+    targetFrom?: number,
+    targetTo?: number,
+    raisedFrom?: number,
+    raisedTo?: number,
+    availableShareFrom?: number,
+    availableShareTo?: number
+  ): Observable<SearchResponseModel<StartupModel>> {
+    const query = (projectName?.trim() ? `projectName=${projectName}&` : '')
+      + (status ? `status=${status}&` : '')
+      + (targetFrom ? `targetFrom=${targetFrom}&` : '')
+      + (targetTo ? `targetTo=${targetTo}&` : '')
+      + (raisedFrom ? `raisedFrom=${raisedFrom}&` : '')
+      + (raisedTo ? `raisedTo=${raisedTo}&` : '')
+      + (availableShareFrom ? `availableShareFrom=${availableShareFrom}&` : '')
+      + (availableShareTo ? `availableShareTo=${availableShareTo}&` : '')
+      + `page=${pageIndex}&size=${pageSize}`;
+    // return of(simulateStartupAPI(
+    //   pageIndex,
+    //   pageSize,
+    //   projectName,
+    //   status,
+    //   targetFrom,
+    //   targetTo,
+    //   raisedFrom,
+    //   raisedTo,
+    //   availableShareFrom,
+    //   availableShareTo
+    // )).pipe(delay(800));
+    return this.http.get<SearchResponseModel<StartupModel>>(
+      this.applicationConfigService.getEndpointFor(`/api/startups?${query}`)
+    ).pipe(
+      map(response => this.parseSearchResponse(response))
+    );
   }
 
   getUserProjects(): Observable<UserProjectsModel> {

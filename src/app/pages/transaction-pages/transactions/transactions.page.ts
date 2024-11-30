@@ -146,6 +146,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   onFilterApplied(filterResult: any) {
     this.filter = {...filterResult};
+    this.pageIndex = 1;
     this.filterTransactions();
   }
 
@@ -158,11 +159,12 @@ export class TransactionsPage implements OnInit, OnDestroy {
       ...this.filter,
       fromName: searchText
     };
+    this.pageIndex = 1;
     this.filterTransactions();
   }
 
   processContent(content: string) : string {
-    if (!content || !content.length) return '';
+    if (!content || !content.length) return 'Không có nội dung giao dịch';
     if (content.length <= 80) return content;
     return content.slice(0, 80) + '...';
   }

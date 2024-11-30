@@ -9,14 +9,12 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { catchError, finalize, Subject, switchMap, takeUntil, throwError } from 'rxjs'
 import { AssetFilterComponent } from 'src/app/components/asset-pages/asset-filter/asset-filter.component'
-import { ContractFilterComponent } from 'src/app/components/contract-pages/contract-filter/contract-filter.component'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component'
 import { AssetService } from 'src/app/services/asset.service'
 import { AssetStatus, AssetStatusLabels } from 'src/app/shared/enums/asset-status.enum'
 import { AssetModel } from 'src/app/shared/models/asset/asset.model'
-import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe'
 import { format } from 'date-fns'
 import { VndCurrencyPipe } from '../../../shared/pipes/vnd-currency.pipe'
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
@@ -142,17 +140,20 @@ export class AssetListPage implements OnInit, OnDestroy {
   }
   onFilterApplied(filterResult: any) {
     this.filter = { ...filterResult }
+    this.pageIndex = 1
     this.filterAssets()
   }
 
   onFilterMenuOpened() {
     this.filterComponent.updateForm(this.filter)
   }
+
   onSearch(searchText: string) {
     this.filter = {
       ...this.filter,
       assetName: searchText,
     }
+    this.pageIndex = 1
     this.filterAssets()
   }
 
@@ -179,6 +180,7 @@ export class AssetListPage implements OnInit, OnDestroy {
     this.pageIndex++
     this.filterAssets(true)
   }
+
   onPageIndexChange(index: number): void {
     this.pageIndex = index
     this.filterAssets()
@@ -194,6 +196,7 @@ export class AssetListPage implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
+
   openDeleteModal(asset: AssetModel) {
     this.modalService.confirm({
       nzTitle: 'Bạn có muốn xóa tài sản này không?',
