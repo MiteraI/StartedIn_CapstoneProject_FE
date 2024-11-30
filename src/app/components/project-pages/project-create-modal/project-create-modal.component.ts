@@ -9,7 +9,7 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { CommonModule, DatePipe } from '@angular/common'
 import { ProjectService } from 'src/app/services/project.service'
 import { NzModalRef } from 'ng-zorro-antd/modal'
-import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 
 @Component({
   selector: 'app-project-create-modal',
@@ -25,16 +25,25 @@ export class ProjectCreateModalComponent implements OnInit {
   previewUrl: string | ArrayBuffer | null = null
   projectForm: FormGroup
 
+  date = null
+  onChange(result: Date[]): void {
+    console.log('onChange: ', result)
+  }
+
   constructor(private fb: FormBuilder, private datePipe: DatePipe, private messageService: NzMessageService, private projectService: ProjectService, private modalRef: NzModalRef) {
     this.projectForm = this.fb.group({
       projectName: ['', [Validators.required]],
       description: ['', [Validators.required]],
       logoFile: [null, [Validators.required]],
-      startDate: [null, [Validators.required]],
-      endDate: [null],
       minMember: [0, [Validators.required, Validators.min(1)]],
-      maxMember: [0, [Validators.required, Validators.min(1)]]
-    });
+      maxMember: [0, [Validators.required, Validators.min(1)]],
+      startEndDate: [null, [Validators.required]],
+    })
+  }
+
+  disabledDate = (current: Date): boolean => {
+    // Disable past dates
+    return current && current < new Date()
   }
 
   onFileSelected(event: Event): void {
@@ -64,20 +73,22 @@ export class ProjectCreateModalComponent implements OnInit {
       formData.append('Description', this.projectForm.get('description')?.value)
       formData.append('LogoFile', this.selectedFile!)
 
-      const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'yyyy-MM-dd')
-      const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'yyyy-MM-dd')
+      // Format the date
+      const dateRange = this.projectForm.get('startEndDate')?.value
+      const formattedStartDate = this.datePipe.transform(dateRange[0], 'yyyy-MM-dd')
+      const formattedEndDate = this.datePipe.transform(dateRange[1], 'yyyy-MM-dd')
       if (formattedStartDate) {
         formData.append('StartDate', formattedStartDate)
       }
       if (formattedEndDate) {
         formData.append('EndDate', formattedEndDate)
       }
-      formData.append('MinMember',this.projectForm.get('minMember')?.value)
-      formData.append('MaxMember',this.projectForm.get('maxMember')?.value)
+      formData.append('MinMember', this.projectForm.get('minMember')?.value)
+      formData.append('MaxMember', this.projectForm.get('maxMember')?.value)
 
       this.projectService.createProject(formData).subscribe({
         next: (response) => {
-          this.messageService.success('Project created successfully')
+          this.messageService.success('Tạo dự án thành công')
           this.projectService.refreshProject$.next(true)
           this.modalRef.close()
         },

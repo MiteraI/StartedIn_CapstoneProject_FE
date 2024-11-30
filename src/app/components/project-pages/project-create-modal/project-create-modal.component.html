@@ -22,20 +22,37 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember">Thành viên <br/> tối thiểu</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember"
+      >Thành viên <br />
+      tối thiểu</nz-form-label
+    >
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối thiểu">
       <nz-input-number formControlName="minMember" [nzMin]="1" [nzPrecision]="0" id="minMember"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="maxMember">Thành viên <br/> tối đa</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="maxMember"
+      >Thành viên <br />
+      tối đa</nz-form-label
+    >
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối đa">
       <nz-input-number formControlName="maxMember" [nzMin]="1" [nzPrecision]="0" id="maxMember"></nz-input-number>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember"
+      >Ngày bắt đầu <br />
+      Kết thúc</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu và kết thúc">
+      <nz-range-picker formControlName="startEndDate" [nzDisabledDate]="disabledDate"></nz-range-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- date -->
+  <!-- <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy chọn ngày bắt đầu">
       <nz-date-picker formControlName="startDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
@@ -46,7 +63,7 @@
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-date-picker formControlName="endDate" nzFormat="dd-MM-yyyy"></nz-date-picker>
     </nz-form-control>
-  </nz-form-item>
+  </nz-form-item> -->
 
   <nz-form-item nz-row class="submit-area">
     <nz-form-control [nzSpan]="14" [nzOffset]="6">
