@@ -1,3 +1,25 @@
+<app-filter-bar
+  viewName="Quản lý dự án"
+  [searchValue]="filter.projectName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-project-filter
+      #filterComponent
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-project-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-project-filter
+      #filterComponent
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-project-filter>
+  </div>
+</app-filter-bar>
+
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <!-- Desktop Table View -->
   <table class="w-full hidden md:table border bg-white">

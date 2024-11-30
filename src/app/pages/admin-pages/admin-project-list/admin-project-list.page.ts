@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
@@ -13,6 +13,15 @@ import { AdminService } from 'src/app/services/admin.service';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { ProjectStatus, ProjectStatusLabels } from 'src/app/shared/enums/project-status.enum';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
+import { ProjectFilterComponent } from 'src/app/components/admin-pages/project-filter/project-filter.component';
+
+interface FilterOptions {
+  projectName?: string;
+  description?: string;
+  leaderFullName?: string;
+  projectStatus?: ProjectStatus;
+}
 
 @Component({
   selector: 'app-admin-project-list',
@@ -27,14 +36,18 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
     RouterModule,
     NzPaginationModule,
     NzSpinModule,
-    RouterModule
+    FilterBarComponent,
+    ProjectFilterComponent
   ]
 })
 export class AdminProjectListPage implements OnInit, OnDestroy {
+  @ViewChild('filterComponent') filterComponent!: ProjectFilterComponent;
+
   projects: ProjectModel[] = [];
   pageIndex: number = 1;
   pageSize: number = 20;
   totalRecords: number = 200;
+  filter: FilterOptions = {};
 
   projectStatus = ProjectStatus;
   statusLabels = ProjectStatusLabels;
@@ -127,5 +140,30 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
 
     this.pageIndex++;
     this.fetchProjects(true);
+  }
+
+  get filterData() {
+    return {
+      ...this.filter
+    };
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = {...filterResult};
+    this.pageIndex = 1;
+    this.fetchProjects();
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter);
+  }
+
+  onSearch(searchText: string) {
+    this.filter = {
+      ...this.filter,
+      projectName: searchText
+    };
+    this.pageIndex = 1;
+    this.fetchProjects();
   }
 }

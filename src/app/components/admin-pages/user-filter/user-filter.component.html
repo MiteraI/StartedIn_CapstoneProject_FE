@@ -1,0 +1,81 @@
+<form [formGroup]="filterForm" class="ant-modal-body">
+  <!-- Full Name -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Họ và tên</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input
+        nz-input
+        formControlName="fullName"
+        placeholder="Nhập họ và tên"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Email -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Email</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input
+        nz-input
+        formControlName="email"
+        placeholder="Nhập email"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Phone Number -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số điện thoại</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input
+        nz-input
+        formControlName="phoneNumber"
+        placeholder="Nhập số điện thoại"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Role -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Vai trò</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select
+        class="w-full"
+        formControlName="authorities"
+        nzPlaceHolder="Chọn vai trò"
+      >
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option
+          *ngFor="let option of roleOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Status -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select
+        class="w-full"
+        formControlName="isActive"
+        nzPlaceHolder="Chọn trạng thái"
+      >
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option
+          *ngFor="let option of statusOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Action Buttons -->
+  <div class="flex justify-end space-x-2 mt-4">
+    <button nz-button (click)="resetFilters()">Đặt lại</button>
+    <button nz-button nzType="primary" (click)="applyFilters()">Áp dụng</button>
+  </div>
+</form>

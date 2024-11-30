@@ -40,8 +40,8 @@ export class TransactionService {
     amountFrom?: number,
     amountTo?: number
   ): Observable<SearchResponseModel<TransactionModel>> {
-    const query = (fromName?.trim() ? `fromName=${fromName}&` : '')
-      + (toName?.trim() ? `toName=${toName}&` : '')
+    const query = (fromName?.trim() ? `fromName=${fromName.trim()}&` : '')
+      + (toName?.trim() ? `toName=${toName.trim()}&` : '')
       + (type ? `type=${type}&` : '')
       + (isInFlow ? `isInFlow=${isInFlow}&` : '')
       + (dateFrom ? `dateFrom=${dateFrom.toISOString().split('T')[0]}&` : '')
@@ -93,8 +93,8 @@ export class TransactionService {
     amountFrom?: number,
     amountTo?: number
   ): Observable<SearchResponseModel<TransactionModel>> {
-    const query = (fromName?.trim() ? `fromName=${fromName}&` : '')
-      + (toName?.trim() ? `toName=${toName}&` : '')
+    const query = (fromName?.trim() ? `fromName=${fromName.trim()}&` : '')
+      + (toName?.trim() ? `toName=${toName.trim()}&` : '')
       + (type ? `type=${type}&` : '')
       + (isInFlow ? `isInFlow=${isInFlow}&` : '')
       + (dateFrom ? `dateFrom=${dateFrom.toISOString().split('T')[0]}&` : '')
