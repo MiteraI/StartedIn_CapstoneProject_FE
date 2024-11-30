@@ -96,6 +96,7 @@ export class UpdateAssetModalComponent  implements OnInit {
       this.assetService.updateAsset(this.nzModalData.projectId,this.nzModalData.assetId,asset).subscribe({
         next:(response) => {
           this.antdNoti.openSuccessNotification('Cập nhật tài sản thành công','')
+          this.assetService.refreshAsset$.next(true)
           this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {
