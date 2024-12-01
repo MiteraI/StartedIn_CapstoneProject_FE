@@ -136,6 +136,11 @@ export class UpdateAssetModalComponent  implements OnInit {
   
           this.isFetchAssetDetailLoading = false;
           this.isFromTransaction = !!response.transactionId;
+          if(response.transactionId !== null)
+          {
+            this.assetForm.get('assetName')?.disable();
+            this.assetForm.get('serialNumber')?.disable();
+          }
   
           // Disable the status field if remainQuantity is 0
           if (response.remainQuantity === 0) {
@@ -144,10 +149,12 @@ export class UpdateAssetModalComponent  implements OnInit {
   
           // Listen for remainQuantity changes
           this.assetForm.get('remainQuantity')?.valueChanges.subscribe((value) => {
+            const statusControl = this.assetForm.get('status');
             if (value === 0) {
-              this.assetForm.get('status')?.disable();
+              statusControl?.setValue(2); 
+              statusControl?.disable();
             } else {
-              this.assetForm.get('status')?.enable();
+              statusControl?.enable();
             }
           });
         },
