@@ -41,21 +41,15 @@
             </nz-col>
             <nz-col [nzSpan]="12" [nzMd]="12" [nzSm]="24">
               <nz-form-item>
-                <nz-form-label class="text-lg font-semibold">Trạng Thái</nz-form-label>
-                <nz-form-control>
-                  <nz-select
-                    class="w-full"
-                    [nzOptions]="statusOptions"
-                    formControlName="status"
-                    nzPlaceHolder="Trạng thái"
+                <nz-form-label class="text-lg font-semibold">Ngày Mua</nz-form-label>
+                <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày mua'" class="text-sm">
+                  <nz-date-picker
+                    class="w-full py-2 text-sm"
+                    formControlName="purchaseDate"
+                    nzPlaceHolder="Chọn ngày mua"
                     (ngModelChange)="handleInfoChanged()"
-                  >
-                    <nz-option
-                      *ngFor="let option of statusOptions"
-                      [nzValue]="option.value"
-                      [nzLabel]="option.label"
-                    ></nz-option>
-                  </nz-select>
+                    [nzDisabled]="isFromTransaction"
+                  ></nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
@@ -104,7 +98,7 @@
                 <nz-form-label [nzRequired]="true" class="text-lg font-semibold">Còn lại</nz-form-label>
                 <nz-form-control>
                   <nz-input-number
-                    class="w-full py-2 text-sm"
+                    class="w-full text-sm"
                     formControlName="remainQuantity"
                     (ngModelChange)="handleInfoChanged()"
                     [nzMin]="0"
@@ -115,15 +109,21 @@
             </nz-col>
             <nz-col [nzSpan]="12" [nzMd]="12" [nzSm]="24">
               <nz-form-item>
-                <nz-form-label class="text-lg font-semibold">Ngày Mua</nz-form-label>
-                <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày mua'" class="text-sm">
-                  <nz-date-picker
-                    class="w-full py-2 text-sm"
-                    formControlName="purchaseDate"
-                    nzPlaceHolder="Chọn ngày mua"
+                <nz-form-label class="text-lg font-semibold">Trạng Thái</nz-form-label>
+                <nz-form-control>
+                  <nz-select
+                    class="w-full"
+                    [nzOptions]="statusOptions"
+                    formControlName="status"
+                    nzPlaceHolder="Trạng thái"
                     (ngModelChange)="handleInfoChanged()"
-                    [nzDisabled]="isFromTransaction"
-                  ></nz-date-picker>
+                  >
+                    <nz-option
+                      *ngFor="let option of statusOptions"
+                      [nzValue]="option.value"
+                      [nzLabel]="option.label"
+                    ></nz-option>
+                  </nz-select>
                 </nz-form-control>
               </nz-form-item>
             </nz-col>
