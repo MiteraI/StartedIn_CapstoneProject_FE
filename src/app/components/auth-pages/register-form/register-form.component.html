@@ -1,4 +1,4 @@
-<div class="flex flex-col mt-10 items-center h-screen">
+<!-- <div class="flex flex-col mt-10 items-center h-screen">
   <div class="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
     <p class="text-center border-b mb-10 pb-5 text-2xl font-semibold">
       Tạo tài khoản
@@ -104,4 +104,89 @@
       </ion-button>
     </form>
   </div>
+</div> -->
+<div class="flex justify-center mt-10">
+  <form class="w-1/2 rounded-md shadow-lg p-5" nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <!-- Role Option -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+        <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Email -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
+        <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Password -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
+        <input nz-input type="password" formControlName="password" id="password" placeholder="Enter your password" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Confirm Password -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkPassword">Confirm Password</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
+        <input nz-input type="password" formControlName="checkPassword" id="checkPassword" placeholder="Confirm your password" />
+        <ng-template #errorTpl let-control>
+          <ng-container *ngIf="control.errors?.['required']">Please confirm your password!</ng-container>
+          <ng-container *ngIf="control.errors?.['confirm']">Two passwords that you enter are inconsistent!</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Nickname -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="nickname" nzTooltipTitle="What do you want others to call you?"> Nickname </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
+        <input nz-input formControlName="nickname" id="nickname" placeholder="Enter your nickname" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Phone Number -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="registerForm.controls['phoneNumber']?.errors?.['required'] ? 'Please input your phone number!' : ''">
+        <nz-input-group>
+          <input formControlName="phoneNumber" nz-input placeholder="Enter your phone number" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Website -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="website">Website</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input website!">
+        <input nz-input formControlName="website" id="website" placeholder="Enter your website" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Agreement -->
+    <nz-form-item>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzOffset]="6">
+        <label nz-checkbox formControlName="agree">
+          <span>
+            I have read the
+            <a href="#">agreement</a>
+          </span>
+        </label>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Submit Button -->
+    <nz-form-item>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzOffset]="6">
+        <button nz-button nzType="primary" [disabled]="registerForm.invalid">Register</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 </div>
