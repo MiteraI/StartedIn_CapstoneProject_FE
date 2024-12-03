@@ -87,9 +87,9 @@ export class BuyAssetsPage implements OnInit, OnDestroy {
   createAssetFormGroup(): FormGroup {
     return this.fb.group({
       assetName: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(1000)]],
+      price: [1000000, [Validators.required, Validators.min(1000)]],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      serialNumber: ['', Validators.required],
+      serialNumber: [''],
     })
   }
 
