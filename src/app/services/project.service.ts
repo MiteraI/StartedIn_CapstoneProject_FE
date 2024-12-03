@@ -12,6 +12,8 @@ import { ProjectOveriewModel } from '../shared/models/project/project-overview.m
 import { PayosInfoModel } from '../shared/models/project/payos-info.model'
 import { InvestmentCallStatus } from '../shared/enums/investment-call-status.enum'
 import { simulateStartupAPI } from '../shared/mocks/startup-samples'
+import { CheckProjectClosableModel } from '../shared/models/project/check-project-closable.model'
+import { mockCanCloseProject, mockCannotCloseProject, mockOnlyAssets, mockOnlyBudgetRemaining, mockOnlyContracts, mockOnlyDisbursements } from '../shared/mocks/close-data-samples'
 
 @Injectable({
   providedIn: 'root',
@@ -113,6 +115,19 @@ export class ProjectService {
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/payment-gateway`),
       payosInfo,
       { responseType: 'text' as 'json' },
+    )
+  }
+
+  checkProjectClosable(projectId: string): Observable<CheckProjectClosableModel> {
+    return of(mockCannotCloseProject).pipe(delay(800))
+    return this.http.get<CheckProjectClosableModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/check-closable`))
+  }
+
+  closeProject(projectId: string): Observable<any> {
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/close`),
+      null,
+      { responseType: 'text' as 'json' }
     )
   }
 }
