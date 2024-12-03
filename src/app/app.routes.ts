@@ -23,7 +23,7 @@ export const routes: Routes = [
     path: 'projects',
     canActivate: [AuthenticatedGuard],
     resolve: { userProjects: UserProjectDataResolver },
-    loadComponent: () => import('./pages/project-list/project-list.page').then((m) => m.ProjectListPage),
+    loadComponent: () => import('./pages/project-pages/project-list/project-list.page').then((m) => m.ProjectListPage),
   },
   {
     path: '',
@@ -72,7 +72,7 @@ export const routes: Routes = [
   },
   {
     path: 'invite/:projectId/:role',
-    loadComponent: () => import('./pages/project-invite-page/project-invite-page.component').then((m) => m.ProjectInvitePage),
+    loadComponent: () => import('./pages/project-pages/project-invite-page/project-invite-page.component').then((m) => m.ProjectInvitePage),
   },
   {
     path: 'projects/:id',
@@ -197,7 +197,11 @@ export const routes: Routes = [
       {
         path: 'recruitment-post',
         loadComponent: () => import('./components/recruitment-page/recruitment-view/recruitment-view.component').then((m) => m.RecruitmentViewComponent),
-      }
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./pages/project-pages/project-settings/project-settings.page').then( m => m.ProjectSettingsPage)
+      },
     ],
   },
   {

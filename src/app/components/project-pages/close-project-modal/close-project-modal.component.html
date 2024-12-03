@@ -1,0 +1,89 @@
+<div class="ant-modal-body">
+  @if (isLoading) {
+    <div class="flex justify-center">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  } @else {
+    @if (canClose) {
+      <div class="mb-6">
+        <div class="flex items-center">
+          <mat-icon fontIcon="warning" class="text-red-600"></mat-icon>
+          <div class="text-red-600 font-medium ml-2">Cảnh báo:</div>
+        </div>
+        <ul class="list-disc list-inside space-y-2 mt-2 ml-2">
+          <li>Dự án sẽ được đóng và không thể hoàn tác</li>
+          <li>Tất cả các hoạt động sẽ bị dừng lại</li>
+          <li>Dự án sẽ chuyển sang trạng thái đã đóng</li>
+        </ul>
+      </div>
+      <div class="flex justify-end space-x-4">
+        <button nz-button (click)="cancel()">Hủy</button>
+        <button nz-button nzType="primary" nzDanger (click)="closeProject()">Đóng dự án</button>
+      </div>
+    } @else {
+      <div class="space-y-4 max-h-[50vh] overflow-y-auto">
+        <p class="text-red-600 font-medium">Không thể đóng dự án do còn các vấn đề sau:</p>
+
+        <div
+          *ngIf="checkResult.currentBudget !== 0"
+          class="flex items-center border rounded-md p-2 cursor-pointer hover:bg-slate-50"
+          (click)="navigateToTransactions()"
+        >
+          <mat-icon fontIcon="wallet"></mat-icon>
+          <div class="ml-2 font-medium">Ngân sách còn lại:</div>
+          <div class="ml-2">{{ checkResult.currentBudget | vndCurrency }}</div>
+        </div>
+
+        <div *ngIf="checkResult.contracts.length" class="flex flex-wrap items-center border rounded-md p-2">
+          <mat-icon fontIcon="history_edu"></mat-icon>
+          <div class="ml-2 font-medium">Hợp đồng còn hiệu lực:</div>
+          <div
+            *ngFor="let item of checkResult.contracts"
+            class="w-full p-2 mt-2 rounded-md bg-slate-50 flex flex-wrap cursor-pointer hover:bg-slate-100"
+            (click)="navigateToContract(item.contractType, item.id)"
+          >
+            <div class="w-full font-medium">{{ item.contractName }}</div>
+            <div class="w-full">
+              <span class="font-medium text-sm">Mã số HĐ:</span> {{ item.contractIdNumber }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="checkResult.disbursements.length" class="flex flex-wrap items-center border rounded-md p-2">
+          <mat-icon fontIcon="account_balance"></mat-icon>
+          <div class="ml-2 font-medium">Giải ngân đang chờ xử lý:</div>
+          <div
+            *ngFor="let item of checkResult.disbursements"
+            class="w-full p-2 mt-2 rounded-md bg-slate-50 flex flex-wrap cursor-pointer hover:bg-slate-100"
+            (click)="navigateToDisbursement(item.id)"
+          >
+            <div class="w-full font-medium">{{ item.title }}</div>
+            <div class="w-full md:w-1/2">
+              <span class="font-medium text-sm">Mã số HĐ:</span> {{ item.contractIdNumber }}
+            </div>
+            <div class="w-full md:w-1/2">
+              <span class="font-medium text-sm">Số tiền:</span> {{ item.amount | vndCurrency }}
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="checkResult.assets.length"
+          class="flex flex-wrap items-center border rounded-md p-2 cursor-pointer"
+          (click)="navigateToAssets()"
+        >
+          <mat-icon fontIcon="inventory"></mat-icon>
+          <div class="ml-2 font-medium">Tài sản chưa thanh lý:</div>
+          <div *ngFor="let item of checkResult.assets" class="w-full mt-2 ml-8">
+            {{ item.assetName }} ({{ item.quantity }} cái)
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button nz-button (click)="cancel()">Đóng</button>
+      </div>
+    }
+  }
+</div>

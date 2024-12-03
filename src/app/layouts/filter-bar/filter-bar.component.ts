@@ -99,7 +99,7 @@ export class FilterBarComponent implements OnInit, OnDestroy {
   openMembersModal() {
     this.modal.create({
       nzFooter: null,
-      nzWidth: 480,
+      nzWidth: 600,
       nzContent: MembersModalComponent,
       nzClassName: 'members-modal',
       nzData: this.projectId

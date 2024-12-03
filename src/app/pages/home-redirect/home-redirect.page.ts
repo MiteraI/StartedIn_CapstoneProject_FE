@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { Router } from '@angular/router';
+import { Authority } from 'src/app/shared/constants/authority.constants';
 
 @Component({
   selector: 'app-home-redirect',
@@ -15,7 +16,7 @@ export class HomeRedirectPage implements OnInit {
 
   ngOnInit() {
     this.accountService.identity().subscribe((account) => {
-      if (account?.authorities.includes('Admin')) {
+      if (account?.authorities.includes(Authority.ADMIN)) {
         this.router.navigate(['/admin']);
       } else {
         this.router.navigate(['/projects']);

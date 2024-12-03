@@ -17,12 +17,13 @@ import { FullProfile } from 'src/app/shared/models/user/full-profile.model';
 import { ImportUsersModalComponent } from 'src/app/components/admin-pages/import-users-modal/import-users-modal.component';
 import { UserFilterComponent } from 'src/app/components/admin-pages/user-filter/user-filter.component';
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component';
+import { Authority } from 'src/app/shared/constants/authority.constants';
 
 interface FilterOptions {
   fullName?: string;
   email?: string;
   phoneNumber?: string;
-  authorities?: 'Admin' | 'User' | 'Investor' | 'Mentor';
+  authorities?: Authority;
   isActive?: boolean;
 }
 
