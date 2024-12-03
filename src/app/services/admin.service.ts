@@ -6,6 +6,7 @@ import { SearchResponseModel } from "../shared/models/search-response.model";
 import { ProjectModel } from "../shared/models/project/project.model";
 import { FullProfile } from "../shared/models/user/full-profile.model";
 import { ProjectStatus } from "../shared/enums/project-status.enum";
+import { Authority } from "../shared/constants/authority.constants";
 
 @Injectable({
   providedIn: 'root',
@@ -63,7 +64,7 @@ export class AdminService {
     fullName?: string,
     email?: string,
     phoneNumber?: string,
-    authorities?: 'Admin' | 'User' | 'Investor' | 'Mentor',
+    authorities?: Authority,
     isActive?: boolean
   ) : Observable<SearchResponseModel<FullProfile>> {
     const query = (fullName?.trim() ? `fullName=${fullName.trim()}&` : '') +

@@ -3,20 +3,13 @@
 
   <div class="mb-6 flex flex-wrap items-center">
     <nz-select
-      class="w-full mb-2"
+      class="w-5/6 mb-2 mr-2"
       nzMode="tags"
       [nzTokenSeparators]="[',', ' ']"
       nzDropdownClassName="hide-dropdown"
       [(ngModel)]="emailsToInvite"
       nzPlaceHolder="Nhập email (bấm Enter để thêm)"
     ></nz-select>
-    <nz-select
-      class="w-2/3 mb-2 mr-2"
-      [(ngModel)]="roleInTeam"
-    >
-      <nz-option [nzValue]="teamRoles.MEMBER" [nzLabel]="teamRoleLabels[teamRoles.MEMBER]"></nz-option>
-      <nz-option [nzValue]="teamRoles.MENTOR" [nzLabel]="teamRoleLabels[teamRoles.MENTOR]"></nz-option>
-    </nz-select>
     <button
       nz-button
       nzType="primary"
@@ -42,12 +35,12 @@
           class="bg-blue-500"
         ></nz-avatar>
         <div>
-          <div class="font-medium">{{member.fullName}}</div>
-          <div class="text-sm text-gray-500">{{member.email}}</div>
+          <div class="font-medium">{{ member.fullName }}</div>
+          <div class="text-sm text-gray-500">{{ member.email }}</div>
         </div>
       </div>
       <div class="text-sm text-gray-600">
-        {{teamRoleLabels[member.roleInTeam]}}
+        {{ teamRoleLabels[member.roleInTeam] }}
       </div>
     </div>
   </div>

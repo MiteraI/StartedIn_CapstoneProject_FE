@@ -13,7 +13,7 @@ import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { catchError, throwError } from 'rxjs'
 import { HttpErrorResponse } from '@angular/common/http'
 import { RecruitInviteService } from 'src/app/services/recruit-invite.service'
-import { Router, RouterModule } from '@angular/router'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-members-modal',
@@ -32,7 +32,6 @@ import { Router, RouterModule } from '@angular/router'
 export class MembersModalComponent implements OnInit {
   members: TeamMemberModel[] = []
   emailsToInvite: string[] = []
-  roleInTeam: TeamRole = TeamRole.MEMBER
   teamRoles = TeamRole
   teamRoleLabels = TeamRoleLabels
 
@@ -62,13 +61,8 @@ export class MembersModalComponent implements OnInit {
   }
 
   inviteMembers() {
-    const invites = this.emailsToInvite.map((email) => ({
-      email: email.trim(),
-      roleInTeam: this.roleInTeam,
-    }))
-
     this.recruitInviteService
-      .inviteMembers(this.projectId, invites)
+      .inviteMembers(this.projectId, this.emailsToInvite)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 400) {

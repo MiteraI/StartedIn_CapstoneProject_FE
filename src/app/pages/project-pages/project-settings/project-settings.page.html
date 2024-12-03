@@ -1,0 +1,12 @@
+<app-title-bar viewName="Cài đặt"></app-title-bar>
+<div class="p-4 max-w-6xl mx-auto overflow-y-auto">
+  <div class="flex flex-wrap py-2 px-4 border border-red-600 rounded">
+    <div>
+      <div class="text-lg font-bold">Đóng dự án</div>
+      <div class="text-sm text-gray-500">Sau khi đóng dự án, bạn sẽ không thể truy cập vào dự án này nữa.</div>
+    </div>
+    <div class="flex justify-end items-center w-full md:w-auto md:flex-grow">
+      <button nz-button nzType="primary" nzDanger (click)="openCloseProjectModal()">Đóng dự án</button>
+    </div>
+  </div>
+</div>

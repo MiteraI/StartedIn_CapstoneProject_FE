@@ -51,14 +51,14 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     linkText: string
   }[] = [
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
-    { linkName: 'charter', iconName: 'info_icon', linkText: 'Điều Lệ' },
-    { linkName: 'milestones', iconName: 'flag_icon', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'swap_horiz_icon', linkText: 'Giao Dịch' },
-    { linkName: 'assets', iconName: 'inventory_icon', linkText: 'Tài Sản' },
-    { linkName: 'contracts', iconName: 'history_edu_icon', linkText: 'Hợp Đồng' },
-    { linkName: 'equity', iconName: 'equalizer_icon', linkText: 'Cổ Phần' },
-    //{ linkName: 'calendar', iconName: 'insert_invitation_icon', linkText: 'Lịch Hẹn' },
-    //{ linkName: 'documents', iconName: 'folder_icon', linkText: 'Tài Liệu' },
+    { linkName: 'charter', iconName: 'info', linkText: 'Điều Lệ' },
+    { linkName: 'milestones', iconName: 'flag', linkText: 'Cột Mốc' },
+    { linkName: 'transactions', iconName: 'swap_horiz', linkText: 'Giao Dịch' },
+    { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },
+    { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
+    { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
+    //{ linkName: 'calendar', iconName: 'insert_invitation', linkText: 'Lịch Hẹn' },
+    //{ linkName: 'documents', iconName: 'folder', linkText: 'Tài Liệu' },
   ]
 
   leaderSideNavLinks: {
@@ -66,23 +66,23 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     iconName: string
     linkText: string
   }[] = [
-    { linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' },
-    { linkName: 'disbursements', iconName: 'account_balance_icon', linkText: 'Giải Ngân' },
-    { linkName: 'investment-call', iconName: 'local_atm_icon', linkText: 'Gọi Vốn' },
+    { linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' },
+    { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' },
+    { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     //{ linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
     { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
-    { linkName: 'recruitment-post', iconName: 'plagiarism_icon', linkText: 'Đăng Tuyển' },
+    { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
   ]
 
   memberSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [{ linkName: 'tasks', iconName: 'assignment_icon', linkText: 'Tác Vụ' }]
+  }[] = [{ linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' }]
 
   investorSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [{ linkName: 'investor-disbursements', iconName: 'account_balance_icon', linkText: 'Giải Ngân' }]
+  }[] = [{ linkName: 'investor-disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' }]
 }
