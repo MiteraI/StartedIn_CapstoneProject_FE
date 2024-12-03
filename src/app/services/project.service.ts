@@ -119,7 +119,7 @@ export class ProjectService {
   }
 
   checkProjectClosable(projectId: string): Observable<CheckProjectClosableModel> {
-    return of(mockCannotCloseProject).pipe(delay(800))
+    //return of(mockCannotCloseProject).pipe(delay(800));
     return this.http.get<CheckProjectClosableModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/check-closable`))
   }
 

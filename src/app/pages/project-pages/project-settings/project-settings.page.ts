@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { CloseProjectModalComponent } from 'src/app/components/project-pages/close-project-modal/close-project-modal.component';
 import { ActivatedRoute } from '@angular/router';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { TitleBarComponent } from "../../../layouts/title-bar/title-bar.component";
 
 @Component({
   selector: 'app-project-settings',
   templateUrl: './project-settings.page.html',
   styleUrls: ['./project-settings.page.scss'],
   standalone: true,
-  imports: [CommonModule, NzModalModule]
+  imports: [CommonModule, NzModalModule, NzButtonModule, TitleBarComponent]
 })
 export class ProjectSettingsPage implements OnInit {
   projectId!: string

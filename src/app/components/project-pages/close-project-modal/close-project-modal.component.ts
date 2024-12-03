@@ -41,6 +41,7 @@ export class CloseProjectModalComponent implements OnInit {
     this.projectService.checkProjectClosable(this.projectId).subscribe({
       next: (result) => {
         this.checkResult = result;
+        console.log(result);
         this.canClose = result.currentBudget === 0
           && result.disbursements.length === 0
           && result.contracts.length === 0

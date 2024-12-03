@@ -1,6 +1,6 @@
 <mat-drawer-container class="h-full">
   <mat-drawer [opened]="opened" mode="side" [style.width]="'200px'">
-    <div class="w-full h-full bg-white">
+    <div class="w-full h-full bg-white flex flex-col">
       <div class="flex justify-between items-center ml-2">
         <div class="m-2 text-2xl font-black">Menu</div>
         <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
@@ -17,6 +17,7 @@
           </div>
         } @empty { }
       </div>
+
       <hr class="mx-4" />
       <div *ngIf="role === teamRole.LEADER" class="flex flex-col my-2">
         @for (link of leaderSideNavLinks; track link.linkText) {
@@ -41,6 +42,14 @@
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
+      </div>
+
+      <hr class="mx-4 mt-auto" />
+      <div class="mt-2 mb-4">
+        <div [routerLink]="['/projects', currentId, 'settings']" class="flex ml-4 my-1 cursor-pointer">
+          <mat-icon fontIcon="settings"></mat-icon>
+          <span class="text-lg mx-2">Cài đặt</span>
+        </div>
       </div>
     </div>
   </mat-drawer>
