@@ -1,4 +1,9 @@
-<app-filter-bar viewName="Danh mục tài sản" [searchValue]="filter.assetName ?? ''" (searchString)="onSearch($event)" (filterMenuOpened)="onFilterMenuOpened()">
+<app-filter-bar
+  viewName="Danh mục tài sản"
+  [searchValue]="filter.assetName ?? ''"
+  (searchString)="onSearch($event)"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
   <div desktop class="p-4 min-w-[400px]">
     <app-asset-filter [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-asset-filter>
   </div>
@@ -46,25 +51,34 @@
         <td class="p-4">
           <div class="text-gray-600 flex justify-center">{{asset.remainQuantity}}</div>
         </td>
-        <td class="p-4 text-gray-600">{{asset.price | vndCurrency }}</td>
+        <td class="p-4 text-gray-600">{{ asset.price | vndCurrency }}</td>
         <td class="p-4 text-gray-600">{{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}</td>
         <td class="p-4">
           <span
             [ngClass]="{
-            'text-green-500': asset.status === assetStatuses.AVAILABLE,
-            'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
-            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
-          }"
+              'text-green-500': asset.status === assetStatuses.AVAILABLE,
+              'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
+              'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE,
+              'text-purple-500': asset.status === assetStatuses.SOLD
+            }"
           >
             ● {{statusLabels[asset.status]}}
           </span>
         </td>
         <td class="p-4 space-x-2 h-6" [ngClass]="{'hidden': !isLeader}">
-          <button (click)="openUpdateAssetModel(asset.id)" class="text-yellow-500 hover:text-yellow-700">
+          <button
+            *ngIf="isLeader && asset.status !== assetStatuses.SOLD"
+            (click)="openUpdateAssetModel(asset)"
+            class="text-yellow-500 hover:text-yellow-700"
+          >
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
-          <button (click)="openDeleteModal(asset)" class="text-red-500 hover:text-red-700" [ngClass]="{'hidden': asset.transactionId}">
-            <mat-icon fontIcon="delete"></mat-icon>
+          <button
+            *ngIf="isLeader && asset.status !== assetStatuses.SOLD"
+            (click)="sellAsset(asset)"
+            class="text-purple-500 hover:text-purple-700"
+          >
+            <mat-icon fontIcon="sell"></mat-icon>
           </button>
         </td>
       </tr>
@@ -97,7 +111,8 @@
           [ngClass]="{
             'text-green-500': asset.status === assetStatuses.AVAILABLE,
             'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
-            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE
+            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE,
+            'text-purple-500': asset.status === assetStatuses.SOLD
           }"
         >
           ● {{ statusLabels[asset.status] }}
