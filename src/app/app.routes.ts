@@ -17,6 +17,7 @@ import { AdminGuard } from './shared/guards/admin.guard'
 import { AdminProjectDataResolver } from './shared/resolvers/admin-project-data.resolver'
 import { UserDataResolver } from './shared/resolvers/user-data.resolver'
 import { ProfileDataResolver } from './shared/resolvers/profile-data.resolver'
+import { MentorGuard } from './shared/guards/mentor.guard'
 
 export const routes: Routes = [
   {
@@ -81,7 +82,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'tasks',
-        canActivate: [UserGuard],
+        // canActivate: [UserGuard],
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
       },
       {
