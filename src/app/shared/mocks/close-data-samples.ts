@@ -36,12 +36,12 @@ export const mockCannotCloseProject: CheckProjectClosableModel = {
     {
       id: 'asset-1',
       assetName: 'Máy tính xách tay',
-      quantity: 3
+      remainQuantity: 3
     },
     {
       id: 'asset-2',
       assetName: 'Màn hình máy tính',
-      quantity: 2
+      remainQuantity: 2
     }
   ]
 }
@@ -101,7 +101,7 @@ export const mockOnlyAssets: CheckProjectClosableModel = {
     {
       id: 'asset-3',
       assetName: 'Máy in',
-      quantity: 1
+      remainQuantity: 1
     }
   ]
 }

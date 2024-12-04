@@ -75,7 +75,7 @@
           <mat-icon fontIcon="inventory"></mat-icon>
           <div class="ml-2 font-medium">Tài sản chưa thanh lý:</div>
           <div *ngFor="let item of checkResult.assets" class="w-full mt-2 ml-8">
-            {{ item.assetName }} ({{ item.quantity }} cái)
+            {{ item.assetName }} ({{ item.remainQuantity }} cái)
           </div>
         </div>
 
