@@ -49,10 +49,24 @@ export class RegisterFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authorityOptions = Object.values(Authority).map((value) => ({
-      label: value,
-      value: value,
-    }))
+    this.authorityOptions = Object.values(Authority).map((value) => {
+      let label = ''; // Initialize label
+      switch (value) {
+        case 'User':
+          label = 'Sinh viên';
+          break;
+        case 'Mentor':
+          label = 'Người hướng dẫn';
+          break;
+        case 'Investor':
+          label = 'Nhà đầu tư';
+          break;
+        default:
+          label = value; // Fallback to the original value if no match
+      }
+    
+      return { label, value };
+    })
 
     this.registerForm.get('role')?.valueChanges.subscribe(() => {
       this.registerForm.get('email')?.updateValueAndValidity()
