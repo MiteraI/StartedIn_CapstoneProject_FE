@@ -7,7 +7,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
-import { catchError, finalize, Subject, switchMap, takeUntil, throwError } from 'rxjs'
+import { catchError, Subject, takeUntil, throwError } from 'rxjs'
 import { AssetFilterComponent } from 'src/app/components/asset-pages/asset-filter/asset-filter.component'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ScrollService } from 'src/app/core/util/scroll.service'
@@ -21,6 +21,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { CreateAssetModalComponent } from 'src/app/components/asset-pages/create-asset-modal/create-asset-modal.component'
 import { UpdateAssetModalComponent } from 'src/app/components/asset-pages/update-asset-modal/update-asset-modal.component'
+import { SellAssetModalComponent } from 'src/app/components/asset-pages/sell-asset-modal/sell-asset-modal.component'
 
 interface FilterOptions {
   assetName?: string
@@ -210,16 +211,16 @@ export class AssetListPage implements OnInit, OnDestroy {
     })
   }
 
-  openUpdateAssetModel(assetId: string) {
+  openUpdateAssetModel(asset: AssetModel) {
     const modalRef = this.modalService.create({
-      nzTitle: 'Thông Tin Tài sản',
+      nzTitle: 'Thông tin tài sản',
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '0px' },
       nzContent: UpdateAssetModalComponent,
       nzData: {
-        assetId: assetId ,
+        assetId: asset.id,
         projectId: this.projectId,
-        assetList: this.assets,
+        quantity: asset.quantity,
       },
       nzFooter: null,
     })
@@ -229,6 +230,21 @@ export class AssetListPage implements OnInit, OnDestroy {
     this.assetService.deleteAsset(this.projectId, asset.id).subscribe(() => {
       this.notification.success('Thành công', 'Xóa tài sản thành công!', { nzDuration: 2000 })
       this.filterAssets()
+    })
+  }
+
+  sellAsset(asset: AssetModel) {
+    this.modalService.create({
+      nzTitle: 'Thanh lý tài sản',
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
+      nzContent: SellAssetModalComponent,
+      nzData: {
+        assetId: asset.id,
+        projectId: this.projectId,
+        remainQuantity: asset.remainQuantity,
+      },
+      nzFooter: null,
     })
   }
 }
