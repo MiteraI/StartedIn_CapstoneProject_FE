@@ -1,29 +1,10 @@
 <div class="flex mt-10 flex-col items-center h-screen">
-  <form
-    [formGroup]="loginForm"
-    (ngSubmit)="onSubmit()"
-    class="w-full max-w-md p-6 bg-white rounded-md shadow-lg"
-  >
-    <p class="text-center border-b mb-10 pb-5 text-2xl font-semibold">
-      Đăng nhập
-    </p>
-    <div
-      class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
-    >
-      <ion-input
-        formControlName="email"
-        class="border-0"
-        label="Email"
-        labelPlacement="floating"
-        placeholder="Nhập email"
-        type="email"
-        [maxlength]="35"
-        email
-      ></ion-input>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
+    <p class="text-center border-b mb-10 pb-5 text-2xl font-semibold">Đăng nhập</p>
+    <div class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400">
+      <ion-input formControlName="email" class="border-0" label="Email" labelPlacement="floating" placeholder="Nhập email" type="email" [maxlength]="35" email></ion-input>
     </div>
-    <div
-      class="mb-2 border pl-4 rounded-lg transition-all flex items-center hover:border-slate-400"
-    >
+    <div class="mb-2 border pl-4 rounded-lg transition-all flex items-center hover:border-slate-400">
       <ion-input
         formControlName="password"
         class="border-0"
@@ -36,32 +17,14 @@
 
     @if (failedValidation) {
     <p class="text-red-500 text-sm mt-2">Vui lòng nhập email và mật khẩu</p>
-    } @if(authenticationError){
-    <p class="text-red-500 text-sm mt-2">Email hoặc mật khẩu không đúng</p>
     }
-    <ion-button
-      expand="full"
-      fill="clear"
-      type="submit"
-      class="mt-4 rounded-md text-white bg-blue-700 hover:bg-blue-800 transition duration-75"
-    >
-      Đăng nhập
-    </ion-button>
+    <ion-button expand="full" fill="clear" type="submit" class="mt-4 rounded-md text-white bg-blue-700 hover:bg-blue-800 transition duration-75"> Đăng nhập </ion-button>
     <div class="my-7 leading-5">
-      <p
-        class="text-center cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75"
-      >
-        Quên mật khẩu?
-      </p>
+      <p class="text-center cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75">Quên mật khẩu?</p>
       <p class="text-center">
         Chưa có tài khoản?
-        <a
-          routerLink="/register"
-          class="cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75"
-          >Đăng ký</a
-        >
+        <a routerLink="/register" class="cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75">Đăng ký</a>
       </p>
     </div>
-
   </form>
 </div>

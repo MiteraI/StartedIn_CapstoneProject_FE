@@ -26,7 +26,7 @@
           labelPlacement="floating"
           placeholder="000-000-0000"
           type="tel"
-          [maskito]="phoneMask"
+
           [maskitoElement]="maskPredicate"
           [minlength]="12"
         ></ion-input>
@@ -107,85 +107,117 @@
 </div> -->
 <div class="flex justify-center mt-10">
   <form class="w-1/2 rounded-md shadow-lg p-5" nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <p class="text-center mb-10 pb-5 text-2xl font-semibold">Tạo tài khoản</p>
+    <!-- select role -->
 
-    <!-- Role Option -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-        <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role">Vai Trò</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24">
+        <nz-select formControlName="role" id="role">
+          @for (item of authorityOptions; track $index) { @if ($index != 0) {
+          <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+          } }
+        </nz-select>
       </nz-form-control>
     </nz-form-item>
-
     <!-- Email -->
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid E-mail!">
-        <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="getEmailErrorMessage()">
+        <input nz-input formControlName="email" type="email" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" placeholder="khangnv@fpt.edu.vn" />
       </nz-form-control>
     </nz-form-item>
 
     <!-- Password -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Password</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your password!">
-        <input nz-input type="password" formControlName="password" id="password" placeholder="Enter your password" />
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Mật Khẩu </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="getPasswordErrorMessage()">
+        <input
+          maxlength="40"
+          minlength="8"
+          nz-input
+          formControlName="password"
+          type="password"
+          class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm"
+          placeholder="abszc@123!"
+        />
       </nz-form-control>
     </nz-form-item>
 
     <!-- Confirm Password -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkPassword">Confirm Password</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="errorTpl">
-        <input nz-input type="password" formControlName="checkPassword" id="checkPassword" placeholder="Confirm your password" />
-        <ng-template #errorTpl let-control>
-          <ng-container *ngIf="control.errors?.['required']">Please confirm your password!</ng-container>
-          <ng-container *ngIf="control.errors?.['confirm']">Two passwords that you enter are inconsistent!</ng-container>
-        </ng-template>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkPassword">Xác Nhận Mật Khẩu</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Mật khẩu không giống nhau">
+        <input nz-input maxlength="40" type="password" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" formControlName="confirmedPassword" placeholder="abszc@123!" />
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Nickname -->
+    <!-- FullName -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="nickname" nzTooltipTitle="What do you want others to call you?"> Nickname </nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your nickname!">
-        <input nz-input formControlName="nickname" id="nickname" placeholder="Enter your nickname" />
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="nickname"> Họ và Tên </nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập họ và tên">
+        <input nz-input formControlName="fullName" id="nickname" placeholder="Nguyễn Văn Khang" />
       </nz-form-control>
     </nz-form-item>
 
     <!-- Phone Number -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="registerForm.controls['phoneNumber']?.errors?.['required'] ? 'Please input your phone number!' : ''">
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber">Số Điện Thoại</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Số điện thoại không hợp lệ">
         <nz-input-group>
-          <input formControlName="phoneNumber" nz-input placeholder="Enter your phone number" />
+          <input
+            class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm"
+            formControlName="phoneNumber"
+            type="tel"
+            nz-input
+            [minlength]="10"
+            [maxlength]="10"
+            placeholder="0903111013"
+          />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Website -->
+    <!-- Address -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="website">Website</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input website!">
-        <input nz-input formControlName="website" id="website" placeholder="Enter your website" />
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Địa Chỉ</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập địa chỉ">
+        <input nz-input formControlName="address" placeholder="19 Lê Quý Đôn, Phường 6, Quận 3" />
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Agreement -->
+    <!-- IdCardNumber -->
     <nz-form-item>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzOffset]="6">
-        <label nz-checkbox formControlName="agree">
-          <span>
-            I have read the
-            <a href="#">agreement</a>
-          </span>
-        </label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Căn Cước Công Dân</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập mật khẩu">
+        <input nz-input formControlName="idCardNumber" placeholder="0793000111" />
       </nz-form-control>
     </nz-form-item>
 
+    <!-- check if role is user -->
+    @if(registerForm.get('role')?.value === 'User'){
+    <!-- studentCode -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="website">MSSV</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập căn mssv">
+        <input nz-input formControlName="studentCode" maxlength="8" placeholder="SE171372" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- academicYear -->
+    <!-- TODO: validate year -->
+    <nz-form-item>
+      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="website">Niêm Khóa</nz-form-label>
+      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập niêm khóa">
+        <input nz-input formControlName="academicYear" maxlength="9" placeholder="2020-2024" />
+      </nz-form-control>
+    </nz-form-item>
+
+    }
     <!-- Submit Button -->
     <nz-form-item>
       <nz-form-control [nzSm]="14" [nzXs]="24" [nzOffset]="6">
-        <button nz-button nzType="primary" [disabled]="registerForm.invalid">Register</button>
+        <button [disabled]="registerForm.invalid" nz-button nzType="primary">Đăng Ký</button>
       </nz-form-control>
     </nz-form-item>
   </form>
