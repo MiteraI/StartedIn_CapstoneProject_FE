@@ -7,6 +7,7 @@ import { SearchResponseModel } from '../shared/models/search-response.model'
 import { AssetModel } from '../shared/models/asset/asset.model'
 import { AssetCreateModel } from '../shared/models/asset/asset-create.model'
 import { AssetUpdateModel } from '../shared/models/asset/asset-update.model'
+import { SellAssetModel } from '../shared/models/asset/sell-asset.model'
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class AssetService {
 
   refreshAsset$ = new BehaviorSubject<boolean>(true)
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
-  
+
   getAssetListForProject(
     id: string,
     pageIndex: number,
@@ -48,12 +49,25 @@ export class AssetService {
     return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`), { responseType: 'text' })
   }
 
-  updateAsset(projectId: string, assetId: string, asset: AssetUpdateModel) : Observable<any>
-  {
+  updateAsset(projectId: string, assetId: string, asset: AssetUpdateModel) : Observable<any> {
     return this.http.put<AssetUpdateModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`), asset)
   }
-  getAssetDetail(projectId:string, assetId: string) : Observable<AssetModel>
-  {
+
+  getAssetDetail(projectId:string, assetId: string) : Observable<AssetModel> {
     return this.http.get<AssetModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}`))
+  }
+
+  sellAsset(projectId: string, assetId: string, sellModel: SellAssetModel) : Observable<any> {
+    const formData = new FormData();
+    formData.append('sellPrice', sellModel.sellPrice.toString());
+    formData.append('sellQuantity', sellModel.sellQuantity.toString());
+    if (sellModel.toId) formData.append('toId', sellModel.toId);
+    if (sellModel.toName) formData.append('toName', sellModel.toName);
+    formData.append('evidenceFile', sellModel.evidenceFile);
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}/sell`),
+      formData,
+      { responseType: 'text' as 'json' }
+    )
   }
 }

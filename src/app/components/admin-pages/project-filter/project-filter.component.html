@@ -29,8 +29,11 @@
     <nz-form-control [nzSpan]="24">
       <nz-select class="w-full" formControlName="projectStatus" nzPlaceHolder="Chọn trạng thái">
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option *ngFor="let option of statusOptions" [nzValue]="option.value" [nzLabel]="option.label">
-        </nz-option>
+        <nz-option
+          *ngFor="let option of statusOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        ></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>
