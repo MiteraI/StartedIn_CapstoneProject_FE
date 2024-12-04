@@ -8,7 +8,7 @@ import { NzFormModule } from "ng-zorro-antd/form"
 import { NzIconModule } from "ng-zorro-antd/icon"
 import { NzInputModule } from "ng-zorro-antd/input"
 import { NzInputNumberModule } from "ng-zorro-antd/input-number"
-import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal"
+import { NZ_MODAL_DATA, NzModalModule, NzModalRef, NzModalService } from "ng-zorro-antd/modal"
 import { NzSelectModule } from "ng-zorro-antd/select"
 import { AntdNotificationService } from "src/app/core/util/antd-notification.service"
 import { AssetService } from "src/app/services/asset.service"
@@ -32,7 +32,8 @@ interface IModalData {
     NzButtonModule,
     NzSelectModule,
     NzIconModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzModalModule
   ]
 })
 export class CreateAssetModalComponent {
@@ -41,11 +42,13 @@ export class CreateAssetModalComponent {
   vndCurrencyPipe = new VndCurrencyPipe();
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
   vndParser = (value: string) => value.replace(/\D/g,'');
+
   constructor(
     private fb: FormBuilder,
     private assetService: AssetService,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef,
+    private modalService: NzModalService,
     @Inject(NZ_MODAL_DATA) private projectId: string,
   ) {
     this.assetForm = this.fb.group({
@@ -57,34 +60,45 @@ export class CreateAssetModalComponent {
     })
   }
 
-  onSubmit() {
-    if (this.assetForm.valid) {
-      const assetData: AssetCreateModel = {
-        assetName: this.assetForm.value.assetName,
-        price: this.assetForm.value.price,
-        purchaseDate: this.assetForm.value.purchaseDate
-          ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0]
-          : null,
-        quantity: this.assetForm.value.quantity,
-        serialNumber: this.assetForm.value.serialNumber
-      };
+  showConfirmMessage() {
+    this.modalService.confirm({
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn tạo tài sản này không?',
+      nzOkText: 'Tạo',
+      nzCancelText: 'Hủy',
+      nzOnOk: () => this.onSubmit()
+    })
+  }
 
-      this.assetService.createNewAsset(this.projectId, assetData).subscribe({
-        next: (response) => {
-          this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '');
-          this.assetService.refreshAsset$.next(true)
-          this.nzModalRef.close();
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error);
-          } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau');
-          } else {
-            console.error('', error);
-          }
-        },
-      });
-    }
+  onSubmit() {
+    if (!this.assetForm.valid) return;
+
+    const assetData: AssetCreateModel = {
+      assetName: this.assetForm.value.assetName,
+      price: this.assetForm.value.price,
+      purchaseDate: this.assetForm.value.purchaseDate
+        ? new Date(this.assetForm.value.purchaseDate).toISOString().split('T')[0]
+        : null,
+      quantity: this.assetForm.value.quantity,
+      serialNumber: this.assetForm.value.serialNumber
+    };
+
+    this.assetService.createNewAsset(this.projectId, assetData).subscribe({
+      next: (response) => {
+        this.antdNoti.openSuccessNotification('Tạo tài sản thành công', '');
+        this.assetService.refreshAsset$.next(true)
+        this.nzModalRef.close();
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error);
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau');
+        } else {
+          console.error('', error);
+        }
+      },
+    });
+
   }
 }
