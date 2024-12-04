@@ -1,16 +1,21 @@
 <form nz-form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <!-- Project Name -->
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="projectName">Tên dự án</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập tên dự án">
       <input nz-input formControlName="projectName" id="projectName" />
     </nz-form-control>
   </nz-form-item>
+
+  <!-- Description -->
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Miêu tả</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập miêu tả dự án">
       <textarea nz-input formControlName="description" id="description"></textarea>
     </nz-form-control>
   </nz-form-item>
+
+  <!-- Logo -->
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Logo</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
@@ -21,7 +26,9 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item>
+  <!-- Min/Max member -->
+
+  <nz-form-item class="">
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember"
       >Thành viên <br />
       tối thiểu</nz-form-label
@@ -29,9 +36,6 @@
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối thiểu">
       <nz-input-number formControlName="minMember" [nzMin]="1" [nzPrecision]="0" id="minMember"></nz-input-number>
     </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="maxMember"
       >Thành viên <br />
       tối đa</nz-form-label
@@ -41,17 +45,33 @@
     </nz-form-control>
   </nz-form-item>
 
+  <!-- Start Date -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember"
-      >Ngày bắt đầu <br />
-      Kết thúc</nz-form-label
-    >
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu và kết thúc">
-      <nz-range-picker formControlName="startEndDate" [nzDisabledDate]="disabledDate"></nz-range-picker>
+      <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate"></nz-date-picker>
     </nz-form-control>
   </nz-form-item>
 
-  <!-- date -->
+  <!-- End Date -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="minMember">Ngày Kết thúc</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate"></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- CompanyId -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24"
+      >Mã Số <br />
+      Doanh Nghiệp</nz-form-label
+    >
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="companyIdNumer" />
+    </nz-form-control>
+  </nz-form-item>
+
   <!-- <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy chọn ngày bắt đầu">
