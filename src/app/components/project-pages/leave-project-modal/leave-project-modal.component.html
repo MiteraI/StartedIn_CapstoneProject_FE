@@ -1,0 +1,93 @@
+<div class="ant-modal-body">
+  @if (isLoading) {
+    <div class="flex justify-center">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  } @else {
+    @if (canLeave) {
+      <div class="mb-6">
+        <div class="flex items-center">
+          <mat-icon fontIcon="warning" class="text-red-600"></mat-icon>
+          <div class="text-red-600 font-medium ml-2">Cảnh báo:</div>
+        </div>
+        <ul class="list-disc list-inside space-y-2 mt-2 ml-2">
+          <li>Bạn sẽ không thể truy cập dự án sau khi rời</li>
+          <li>Yêu cầu rời dự án sẽ được gửi đến quản lý dự án</li>
+          <li>Bạn có thể tiếp tục làm việc cho đến khi yêu cầu được chấp nhận</li>
+        </ul>
+      </div>
+
+      <form [formGroup]="leaveForm" class="mb-6">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="24">Lý do rời dự án</nz-form-label>
+          <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng nhập lý do rời dự án (ít nhất 10 ký tự)">
+            <textarea
+              nz-input
+              formControlName="reason"
+              [nzAutosize]="{ minRows: 4, maxRows: 6 }"
+              placeholder="Nhập lý do rời dự án">
+            </textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+
+      <div class="flex justify-end space-x-4">
+        <button nz-button (click)="cancel()">Hủy</button>
+        <button
+          nz-button
+          nzType="primary"
+          nzDanger
+          [disabled]="!leaveForm.valid"
+          (click)="submitLeaveRequest()">
+          Gửi yêu cầu
+        </button>
+      </div>
+    } @else {
+      <div class="space-y-4 max-h-[50vh] overflow-y-auto">
+        <div *ngIf="checkResult.requestExisted" class="flex flex-wrap items-center border rounded-md p-2">
+          <mat-icon fontIcon="warning"></mat-icon>
+          <div class="ml-2 font-medium">Bạn đã gửi yêu cầu rời dự án! Xin hãy chờ quản lý dự án xử lý!</div>
+        </div>
+
+        <p *ngIf="!checkResult.requestExisted" class="text-red-600 font-medium">Không thể rời dự án do còn các vấn đề sau:</p>
+
+        <div *ngIf="checkResult.contracts.length" class="flex flex-wrap items-center border rounded-md p-2">
+          <mat-icon fontIcon="history_edu"></mat-icon>
+          <div class="ml-2 font-medium">Hợp đồng còn hiệu lực:</div>
+          <div
+            *ngFor="let item of checkResult.contracts"
+            class="w-full p-2 mt-2 rounded-md bg-slate-50 flex flex-wrap cursor-pointer hover:bg-slate-100"
+            (click)="navigateToContract(item.contractType, item.id)"
+          >
+            <div class="w-full font-medium">{{ item.contractName }}</div>
+            <div class="w-full">
+              <span class="font-medium text-sm">Mã số HĐ:</span> {{ item.contractIdNumber }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="checkResult.disbursements.length" class="flex flex-wrap items-center border rounded-md p-2">
+          <mat-icon fontIcon="account_balance"></mat-icon>
+          <div class="ml-2 font-medium">Giải ngân đang chờ xử lý:</div>
+          <div
+            *ngFor="let item of checkResult.disbursements"
+            class="w-full p-2 mt-2 rounded-md bg-slate-50 flex flex-wrap cursor-pointer hover:bg-slate-100"
+            (click)="navigateToDisbursement(item.id)"
+          >
+            <div class="w-full font-medium">{{ item.title }}</div>
+            <div class="w-full md:w-1/2">
+              <span class="font-medium text-sm">Mã số HĐ:</span> {{ item.contractIdNumber }}
+            </div>
+            <div class="w-full md:w-1/2">
+              <span class="font-medium text-sm">Số tiền:</span> {{ item.amount | vndCurrency }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button nz-button (click)="cancel()">Đóng</button>
+      </div>
+    }
+  }
+</div>

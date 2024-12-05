@@ -1,5 +1,15 @@
 <app-title-bar viewName="Cài đặt"></app-title-bar>
-<div class="p-4 max-w-6xl mx-auto overflow-y-auto">
+
+<div *ngIf="isLeader" class="p-4 max-w-6xl mx-auto overflow-y-auto">
+  <!-- Leaving Requests Section -->
+  <div class="mb-6">
+    <div class="text-lg font-bold mb-4">Yêu cầu rời dự án</div>
+    <app-leaving-request-list [projectId]="projectId"></app-leaving-request-list>
+  </div>
+
+  <hr class="mb-6" />
+
+  <!-- Close Project Section -->
   <div class="flex flex-wrap py-2 px-4 border border-red-600 rounded">
     <div>
       <div class="text-lg font-bold">Đóng dự án</div>
@@ -7,6 +17,18 @@
     </div>
     <div class="flex justify-end items-center w-full md:w-auto md:flex-grow">
       <button nz-button nzType="primary" nzDanger (click)="openCloseProjectModal()">Đóng dự án</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isLeader" class="p-4 max-w-6xl mx-auto overflow-y-auto">
+  <div class="flex flex-wrap py-2 px-4 border border-red-600 rounded">
+    <div>
+      <div class="text-lg font-bold">Rời dự án</div>
+      <div class="text-sm text-gray-500">Sau khi rời dự án, bạn sẽ không thể truy cập vào dự án này nữa.</div>
+    </div>
+    <div class="flex justify-end items-center w-full md:w-auto md:flex-grow">
+      <button nz-button nzType="primary" nzDanger (click)="openLeaveProjectModal()">Rời dự án</button>
     </div>
   </div>
 </div>
