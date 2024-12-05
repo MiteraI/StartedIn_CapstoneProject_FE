@@ -39,7 +39,7 @@
             <nz-select
               nzShowSearch
               nzAllowClear
-              nzPlaceHolder="Thành viên"
+              [nzPlaceHolder]="share.get('initialFullName')?.value || 'Thành viên'"
               [nzDisabled]="isReadOnly"
               formControlName="userId"
               class="w-2/3 md:w-1/3"
