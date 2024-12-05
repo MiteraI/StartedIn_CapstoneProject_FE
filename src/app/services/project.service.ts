@@ -14,6 +14,7 @@ import { InvestmentCallStatus } from '../shared/enums/investment-call-status.enu
 import { simulateStartupAPI } from '../shared/mocks/startup-samples'
 import { CheckProjectClosableModel } from '../shared/models/project/check-project-closable.model'
 import { mockCanCloseProject, mockCannotCloseProject, mockOnlyAssets, mockOnlyBudgetRemaining, mockOnlyContracts, mockOnlyDisbursements } from '../shared/mocks/close-data-samples'
+import { CheckUserLeaveableModel } from '../shared/models/project/check-user-leaveable.model'
 
 @Injectable({
   providedIn: 'root',
@@ -129,5 +130,9 @@ export class ProjectService {
       null,
       { responseType: 'text' as 'json' }
     )
+  }
+
+  checkUserLeaveable(projectId: string): Observable<CheckUserLeaveableModel> {
+    return this.http.get<CheckUserLeaveableModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/check-leaveable`))
   }
 }
