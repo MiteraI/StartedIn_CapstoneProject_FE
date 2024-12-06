@@ -1,0 +1,55 @@
+<mat-drawer-container [style.height]="height + 'px'">
+  <mat-drawer [opened]="!isCollapsed" [mode]="isDesktopView ? 'side' : 'over'" position="end" [style.width]="'300px'">
+    <div class="w-full h-full bg-white flex flex-col">
+      <div class="flex justify-between items-center ml-2">
+        <div class="m-2 text-xl font-black">Lịch sử</div>
+        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="toggleSidebar()">
+          <mat-icon fontIcon="close"></mat-icon>
+        </button>
+      </div>
+
+      <hr class="mx-4 mb-4" />
+      <div
+        *ngFor="let entry of historyEntries"
+        class="flex items-center rounded px-1 py-2 mx-2 my-1"
+        [ngClass]="{
+          'bg-green-100': !entry.isReject,
+          'bg-red-100': entry.isReject
+        }"
+      >
+        <nz-avatar
+          [nzSrc]="entry.profilePicture"
+          [nzText]="entry.fullName | initialsOnly"
+          [routerLink]="['/users', entry.userId]"
+          class="mx-2 min-h-8 min-w-8 cursor-pointer"
+        ></nz-avatar>
+        <div *ngIf="!entry.isReject" class="mr-2">
+          <a [routerLink]="['/users', entry.userId]" class="font-medium hover:text-blue-500">{{ entry.fullName }}</a>
+          đã ký hợp đồng vào lúc {{ entry.signedDate | date:'hh:mm dd/MM/yyyy'}}
+        </div>
+        <div *ngIf="entry.isReject" class="mr-2">
+          <a [routerLink]="['/users', entry.userId]" class="font-medium hover:text-blue-500">{{ entry.fullName }}</a>
+          đã từ chối ký hợp đồng
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="flex h-full">
+      <div class="w-full overflow-y-scroll">
+        <ng-content></ng-content>
+      </div>
+      <button
+        *ngIf="isCollapsed"
+        (click)="toggleSidebar()"
+        class="absolute top-2 right-4 px-4 py-2 flex items-center rounded-full hover:bg-slate-200"
+        [ngClass]="{'opacity-50 bg-white' : !isDesktopView}"
+      >
+        <mat-icon fontIcon="history"></mat-icon>
+        <span class="ml-2 hidden lg:inline">Lịch sử ký kết</span>
+      </button>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+

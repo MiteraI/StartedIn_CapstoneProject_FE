@@ -25,6 +25,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 
 @Component({
   selector: 'app-internal-contract',
@@ -44,6 +45,7 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
     NzInputNumberModule,
     IonicModule,
     TitleBarComponent,
+    ContractHistorySidebarComponent
   ],
 })
 export class InternalContractPage implements OnInit, OnDestroy {
