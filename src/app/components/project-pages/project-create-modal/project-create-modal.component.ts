@@ -37,13 +37,20 @@ export class ProjectCreateModalComponent implements OnInit {
       logoFile: [null, [Validators.required]],
       minMember: [0, [Validators.required, Validators.min(1)]],
       maxMember: [0, [Validators.required, Validators.min(1)]],
-      startEndDate: [null, [Validators.required]],
+      startDate: [null, [Validators.required]],
+      endDate: [null],
+      companyIdNumer: [''],
     })
   }
 
-  disabledDate = (current: Date): boolean => {
+  disabledStartDate = (current: Date): boolean => {
     // Disable past dates
     return current && current < new Date()
+  }
+
+  disabledEndDate = (current: Date): boolean => {
+    const startDate = this.projectForm.get('startDate')?.value
+    return current && startDate && current < startDate
   }
 
   onFileSelected(event: Event): void {
@@ -74,9 +81,10 @@ export class ProjectCreateModalComponent implements OnInit {
       formData.append('LogoFile', this.selectedFile!)
 
       // Format the date
-      const dateRange = this.projectForm.get('startEndDate')?.value
-      const formattedStartDate = this.datePipe.transform(dateRange[0], 'yyyy-MM-dd')
-      const formattedEndDate = this.datePipe.transform(dateRange[1], 'yyyy-MM-dd')
+      const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'yyyy-MM-dd')
+      const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'yyyy-MM-dd')
+
+      console.log('formattedStartDate', formattedStartDate)
       if (formattedStartDate) {
         formData.append('StartDate', formattedStartDate)
       }
@@ -85,6 +93,7 @@ export class ProjectCreateModalComponent implements OnInit {
       }
       formData.append('MinMember', this.projectForm.get('minMember')?.value)
       formData.append('MaxMember', this.projectForm.get('maxMember')?.value)
+      formData.append('CompanyIdNumer', this.projectForm.get('companyIdNumer')?.value)
 
       this.projectService.createProject(formData).subscribe({
         next: (response) => {

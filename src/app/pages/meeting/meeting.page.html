@@ -1,0 +1,20 @@
+<app-title-bar viewName="Danh sách lịch hẹn"></app-title-bar>
+
+<div class="w-fit flex items-end">
+  <nz-calendar class="calendar" [nzMode]="'month'">
+    <ul *nzDateCell="let date" class="events">
+      <ng-container *ngFor="let event of objects; trackBy:getEvents">
+        <li *ngIf="event.date.getTime() === date.getTime()">
+          <nz-badge [nzStatus]="event.type" [nzText]="event.title"></nz-badge>
+        </li>
+      </ng-container>
+    </ul>
+    <ul *nzMonthCell="let month" class="events">
+      <ng-container *ngFor="let event of getMonthEvents(month)">
+        <li>
+          <nz-badge [nzStatus]="event.type" [nzText]="event.title"></nz-badge>
+        </li>
+      </ng-container>
+    </ul>
+  </nz-calendar>
+</div>

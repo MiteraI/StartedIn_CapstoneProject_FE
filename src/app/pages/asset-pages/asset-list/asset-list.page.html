@@ -100,23 +100,73 @@
 
   <!--Mobile View-->
   <div class="md:hidden space-y-4">
-    <div *ngFor="let asset of assets" class="border p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white">
-      <div class="font-medium text-xl">{{ asset.assetName }}</div>
-      <div class="text-md text-gray-600">Số seri: {{ asset.serialNumber }}</div>
-      <div class="text-md text-gray-600">Số lượng: {{ asset.quantity }}</div>
-      <div class="text-md text-gray-600">Giá: {{ asset.price | vndCurrency }}</div>
-      <div class="text-md text-gray-600">Ngày mua: {{ formatDate(asset.purchaseDate) }}</div>
-      <div class="text-md">
-        <span
-          [ngClass]="{
-            'text-green-500': asset.status === assetStatuses.AVAILABLE,
-            'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
-            'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE,
-            'text-purple-500': asset.status === assetStatuses.SOLD
-          }"
-        >
-          ● {{ statusLabels[asset.status] }}
-        </span>
+    <div 
+      *ngFor="let asset of assets" 
+      class="border p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white"
+    >
+      <div class="flex justify-between items-start">
+        <!-- Asset Details -->
+        <div class="space-y-2">
+          <div class="font-medium text-xl text-gray-800">{{ asset.assetName }}</div>
+          
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Số seri: </span>
+            <span class="text-gray-800">{{ asset.serialNumber }}</span>
+          </div>
+  
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Số lượng: </span>
+            <span class="text-gray-800">{{ asset.quantity }}</span>
+          </div>
+  
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Còn lại: </span>
+            <span class="text-gray-800">{{ asset.remainQuantity }}</span>
+          </div>
+  
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Giá: </span>
+            <span class="text-gray-800">{{ asset.price | vndCurrency }}</span>
+          </div>
+  
+          <div class="text-sm text-gray-600">
+            <span class="font-semibold">Ngày mua: </span>
+            <span class="text-gray-800">{{ formatDate(asset.purchaseDate) }}</span>
+          </div>
+  
+          <div class="text-sm">
+            <span class="font-semibold text-gray-600">Trạng thái: </span>
+            <span
+              [ngClass]="{
+                'text-green-500': asset.status === assetStatuses.AVAILABLE,
+                'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
+                'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE,
+                'text-purple-500': asset.status === assetStatuses.SOLD
+              }"
+            >
+              ● {{ statusLabels[asset.status] }}
+            </span>
+          </div>
+        </div>
+  
+        <!-- Action Buttons -->
+        <div *ngIf="isLeader" class="flex space-x-2 mt-2">
+          <button
+            *ngIf="asset.status !== assetStatuses.SOLD"
+            (click)="openUpdateAssetModel(asset)"
+            class="p-2 text-yellow-500 hover:bg-yellow-200"
+          >
+            <mat-icon fontIcon="edit"></mat-icon>
+          </button>
+          <button
+            *ngIf="asset.status !== assetStatuses.SOLD"
+            (click)="sellAsset(asset)"
+            class="p-2 text-purple-500 hover:bg-purple-200"
+          >
+            <mat-icon fontIcon="sell"></mat-icon>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

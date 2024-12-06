@@ -11,6 +11,7 @@ import { ContractCreateFromDealModel } from "../shared/models/contract/contract-
 import { InvestmentContractDetailModel } from "../shared/models/contract/investment-contract-detail.model";
 import { InternalContractCreateUpdateModel } from "../shared/models/contract/internal-contract-create-update.model";
 import { InternalContractDetailModel } from "../shared/models/contract/internal-contract-detail.model";
+import { ContractHistoryModel } from "../shared/models/contract/contract-history.model";
 
 @Injectable({
   providedIn: 'root',
@@ -124,6 +125,12 @@ export class ContractService {
     return this.http.delete(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}`),
       { responseType: 'text' as 'json' }
+    );
+  }
+
+  getHistory(id: string, projectId: string): Observable<ContractHistoryModel[]> {
+    return this.http.get<ContractHistoryModel[]>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/history`)
     );
   }
 }

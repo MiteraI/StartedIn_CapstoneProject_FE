@@ -26,6 +26,7 @@ import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 
 @Component({
   selector: 'app-investment-contract',
@@ -45,7 +46,8 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
     NzInputNumberModule,
     IonicModule,
     VndCurrencyPipe,
-    TitleBarComponent
+    TitleBarComponent,
+    ContractHistorySidebarComponent
   ]
 })
 export class InvestmentContractPage implements OnInit {

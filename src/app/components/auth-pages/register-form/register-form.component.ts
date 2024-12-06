@@ -1,108 +1,152 @@
-import { Component, OnInit } from '@angular/core';
-import { MatInputModule } from '@angular/material/input';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { IonInput, IonButton, IonIcon } from '@ionic/angular/standalone';
-import { MaskitoElementPredicate } from '@maskito/core';
-import { phoneMask } from './mask';
-import { MaskitoDirective } from '@maskito/angular';
-import { addIcons } from 'ionicons';
-import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { RegisterRequest } from 'src/app/shared/models/register.model';
-import { RegisterService } from 'src/app/services/register.service';
-import { catchError, tap, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, OnInit } from '@angular/core'
+import { MatInputModule } from '@angular/material/input'
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { addIcons } from 'ionicons'
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons'
+import { RegisterService } from 'src/app/services/register.service'
+import { Router } from '@angular/router'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'
+import { NzFormModule } from 'ng-zorro-antd/form'
+import { NzInputModule } from 'ng-zorro-antd/input'
+import { NzSelectModule } from 'ng-zorro-antd/select'
+import { CommonModule } from '@angular/common'
+import { Authority } from 'src/app/shared/constants/authority.constants'
+import { RegisterRequest } from 'src/app/shared/models/register.model'
+import { catchError, tap, throwError } from 'rxjs'
+import { NzMessageService } from 'ng-zorro-antd/message'
 
 @Component({
   selector: 'app-register-form',
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss'],
   standalone: true,
-  imports: [
-    IonIcon,
-    IonButton,
-    IonInput,
-    FormsModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MaskitoDirective,
-  ],
+  imports: [FormsModule, MatInputModule, ReactiveFormsModule, NzButtonModule, NzCheckboxModule, NzFormModule, NzInputModule, NzSelectModule, CommonModule],
 })
 export class RegisterFormComponent implements OnInit {
-  showPassword = false;
+  showPassword = false
   registerForm = this.formBuilder.group(
     {
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email, emailDomainValidator('role')]],
       password: ['', Validators.required],
       confirmedPassword: ['', Validators.required],
       fullName: ['', Validators.required],
       phoneNumber: ['', Validators.required],
+      role: ['User', Validators.required],
+      address: ['', Validators.required],
+      idCardNumber: ['', Validators.required],
+      studentCode: [''],
+      academicYear: [''],
     },
     { validator: this.passwordMatchValidator }
-  );
+  )
 
-  readonly phoneMask = phoneMask;
+  authorityOptions: { label: string; value: string }[] = []
 
-  readonly maskPredicate: MaskitoElementPredicate = async (el) =>
-    (el as HTMLIonInputElement).getInputElement();
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private registerService: RegisterService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
-    addIcons({ eyeOutline, eyeOffOutline });
+  constructor(private formBuilder: FormBuilder, private registerService: RegisterService, private router: Router, private message: NzMessageService) {
+    addIcons({ eyeOutline, eyeOffOutline })
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authorityOptions = Object.values(Authority).map((value) => {
+      let label = ''; // Initialize label
+      switch (value) {
+        case 'User':
+          label = 'Sinh viên';
+          break;
+        case 'Mentor':
+          label = 'Người hướng dẫn';
+          break;
+        case 'Investor':
+          label = 'Nhà đầu tư';
+          break;
+        default:
+          label = value; // Fallback to the original value if no match
+      }
+    
+      return { label, value };
+    })
+
+    this.registerForm.get('role')?.valueChanges.subscribe(() => {
+      this.registerForm.get('email')?.updateValueAndValidity()
+      this.registerForm.get('studentCode')?.setValue('')
+      this.registerForm.get('academicYear')?.setValue('')
+    })
+  }
 
   onSubmit() {
     //return if form invalid
-    if (this.registerForm.invalid) {
-      return;
-    }
-    const phoneNumber = this.registerForm.value.phoneNumber?.replace(/-/g, '');
-    const registerData: RegisterRequest = this.registerForm.getRawValue();
-    registerData.phoneNumber = phoneNumber;
 
+    console.log(this.registerForm.getRawValue())
+    console.log(this.registerForm.valid)
+
+    if (this.registerForm.invalid) {
+      return
+    }
+    const registerData: RegisterRequest = this.registerForm.getRawValue()
     this.registerService
       .register(registerData)
       .pipe(
         tap((response: string) => {
-          this.router.navigate(['login']);
-          this.snackBar.open(response, 'Đóng', {
-            duration: 5000,
-          });
+          this.router.navigate(['login'])
+          this.message.success(response)
         }),
         catchError((error) => {
-          return throwError(error);
+          this.message.error(error.message)
+          return throwError(error)
         })
       )
-      .subscribe();
+      .subscribe()
+  }
+
+  getEmailErrorMessage() {
+    const emailControl = this.registerForm.get('email')
+
+    if (emailControl?.hasError('required')) {
+      return 'Vui lòng nhập email'
+    }
+    if (emailControl?.hasError('email')) {
+      return 'Email không hợp lệ'
+    }
+    if (emailControl?.hasError('invalidEmailDomain')) {
+      return 'Vui lòng nhập email fpt.edu.vn'
+    }
+
+    return '' // No error
+  }
+
+  getPasswordErrorMessage() {
+    const passwordControl = this.registerForm.get('password')
+
+    if (passwordControl?.hasError('required')) {
+      return 'Vui lòng nhập mật khẩu'
+    }
+    if (passwordControl?.hasError('minlength')) {
+      return 'Mật khẩu phải có ít nhất 8 ký tự'
+    }
+
+    return '' // No error
   }
 
   passwordMatchValidator(control: AbstractControl) {
-    const password = control.get('password');
-    const confirmedPassword = control.get('confirmedPassword');
-    if (
-      password &&
-      confirmedPassword &&
-      password.value !== confirmedPassword.value
-    ) {
-      confirmedPassword.setErrors({ passwordMismatch: true });
+    const password = control.get('password')
+    const confirmedPassword = control.get('confirmedPassword')
+    if (password && confirmedPassword && password.value !== confirmedPassword.value) {
+      confirmedPassword.setErrors({ passwordMismatch: true })
     } else {
-      confirmedPassword?.setErrors(null);
+      confirmedPassword?.setErrors(null)
     }
   }
-
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
+}
+function emailDomainValidator(roleField: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const email = control.value as string
+    const parent = control.parent // Access the form group
+    const role = parent?.get(roleField)?.value
+    if (role === 'User' && !email.endsWith('@fpt.edu.vn')) {
+      return { invalidEmailDomain: true }
+    }
+    return null
   }
 }

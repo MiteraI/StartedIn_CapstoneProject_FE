@@ -17,6 +17,7 @@ import { AdminGuard } from './shared/guards/admin.guard'
 import { AdminProjectDataResolver } from './shared/resolvers/admin-project-data.resolver'
 import { UserDataResolver } from './shared/resolvers/user-data.resolver'
 import { ProfileDataResolver } from './shared/resolvers/profile-data.resolver'
+import { MentorGuard } from './shared/guards/mentor.guard'
 
 export const routes: Routes = [
   {
@@ -28,7 +29,7 @@ export const routes: Routes = [
   {
     path: '',
     canActivate: [AuthenticatedGuard],
-    loadComponent: () => import('./pages/home-redirect/home-redirect.page').then( m => m.HomeRedirectPage)
+    loadComponent: () => import('./pages/home-redirect/home-redirect.page').then((m) => m.HomeRedirectPage),
   },
   {
     path: 'login',
@@ -81,7 +82,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'tasks',
-        canActivate: [UserGuard],
+        // canActivate: [UserGuard],
         loadComponent: () => import('./components/task-page/task-view/task-view.component').then((m) => m.TaskViewComponent),
       },
       {
@@ -200,7 +201,12 @@ export const routes: Routes = [
       },
       {
         path: 'settings',
-        loadComponent: () => import('./pages/project-pages/project-settings/project-settings.page').then( m => m.ProjectSettingsPage)
+        loadComponent: () => import('./pages/project-pages/project-settings/project-settings.page').then((m) => m.ProjectSettingsPage),
+      },
+
+      {
+        path: 'meeting',
+        loadComponent: () => import('./pages/meeting/meeting.page').then((m) => m.MeetingPage),
       },
     ],
   },
@@ -234,12 +240,12 @@ export const routes: Routes = [
   {
     path: 'disbursements/overview',
     canActivate: [InvestorGuard],
-    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-overview/investor-disbursement-overview.page').then( m => m.InvestorDisbursementOverviewPage)
+    loadComponent: () => import('./pages/disbursement-pages/investor-disbursement-overview/investor-disbursement-overview.page').then((m) => m.InvestorDisbursementOverviewPage),
   },
   {
     path: 'disbursements/history',
     canActivate: [InvestorGuard],
-    loadComponent: () => import('./pages/transaction-pages/disbursement-history/disbursement-history.page').then( m => m.DisbursementHistoryPage)
+    loadComponent: () => import('./pages/transaction-pages/disbursement-history/disbursement-history.page').then((m) => m.DisbursementHistoryPage),
   },
   {
     path: 'disbursements/:disbursementId',
@@ -250,39 +256,39 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [AdminGuard],
-    loadComponent: () => import('./pages/admin-pages/admin-home/admin-home.page').then( m => m.AdminHomePage)
+    loadComponent: () => import('./pages/admin-pages/admin-home/admin-home.page').then((m) => m.AdminHomePage),
   },
   {
     path: 'admin/projects',
     canActivate: [AdminGuard],
-    loadComponent: () => import('./pages/admin-pages/admin-project-list/admin-project-list.page').then( m => m.AdminProjectListPage)
+    loadComponent: () => import('./pages/admin-pages/admin-project-list/admin-project-list.page').then((m) => m.AdminProjectListPage),
   },
   {
     path: 'admin/projects/:projectId',
     canActivate: [AdminGuard],
     resolve: { project: AdminProjectDataResolver },
-    loadComponent: () => import('./pages/admin-pages/admin-project-detail/admin-project-detail.page').then( m => m.AdminProjectDetailPage)
+    loadComponent: () => import('./pages/admin-pages/admin-project-detail/admin-project-detail.page').then((m) => m.AdminProjectDetailPage),
   },
   {
     path: 'admin/users',
     canActivate: [AdminGuard],
-    loadComponent: () => import('./pages/admin-pages/admin-user-list/admin-user-list.page').then( m => m.AdminUserListPage)
+    loadComponent: () => import('./pages/admin-pages/admin-user-list/admin-user-list.page').then((m) => m.AdminUserListPage),
   },
   {
     path: 'profile',
     canActivate: [AuthenticatedGuard],
     resolve: { profile: ProfileDataResolver },
-    loadComponent: () => import('./pages/user-pages/profile/profile.page').then( m => m.ProfilePage)
+    loadComponent: () => import('./pages/user-pages/profile/profile.page').then((m) => m.ProfilePage),
   },
   {
     path: 'users/:userId',
     canActivate: [AuthenticatedGuard],
     resolve: { user: UserDataResolver },
-    loadComponent: () => import('./pages/user-pages/user-detail/user-detail.page').then( m => m.UserDetailPage)
+    loadComponent: () => import('./pages/user-pages/user-detail/user-detail.page').then((m) => m.UserDetailPage),
   },
   {
     path: 'transactions',
     canActivate: [AuthenticatedGuard],
-    loadComponent: () => import('./pages/transaction-pages/self-transactions/self-transactions.page').then( m => m.SelfTransactionsPage)
+    loadComponent: () => import('./pages/transaction-pages/self-transactions/self-transactions.page').then((m) => m.SelfTransactionsPage),
   },
 ]
