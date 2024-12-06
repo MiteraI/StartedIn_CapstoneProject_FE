@@ -1,22 +1,38 @@
-<p>2 button for list invite and list application</p>
+<div class="flex justify-around my-2">
+  <button nz-button nzType="default">
+    <span class="px-2">Preview</span>
+  </button>
+    <button nz-button nzType="default">
+    <span class="px-2">Danh sách đơn nộp</span>
+  </button>
+</div>
+@if (isCreateMode) {
 <form [formGroup]="recruitmentForm" nz-form nzLayout="vertical" class="bg-white mx-8 p-4">
-  <nz-form-item>
-    <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
-      <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
-    </nz-form-control>
-  </nz-form-item>
+  <div class="flex justify-between">
+    <nz-form-item>
+      <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập tựa đề bài đăng'">
+        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Hiển thị cho mọi người</nz-form-label>
+      <nz-form-control>
+        <nz-switch formControlName="isOpen"></nz-switch>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
 
   <!-- Description Field -->
   <nz-form-item>
-    <nz-form-label>Nội dung bài đăng</nz-form-label>
-    <nz-form-control>
-      <textarea nz-input formControlName="content" placeholder="Nhập thông tin tác vụ" class="w-full"></textarea>
+    <nz-form-label [nzRequired]="true">Nội dung bài đăng</nz-form-label>
+    <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung bài đăng'">
+      <textarea nz-input formControlName="content" placeholder="Nhập nội dung bài đăng" class="w-full"></textarea>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="24">Tài liệu chứng minh</nz-form-label>
+    <nz-form-label [nzSpan]="24">Ảnh bài tuyển dụng</nz-form-label>
     <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng tải lên tài liệu chứng minh!">
       <nz-upload
         ngDefaultControl
@@ -39,8 +55,77 @@
   <nz-form-item>
     <nz-form-control>
       <div class="flex items-center justify-end">
-        <button nz-button nzType="default" [disabled]="recruitmentForm.invalid">Cập Nhật</button>
+        <button nz-button nzType="default" [disabled]="recruitmentForm.invalid" (click)="onSubmit()">Tạo Bài Đăng Tuyển</button>
       </div>
     </nz-form-control>
   </nz-form-item>
 </form>
+} @else {
+<form [formGroup]="recruitmentForm" nz-form nzLayout="vertical" class="bg-white mx-8 p-4">
+  <div class="flex justify-between">
+    <nz-form-item>
+      <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập tựa đề bài đăng'">
+        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" (input)="onInfoChange()"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label>Hiển thị cho mọi người</nz-form-label>
+      <nz-form-control>
+        <nz-switch formControlName="isOpen" (ngModelChange)="onInfoChange()"></nz-switch>
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
+  <!-- Description Field -->
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Nội dung bài đăng</nz-form-label>
+    <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung bài đăng'">
+      <textarea nz-input formControlName="content" placeholder="Nhập nội dung bài đăng" class="w-full" (input)="onInfoChange()"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Ảnh bài tuyển dụng</nz-form-label>
+    @for (image of recruitmentFileList; track image.id) {
+    <div>
+      <nz-tag [nzColor]="'blue'" class="flex mb-2 py-1 space-x-2 items-center">
+        <a [href]="image.imageUrl" target="_blank">{{ image.fileName }}</a>
+        <mat-icon fontIcon="delete" class="cursor-pointer" (click)="deleteAttachment(image.id)"></mat-icon>
+      </nz-tag>
+    </div>
+    }
+    <nz-form-control [nzSpan]="24">
+      <nz-upload
+        ngDefaultControl
+        [(nzFileList)]="fileList"
+        [nzBeforeUpload]="beforeUpload"
+        [nzRemove]="removeUpload"
+        [nzMultiple]="true"
+        [nzShowUploadList]="true"
+        class="mb-2 upload-container"
+      >
+        <div class="flex justify-between w-full">
+          <button nz-button class="flex justify-center items-center">
+            <mat-icon fontIcon="file_upload"></mat-icon>
+            <span class="px-2">Tải lên tài liệu</span>
+          </button>
+          @if (fileList.length > 0) {
+          <button nz-button nzType="primary" class="flex justify-center items-center" (click)="$event.stopPropagation(); uploadAttachment()">
+            <span class="px-2">Lưu tài liệu</span>
+          </button>
+          }
+        </div>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control>
+      <div class="flex items-center justify-end">
+        <button nz-button nzType="default" [disabled]="recruitmentForm.invalid  || !isUpdating" (click)="onSubmit()">Cập Nhật</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+}
