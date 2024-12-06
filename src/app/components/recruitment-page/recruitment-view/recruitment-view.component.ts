@@ -105,7 +105,7 @@ export class RecruitmentViewComponent implements OnInit {
           next: (res) => {
             //TODO: Call get the recruitment post and change state to update from create
             this.antdNoti.openSuccessNotification('', 'Tạo bài tuyển dụng thành công')
-            this.recruitmentService.getProjectRecruitmentPosts(this.projectId).subscribe({
+            this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
               next: (res) => {
                 this.recruitmentForm.value.title = res.title
                 this.isCreateMode = false
@@ -135,7 +135,7 @@ export class RecruitmentViewComponent implements OnInit {
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
-    this.recruitmentService.getProjectRecruitmentPosts(this.projectId).subscribe({
+    this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
       next: (res) => {
         this.isCreateMode = false
         //map res to form

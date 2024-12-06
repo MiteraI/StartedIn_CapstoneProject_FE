@@ -1,3 +1,20 @@
-<p>
-  recruitment-post-card works!
-</p>
+<nz-card class="w-full max-w-sm rounded-lg shadow-md overflow-hidden" [nzCover]="coverTemplate" (click)="openRecruitmentDetailsDialog()">
+  <ng-template #coverTemplate>
+    <img [src]="recruitmentPost.logoUrl" alt="Recruitment Post Logo" class="w-full h-48 object-cover" />
+  </ng-template>
+
+  <nz-card-meta [nzTitle]="recruitmentPost.title" [nzDescription]="recruitmentPost.content" class="mb-4"></nz-card-meta>
+
+  <div class="flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <nz-avatar nzIcon="user" [nzSrc]="recruitmentPost.leaderAvatarUrl" class="mr-2"></nz-avatar>
+      <span class="font-medium text-gray-700">
+        {{ recruitmentPost.leaderName }}
+      </span>
+    </div>
+
+    <nz-tag [nzColor]="recruitmentPost.isOpen ? 'green' : 'red'" class="px-2 py-1 rounded">
+      {{ recruitmentPost.isOpen ? 'Open' : 'Closed' }}
+    </nz-tag>
+  </div>
+</nz-card>
