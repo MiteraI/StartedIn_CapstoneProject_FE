@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { Milestone } from '../shared/models/milestone/milestone.model'
 import { CreateMilestone } from '../shared/models/milestone/milestone-create.model'
 import { Pagination } from '../shared/models/pagination.model'
@@ -12,6 +12,8 @@ import { MilestoneDetails } from '../shared/models/milestone/milestone-details.m
   providedIn: 'root',
 })
 export class MilestoneService {
+  refreshMilestone$ = new BehaviorSubject<boolean>(true)
+  
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getMilestones(projectId: string, page: number, size: number, title?: string, phaseId?: string): Observable<Pagination<Milestone>> {

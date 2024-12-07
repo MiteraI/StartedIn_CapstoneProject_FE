@@ -21,11 +21,12 @@ import { InternalContractCreateUpdateModel } from 'src/app/shared/models/contrac
 import { InternalContractDetailModel } from 'src/app/shared/models/contract/internal-contract-detail.model';
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model';
 import { ProjectService } from 'src/app/services/project.service';
-import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
+import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 
 @Component({
   selector: 'app-internal-contract',
@@ -45,7 +46,8 @@ import { ContractHistorySidebarComponent } from 'src/app/components/contract-pag
     NzInputNumberModule,
     IonicModule,
     TitleBarComponent,
-    ContractHistorySidebarComponent
+    ContractHistorySidebarComponent,
+    PercentFormatterPipe
   ],
 })
 export class InternalContractPage implements OnInit, OnDestroy {
@@ -57,6 +59,9 @@ export class InternalContractPage implements OnInit, OnDestroy {
   contractId: string | null = null;
   memberList: TeamMemberModel[] = [];
   selectedMemberId: string | null = null;
+
+  roleInTeam = TeamRole
+  roleInTeamLabels = TeamRoleLabels
 
   contractForm!: FormGroup;
   percentFormatter = (value: number) => `${value}%`;
@@ -75,7 +80,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
     private projectService: ProjectService,
     private notification: NzNotificationService,
     private accountService: AccountService,
-    private roleService: RoleInTeamService
+    private roleService: RoleInTeamService,
   ) {}
 
   ngOnInit() {
@@ -131,6 +136,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
           userId: this.currentUserId!,
           percentage: 0,
           buyPrice: 0,
+
         });
       }
     });

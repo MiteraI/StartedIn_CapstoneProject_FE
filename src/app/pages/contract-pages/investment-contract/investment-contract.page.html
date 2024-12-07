@@ -1,66 +1,54 @@
 <app-title-bar viewName="Chi tiết hợp đồng"></app-title-bar>
 
 <app-contract-history-sidebar *ngIf="contract && contract.contractStatus !== 1" [projectId]="project.id" [contractId]="contract.id">
-  <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
+  <div class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
     <div class="p-4 md:p-8 bg-white rounded border">
-      <div class="font-bold text-3xl text-black mb-6">Chi tiết hợp đồng</div>
+      <div class="font-bold text-3xl text-black mb-6 flex justify-center">Chi tiết hợp đồng</div>
+      
+      <div class="flex justify-center text-lg mb-6">
+        <strong>Tên dự án:&nbsp;</strong>{{ contract.projectName }}
+      </div>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Mã số hợp đồng</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập mã số hợp đồng!">
-          <input nz-input formControlName="contractIdNumber" placeholder="Nhập mã số hợp đồng" />
-        </nz-form-control>
-      </nz-form-item>
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Mã số hợp đồng:</div>
+        <div class="w-2/3">{{ contract.contractIdNumber }}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Tên hợp đồng:</div>
+        <div class="w-2/3">{{ contract.contractName}}</div>
+      </div>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
-          <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
-        </nz-form-control>
-      </nz-form-item>
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Nhà đầu tư:</div>
+        <div class="w-2/3">{{ contract.investorName}}</div>
+      </div>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tỉ lệ cổ phần (%)</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tỉ lệ cổ phần!">
-          <nz-input-number
-            formControlName="percentage"
-            [nzDisabled]="isFromDeal || isReadOnly"
-            [nzMin]="0"
-            [nzMax]="project.remainingPercentOfShares"
-            [nzPrecision]="2"
-            nzPlaceHolder="Nhập tỉ lệ cổ phần"
-            [nzFormatter]="percentFormatter"
-            [nzParser]="percentParser"
-            class="w-full">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Email:</div>
+        <div class="w-2/3">{{ contract.investorEmail}}</div>
+      </div>
 
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Giá mua</nz-form-label>
-        <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập giá mua!">
-          <nz-input-number
-            formControlName="buyPrice"
-            [nzDisabled]="isFromDeal || isReadOnly"
-            [nzMin]="disbursementTotalAmount"
-            [nzMax]="1000000000000"
-            [nzStep]="100000000"
-            [nzPrecision]="-3"
-            nzPlaceHolder="Nhập giá mua"
-            [nzFormatter]="vndFormatter"
-            [nzParser]="vndParser"
-            class="w-full">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
-        </nz-form-control>
-      </nz-form-item>
-
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Số điện thoại:</div>
+        <div class="w-2/3">{{ contract.investorPhoneNumber}}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Tỉ lệ cổ phần (%):</div>
+        <div class="w-2/3">{{ contract.sharePercentage | percentFormatter }}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Giá mua:</div>
+        <div class="w-2/3">{{ contract.buyPrice | vndCurrency}}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Điều khoản:</div>
+        <div class="w-2/3">{{ contract.contractPolicy }}</div>
+      </div>
+  
       <div class="mt-6">
         <div class="flex items-center justify-between mb-4">
           <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
@@ -68,7 +56,7 @@
             <i nz-icon nzType="plus"></i>
           </button>
         </div>
-
+  
         <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
           <ng-template #disbursementItem let-item let-index="index">
             <nz-list-item>
@@ -96,19 +84,19 @@
           </ng-template>
         </nz-list>
       </div>
-
+  
       <div *ngIf="!isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
+        <button nz-button nzType="link" (click)="showPreview()">
           Bản xem trước
         </button>
         <button nz-button nzType="default" (click)="save()">
           Lưu
         </button>
-        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()">
+        <button nz-button nzType="primary" (click)="saveAndSend()" [disabled]="!contractForm.valid">
           Lưu & Gửi
         </button>
       </div>
-
+  
       <div *ngIf="isReadOnly" class="mt-6 text-right">
         <button nz-button nzType="link" (click)="download()">
           Tải xuống
@@ -118,7 +106,8 @@
         </button>
       </div>
     </div>
-  </form>
+  </div>
+  
 </app-contract-history-sidebar>
 
 <div *ngIf="!contract || contract.contractStatus === 1">
