@@ -38,6 +38,7 @@ export class TaskTableComponent implements OnInit {
     this.taskService.deleteTask(this.projectId, taskId).subscribe({
       next: (res) => {
         this.antdNoti.openSuccessNotification('', 'Xóa tác vụ thành công')
+        this.taskService.refreshTask$.next(true)
       },
       error: (error) => {
         if (error.status === 400) {

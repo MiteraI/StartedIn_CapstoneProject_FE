@@ -10,13 +10,14 @@ import { UpdateTaskStatus } from '../shared/models/task/update-task-status.model
 import { UpdateTaskAssignment } from '../shared/models/task/update-task-assignment.model'
 import { UpdateTaskParent } from '../shared/models/task/update-task-parent.model'
 import { TaskStatus } from '../shared/enums/task-status.enum'
-import { Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { UpdateTaskMilestone } from '../shared/models/task/update-task-milestone.model'
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
+  refreshTask$ = new BehaviorSubject<boolean>(true)
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   createTask(projectId: string, createTask: CreateTask) {
