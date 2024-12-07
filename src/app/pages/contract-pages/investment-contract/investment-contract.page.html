@@ -1,6 +1,116 @@
 <app-title-bar viewName="Chi tiết hợp đồng"></app-title-bar>
 
-<app-contract-history-sidebar *ngIf="contract" [projectId]="project.id" [contractId]="contract.id">
+<app-contract-history-sidebar *ngIf="contract && contract.contractStatus !== 1" [projectId]="project.id" [contractId]="contract.id">
+  <div class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
+    <div class="p-4 md:p-8 bg-white rounded border">
+      <div class="font-bold text-3xl text-black mb-6 flex justify-center">Chi tiết hợp đồng</div>
+      
+      <div class="flex justify-center text-lg mb-6">
+        <strong>Tên dự án:&nbsp;</strong>{{ contract.projectName }}
+      </div>
+
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Mã số hợp đồng:</div>
+        <div class="w-2/3">{{ contract.contractIdNumber }}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Tên hợp đồng:</div>
+        <div class="w-2/3">{{ contract.contractName}}</div>
+      </div>
+
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Nhà đầu tư:</div>
+        <div class="w-2/3">{{ contract.investorName}}</div>
+      </div>
+
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Email:</div>
+        <div class="w-2/3">{{ contract.investorEmail}}</div>
+      </div>
+
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Số điện thoại:</div>
+        <div class="w-2/3">{{ contract.investorPhoneNumber}}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Tỉ lệ cổ phần (%):</div>
+        <div class="w-2/3">{{ contract.sharePercentage | percentFormatter }}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Giá mua:</div>
+        <div class="w-2/3">{{ contract.buyPrice | vndCurrency}}</div>
+      </div>
+  
+      <div class="flex mb-4">
+        <div class="w-1/3 font-medium">Điều khoản:</div>
+        <div class="w-2/3">{{ contract.contractPolicy }}</div>
+      </div>
+  
+      <div class="mt-6">
+        <div class="flex items-center justify-between mb-4">
+          <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
+          <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="openDisbursementModal()">
+            <i nz-icon nzType="plus"></i>
+          </button>
+        </div>
+  
+        <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
+          <ng-template #disbursementItem let-item let-index="index">
+            <nz-list-item>
+              <div class="flex w-full items-center justify-between">
+                <div class="flex flex-col">
+                  <span class="font-medium">{{ item.title }}</span>
+                  <div class="text-sm text-gray-500">
+                    <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
+                    <span class="mx-2 hidden md:inline">•</span>
+                    <div class="md:inline">
+                      Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
+                    </div>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
+                    <i nz-icon nzType="edit"></i>
+                  </button>
+                  <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
+                    <i nz-icon nzType="delete"></i>
+                  </button>
+                </div>
+              </div>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </div>
+  
+      <div *ngIf="!isReadOnly" class="mt-6 text-right">
+        <button nz-button nzType="link" (click)="showPreview()">
+          Bản xem trước
+        </button>
+        <button nz-button nzType="default" (click)="save()">
+          Lưu
+        </button>
+        <button nz-button nzType="primary" (click)="saveAndSend()" [disabled]="!contractForm.valid">
+          Lưu & Gửi
+        </button>
+      </div>
+  
+      <div *ngIf="isReadOnly" class="mt-6 text-right">
+        <button nz-button nzType="link" (click)="download()">
+          Tải xuống
+        </button>
+        <button nz-button nzType="primary" (click)="navigateBack()">
+          Quay lại
+        </button>
+      </div>
+    </div>
+  </div>
+  
+</app-contract-history-sidebar>
+
+<div *ngIf="!contract || contract.contractStatus === 1">
   <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
     <div class="p-4 md:p-8 bg-white rounded border">
       <div class="font-bold text-3xl text-black mb-6">Chi tiết hợp đồng</div>
@@ -119,4 +229,5 @@
       </div>
     </div>
   </form>
-</app-contract-history-sidebar>
+</div>
+

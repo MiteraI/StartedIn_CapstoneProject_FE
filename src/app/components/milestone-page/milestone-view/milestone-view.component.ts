@@ -80,6 +80,11 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
+    this.milestoneService.refreshMilestone$.pipe()
+    .subscribe(() => {
+      this.fetchMilestones(this.isDesktopView);
+    });
+
   }
 
   ngOnDestroy() {

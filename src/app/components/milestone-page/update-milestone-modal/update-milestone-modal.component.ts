@@ -95,6 +95,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
       this.milestoneService.updateMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId, milestone).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Cập Nhật Cột Mốc Thành Công', '')
+          this.milestoneService.refreshMilestone$.next(true)
           this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {
@@ -149,6 +150,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.milestoneService.deleteMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
       next: (response) => {
         this.antdNoti.openSuccessNotification('Xóa Cột Mốc Thành Công', '')
+        this.milestoneService.refreshMilestone$.next(true)
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {

@@ -9,7 +9,11 @@ export type InvestmentContractDetailModel = {
   contractIdNumber: string;
   contractStatus: ContractStatus;
   investorId: string;
+  investorName: string;
+  investorEmail: string;
+  investorPhoneNumber: string;
   buyPrice: number;
   sharePercentage: number;
+  projectName: string;
   disbursements: DisbursementModel[];
 }
