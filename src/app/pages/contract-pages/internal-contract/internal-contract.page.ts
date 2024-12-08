@@ -220,7 +220,6 @@ export class InternalContractPage implements OnInit, OnDestroy {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
-        contractIdNumber: this.contractForm.value.contractIdNumber || '',
       },
       shareEquitiesOfMembers: this.sharesFormArray.value.map((share: any) => ({
         userId: share.userId,

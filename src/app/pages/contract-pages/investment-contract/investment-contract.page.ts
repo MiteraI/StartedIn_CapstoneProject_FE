@@ -247,7 +247,6 @@ export class InvestmentContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
-        contractIdNumber: this.contractForm.value.contractIdNumber || ''
       },
       investorInfo: {
         userId: this.investorId,
@@ -264,7 +263,6 @@ export class InvestmentContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
-        contractIdNumber: this.contractForm.value.contractIdNumber || ''
       },
       disbursements: this.disbursements
     };
