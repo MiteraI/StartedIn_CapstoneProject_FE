@@ -11,13 +11,16 @@ import { ActivatedRoute } from '@angular/router'
 import { RecruitmentImage } from 'src/app/shared/models/recruitment/recruitment-image.model'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { HttpErrorResponse } from '@angular/common/http'
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
+import { RecruitmentDetailsDialogComponent } from '../../find-team-page/recruitment-details-dialog/recruitment-details-dialog.component'
+import { ApplicantListDialogComponent } from '../applicant-list-dialog/applicant-list-dialog.component'
 
 @Component({
   selector: 'app-recruitment-view',
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule],
+  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule],
 })
 export class RecruitmentViewComponent implements OnInit {
   recruitmentForm: FormGroup
@@ -32,7 +35,13 @@ export class RecruitmentViewComponent implements OnInit {
   isUpdating = false
   isCreateMode = true
 
-  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private antdNoti: AntdNotificationService, private recruitmentService: RecruitmentService) {
+  constructor(
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private antdNoti: AntdNotificationService,
+    private recruitmentService: RecruitmentService,
+    private modalService: NzModalService
+  ) {
     this.recruitmentForm = this.fb.group({
       title: ['', [Validators.required]],
       content: ['', [Validators.required]],
@@ -128,6 +137,34 @@ export class RecruitmentViewComponent implements OnInit {
     } else {
       this.antdNoti.openErrorNotification('', 'Vui lòng nhập đầy đủ thông tin')
     }
+  }
+
+  openRecruitmentDetailsPreview() {
+    this.modalService.create({
+      nzTitle: 'Chi Tiết Bài Đăng',
+      nzContent: RecruitmentDetailsDialogComponent,
+      nzFooter: null,
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
+      nzData: {
+        projectId: this.projectId,
+        previewMode: true,
+      },
+    })
+  }
+
+  openApplicantListDialog() {
+    this.modalService.create({
+      nzTitle: 'Danh Sách Ứng Tuyển',
+      nzContent: ApplicantListDialogComponent,
+      nzFooter: null,
+      nzStyle: { top: '20px', width: 'auto', maxWidth: '90vw' },
+      nzBodyStyle: { padding: '0px' },
+      nzData: {
+        projectId: this.projectId,
+      },
+      nzWidth: 'fit-content',
+    })
   }
 
   ngOnInit() {

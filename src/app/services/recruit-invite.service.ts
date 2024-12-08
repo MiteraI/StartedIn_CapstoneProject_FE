@@ -4,6 +4,7 @@ import { ApplicationConfigService } from '../core/config/application-config.serv
 import { Observable } from 'rxjs'
 import { AcceptInvite } from '../shared/models/recruit-invite/accept-invite.model'
 import { ApplyRecruitment } from '../shared/models/recruit-invite/apply-recruitment.model'
+import { Applicant } from '../shared/models/recruit-invite/applicant.model'
 
 @Injectable({
   providedIn: 'root',
@@ -32,14 +33,14 @@ export class RecruitInviteService {
   }
 
   getRecruitmentApplications(projectId: string) {
-    return this.http.get(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications`))
+    return this.http.get<Applicant[]>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications`))
   }
 
   acceptApplication(projectId: string, applicationId: string) {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/accept`), null, { responseType: 'text' as 'json' })
+    return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/accept`), null, { responseType: 'text' as 'json' })
   }
 
   rejectApplication(projectId: string, applicationId: string) {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/reject`), null, { responseType: 'text' as 'json' })
+    return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/reject`), null, { responseType: 'text' as 'json' })
   }
 }

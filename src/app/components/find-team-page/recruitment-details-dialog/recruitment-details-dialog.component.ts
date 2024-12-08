@@ -9,6 +9,7 @@ import { RecruitmentApplyDialogComponent } from '../recruitment-apply-dialog/rec
 
 interface IModalData {
   projectId: string
+  previewMode: boolean
 }
 
 @Component({
@@ -39,6 +40,7 @@ export class RecruitmentDetailsDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    //In backend, the recruitmentId on FE is actually projectId, there is currently no way to get recruitment details by recruitmentId
     this.recruitmentService.getTeamRecruitmentPostDetail(this.nzModalData.projectId).subscribe((data) => {
       this.post = data
     })

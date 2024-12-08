@@ -26,6 +26,7 @@ export class RecruitmentPostCardComponent implements OnInit {
       nzBodyStyle: { padding: '0px' },
       nzData: {
         projectId: this.recruitmentPost.projectId,
+        previewMode: false,
       },
     })
   }

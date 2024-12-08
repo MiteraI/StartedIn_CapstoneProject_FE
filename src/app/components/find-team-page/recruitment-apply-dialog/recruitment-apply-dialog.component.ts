@@ -49,14 +49,10 @@ export class RecruitmentApplyDialogComponent implements OnInit {
   uploadCV() {
     this.recruitInviteService.applyRecruitment(this.nzModalData.projectId, this.nzModalData.recruitmentId, { cvFile: this.fileList[0] }).subscribe({
       next: (res: any) => {
-        console.log(res)
-
         this.antdNoti.openSuccessNotification('', res)
         this.modalRef.close()
       },
       error: (err) => {
-        console.log(err);
-        
         this.antdNoti.openErrorNotification('', err.error)
       },
     })
