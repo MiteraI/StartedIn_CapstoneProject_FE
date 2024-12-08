@@ -103,11 +103,10 @@ export class RecruitmentViewComponent implements OnInit {
       if (this.isCreateMode) {
         this.recruitmentService.createRecruitmentPost(this.projectId, { ...this.recruitmentForm.value, files: this.fileList }).subscribe({
           next: (res) => {
-            //TODO: Call get the recruitment post and change state to update from create
             this.antdNoti.openSuccessNotification('', 'Tạo bài tuyển dụng thành công')
             this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
               next: (res) => {
-                this.recruitmentForm.value.title = res.title
+                //TODO: add loading
                 this.isCreateMode = false
               },
             })

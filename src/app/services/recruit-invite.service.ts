@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Observable } from 'rxjs'
 import { AcceptInvite } from '../shared/models/recruit-invite/accept-invite.model'
+import { ApplyRecruitment } from '../shared/models/recruit-invite/apply-recruitment.model'
 
 @Injectable({
   providedIn: 'root',
@@ -15,34 +16,30 @@ export class RecruitInviteService {
   }
 
   inviteMembers(projectId: string, users: string[]): Observable<any> {
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/invite`),
-      users,
-      { responseType: 'text' as 'json' }
-    )
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/invite`), users, { responseType: 'text' as 'json' })
   }
 
   acceptProjectInvite(acceptInvitation: AcceptInvite, projectId: string): Observable<any> {
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/accept-invite`),
-      acceptInvitation,
-      { responseType: 'text' as 'json' }
-    )
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/accept-invite`), acceptInvitation, { responseType: 'text' as 'json' })
   }
 
-  updateProjectRecruitmentInfo(projectId: string, recruitmentInfo: any): Observable<any> {
-    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-info`), recruitmentInfo)
+  applyRecruitment(projectId: string, recruitmentId: string, data: ApplyRecruitment) {
+    const formData = new FormData()
+    formData.append('cvFile', data.cvFile)
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitments/${recruitmentId}/apply`), formData, {
+      responseType: 'text' as 'json',
+    })
   }
 
-  updateProjectRecruitmentStatus(projectId: string, status: string): Observable<any> {
-    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-status`), { status })
+  getRecruitmentApplications(projectId: string) {
+    return this.http.get(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications`))
   }
 
-  updateAddRecruitmentImage(projectId: string, image: any): Observable<any> {
-    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-image`), image)
+  acceptApplication(projectId: string, applicationId: string) {
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/accept`), null, { responseType: 'text' as 'json' })
   }
 
-  updateRemoveRecruitmentImage(projectId: string): Observable<any> {
-    return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitment-image`))
+  rejectApplication(projectId: string, applicationId: string) {
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/reject`), null, { responseType: 'text' as 'json' })
   }
 }

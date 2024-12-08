@@ -1,0 +1,27 @@
+<form [formGroup]="cvForm" nz-form nzLayout="vertical" class="px-4 py-12">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Gửi CV cho nhóm trưởng</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-upload
+        ngDefaultControl
+        [(nzFileList)]="fileList"
+        [nzBeforeUpload]="beforeUpload"
+        [nzRemove]="removeUpload"
+        [nzShowUploadList]="true"
+        class="mb-2 upload-container"
+      >
+        <div class="flex justify-between w-full">
+          <button nz-button class="flex justify-center items-center">
+            <mat-icon fontIcon="file_upload"></mat-icon>
+            <span class="px-2">Tải lên CV</span>
+          </button>
+          @if (fileList.length > 0) {
+          <button nz-button nzType="primary" class="flex justify-center items-center" (click)="$event.stopPropagation(); uploadCV()">
+            <span class="px-2">Gửi CV</span>
+          </button>
+          }
+        </div>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+</form>
