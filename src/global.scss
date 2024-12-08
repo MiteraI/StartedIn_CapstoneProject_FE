@@ -60,6 +60,8 @@ body {
   margin-right: 13%;
 }
 
+img.ant-image-preview-img { display: inline-block; } /* Fix image ng-zorro preview */
+
 :root {
   --font-sans: '';
 }

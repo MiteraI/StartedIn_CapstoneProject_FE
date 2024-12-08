@@ -1,0 +1,29 @@
+<div class="p-6">
+  <nz-table [nzData]="applicantList" nzSize="small">
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th>Email</th>
+        <th>CV</th>
+        <th>Hành Động</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (applicant of applicantList; track applicant.id) {
+      <tr>
+        <td>{{ applicant.candidate.fullName }}</td>
+        <td>{{ applicant.candidate.email }}</td>
+        <td>
+          @if (applicant.cvUrl) {
+          <a [href]="applicant.cvUrl" target="_blank" nz-button nzType="link"> Xem CV </a>
+          }
+        </td>
+        <td>
+          <button nz-button nzType="primary" (click)="acceptApplicant(applicant.id)" class="mr-2">Chấp nhận</button>
+          <button nz-button nzType="default" nzDanger (click)="rejectApplicant(applicant.id)">Từ chối</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

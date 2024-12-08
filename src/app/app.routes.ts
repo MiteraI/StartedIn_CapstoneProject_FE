@@ -48,8 +48,8 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then((m) => m.PaymentSuccessPage),
   },
   {
-    path: 'create-project-charter',
-    loadComponent: () => import('./pages/project-charter-pages/create-project-charter/create-project-charter.page').then((m) => m.CreateProjectCharterPage),
+    path: 'explore-team',
+    loadComponent: () => import('./components/find-team-page/find-team-view/find-team-view.component').then((m) => m.FindTeamViewComponent),
   },
   {
     path: 'project-overview/:projectId',

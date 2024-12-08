@@ -1,0 +1,9 @@
+@if (recruitmentPostList.length === 0) {
+<p class="text-center text-gray-500 w-full py-20">Không có bài viết tuyển thành viên nào</p>
+} @else {
+<div class="border-padding my-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  @for (post of recruitmentPostList; track post.id) {
+  <app-recruitment-post-card [recruitmentPost]="post"></app-recruitment-post-card>
+  }
+</div>
+}
