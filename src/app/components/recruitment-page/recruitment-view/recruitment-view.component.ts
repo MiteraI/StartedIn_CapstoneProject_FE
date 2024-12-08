@@ -1,26 +1,51 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
+import { NzSwitchModule } from 'ng-zorro-antd/switch'
+import { RecruitmentService } from 'src/app/services/recruitment.service'
+import { ActivatedRoute } from '@angular/router'
+import { RecruitmentImage } from 'src/app/shared/models/recruitment/recruitment-image.model'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { HttpErrorResponse } from '@angular/common/http'
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
+import { RecruitmentDetailsDialogComponent } from '../../find-team-page/recruitment-details-dialog/recruitment-details-dialog.component'
+import { ApplicantListDialogComponent } from '../applicant-list-dialog/applicant-list-dialog.component'
 
 @Component({
   selector: 'app-recruitment-view',
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule],
+  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule],
 })
 export class RecruitmentViewComponent implements OnInit {
   recruitmentForm: FormGroup
+  // fileList for upload related to ngZorro
   fileList: NzUploadFile[] = []
 
-  constructor(private fb: FormBuilder, private antdNoti: AntdNotificationService) {
+  // recruitmentFileList for display related to recruitment post
+  recruitmentFileList: RecruitmentImage[] = []
+
+  projectId = ''
+  recruitmentId = ''
+  isUpdating = false
+  isCreateMode = true
+
+  constructor(
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private antdNoti: AntdNotificationService,
+    private recruitmentService: RecruitmentService,
+    private modalService: NzModalService
+  ) {
     this.recruitmentForm = this.fb.group({
-      title: [''],
-      content: [''],
+      title: ['', [Validators.required]],
+      content: ['', [Validators.required]],
+      isOpen: [false],
       files: [[]],
     })
   }
@@ -38,5 +63,130 @@ export class RecruitmentViewComponent implements OnInit {
     return true
   }
 
-  ngOnInit() {}
+  uploadAttachment() {
+    // Get file from taskForm and forEach to upload
+    this.fileList.forEach((file) => {
+      this.recruitmentService.uploadImage(this.projectId, file).subscribe({
+        next: (res) => {
+          this.antdNoti.openSuccessNotification('', 'Tải lên tệp đính kèm thành công')
+          // Remove this file from the fileList
+          this.fileList = this.fileList.filter((f) => f.uid !== file.uid)
+          this.recruitmentFileList.push(res)
+          console.log(this.recruitmentFileList)
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          } else {
+          }
+        },
+      })
+    })
+  }
+
+  deleteAttachment(imageId: string) {
+    this.recruitmentService.deleteImage(this.projectId, imageId).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Xóa tệp đính kèm thành công')
+        this.recruitmentFileList = this.recruitmentFileList.filter((a) => a.id !== imageId)
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
+  }
+
+  onInfoChange() {
+    this.isUpdating = true
+  }
+
+  onSubmit() {
+    if (this.recruitmentForm.valid) {
+      if (this.isCreateMode) {
+        this.recruitmentService.createRecruitmentPost(this.projectId, { ...this.recruitmentForm.value, files: this.fileList }).subscribe({
+          next: (res) => {
+            this.antdNoti.openSuccessNotification('', 'Tạo bài tuyển dụng thành công')
+            this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
+              next: (res) => {
+                //TODO: add loading
+                this.isCreateMode = false
+              },
+            })
+          },
+          error: (err) => {
+            this.antdNoti.openErrorNotification('', 'Đã có lỗi xảy ra')
+          },
+        })
+      } else {
+        this.recruitmentService.updateRecruitmentPost(this.projectId, { ...this.recruitmentForm.value }).subscribe({
+          next: (res) => {
+            this.antdNoti.openSuccessNotification('', 'Cập nhật bài tuyển dụng thành công')
+          },
+          error: (err) => {
+            this.antdNoti.openErrorNotification('', 'Đã có lỗi xảy ra')
+          },
+        })
+      }
+    } else {
+      this.antdNoti.openErrorNotification('', 'Vui lòng nhập đầy đủ thông tin')
+    }
+  }
+
+  openRecruitmentDetailsPreview() {
+    this.modalService.create({
+      nzTitle: 'Chi Tiết Bài Đăng',
+      nzContent: RecruitmentDetailsDialogComponent,
+      nzFooter: null,
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
+      nzData: {
+        projectId: this.projectId,
+        previewMode: true,
+      },
+    })
+  }
+
+  openApplicantListDialog() {
+    this.modalService.create({
+      nzTitle: 'Danh Sách Ứng Tuyển',
+      nzContent: ApplicantListDialogComponent,
+      nzFooter: null,
+      nzStyle: { top: '20px', width: 'auto', maxWidth: '90vw' },
+      nzBodyStyle: { padding: '0px' },
+      nzData: {
+        projectId: this.projectId,
+      },
+      nzWidth: 'fit-content',
+    })
+  }
+
+  ngOnInit() {
+    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+      this.projectId = value.get('id')!
+    })
+    this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
+      next: (res) => {
+        this.isCreateMode = false
+        //map res to form
+        this.recruitmentForm.setValue({
+          title: res.title,
+          content: res.content,
+          isOpen: res.isOpen,
+          files: [],
+        })
+        this.recruitmentFileList = res.recruitmentImgs
+        this.recruitmentId = res.id
+      },
+      error: (err) => {
+        this.isCreateMode = true
+      },
+    })
+  }
 }

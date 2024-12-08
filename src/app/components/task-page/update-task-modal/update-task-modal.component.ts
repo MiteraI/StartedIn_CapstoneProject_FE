@@ -507,7 +507,6 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   // Attachments handling
-
   beforeUpload = (file: NzUploadFile): boolean => {
     this.taskForm.get('files')?.setErrors(null)
     this.fileList = this.fileList.concat(file)
