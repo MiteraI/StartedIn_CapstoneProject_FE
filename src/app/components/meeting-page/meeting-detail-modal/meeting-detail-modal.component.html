@@ -1,0 +1,11 @@
+<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
+  <nz-descriptions [nzTitle]="meetingDetail.title" [nzSize]="'middle'">
+    <nz-descriptions-item nzTitle="Chi tiết" [nzSpan]="3">{{ meetingDetail.description }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Cột mốc" [nzSpan]="2">{{ meetingDetail.milestoneName }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Trạng thái">{{ meetingDetail.status }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Thời gian" [nzSpan]="3">
+      {{ meetingDetail.appointmentTime | date : 'dd/MM/yyyy HH:mm' }}
+    </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Link cuộc họp" [nzSpan]="3">{{ meetingDetail.meetingLink }}</nz-descriptions-item>
+  </nz-descriptions>
+</nz-skeleton>

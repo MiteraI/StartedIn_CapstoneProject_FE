@@ -1,6 +1,5 @@
-export type MeetingList = {
-  type: string
-  content: string
+export type MeetingListModel = {
+  id: string
   title: string
-  date: Date
+  appointmentTime: Date
 }
