@@ -59,7 +59,52 @@
             </div>
           </div>
         </div>
-
     </div>
+
+    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2 pt-4">
+      <div class="text-xl md:text-2xl font-semibold mb-4">Tổng quan công việc</div>
+      <div class="flex justify-between items-center pb-5">
+        <span class="text-gray-600 md:text-lg">Tổng số công việc: {{ dashboard.totalTask }}</span>
+      </div>
+      <div class="space-y-8">
+        <!-- Completed Tasks Table -->
+        <div>
+          <div class="text-gray-600 font-semibold mb-4 text-green-600">Công việc đã hoàn thành</div>
+          <table class="w-full text-left border-collapse border border-gray-200 rounded-md shadow-md pt-4">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="p-3 border-b font-medium text-gray-600">Tên công việc</th>
+                        <th class="p-3 border-b font-medium text-gray-600">Ngày hoàn thành</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let task of dashboard.completedTasks" class="hover:bg-green-50">
+                        <td class="p-3 border-b">{{ task.title }}</td>
+                        <td class="p-3 border-b">{{ task.endDate ? (task.endDate | date: 'dd-MM-yyyy') : 'Không xác định' }}</td>
+                    </tr>
+                </tbody>
+          </table>
+        </div>
+    
+        <!-- Overdue Tasks Table -->
+        <div>
+            <div class="text-gray-600 font-semibold mb-4 text-red-600">Công việc quá hạn</div>
+            <table class="w-full text-left border-collapse border border-gray-200 rounded-md shadow-md pt-4">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="p-3 border-b font-medium text-gray-600">Tên công việc</th>
+                        <th class="p-3 border-b font-medium text-gray-600">Ngày hết hạn</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let task of dashboard.overdueTasks" class="hover:bg-red-50">
+                        <td class="p-3 border-b">{{ task.title }}</td>
+                        <td class="p-3 border-b">{{ task.endDate ? (task.endDate | date: 'dd-MM-yyyy') : 'Không xác định' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>  
+    </div> 
   </div>
 </div>
