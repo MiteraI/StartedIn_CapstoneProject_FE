@@ -156,7 +156,7 @@ export class ContractFilterComponent implements OnInit {
         contractName: filterData.contractName || '',
         contractType: filterData.contractType || '',
         parties: filterData.parties || [],
-        dateRange: dateRange,
+        dateRange: dateRange || [],
         contractStatus: filterData.contractStatus || ''
       });
     }
