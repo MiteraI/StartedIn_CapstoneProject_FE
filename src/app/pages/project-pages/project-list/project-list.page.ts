@@ -50,7 +50,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
   }
 
   navigateToProject(id: string) {
-    this.router.navigate(['/projects', id, this.isInvestor ? 'dashboard' : 'tasks'])
+    this.router.navigate(['/projects', id, 'dashboard'])
   }
 
   ngOnDestroy() {
