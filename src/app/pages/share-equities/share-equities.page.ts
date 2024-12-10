@@ -120,4 +120,8 @@ export class ShareEquitiesPage implements OnInit {
 
     this.chartRendered = true;
   }
+
+  disableFutureDate = (current: Date): boolean => {
+    return current && current > new Date(); // Disable future dates
+  };
 }

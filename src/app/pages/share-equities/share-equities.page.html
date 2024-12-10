@@ -10,6 +10,7 @@
           [(ngModel)]="selectedDate"
           (ngModelChange)="onDateChange($event)"
           [nzAllowClear]="false"
+          [nzDisabledDate]="disableFutureDate"
         ></nz-date-picker>
       </div>
       <div class="aspect-square max-w-md mx-auto pt-20">
@@ -29,6 +30,18 @@
             </div>
             <div class="text-right">
               <div class="font-medium text-lg">{{ equity.percentage }}% cổ phần</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unowned Shares -->
+        <div class="border-b pb-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-medium text-lg">Chưa sở hữu</div>
+            </div>
+            <div class="text-right">
+              <div class="font-medium text-lg">{{ 100 - totalPercentage }}% cổ phần</div>
             </div>
           </div>
         </div>
