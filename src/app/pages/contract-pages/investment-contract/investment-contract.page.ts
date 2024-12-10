@@ -91,8 +91,7 @@ export class InvestmentContractPage implements OnInit {
     });
 
     this.roleService.role$.subscribe(role => {
-      if (!role) return;
-      if (role.roleInTeam !== TeamRole.LEADER) {
+      if (role && role !== TeamRole.LEADER) {
         this.contractForm.disable();
       }
     });

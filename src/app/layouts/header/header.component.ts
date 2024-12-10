@@ -1,10 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { RouterModule } from '@angular/router'
-import { ProfileDropdownComponent } from './profile-dropdown/profile-dropdown.component'
+import { ProfileDropdownComponent } from '../profile-dropdown/profile-dropdown.component'
 import { AccountService } from '../../core/auth/account.service'
 import { CommonModule } from '@angular/common'
 import { Subject, takeUntil } from 'rxjs'
+import { Authority } from 'src/app/shared/constants/authority.constants'
 
 @Component({
   selector: 'app-header',
@@ -23,7 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
-      this.isInvestor = account?.authorities.includes('Investor') ?? false
+      this.isInvestor = account?.authorities.includes(Authority.INVESTOR) ?? false
     })
   }
 

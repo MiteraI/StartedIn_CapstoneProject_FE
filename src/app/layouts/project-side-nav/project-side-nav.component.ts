@@ -30,8 +30,16 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
         filter(role => role !== null)
       )
       .subscribe(role => {
-        this.showLinksForRole(role!.roleInTeam)
-      })
+        this.resetLinks();
+        this.showLinksForRole(role!);
+      });
+  }
+
+  resetLinks() {
+    this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = true;
+    this.contractSideNavLinks.find(link => link.linkName === 'disbursements')!.hide = true;
+    this.contractSideNavLinks.find(link => link.linkName === 'investor-disbursements')!.hide = true;
+    this.showCall = false;
   }
 
   showLinksForRole(role: TeamRole) {

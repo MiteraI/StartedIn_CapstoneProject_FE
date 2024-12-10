@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { filter, Subject, takeUntil } from 'rxjs'
 import { AccountService } from 'src/app/core/auth/account.service'
+import { Authority } from 'src/app/shared/constants/authority.constants'
 
 @Component({
   selector: 'app-footer',
@@ -23,7 +24,7 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
-      this.isInvestor = account?.authorities.includes('Investor') ?? false
+      this.isInvestor = account?.authorities.includes(Authority.INVESTOR) ?? false
     })
     this.router.events
       .pipe(

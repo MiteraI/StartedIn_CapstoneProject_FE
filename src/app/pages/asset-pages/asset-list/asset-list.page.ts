@@ -97,7 +97,7 @@ export class AssetListPage implements OnInit, OnDestroy {
       this.loadMore()
     })
     this.roleService.role$.subscribe((role) => {
-      this.isLeader = role?.roleInTeam === TeamRole.LEADER
+      this.isLeader = role === TeamRole.LEADER
       this.filterAssets()
     })
     this.assetService.refreshAsset$.pipe()

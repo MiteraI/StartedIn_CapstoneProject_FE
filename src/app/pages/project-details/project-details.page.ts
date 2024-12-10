@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { Subject, takeUntil } from 'rxjs'
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { ProjectTitleBarComponent } from 'src/app/layouts/project-title-bar/project-title-bar.component'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 
 @Component({
   selector: 'app-project-details',
@@ -21,15 +22,20 @@ export class ProjectDetailsPage implements OnInit, OnDestroy {
   constructor(
     private viewMode: ViewModeConfigService,
     private route: ActivatedRoute,
-    private scrollService: ScrollService
+    private scrollService: ScrollService,
+    private roleInTeamService: RoleInTeamService
   ) {}
 
   ngOnInit(): void {
     this.projectId = this.route.snapshot.paramMap.get('id')!
-    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
+    this.viewMode.isDesktopView$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((val) => (this.isDesktopView = val))
+    this.roleInTeamService.fetchRole().subscribe();
   }
 
   ngOnDestroy() {
+    this.roleInTeamService.clearRole();
     this.destroy$.next()
     this.destroy$.complete()
   }
