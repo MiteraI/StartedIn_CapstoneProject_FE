@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { NzCalendarModule } from 'ng-zorro-antd/calendar'
 import { NzBadgeModule } from 'ng-zorro-antd/badge'
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component'
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component'
 import { MeetingListModel } from 'src/app/shared/models/meeting/meeting-list.model'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { ActivatedRoute } from '@angular/router'
@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs'
   templateUrl: './meeting.page.html',
   styleUrls: ['./meeting.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzCalendarModule, NzBadgeModule, TitleBarComponent],
+  imports: [CommonModule, FormsModule, NzCalendarModule, NzBadgeModule, ViewTitleBarComponent],
 })
 export class MeetingPage implements OnInit, OnDestroy {
   constructor(private meetingService: MeetingService, private activatedRoute: ActivatedRoute, private modalService: NzModalService) {}

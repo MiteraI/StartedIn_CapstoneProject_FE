@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CreateProjectCharterFormComponent } from 'src/app/components/project-charter/create-project-charter-form/create-project-charter-form.component';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-create-project-charter',
@@ -9,7 +9,7 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
   standalone: true,
   imports: [
     CreateProjectCharterFormComponent,
-    TitleBarComponent
+    ViewTitleBarComponent
   ],
 })
 export class CreateProjectCharterPage implements OnInit {

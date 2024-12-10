@@ -1,4 +1,4 @@
-import { afterRender, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShareEquityService } from 'src/app/services/share-equity.service';
@@ -10,14 +10,14 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { format } from 'date-fns';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-share-equities',
   templateUrl: './share-equities.page.html',
   styleUrls: ['./share-equities.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzDatePickerModule, TitleBarComponent]
+  imports: [CommonModule, FormsModule, NzDatePickerModule, ViewTitleBarComponent]
 })
 export class ShareEquitiesPage implements OnInit {
   equities: ShareEquityItemModel[] = [];

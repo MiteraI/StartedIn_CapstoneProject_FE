@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
-import { TitleBarComponent } from '../../layouts/title-bar/title-bar.component'
+import { ViewTitleBarComponent } from '../../layouts/view-title-bar/view-title-bar.component'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { MatIconModule } from '@angular/material/icon'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
@@ -19,7 +19,15 @@ import { InvestmentCallListComponent } from 'src/app/components/investment-call-
   templateUrl: './investment-call-page.page.html',
   styleUrls: ['./investment-call-page.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, TitleBarComponent, NzButtonModule, MatIconModule, InvestmentCallTableComponent, InvestmentCallListComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ViewTitleBarComponent,
+    NzButtonModule,
+    MatIconModule,
+    InvestmentCallTableComponent,
+    InvestmentCallListComponent
+  ],
 })
 export class InvestmentCallPagePage implements OnInit {
   isDesktopView: boolean = false
@@ -40,7 +48,7 @@ export class InvestmentCallPagePage implements OnInit {
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
-    
+
     // fetch the data again when create new item
     this.investmentCallService.refreshInvestmentCall$.pipe(
       switchMap(() => {
@@ -77,5 +85,5 @@ export class InvestmentCallPagePage implements OnInit {
     })
   }
 
-  
+
 }

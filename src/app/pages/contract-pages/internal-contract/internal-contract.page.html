@@ -1,4 +1,4 @@
-<app-title-bar viewName="Chi tiết hợp đồng"></app-title-bar>
+<app-view-title-bar viewName="Chi tiết hợp đồng"></app-view-title-bar>
 
 <app-contract-history-sidebar *ngIf="contract && contract.contractStatus !== 1" [contractId]="contract.id" [projectId]="project.id">
   <div class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
@@ -13,33 +13,33 @@
           <div class="font-semibold text-lg">Mã số hợp đồng</div>
           <div class="text-gray-700">{{ contract.contractIdNumber || 'Không có dữ liệu' }}</div>
         </div>
-      
+
         <!-- Tên hợp đồng -->
         <div class="w-1/2 md:w-1/2">
           <div class="font-semibold text-lg">Tên hợp đồng</div>
           <div class="text-gray-700">{{ contract.contractName || 'Không có dữ liệu' }}</div>
         </div>
       </div>
-  
-      
-  
+
+
+
       <!-- Điều khoản -->
       <div class="mb-4 pt-4 w-full">
         <div class="font-semibold text-lg">Điều khoản</div>
         <div class="text-gray-700 whitespace-pre-wrap">{{ contract.contractPolicy || 'Không có điều khoản' }}</div>
       </div>
-  
+
       <!-- Phân chia cổ phần -->
       <div class="mt-6">
         <div class="font-bold text-3xl text-black mb-4">Phân chia cổ phần</div>
-  
+
         <!-- Danh sách cổ phần -->
         <div *ngFor="let share of contract.shareEquities; let i = index" class="mb-4 p-2 border rounded shadow-sm">
           <div class="flex flex-wrap items-center">
             <!-- Member Info -->
             <div class="w-full md:w-1/2 px-2 mb-2 md:mb-0">
               <div class="font-semibold">
-                {{ 
+                {{
                   share.stakeHolderType === 1 ? "Trưởng nhóm" :
                   share.stakeHolderType === 2 ? 'Thành viên' :
                   share.stakeHolderType === 3 ? 'Nhà đầu tư' :
@@ -49,7 +49,7 @@
               </div>
               <div class="text-gray-700">{{ share.fullName || 'Không rõ' }}</div>
             </div>
-            
+
             <!-- Percentage Info -->
             <div class="w-full md:w-1/2 px-2">
               <div class="font-semibold">Tỉ lệ cổ phần</div>
@@ -58,7 +58,7 @@
           </div>
         </div>
       </div>
-  
+
       <!-- Hành động -->
       <div class="mt-6 text-right">
         <button nz-button nzType="link" (click)="download()">
@@ -77,7 +77,7 @@
   <form [formGroup]="contractForm" class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0">
     <div class="p-4 md:p-8 bg-white rounded border">
       <div class="font-bold text-3xl text-black mb-6">Chi tiết hợp đồng</div>
-      
+
       <nz-form-item>
         <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">

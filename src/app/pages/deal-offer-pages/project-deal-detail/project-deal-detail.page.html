@@ -1,4 +1,4 @@
-<app-title-bar viewName="Chi tiết thỏa thuận"></app-title-bar>
+<app-view-title-bar viewName="Chi tiết thỏa thuận"></app-view-title-bar>
 
 <div class="max-w-5xl mx-auto my-12 space-y-8">
   <!-- Card Content -->
@@ -48,21 +48,21 @@
 
       <!-- Action Buttons -->
       <div *ngIf="deal?.dealStatus === dealStatuses.WAITING" class="flex justify-end space-x-4">
-        <button 
-          (click)="rejectDeal()" 
+        <button
+          (click)="rejectDeal()"
           class="text-red-500 hover:text-red-700 px-6 py-3 rounded-md border border-red-500 hover:border-red-700">
           Từ chối
         </button>
-        <button 
-          (click)="acceptDeal()" 
+        <button
+          (click)="acceptDeal()"
           class="text-white bg-green-500 hover:bg-green-700 px-6 py-3 rounded-md shadow-md">
           Chấp nhận
         </button>
       </div>
 
       <div *ngIf="deal?.dealStatus === dealStatuses.ACCEPTED" class="flex justify-end">
-        <button 
-          (click)="navigateToCreateContract()" 
+        <button
+          (click)="navigateToCreateContract()"
           class="text-white bg-blue-500 hover:bg-blue-700 px-6 py-3 rounded-md shadow-md">
           Tạo hợp đồng
         </button>

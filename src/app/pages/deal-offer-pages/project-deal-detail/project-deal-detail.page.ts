@@ -9,14 +9,14 @@ import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-item.model';
 import { DealStatus, DealStatusLabels } from 'src/app/shared/enums/deal-status.enum';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-project-deal-detail',
   templateUrl: './project-deal-detail.page.html',
   styleUrls: ['./project-deal-detail.page.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, NzModalModule, VndCurrencyPipe, TitleBarComponent]
+  imports: [CommonModule, IonicModule, NzModalModule, VndCurrencyPipe, ViewTitleBarComponent]
 })
 export class ProjectDealDetailPage implements OnInit {
   deal!: ProjectDealItem;
