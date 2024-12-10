@@ -27,7 +27,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification'
   styleUrls: ['./project-title-bar.component.scss'],
 })
 export class ProjectTitleBarComponent implements OnInit, OnDestroy {
-  project!: ProjectModel;
+  project: ProjectModel | null = null;
   isDesktopView: boolean = false;
   private destroy$ = new Subject<void>();
 
@@ -76,7 +76,7 @@ export class ProjectTitleBarComponent implements OnInit, OnDestroy {
       nzWidth: 600,
       nzContent: MembersModalComponent,
       nzClassName: 'members-modal',
-      nzData: this.project.id
+      nzData: this.project!.id
     });
   }
 }
