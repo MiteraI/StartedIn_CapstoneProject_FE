@@ -31,7 +31,7 @@ interface FilterOptions {
   amountTo?: number;
   status?: DisbursementStatus;
   projectId?: string;
-  contractId?: string;
+  contractIdNumber?: string;
 }
 
 @Component({
@@ -125,7 +125,7 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
         this.filter.amountTo,
         this.filter.status,
         this.filter.projectId,
-        this.filter.contractId
+        this.filter.contractIdNumber
       )
       .pipe(
         catchError(error => {

@@ -83,7 +83,8 @@ export class DisbursementFilterComponent implements OnInit {
       dateRange: [this.data.dateRange || []],
       amountFrom: [this.data.amountFrom || null],
       amountTo: [this.data.amountTo || null],
-      status: [this.data.status || '']
+      status: [this.data.status || ''],
+      contractIdNumber: [this.data.contractIdNumber || ''],
     });
   }
 
@@ -142,7 +143,8 @@ export class DisbursementFilterComponent implements OnInit {
       dateRange: [],
       amountFrom: null,
       amountTo: null,
-      status: ''
+      status: '',
+      contractIdNumber: ''
     });
     this.filterApplied.emit({
       ...this.filterForm.value,
@@ -175,7 +177,8 @@ export class DisbursementFilterComponent implements OnInit {
         dateRange: dateRange,
         amountFrom: filterData.amountFrom || null,
         amountTo: filterData.amountTo || null,
-        status: filterData.status || ''
+        status: filterData.status || '',
+        contractIdNumber: filterData.contractIdNumber || ''
       });
     }
   }

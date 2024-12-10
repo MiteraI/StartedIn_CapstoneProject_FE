@@ -9,7 +9,7 @@ export enum DisbursementStatus {
 
 export const DisbursementStatusLabels: Record<DisbursementStatus, string> = {
   [DisbursementStatus.PENDING]: 'Đang chờ',
-  [DisbursementStatus.ACCEPTED]: 'Đã chấp nhận',
+  [DisbursementStatus.ACCEPTED]: 'Đã ghi nhận',
   [DisbursementStatus.REJECTED]: 'Bị từ chối',
   [DisbursementStatus.FINISHED]: 'Đã hoàn tất',
   [DisbursementStatus.OVERDUE]: 'Quá hạn',
