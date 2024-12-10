@@ -21,6 +21,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { ScrollService } from 'src/app/core/util/scroll.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
+import { ContractTableComponent } from "../../../components/contract-pages/contract-table/contract-table.component";
+import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 
 interface FilterOptions {
   contractIdNumber?: string;
@@ -47,8 +49,9 @@ interface FilterOptions {
     MatIconModule,
     RouterModule,
     NzPaginationModule,
-    NzSpinModule
-  ]
+    NzSpinModule,
+    ContractTableComponent
+]
 })
 export class ContractListPage implements OnInit, OnDestroy {
   projectId!: string;
@@ -74,6 +77,14 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
+  listContract: SearchResponseModel<ContractListItemModel> = 
+  {
+    data: [],
+    page: 1,
+    size: 10,
+    total: 0
+  };
+  isFetchAllContractLoading: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -127,9 +138,20 @@ export class ContractListPage implements OnInit, OnDestroy {
         })
       )
       .subscribe(result => {
-        const newData = result.data.filter(c => this.isLeader || c.contractStatus !== ContractStatus.DRAFT);
-        this.contracts = append ? [...this.contracts, ...newData] : newData;
-        this.totalRecords = result.total;
+        // Update listContract with the new data
+        this.listContract = {
+          data: append ? [...this.listContract.data, ...result.data] : result.data,
+          page: this.pageIndex,
+          size: this.pageSize,
+          total: result.total
+        };
+  
+        // Update contracts from listContract data
+        this.contracts = this.listContract.data.filter(c => 
+          this.isLeader || c.contractStatus !== ContractStatus.DRAFT
+        );
+  
+        this.totalRecords = this.listContract.total;
         this.groupContracts();
         this.isLoading = false;
       });
@@ -354,4 +376,4 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-}
+} 

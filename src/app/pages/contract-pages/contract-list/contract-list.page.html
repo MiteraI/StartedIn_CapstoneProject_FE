@@ -18,29 +18,9 @@
   </div>
 </app-filter-bar>
 
-<div class="p-4 max-w-7xl mx-auto overflow-y-auto">
-  <!-- Desktop Selection Actions -->
+<!-- Desktop View -->
+<div *ngIf="isDesktopView" class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <div class="flex flex-col md:flex-row mb-4">
-    <div
-      class="mr-2 hidden md:flex flex-grow justify-between items-center bg-gray-200 p-3 rounded-md"
-      [ngClass]="{ 'opacity-0': selectedContracts.length <= 0 }"
-    >
-      <span>Đã chọn {{ selectedContracts.length }} hợp đồng</span>
-      <div class="space-x-4 h-6">
-        <button *ngIf="canSendSelected" (click)="deleteSelected()" class="text-blue-500 hover:text-blue-700">
-          <mat-icon fontIcon="send"></mat-icon>
-        </button>
-        <button *ngIf="canDeleteSelected" (click)="sendSelected()" class="text-red-500 hover:text-red-700">
-          <mat-icon fontIcon="delete_outline"></mat-icon>
-        </button>
-        <button *ngIf="canDownloadSelected" (click)="downloadSelected()" class="text-green-500 hover:text-green-700">
-          <mat-icon fontIcon="file_download"></mat-icon>
-        </button>
-        <button *ngIf="canExpireSelected" (click)="expireSelected()" class="text-yellow-500 hover:text-yellow-700">
-          <mat-icon fontIcon="timer_off"></mat-icon>
-        </button>
-      </div>
-    </div>
     <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
       <button
         (click)="openAddModal()"
@@ -52,109 +32,12 @@
     </div>
   </div>
 
-  <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border">
-    <thead>
-      <tr class="border-b">
-        <th class="p-4 text-left w-12">
-          <input
-            type="checkbox"
-            [checked]="isAllSelected()"
-            (change)="toggleAllSelection()"
-            class="rounded"
-          >
-        </th>
-        <th class="p-4 text-left">Mã hợp đồng</th>
-        <th class="p-4 text-left">Tên hợp đồng</th>
-        <th class="p-4 text-left flex justify-center">Loại hợp đồng</th>
-        <th class="p-4 text-left">Các bên liên quan</th>
-        <th class="p-4 text-left">Lần cập nhật cuối</th>
-        <th class="p-4 text-left">Trạng thái</th>
-        <th class="p-4 text-left"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let group of contractGroups; index as i">
-        <!-- Date Header Row -->
-        <tr class="bg-gray-100">
-          <td colspan="8" class="px-3 py-1 font-medium">
-            {{ formatGroupHeader(keys[i]) }}
-          </td>
-        </tr>
-        <!-- Contract Rows -->
-        <tr
-          *ngFor="let contract of group"
-          class="border-b hover:bg-gray-50 hover:cursor-pointer"
-          [routerLink]="[
-            '/projects',
-            projectId,
-            contract.contractType === contractTypes.INVESTMENT ? 'investment-contract' : 'internal-contract',
-            contract.id
-          ]"
-        >
-          <td class="p-4" (click)="$event.stopPropagation()">
-            <input type="checkbox" [checked]="isSelected(contract)" (change)="toggleSelection(contract)" class="rounded">
-          </td>
-          <td class="p-4">
-            <div class="font-medium hover:font-bold">{{ contract.contractIdNumber }}</div>
-          </td>
-          <td class="p-4">
-            <div class="font-medium hover:font-bold">{{ contract.contractName }}</div>
-          </td>
-          <td class="p-4 flex justify-center">
-            <div class="text-gray-600">{{ typeLabels[contract.contractType] }}</div>
-          </td>
-          <td class="p-4">
-            <div class="flex justify-center">
-              <nz-avatar
-                *ngFor="let party of contract.parties"
-                [nzSrc]="party.profilePicture"
-                [nzText]="party.fullName | initialsOnly"
-                [nzSize]="32"
-                class="-mr-2 bg-orange-600 ring-2 ring-white"
-              ></nz-avatar>
-            </div>
-          </td>
-          <td class="p-4 text-gray-600">{{ formatDate(contract.lastUpdatedTime) }}</td>
-          <td class="p-4">
-            <span [ngClass]="{
-              'text-gray-500': contract.contractStatus === contractStatuses.DRAFT,
-              'text-blue-500': contract.contractStatus === contractStatuses.SENT,
-              'text-green-500': contract.contractStatus === contractStatuses.COMPLETED,
-              'text-red-500': contract.contractStatus === contractStatuses.DECLINED,
-              'text-orange-500': contract.contractStatus === contractStatuses.EXPIRED
-            }">
-              ● {{ statusLabels[contract.contractStatus] }}
-            </span>
-          </td>
-          <td class="p-4">
-            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT && isLeader" class="space-x-2 h-6">
-              <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500 hover:text-blue-700">
-                <mat-icon fontIcon="send"></mat-icon>
-              </button>
-              <button (click)="$event.stopPropagation(); deleteContract(contract)" class="text-red-500 hover:text-red-700">
-                <mat-icon fontIcon="delete_outline"></mat-icon>
-              </button>
-            </div>
-            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2 h-6">
-              <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
-                <mat-icon fontIcon="file_download"></mat-icon>
-              </button>
-              <button
-                *ngIf="contract.contractStatus === contractStatuses.COMPLETED"
-                (click)="$event.stopPropagation(); expireContract(contract)"
-                class="text-yellow-500 hover:text-yellow-700"
-              >
-                <mat-icon fontIcon="timer_off"></mat-icon>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+  <app-contract-table
+    [listContract]="listContract"
+    [projectId]="projectId"
+    [isFetchAllContractLoading]="isFetchAllContractLoading"
+  ></app-contract-table>
 
-  <!-- Pagination -->
   <div class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
@@ -166,88 +49,90 @@
       (nzPageSizeChange)="onPageSizeChange($event)"
     ></nz-pagination>
   </div>
+</div>
 
-  <!-- Mobile View -->
+<!-- Mobile View -->
+<div *ngIf="!isDesktopView" class="p-4">
+  <ng-container *ngFor="let group of contractGroups; index as i">
+    <div class="bg-gray-100 px-3 py-1 font-medium">
+      {{ formatGroupHeader(keys[i]) }}
+    </div>
+    <div class="space-y-4">
+      <div *ngFor="let contract of group" class="bg-white rounded-lg shadow p-4">
+        <div
+          class="flex items-start justify-between"
+          [routerLink]="[
+            '/projects',
+            projectId,
+            contract.contractType === contractTypes.INVESTMENT ? 'investment-contract' : 'internal-contract',
+            contract.id
+          ]"
+        >
+          <div class="flex-1">
+            <div class="text-2xl font-medium mr-2">{{ contract.contractName }}</div>
+            <div class="text-xs text-gray-500 mt-1">{{ contract.contractIdNumber }}</div>
+            <div class="text-xs text-gray-500 mt-1">{{ typeLabels[contract.contractType] }}</div>
+          </div>
+          <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
+            <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500">
+              <mat-icon fontIcon="send"></mat-icon>
+            </button>
+            <button (click)="$event.stopPropagation(); deleteContract(contract)" class="text-red-500">
+              <mat-icon fontIcon="delete_outline"></mat-icon>
+            </button>
+          </div>
+          <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2 h-6">
+            <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
+              <mat-icon fontIcon="file_download"></mat-icon>
+            </button>
+            <button
+              *ngIf="contract.contractStatus === contractStatuses.COMPLETED"
+              (click)="$event.stopPropagation(); expireContract(contract)"
+              class="text-yellow-500 hover:text-yellow-700"
+            >
+              <mat-icon fontIcon="timer_off"></mat-icon>
+            </button>
+          </div>
+        </div>
 
-  <div class="md:hidden space-y-4">
-    <ng-container *ngFor="let group of contractGroups; index as i">
-      <div class="bg-gray-100 px-3 py-1 font-medium">
-        {{ formatGroupHeader(keys[i]) }}
-      </div>
-      <div class="space-y-4">
-        <div *ngFor="let contract of group" class="bg-white rounded-lg shadow p-4">
-          <div
-            class="flex items-start justify-between"
-            [routerLink]="[
-              '/projects',
-              projectId,
-              contract.contractType === contractTypes.INVESTMENT ? 'investment-contract' : 'internal-contract',
-              contract.id
-            ]"
-          >
-            <div class="flex-1">
-              <div class="text-2xl font-medium mr-2">{{ contract.contractName }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ contract.contractIdNumber }}</div>
-              <div class="text-xs text-gray-500 mt-1">{{ typeLabels[contract.contractType] }}</div>
+        <div class="mt-3 flex justify-between items-end">
+          <div>
+            <div class="text-sm text-gray-500">
+              {{ formatDate(contract.lastUpdatedTime) }}
             </div>
-            <div *ngIf="contract.contractStatus === contractStatuses.DRAFT" class="space-x-2 h-6">
-              <button (click)="$event.stopPropagation(); sendContract(contract)" class="text-blue-500">
-                <mat-icon fontIcon="send"></mat-icon>
-              </button>
-              <button (click)="$event.stopPropagation(); deleteContract(contract)" class="text-red-500">
-                <mat-icon fontIcon="delete_outline"></mat-icon>
-              </button>
-            </div>
-            <div *ngIf="contract.contractStatus !== contractStatuses.DRAFT" class="space-x-2 h-6">
-              <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
-                <mat-icon fontIcon="file_download"></mat-icon>
-              </button>
-              <button
-                *ngIf="contract.contractStatus === contractStatuses.COMPLETED"
-                (click)="$event.stopPropagation(); expireContract(contract)"
-                class="text-yellow-500 hover:text-yellow-700"
-              >
-                <mat-icon fontIcon="timer_off"></mat-icon>
-              </button>
+            <div class="mt-1">
+              <span [ngClass]="{
+                'text-gray-500': contract.contractStatus === contractStatuses.DRAFT,
+                'text-blue-500': contract.contractStatus === contractStatuses.SENT,
+                'text-green-500': contract.contractStatus === contractStatuses.COMPLETED,
+                'text-red-500': contract.contractStatus === contractStatuses.DECLINED,
+                'text-orange-500': contract.contractStatus === contractStatuses.EXPIRED
+              }">
+                ● {{ statusLabels[contract.contractStatus] }}
+              </span>
             </div>
           </div>
-
-          <div class="mt-3 flex justify-between items-end">
-            <div>
-              <div class="text-sm text-gray-500">
-                {{ formatDate(contract.lastUpdatedTime) }}
-              </div>
-              <div class="mt-1">
-                <span [ngClass]="{
-                  'text-gray-500': contract.contractStatus === contractStatuses.DRAFT,
-                  'text-blue-500': contract.contractStatus === contractStatuses.SENT,
-                  'text-green-500': contract.contractStatus === contractStatuses.COMPLETED,
-                  'text-red-500': contract.contractStatus === contractStatuses.DECLINED,
-                  'text-orange-500': contract.contractStatus === contractStatuses.EXPIRED
-                }">
-                  ● {{ statusLabels[contract.contractStatus] }}
-                </span>
-              </div>
-            </div>
-            <div class="flex">
-              <nz-avatar
-                *ngFor="let party of contract.parties"
-                [nzSrc]="party.profilePicture"
-                [nzText]="party.fullName | initialsOnly"
-                [nzSize]="24"
-                class="-mr-1 bg-orange-600 ring-2 ring-white"
-              ></nz-avatar>
-            </div>
+          <div class="flex">
+            <nz-avatar
+              *ngFor="let party of contract.parties"
+              [nzSrc]="party.profilePicture"
+              [nzText]="party.fullName | initialsOnly"
+              [nzSize]="24"
+              class="-mr-1 bg-orange-600 ring-2 ring-white"
+            ></nz-avatar>
           </div>
         </div>
       </div>
-    </ng-container>
+    </div>
+  </ng-container>
 
-    <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
-      <nz-spin nzSimple></nz-spin>
-    </div>
-    <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
-      Bạn đã xem hết các hợp đồng!
-    </div>
+  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các hợp đồng!
   </div>
 </div>
+
+
+
