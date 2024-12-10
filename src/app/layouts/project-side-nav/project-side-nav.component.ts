@@ -6,7 +6,6 @@ import { filter, Subject, takeUntil } from 'rxjs'
 import { CommonModule } from '@angular/common'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
-import { link } from 'ionicons/icons'
 
 @Component({
   selector: 'app-project-side-nav',
@@ -19,9 +18,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true
   @Input() currentId = ''
 
-  role: TeamRole | null = null
   showCall: boolean = false;
-  teamRole = TeamRole
   private destroy$ = new Subject<void>()
 
   constructor(private roleService: RoleInTeamService) {}
@@ -30,10 +27,9 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.roleService.role$
       .pipe(
         takeUntil(this.destroy$),
-        filter((role) => role !== null)
+        filter(role => role !== null)
       )
-      .subscribe((role) => {
-        this.role = role!.roleInTeam
+      .subscribe(role => {
         this.showLinksForRole(role!.roleInTeam)
       })
   }
@@ -104,44 +100,4 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
   ]
-
-  sharedSideNavLinks: {
-    linkName: string
-    iconName: string
-    linkText: string
-  }[] = [
-    { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
-    { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
-    { linkName: 'milestones', iconName: 'flag', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'swap_horiz', linkText: 'Giao Dịch' },
-    { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },
-    { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
-    { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
-    { linkName: 'meeting', iconName: 'insert_invitation', linkText: 'Lịch Hẹn' },
-    //{ linkName: 'documents', iconName: 'folder', linkText: 'Tài Liệu' },
-  ]
-
-  leaderSideNavLinks: {
-    linkName: string
-    iconName: string
-    linkText: string
-  }[] = [
-    { linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' },
-    { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' },
-    { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
-    //{ linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
-    { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
-  ]
-
-  memberSideNavLinks: {
-    linkName: string
-    iconName: string
-    linkText: string
-  }[] = [{ linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' }]
-
-  investorSideNavLinks: {
-    linkName: string
-    iconName: string
-    linkText: string
-  }[] = [{ linkName: 'investor-disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' }]
 }
