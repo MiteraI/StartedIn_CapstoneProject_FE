@@ -1,28 +1,11 @@
-<div class="flex items-center justify-center bg-white sticky top-0 z-50 w-full min-h-[7vh] border-b">
-  <div *ngIf="isDesktopView" class="flex items-center justify-between px-3 max-w-6xl mx-auto w-full">
-    <div>
-      <span class="text-xl font-medium">{{ viewName }}</span>
-    </div>
-    <div class="flex items-center space-x-3">
-      <button
-        *ngIf="projectId"
-        nz-button
-        nzType="default"
-        class="flex items-center space-x-2"
-        (click)="openMembersModal()"
-      >
-        <mat-icon fontIcon="group"></mat-icon>
-        Thành viên
-      </button>
+<div class="w-full">
+  <div *ngIf="isDesktopView" class="flex items-center justify-between px-6 max-w-7xl mx-auto w-full my-4">
+    <div class="text-xl font-medium mr-10 my-2">
+      {{ viewName }}
     </div>
   </div>
-
-  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between">
-    <mat-icon (click)="navigateBack()" fontIcon="chevron_left" class="ml-2"></mat-icon>
-    <span>{{ viewName }}</span>
-    <div class="flex items-center space-x-3 mr-2">
-      <app-profile-dropdown></app-profile-dropdown>
-    </div>
+  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between my-2">
+    <span class="ml-6 my-2 text-lg">{{ viewName }}</span>
   </div>
+  <hr class="mx-6" />
 </div>
-
