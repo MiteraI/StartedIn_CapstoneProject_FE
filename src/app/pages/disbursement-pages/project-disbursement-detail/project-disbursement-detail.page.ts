@@ -12,7 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-project-disbursement-detail',
@@ -26,7 +25,6 @@ import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title
     InitialsOnlyPipe,
     MatIconModule,
     NzModalModule,
-    ViewTitleBarComponent,
     RouterModule
   ]
 })
