@@ -286,13 +286,13 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
           datasets: [
             {
               label: 'Đã giải ngân',
-              data: [info.disbursedAmount / 1000000],
+              data: [info.disbursedAmount / 1000],
               backgroundColor: '#10B981',
               borderRadius: 4
             },
             {
               label: 'Chưa giải ngân',
-              data: [info.remainingDisbursement / 1000000],
+              data: [info.remainingDisbursement / 1000],
               backgroundColor: '#4F46E5',
               borderRadius: 4
             }
@@ -319,7 +319,7 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
               stacked: true,
               title: {
                 display: true,
-                text: '(triệu đồng)'
+                text: '(nghìn đồng)'
               }
             },
             y: {

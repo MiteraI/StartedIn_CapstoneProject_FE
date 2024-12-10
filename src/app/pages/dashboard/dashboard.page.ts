@@ -64,16 +64,16 @@ export class DashboardPage implements OnInit {
 
     const labels = this.dashboard.selfDisbursedAmount ? ['Tổng dự án', 'Cá nhân'] : ['Tổng dự án'];
     const disbursedData = this.dashboard.selfDisbursedAmount ? [
-      this.dashboard.disbursedAmount / 1000000,
-      this.dashboard.selfDisbursedAmount / 1000000
+      this.dashboard.disbursedAmount / 1000,
+      this.dashboard.selfDisbursedAmount / 1000
     ] : [
-      this.dashboard.disbursedAmount / 1000000
+      this.dashboard.disbursedAmount / 1000
     ];
     const remainingData = this.dashboard.selfRemainingDisbursement ? [
-      this.dashboard.remainingDisbursement / 1000000,
-      this.dashboard.selfRemainingDisbursement / 1000000
+      this.dashboard.remainingDisbursement / 1000,
+      this.dashboard.selfRemainingDisbursement / 1000
     ] : [
-      this.dashboard.remainingDisbursement / 1000000
+      this.dashboard.remainingDisbursement / 1000
     ]
 
     this.disbursementChart = new Chart(canvas, {
@@ -101,7 +101,7 @@ export class DashboardPage implements OnInit {
             stacked: true,
             title: {
               display: true,
-              text: '(triệu đồng)'
+              text: '(nghìn đồng)'
             }
           },
           y: {
