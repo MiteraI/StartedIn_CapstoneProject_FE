@@ -113,6 +113,11 @@
       </td>      
     </tr>
     <tr *ngIf="data.contractType == 2" [nzExpand]="data.expand" >
+      <div style="font-size: larger ; display: flex; justify-content: space-around; margin-bottom: 10px;">
+        <p>Tổng số giải ngân: <strong>{{ data.totalDisbursementAmount | vndCurrency }}</strong></p>
+        <p>Đã giải ngân: <strong>{{ data.disbursedAmount | vndCurrency }}</strong></p>
+        <p>Chưa giải ngân: <strong>{{ data.pendingAmount | vndCurrency }}</strong></p>
+      </div>
       <nz-table #innerTable [nzData]="data.disbursements" nzSize="small" [nzShowPagination]="false">
         <thead>
           <tr>
@@ -127,9 +132,9 @@
           @for (data of innerTable.data; track data) {
           <tr>
             <td>{{ data.title }}</td>
-            <td>{{ data.startDate }}</td>
-            <td>{{ data.endDate }}</td>
-            <td>{{ data.amount }}</td>
+            <td>{{ formatDateOnly(data.startDate) }}</td>
+            <td>{{ formatDateOnly(data.endDate) }}</td>
+            <td>{{ data.amount | vndCurrency }}</td>
             <td>{{getDisbursementStatusLabel(data.disbursementStatus)}}</td>
           </tr>
           }

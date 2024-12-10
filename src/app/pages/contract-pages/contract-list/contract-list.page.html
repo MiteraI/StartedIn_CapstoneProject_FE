@@ -20,8 +20,8 @@
 
 <!-- Desktop View -->
 <div *ngIf="isDesktopView" class="p-4 max-w-7xl mx-auto overflow-y-auto">
-  <div class="flex flex-col md:flex-row mb-4">
-    <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
+  <div class="flex justify-end mb-4">
+    <div *ngIf="isLeader" class="flex items-center gap-3">
       <button
         (click)="openAddModal()"
         class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
