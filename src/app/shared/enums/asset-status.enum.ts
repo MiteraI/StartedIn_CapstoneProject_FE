@@ -5,9 +5,9 @@ export enum AssetStatus {
     SOLD = 4
 }
 
-export const AssetStatusLabels : Record<AssetStatus,string> = {
+export const AssetStatusLabels : Record<AssetStatus, string> = {
     [AssetStatus.AVAILABLE]: 'Khả dụng',
     [AssetStatus.UNAVAILABLE]: 'Không khả dụng',
     [AssetStatus.INMANTAINANCE]: 'Đang bảo trì',
-    [AssetStatus.SOLD]:'Đã thanh lý'
+    [AssetStatus.SOLD]: 'Đã thanh lý'
 }

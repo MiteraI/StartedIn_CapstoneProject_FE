@@ -10,6 +10,7 @@ import { AccountService } from 'src/app/core/auth/account.service'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { ProjectService } from 'src/app/services/project.service'
 import { Subject, switchMap, takeUntil } from 'rxjs'
+import { Authority } from 'src/app/shared/constants/authority.constants'
 
 @Component({
   selector: 'app-project-list',
@@ -34,7 +35,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.userProjects = this.route.snapshot.data['userProjects']
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
-      this.isInvestor = account?.authorities.includes('Investor') ?? false
+      this.isInvestor = account?.authorities.includes(Authority.INVESTOR) ?? false
     })
     this.projectService.refreshProject$.pipe(switchMap(() => this.projectService.getUserProjects())).subscribe((userProjects) => {
       this.userProjects = userProjects

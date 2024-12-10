@@ -34,7 +34,7 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
         filter((role) => role !== null)
       )
       .subscribe((role) => {
-        this.role = role!.roleInTeam
+        this.role = role!
       })
   }
 

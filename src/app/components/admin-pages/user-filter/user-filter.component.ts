@@ -6,7 +6,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { MenuStateService } from 'src/app/core/util/menu-state.service';
-import { Authority } from 'src/app/shared/constants/authority.constants';
+import { Authority, AuthorityLabels } from 'src/app/shared/constants/authority.constants';
 
 @Component({
   selector: 'app-user-filter',
@@ -30,9 +30,9 @@ export class UserFilterComponent implements OnInit {
   filterForm!: FormGroup;
 
   roleOptions = [
-    { value: Authority.USER, label: 'User' },
-    { value: Authority.INVESTOR, label: 'Nhà đầu tư' },
-    { value: Authority.MENTOR, label: 'Cố vấn' }
+    { value: Authority.USER, label: AuthorityLabels[Authority.USER] },
+    { value: Authority.INVESTOR, label: AuthorityLabels[Authority.INVESTOR] },
+    { value: Authority.MENTOR, label: AuthorityLabels[Authority.MENTOR] }
   ];
 
   constructor(

@@ -49,7 +49,7 @@ export class AccountService {
     this.accountSubject$.next(null);
     this.isAuthenticatedSubject$.next(false);
     this.authJwt.stateStorage.clearAuthenticationToken();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/login']);
   }
 
   private fetch(): Observable<Account> {
