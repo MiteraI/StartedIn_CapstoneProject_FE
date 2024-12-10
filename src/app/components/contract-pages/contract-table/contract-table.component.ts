@@ -62,7 +62,7 @@ export class ContractTableComponent  implements OnInit {
 
   ngOnInit() {
     this.roleService.role$.subscribe(role => {
-      this.isLeader = (role?.roleInTeam === TeamRole.LEADER);
+      this.isLeader = role === TeamRole.LEADER;
     });
   }
 
