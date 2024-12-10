@@ -1,0 +1,141 @@
+<nz-table #contractTable nzSize="small" [nzFrontPagination]="false" [nzData]="listContract.data" [nzLoading]="isFetchAllContractLoading" [nzBordered]="true">
+  <thead>
+    <tr>
+      <th></th>
+      <th class="p-4 text-left">
+        <div class="flex justify-center">
+          Mã hợp đồng
+        </div>
+      </th>
+      <th class="p-4 text-left">
+        <div class="flex justify-center">
+          Tên hợp đồng
+        </div>
+      </th>
+      <th class="p-4 text-left flex justify-center">Loại hợp đồng</th>
+      <th class="p-4 text-left">
+        <div class="flex justify-center">
+          Các bên liên quan
+        </div>
+      </th>
+      <th class="p-4 text-left">
+        <div class="flex justify-center">
+          Lần cập nhật cuối
+        </div>
+      </th>
+      <th class="p-4 text-left">
+        <div class="flex justify-center">
+          Trạng thái
+        </div>
+      </th>
+      <th class="p-4 text-left"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (data of contractTable.data; track data.id) {
+    <tr>
+      <td *ngIf="data.contractType == 2" [(nzExpand)]="data.expand"></td>
+      <td *ngIf="data.contractType !== 2"></td>
+      <td>{{data.contractIdNumber}}</td>
+      <td>{{data.contractName}}</td>
+      <td>
+        <div class="flex justify-center">
+          {{getContractTypeLabel(data.contractType)}}
+        </div>
+      </td>
+      <td>
+        <div class="flex justify-center">
+          <nz-avatar
+            *ngFor="let party of data.parties"
+            [nzSrc]="party.profilePicture"
+            [nzText]="party.fullName | initialsOnly"
+            [nzSize]="32"
+            class="-mr-2 bg-orange-600 ring-2 ring-white"
+          ></nz-avatar>
+        </div>
+      </td>
+      <td>
+        <div class="flex justify-center">
+          {{formatDate(data.lastUpdatedTime)}}
+        </div>
+      </td>
+      <td>
+        <div class="flex justify-center">
+          {{getContractStatusLabel(data.contractStatus)}}
+        </div>
+      </td>
+      <td>
+        <div class="flex items-center space-x-2">
+          <!-- View Button -->
+          <button 
+            class="text-blue-500 hover:text-blue-700"
+            [routerLink]="[
+              '/projects',
+              projectId,
+              data.contractType === 2 ? 'investment-contract' : 'internal-contract',
+              data.id
+            ]">
+            <mat-icon fontIcon="visibility"></mat-icon>
+          </button>
+      
+          <!-- Send Button (Visible for specific conditions) -->
+          <button 
+            *ngIf="data.contractStatus === 1 && isLeader" 
+            (click)="$event.stopPropagation(); sendContract(data)" 
+            class="text-blue-500 hover:text-blue-700">
+            <mat-icon fontIcon="send"></mat-icon>
+          </button>
+      
+          <!-- Delete Button (Visible for specific conditions) -->
+          <button 
+            *ngIf="data.contractStatus === 1 && isLeader" 
+            (click)="$event.stopPropagation(); deleteContract(data)" 
+            class="text-red-500 hover:text-red-700">
+            <mat-icon fontIcon="delete_outline"></mat-icon>
+          </button>
+      
+          <!-- Download Button -->
+          <button 
+            *ngIf="data.contractStatus !== 1" 
+            (click)="$event.stopPropagation(); download(data)" 
+            class="text-green-500 hover:text-green-700">
+            <mat-icon fontIcon="file_download"></mat-icon>
+          </button>
+      
+          <!-- Expire Button -->
+          <button 
+            *ngIf="data.contractStatus === 3" 
+            (click)="$event.stopPropagation(); expireContract(data)" 
+            class="text-yellow-500 hover:text-yellow-700">
+            <mat-icon fontIcon="timer_off"></mat-icon>
+          </button>
+        </div>
+      </td>      
+    </tr>
+    <tr *ngIf="data.contractType == 2" [nzExpand]="data.expand" >
+      <nz-table #innerTable [nzData]="data.disbursements" nzSize="small" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>Tiêu đề</th>
+            <th>Ngày bắt đầu</th>
+            <th>Hạn chót</th>
+            <th>Số tiền</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (data of innerTable.data; track data) {
+          <tr>
+            <td>{{ data.title }}</td>
+            <td>{{ data.startDate }}</td>
+            <td>{{ data.endDate }}</td>
+            <td>{{ data.amount }}</td>
+            <td>{{getDisbursementStatusLabel(data.disbursementStatus)}}</td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </tr>
+    }
+  </tbody>
+</nz-table>
