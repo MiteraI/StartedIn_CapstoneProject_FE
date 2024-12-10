@@ -5,6 +5,7 @@ import { ContractPartyModel } from "./contract-party.model";
 export type ContractListItemModel = {
   id: string;
   contractName: string;
+  contractIdNumber: string;
   contractType: ContractType;
   parties: ContractPartyModel[];
   lastUpdatedTime: string;

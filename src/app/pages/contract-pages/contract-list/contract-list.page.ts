@@ -23,6 +23,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 
 interface FilterOptions {
+  contractIdNumber?: string;
   contractName?: string;
   contractType?: ContractType;
   parties?: string[];
@@ -111,6 +112,7 @@ export class ContractListPage implements OnInit, OnDestroy {
         this.projectId,
         this.pageIndex,
         this.pageSize,
+        this.filter.contractIdNumber,
         this.filter.contractName,
         this.filter.contractType,
         this.filter.parties,

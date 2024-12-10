@@ -51,7 +51,7 @@ export class DisbursementService {
     amountTo?: number,
     status?: DisbursementStatus,
     investorId?: string,
-    contractId?: string
+    contractIdNumber?: string
   ): Observable<SearchResponseModel<DisbursementItemModel>> {
     const query = (name?.trim() ? `title=${name.trim()}&` : '')
       + (periodFrom ? `periodFrom=${periodFrom.toISOString().split('T')[0]}&` : '')
@@ -60,7 +60,7 @@ export class DisbursementService {
       + (amountTo ? `amountTo=${amountTo}&` : '')
       + (status ? `disbursementStatus=${status}&` : '')
       + (investorId ? `investorId=${investorId}&` : '')
-      + (contractId ? `contractId=${contractId}&` : '')
+      + (contractIdNumber ? `contractIdNumber=${contractIdNumber}&` : '')
       + `page=${pageIndex}&size=${pageSize}`;
 
     return this.http.get<SearchResponseModel<DisbursementItemModel>>(
@@ -88,7 +88,7 @@ export class DisbursementService {
     amountTo?: number,
     status?: DisbursementStatus,
     projectId?: string,
-    contractId?: string
+    contractIdNumber?: string
   ): Observable<SearchResponseModel<DisbursementItemModel>> {
     const query = (name?.trim() ? `title=${name}&` : '')
       + (periodFrom ? `periodFrom=${periodFrom.toISOString().split('T')[0]}&` : '')
@@ -97,7 +97,7 @@ export class DisbursementService {
       + (amountTo ? `amountTo=${amountTo}&` : '')
       + (status ? `disbursementStatus=${status}&` : '')
       + (projectId ? `projectId=${projectId}&` : '')
-      + (contractId ? `contractId=${contractId}&` : '')
+      + (contractIdNumber ? `contractIdNumber=${contractIdNumber}&` : '')
       + `page=${pageIndex}&size=${pageSize}`;
 
     return this.http.get<SearchResponseModel<DisbursementItemModel>>(

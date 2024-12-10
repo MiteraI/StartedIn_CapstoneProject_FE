@@ -50,7 +50,7 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
   // TODO update links
   sharedSideNavLinks = [
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
-    { linkName: 'charter', iconName: 'info', linkText: 'Điều Lệ' },
+    { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
     { linkName: 'milestones', iconName: 'flag', linkText: 'Cột Mốc' },
     { linkName: 'transactions', iconName: 'swap_horiz', linkText: 'Giao Dịch' },
     { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },

@@ -72,7 +72,7 @@ export class CreateMilestoneModalComponent implements OnInit {
         description: this.milestoneForm.value.description,
         startDate: new Date(this.milestoneForm.value.startDate).toISOString().split('T')[0],
         endDate: new Date(this.milestoneForm.value.endDate).toISOString().split('T')[0],
-        phaseId: this.milestoneForm.value.phase,
+        phaseId: this.milestoneForm.value.phase ? this.milestoneForm.value.phase : null,
       }
 
       //If start date is after end date, show error notification

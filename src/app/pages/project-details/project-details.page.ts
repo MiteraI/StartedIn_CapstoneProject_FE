@@ -4,13 +4,14 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { Subject, takeUntil } from 'rxjs'
 import { ScrollService } from 'src/app/core/util/scroll.service'
+import { ProjectTitleBarComponent } from 'src/app/layouts/project-title-bar/project-title-bar.component'
 
 @Component({
   selector: 'app-project-details',
   templateUrl: './project-details.page.html',
   styleUrls: ['./project-details.page.scss'],
   standalone: true,
-  imports: [ProjectSideNavComponent, RouterOutlet],
+  imports: [ProjectSideNavComponent, RouterOutlet, ProjectTitleBarComponent],
 })
 export class ProjectDetailsPage implements OnInit, OnDestroy {
   isDesktopView: boolean = false

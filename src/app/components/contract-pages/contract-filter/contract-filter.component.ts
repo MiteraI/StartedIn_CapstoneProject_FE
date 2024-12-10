@@ -79,6 +79,7 @@ export class ContractFilterComponent implements OnInit {
       )
       .subscribe(result => this.users = result);
     this.filterForm = this.fb.group({
+      contractIdNumber: [this.data.contractIdNumber || ''],
       contractName: [this.data.contractName || ''],
       contractType: [this.data.contractType || ''],
       parties: [this.data.parties || []],
@@ -121,6 +122,7 @@ export class ContractFilterComponent implements OnInit {
 
   resetFilters() {
     this.filterForm.reset({
+      contractIdNumber: '',
       contractName: '',
       contractType: '',
       parties: [],
@@ -150,10 +152,11 @@ export class ContractFilterComponent implements OnInit {
       : null;
     if (this.filterForm) {
       this.filterForm.patchValue({
+        contractIdNumber: filterData.contractIdNumber || '',
         contractName: filterData.contractName || '',
         contractType: filterData.contractType || '',
         parties: filterData.parties || [],
-        dateRange: dateRange,
+        dateRange: dateRange || [],
         contractStatus: filterData.contractStatus || ''
       });
     }

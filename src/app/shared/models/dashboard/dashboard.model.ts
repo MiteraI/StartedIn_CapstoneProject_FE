@@ -1,4 +1,5 @@
 import { MilestoneProgressModel } from "../milestone/milestone-progress.model";
+import { Task } from "../task/task.model";
 
 export type DashboardModel = {
   currentBudget: number;
@@ -13,4 +14,7 @@ export type DashboardModel = {
   // nếu login user là investor
   selfRemainingDisbursement: number;
   selfDisbursedAmount: number;
+  totalTask: number;
+  completedTasks: Task[];
+  overdueTasks: Task[];
 }

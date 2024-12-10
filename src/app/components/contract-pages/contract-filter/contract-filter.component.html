@@ -1,4 +1,19 @@
 <form [formGroup]="filterForm" class="ant-modal-body">
+
+  <!-- Contract Id Number -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Mã hợp đồng</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-input-group>
+        <input
+          nz-input
+          formControlName="contractIdNumber"
+          placeholder="Nhập mã hợp đồng"
+        />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
   <!-- Contract Name -->
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Tên hợp đồng</nz-form-label>

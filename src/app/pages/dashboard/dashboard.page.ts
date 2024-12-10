@@ -7,14 +7,14 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { catchError, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, VndCurrencyPipe, TitleBarComponent]
+  imports: [CommonModule, VndCurrencyPipe, ViewTitleBarComponent]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null;
@@ -64,16 +64,16 @@ export class DashboardPage implements OnInit {
 
     const labels = this.dashboard.selfDisbursedAmount ? ['Tổng dự án', 'Cá nhân'] : ['Tổng dự án'];
     const disbursedData = this.dashboard.selfDisbursedAmount ? [
-      this.dashboard.disbursedAmount / 1000000,
-      this.dashboard.selfDisbursedAmount / 1000000
+      this.dashboard.disbursedAmount / 1000,
+      this.dashboard.selfDisbursedAmount / 1000
     ] : [
-      this.dashboard.disbursedAmount / 1000000
+      this.dashboard.disbursedAmount / 1000
     ];
     const remainingData = this.dashboard.selfRemainingDisbursement ? [
-      this.dashboard.remainingDisbursement / 1000000,
-      this.dashboard.selfRemainingDisbursement / 1000000
+      this.dashboard.remainingDisbursement / 1000,
+      this.dashboard.selfRemainingDisbursement / 1000
     ] : [
-      this.dashboard.remainingDisbursement / 1000000
+      this.dashboard.remainingDisbursement / 1000
     ]
 
     this.disbursementChart = new Chart(canvas, {
@@ -101,7 +101,7 @@ export class DashboardPage implements OnInit {
             stacked: true,
             title: {
               display: true,
-              text: '(triệu đồng)'
+              text: '(nghìn đồng)'
             }
           },
           y: {

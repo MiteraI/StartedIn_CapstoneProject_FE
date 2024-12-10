@@ -11,6 +11,17 @@
     </nz-form-control>
   </nz-form-item>
 
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số hợp đồng</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <input
+        nz-input
+        formControlName="contractIdNumber"
+        placeholder="Nhập số hợp đồng"
+      />
+    </nz-form-control>
+  </nz-form-item>
+
   <!-- Investor Select -->
   <nz-form-item *ngIf="showInvestorSelect">
     <nz-form-label [nzSpan]="24">Nhà đầu tư</nz-form-label>
