@@ -14,7 +14,6 @@ import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { TransactionType } from 'src/app/shared/enums/transaction-type.enum';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
-import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 
 @Component({
@@ -31,8 +30,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
     NzInputNumberModule,
     NzSelectModule,
     NzRadioModule,
-    NzButtonModule,
-    ViewTitleBarComponent
+    NzButtonModule
   ]
 })
 export class CreateTransactionPage implements OnInit {

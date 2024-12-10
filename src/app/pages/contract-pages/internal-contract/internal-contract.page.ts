@@ -24,7 +24,6 @@ import { ProjectService } from 'src/app/services/project.service';
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
-import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 
@@ -45,7 +44,6 @@ import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
     NzSelectModule,
     NzInputNumberModule,
     IonicModule,
-    ViewTitleBarComponent,
     ContractHistorySidebarComponent,
     PercentFormatterPipe
   ],

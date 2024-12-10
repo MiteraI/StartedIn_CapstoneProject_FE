@@ -12,7 +12,6 @@ import { catchError, throwError } from 'rxjs';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-payos-setup',
@@ -25,8 +24,7 @@ import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title
     NzFormModule,
     NzInputModule,
     NzButtonModule,
-    NzIconModule,
-    ViewTitleBarComponent
+    NzIconModule
   ]
 })
 export class PayosSetupPage implements OnInit {

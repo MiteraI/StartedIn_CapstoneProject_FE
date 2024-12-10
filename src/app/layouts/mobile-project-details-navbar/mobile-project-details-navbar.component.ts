@@ -63,7 +63,6 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
     { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' },
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     { linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
-    { linkName: 'payos', iconName: 'payment', linkText: 'PayOS' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
   ]
 

@@ -1,4 +1,4 @@
-<app-view-title-bar viewName="Cài đặt"></app-view-title-bar>
+<div class="font-bold text-3xl text-black mt-6 flex justify-center">Cài đặt</div>
 
 <div *ngIf="isLeader" class="p-4 max-w-6xl mx-auto overflow-y-auto">
   <!-- Leaving Requests Section -->
@@ -8,6 +8,19 @@
   </div>
 
   <hr class="mb-6" />
+
+  <!-- Close Project Section -->
+  <div class="flex flex-wrap py-2 px-4 border border-blue-400 rounded mb-2">
+    <div>
+      <div class="text-lg font-bold">PayOS</div>
+      <div class="text-sm text-gray-500">
+        PayOS là cổng thanh toán điện tử giúp bạn nhận thanh toán từ nhà đầu tư một cách an toàn và thuận tiện.
+      </div>
+    </div>
+    <div class="flex justify-end items-center w-full md:w-auto md:flex-grow">
+      <button nz-button nzType="primary" [routerLink]="['/projects', projectId, 'payos']">Cài đặt PayOS</button>
+    </div>
+  </div>
 
   <!-- Close Project Section -->
   <div class="flex flex-wrap py-2 px-4 border border-red-600 rounded">
