@@ -1,60 +1,62 @@
-<div class="flex items-center justify-center bg-white sticky top-0 z-50 w-full min-h-[7vh] border-b">
-  <div *ngIf="isDesktopView" class="flex items-center justify-between px-3 max-w-6xl mx-auto w-full">
-    <div>
-      <span class="text-xl font-medium">{{ viewName }}</span>
+<div class="w-full">
+  <div *ngIf="isDesktopView" class="flex items-center justify-between px-6 max-w-7xl mx-auto w-full my-4">
+    <div class="text-xl font-medium mr-10">
+      {{ viewName }}
     </div>
-    <div class="flex items-center justify-between border rounded-lg space-x-4 px-4 w-5/12">
-      <input #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full" />
-      <mat-icon (click)="onSearchClick()" fontIcon="search_icon" class="cursor-pointer"></mat-icon>
-    </div>
-    <div class="flex items-center space-x-3">
+    <div class="flex-grow flex space-x-2">
+      <div class="flex-grow flex items-center justify-between border rounded-sm space-x-4 px-4 bg-white bg-opacity-50">
+        <input
+          #searchInput
+          type="text"
+          [ngModel]="searchValue"
+          (ngModelChange)="onSearchClick()"
+          placeholder="Tìm kiếm..."
+          class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full bg-transparent" />
+        <mat-icon (click)="onSearchClick()" fontIcon="search" class="cursor-pointer"></mat-icon>
+      </div>
       <button
         [matMenuTriggerFor]="filterMenu"
         [matMenuTriggerRestoreFocus]="false"
         nz-button
-        nzType="default"
-        class="flex items-center space-x-2 cursor-pointer pr-6"
+        nzSize="large"
+        class="flex items-center"
         (click)="onMenuOpened()"
       >
-        <mat-icon fontIcon="filter_alt_icon"></mat-icon>
-        Lọc
+        <mat-icon fontIcon="filter_alt"></mat-icon>
+        <span class="mx-2">Lọc</span>
       </button>
       <mat-menu #filterMenu="matMenu">
         <div (click)="$event.stopPropagation()">
           <ng-content select="[desktop]"></ng-content>
         </div>
       </mat-menu>
-      <button
-        *ngIf="projectId"
-        nz-button
-        nzType="default"
-        class="flex items-center space-x-2"
-        (click)="openMembersModal()"
-      >
-        <mat-icon fontIcon="group"></mat-icon>
-        Thành viên
-      </button>
     </div>
   </div>
-  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between">
-    <mat-icon (click)="navigateToHome()" fontIcon="chevron_left" class="ml-2"></mat-icon>
+  <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between my-2">
     @if (!isSearching) {
-      <span>{{ viewName }}</span>
+      <span class="ml-6 my-2 text-lg">{{ viewName }}</span>
     } @else {
-      <div>
-        <input class="rounded-lg " #searchInput type="text" [ngModel]="searchValue" (ngModelChange)="onSearchClick()" />
+      <mat-icon (click)="closeSearchBarMobile()" fontIcon="close" class="ml-4"></mat-icon>
+      <div class="mt-0.5">
+        <input
+          class="rounded-sm"
+          #searchInput
+          type="text"
+          [ngModel]="searchValue"
+          (ngModelChange)="onSearchClick()"
+          placeholder="Tìm kiếm..." />
       </div>
     }
-    <div class="flex items-center space-x-3 mr-2">
+    <div class="flex items-center space-x-3 mr-6">
       @if (isSearching) {
-        <mat-icon (click)="onSearchClick()" fontIcon="search_icon"></mat-icon>
+        <mat-icon (click)="onSearchClick()" fontIcon="search"></mat-icon>
       } @else {
-        <mat-icon (click)="openSearchBarMobile()" fontIcon="search_icon"></mat-icon>
+        <mat-icon (click)="openSearchBarMobile()" fontIcon="search"></mat-icon>
       }
       <mat-icon
         [matMenuTriggerFor]="mobileMenu"
         [matMenuTriggerRestoreFocus]="false"
-        fontIcon="more_horiz_icon"
+        fontIcon="filter_alt"
         (click)="onMenuOpened()"
       ></mat-icon>
       <mat-menu #mobileMenu="matMenu">
@@ -62,7 +64,7 @@
           <ng-content select="[mobile]"></ng-content>
         </div>
       </mat-menu>
-      <app-profile-dropdown></app-profile-dropdown>
     </div>
   </div>
+  <hr class="mx-6" />
 </div>
