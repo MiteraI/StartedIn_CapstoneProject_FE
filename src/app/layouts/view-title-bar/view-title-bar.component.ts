@@ -10,7 +10,7 @@ import { MembersModalComponent } from 'src/app/components/members-modal/members-
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 
 @Component({
-  selector: 'app-title-bar',
+  selector: 'app-view-title-bar',
   standalone: true,
   imports: [
     MatIconModule,
@@ -19,10 +19,10 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
     CommonModule,
     NzModalModule
   ],
-  templateUrl: './title-bar.component.html',
-  styleUrls: ['./title-bar.component.scss'],
+  templateUrl: './view-title-bar.component.html',
+  styleUrls: ['./view-title-bar.component.scss'],
 })
-export class TitleBarComponent implements OnInit, OnDestroy {
+export class ViewTitleBarComponent implements OnInit, OnDestroy {
   @Input({ required: true }) viewName: string = '';
 
   projectId: string | null = null;

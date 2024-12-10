@@ -80,7 +80,7 @@ export class ContractHistorySidebarComponent implements OnInit, AfterViewInit, O
   }
 
   calculateDistance() {
-    const titleBar = document.querySelector('app-title-bar');
+    const titleBar = document.querySelector('app-project-title-bar');
     const footer = document.querySelector('app-footer');
 
     if (titleBar && footer) {

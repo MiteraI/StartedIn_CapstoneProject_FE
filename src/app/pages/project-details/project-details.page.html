@@ -1,9 +1,11 @@
 @if (isDesktopView) {
 <app-project-side-nav [currentId]="projectId" class="h-full">
+  <app-project-title-bar></app-project-title-bar>
   <router-outlet></router-outlet>
 </app-project-side-nav>
 } @else {
 <div class="scroll-container overflow-y-scroll max-h-[93vh]" (scroll)="onScroll($event)">
+  <app-project-title-bar></app-project-title-bar>
   <router-outlet></router-outlet>
 </div>
 }

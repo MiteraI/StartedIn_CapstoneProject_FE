@@ -12,7 +12,7 @@ import { catchError, throwError } from 'rxjs';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 @Component({
   selector: 'app-payos-setup',
@@ -26,7 +26,7 @@ import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component
     NzInputModule,
     NzButtonModule,
     NzIconModule,
-    TitleBarComponent
+    ViewTitleBarComponent
   ]
 })
 export class PayosSetupPage implements OnInit {

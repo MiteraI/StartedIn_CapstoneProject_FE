@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TitleBarComponent } from 'src/app/layouts/title-bar/title-bar.component';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 import { RouterModule } from '@angular/router';
 import { DisbursementService } from 'src/app/services/disbursement.service';
 import { DisbursementForProjectModel } from 'src/app/shared/models/disbursement/disbursement-for-project.model';
@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     RouterModule,
-    TitleBarComponent,
+    ViewTitleBarComponent,
     NzSpinModule,
     VndCurrencyPipe,
     MatIconModule
