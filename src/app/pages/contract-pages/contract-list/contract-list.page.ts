@@ -92,7 +92,7 @@ export class ContractListPage implements OnInit, OnDestroy {
       }
       this.projectId = map.get('id')!;
       this.roleService.role$.subscribe(role => {
-        this.isLeader = (role?.roleInTeam === TeamRole.LEADER);
+        this.isLeader = role === TeamRole.LEADER;
         this.filterContracts();
       });
     });

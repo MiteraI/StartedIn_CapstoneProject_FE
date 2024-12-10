@@ -71,9 +71,9 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     }
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
-      this.roleService.role$.subscribe(response => {
-        if (!response) return;
-        this.isLeader = response.roleInTeam === TeamRole.LEADER;
+      this.roleService.role$.subscribe(role => {
+        if (!role) return;
+        this.isLeader = role === TeamRole.LEADER;
       })
     })
     this.fetchMilestones(this.isDesktopView)

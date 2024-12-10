@@ -8,36 +8,72 @@
         </button>
       </div>
 
-      <hr class="mx-4" />
+      <div class="flex items-center">
+        <hr class="ml-4 mr-2 flex-grow">
+        <span class="text-center text-gray-400 text-xs">Tổng quan</span>
+        <hr class="ml-2 mr-4 flex-grow">
+      </div>
       <div class="flex flex-col my-2">
-        @for (link of sharedSideNavLinks; track link.linkText) {
-          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+        @for (link of overviewSideNavLinks; track link.linkText) {
+          <div
+            *ngIf="!link.hide"
+            [routerLink]="['/projects', currentId, link.linkName]"
+            class="flex ml-4 my-1 cursor-pointer"
+          >
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
       </div>
 
-      <hr class="mx-4" />
-      <div *ngIf="role === teamRole.LEADER" class="flex flex-col my-2">
-        @for (link of leaderSideNavLinks; track link.linkText) {
-          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+      <div class="flex items-center">
+        <hr class="ml-4 mr-2 flex-grow">
+        <span class="text-center text-gray-400 text-xs">Dự án</span>
+        <hr class="ml-2 mr-4 flex-grow">
+      </div>
+      <div class="flex flex-col my-2">
+        @for (link of projectSideNavLinks; track link.linkText) {
+          <div
+            *ngIf="!link.hide"
+            [routerLink]="['/projects', currentId, link.linkName]"
+            class="flex ml-4 my-1 cursor-pointer"
+          >
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
       </div>
-      <div *ngIf="role === teamRole.MEMBER || role === teamRole.MENTOR" class="flex flex-col my-2">
-        @for (link of memberSideNavLinks; track link.linkText) {
-          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+
+      <div class="flex items-center">
+        <hr class="ml-4 mr-2 flex-grow">
+        <span class="text-center text-gray-400 text-xs">Hợp đồng</span>
+        <hr class="ml-2 mr-4 flex-grow">
+      </div>
+      <div class="flex flex-col my-2">
+        @for (link of contractSideNavLinks; track link.linkText) {
+          <div
+            *ngIf="!link.hide"
+            [routerLink]="['/projects', currentId, link.linkName]"
+            class="flex ml-4 my-1 cursor-pointer"
+          >
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
         } @empty { }
       </div>
-      <div *ngIf="role === teamRole.INVESTOR" class="flex flex-col my-2">
-        @for (link of investorSideNavLinks; track link.linkText) {
-          <div [routerLink]="['/projects', currentId, link.linkName]" class="flex ml-4 my-1 cursor-pointer">
+
+      <div *ngIf="showCall" class="flex items-center">
+        <hr class="ml-4 mr-2 flex-grow">
+        <span class="text-center text-gray-400 text-xs">Kêu gọi</span>
+        <hr class="ml-2 mr-4 flex-grow">
+      </div>
+      <div *ngIf="showCall" class="flex flex-col my-2">
+        @for (link of callSideNavLinks; track link.linkText) {
+          <div
+            *ngIf="!link.hide"
+            [routerLink]="['/projects', currentId, link.linkName]"
+            class="flex ml-4 my-1 cursor-pointer"
+          >
             <mat-icon [fontIcon]="link.iconName"></mat-icon>
             <span class="text-lg mx-2">{{ link.linkText }}</span>
           </div>
@@ -50,21 +86,44 @@
     <div class="flex h-full">
       @if (!opened) {
         <div class="flex flex-col bg-white border items-center">
-          <button class="mt-2 mb-4 mx-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
+          <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="sideNavToggle()">
             <mat-icon fontIcon="chevron_right"></mat-icon>
           </button>
-          @for (link of sharedSideNavLinks; track link.linkName) {
-            <mat-icon [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          <hr class="w-full mb-4" />
+          @for (link of overviewSideNavLinks; track link.linkName) {
+            <mat-icon
+              *ngIf="!link.hide"
+              [routerLink]="['/projects', currentId, link.linkName]"
+              [fontIcon]="link.iconName"
+              class="my-1.5 cursor-pointer"
+            ></mat-icon>
           } @empty { }
-          <hr class="w-full my-2" />
-          @for (link of leaderSideNavLinks; track link.linkName) {
-            <mat-icon *ngIf="role === teamRole.LEADER" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          <hr class="w-full my-4" />
+          @for (link of projectSideNavLinks; track link.linkName) {
+            <mat-icon
+              *ngIf="!link.hide"
+              [routerLink]="['/projects', currentId, link.linkName]"
+              [fontIcon]="link.iconName"
+              class="my-1.5 cursor-pointer"
+            ></mat-icon>
           } @empty { }
-          @for (link of memberSideNavLinks; track link.linkName) {
-            <mat-icon *ngIf="role === teamRole.MEMBER || role === teamRole.MENTOR" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          <hr class="w-full my-4" />
+          @for (link of contractSideNavLinks; track link.linkName) {
+            <mat-icon
+              *ngIf="!link.hide"
+              [routerLink]="['/projects', currentId, link.linkName]"
+              [fontIcon]="link.iconName"
+              class="my-1.5 cursor-pointer"
+            ></mat-icon>
           } @empty { }
-          @for (link of investorSideNavLinks; track link.linkName) {
-            <mat-icon *ngIf="role === teamRole.INVESTOR" [routerLink]="['/projects', currentId, link.linkName]" [fontIcon]="link.iconName" class="my-[6px] cursor-pointer"></mat-icon>
+          <hr *ngIf="showCall" class="w-full my-4" />
+          @for (link of callSideNavLinks; track link.linkName) {
+            <mat-icon
+              *ngIf="!link.hide && showCall"
+              [routerLink]="['/projects', currentId, link.linkName]"
+              [fontIcon]="link.iconName"
+              class="my-1.5 cursor-pointer"
+            ></mat-icon>
           } @empty { }
         </div>
       }

@@ -99,7 +99,7 @@ export class ProjectDealListPage implements OnInit {
       .subscribe(() => {
         this.loadMore();
       });
-    this.roleService.role$.subscribe(role => this.isLeader = (role?.roleInTeam === TeamRole.LEADER));
+    this.roleService.role$.subscribe(role => this.isLeader = role === TeamRole.LEADER);
   }
 
   filterDeals(append: boolean = false) {

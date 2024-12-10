@@ -37,13 +37,7 @@
             <!-- Member Info -->
             <div class="w-full md:w-1/2 px-2 mb-2 md:mb-0">
               <div class="font-semibold">
-                {{
-                  share.stakeHolderType === 1 ? "Trưởng nhóm" :
-                  share.stakeHolderType === 2 ? 'Thành viên' :
-                  share.stakeHolderType === 3 ? 'Nhà đầu tư' :
-                  share.stakeHolderType === 4 ? 'Cố vấn/Hướng dẫn' :
-                  'Unknown'
-                }}
+                {{ share.stakeHolderType ? roleInTeamLabels[share.stakeHolderType] : 'Không rõ' }}
               </div>
               <div class="text-gray-700">{{ share.fullName || 'Không rõ' }}</div>
             </div>

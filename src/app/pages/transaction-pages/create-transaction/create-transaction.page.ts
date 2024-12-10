@@ -56,7 +56,7 @@ export class CreateTransactionPage implements OnInit {
 
   ngOnInit() {
     this.roleService.role$.subscribe(role => {
-      if (!role || role.roleInTeam !== TeamRole.LEADER) {
+      if (!role || role !== TeamRole.LEADER) {
         this.router.navigate(['../'], { relativeTo: this.route });
         return;
       }

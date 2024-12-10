@@ -52,8 +52,8 @@ export class PayosSetupPage implements OnInit {
 
     // Check if user is leader
     this.roleService.role$.subscribe(role => {
-      if (role && role.roleInTeam !== TeamRole.LEADER) {
-        this.router.navigate(['/projects', this.projectId, 'tasks']);
+      if (role && role !== TeamRole.LEADER) {
+        this.router.navigate(['/projects', this.projectId]);
         return;
       }
 

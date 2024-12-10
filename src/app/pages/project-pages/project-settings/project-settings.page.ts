@@ -34,9 +34,8 @@ export class ProjectSettingsPage implements OnInit {
 
   ngOnInit() {
     this.projectId = this.route.parent?.snapshot.params['id'];
-    this.roleService.role$.subscribe(response => {
-      if (!response) return;
-      this.isLeader = response.roleInTeam === TeamRole.LEADER;
+    this.roleService.role$.subscribe(role => {
+      this.isLeader = role === TeamRole.LEADER;
     });
   }
 

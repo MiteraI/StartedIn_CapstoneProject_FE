@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { RouterModule } from '@angular/router'
 import { filter, Subject, takeUntil } from 'rxjs'
-import { AccountService } from '../../core/auth/account.service'
 import { CommonModule } from '@angular/common'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
@@ -19,21 +18,40 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true
   @Input() currentId = ''
 
-  role: TeamRole | null = null
-  teamRole = TeamRole
+  showCall: boolean = false;
   private destroy$ = new Subject<void>()
 
-  constructor(private accountService: AccountService, private roleService: RoleInTeamService) {}
+  constructor(private roleService: RoleInTeamService) {}
 
   ngOnInit(): void {
     this.roleService.role$
       .pipe(
         takeUntil(this.destroy$),
-        filter((role) => role !== null)
+        filter(role => role !== null)
       )
-      .subscribe((role) => {
-        this.role = role!.roleInTeam
-      })
+      .subscribe(role => {
+        this.resetLinks();
+        this.showLinksForRole(role!);
+      });
+  }
+
+  resetLinks() {
+    this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = true;
+    this.contractSideNavLinks.find(link => link.linkName === 'disbursements')!.hide = true;
+    this.contractSideNavLinks.find(link => link.linkName === 'investor-disbursements')!.hide = true;
+    this.showCall = false;
+  }
+
+  showLinksForRole(role: TeamRole) {
+    if (role === TeamRole.LEADER) {
+      this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = false;
+      this.contractSideNavLinks.find(link => link.linkName === 'disbursements')!.hide = false;
+      this.showCall = true;
+    } else if (role === TeamRole.INVESTOR) {
+      this.contractSideNavLinks.find(link => link.linkName === 'investor-disbursements')!.hide = false;
+    } else {
+      this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = false;
+    }
   }
 
   ngOnDestroy() {
@@ -45,43 +63,49 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.opened = !this.opened
   }
 
-  sharedSideNavLinks: {
+  overviewSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
+    hide?: boolean
   }[] = [
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
+  ]
+
+  projectSideNavLinks: {
+    linkName: string
+    iconName: string
+    linkText: string
+    hide?: boolean
+  }[] = [
     { linkName: 'milestones', iconName: 'flag', linkText: 'Cột Mốc' },
-    { linkName: 'transactions', iconName: 'swap_horiz', linkText: 'Giao Dịch' },
-    { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },
-    { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
-    { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
+    { linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ', hide: true },
     { linkName: 'meeting', iconName: 'insert_invitation', linkText: 'Lịch Hẹn' },
+    { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },
     //{ linkName: 'documents', iconName: 'folder', linkText: 'Tài Liệu' },
   ]
 
-  leaderSideNavLinks: {
+  contractSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
+    hide?: boolean
   }[] = [
-    { linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' },
-    { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' },
-    { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
-    //{ linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
-    { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
+    { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
+    { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân', hide: true },
+    { linkName: 'investor-disbursements', iconName: 'account_balance', linkText: 'Giải Ngân', hide: true },
+    { linkName: 'transactions', iconName: 'swap_horiz', linkText: 'Giao Dịch' },
+    { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
   ]
 
-  memberSideNavLinks: {
+  callSideNavLinks: {
     linkName: string
     iconName: string
     linkText: string
-  }[] = [{ linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' }]
-
-  investorSideNavLinks: {
-    linkName: string
-    iconName: string
-    linkText: string
-  }[] = [{ linkName: 'investor-disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' }]
+    hide?: boolean
+  }[] = [
+    { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
+    { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
+  ]
 }

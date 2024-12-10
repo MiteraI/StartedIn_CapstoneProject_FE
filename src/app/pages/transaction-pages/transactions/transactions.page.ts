@@ -106,7 +106,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
       });
 
     this.roleService.role$.subscribe(role => {
-      this.isLeader = role?.roleInTeam === TeamRole.LEADER;
+      this.isLeader = role === TeamRole.LEADER;
     });
   }
 
