@@ -20,7 +20,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal'
 })
 export class ViewTitleBarComponent implements OnInit, OnDestroy {
   @Input({ required: true }) viewName: string = '';
-
+  @Input() centered: boolean = false
   isDesktopView: boolean = false;
   private destroy$ = new Subject<void>();
 

@@ -1,5 +1,8 @@
 <div class="w-full">
-  <div *ngIf="isDesktopView" class="flex items-center justify-between px-6 max-w-7xl mx-auto w-full my-4">
+  <div
+    *ngIf="isDesktopView" class="flex items-center px-6 max-w-7xl mx-auto w-full my-4"
+    [ngClass]="{'justify-center': centered}"
+  >
     <div class="text-xl font-medium mr-10 my-2">
       {{ viewName }}
     </div>

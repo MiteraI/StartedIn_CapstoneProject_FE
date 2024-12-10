@@ -4,7 +4,6 @@ import { CloseProjectModalComponent } from 'src/app/components/project-pages/clo
 import { ActivatedRoute } from '@angular/router';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { ViewTitleBarComponent } from "../../../layouts/view-title-bar/view-title-bar.component";
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { LeaveProjectModalComponent } from 'src/app/components/project-pages/leave-project-modal/leave-project-modal.component';
@@ -19,7 +18,6 @@ import { LeavingRequestListComponent } from 'src/app/components/project-pages/le
     CommonModule,
     NzModalModule,
     NzButtonModule,
-    ViewTitleBarComponent,
     LeavingRequestListComponent
   ]
 })
