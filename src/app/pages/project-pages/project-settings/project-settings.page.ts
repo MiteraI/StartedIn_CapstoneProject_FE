@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CloseProjectModalComponent } from 'src/app/components/project-pages/close-project-modal/close-project-modal.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
@@ -18,7 +18,8 @@ import { LeavingRequestListComponent } from 'src/app/components/project-pages/le
     CommonModule,
     NzModalModule,
     NzButtonModule,
-    LeavingRequestListComponent
+    LeavingRequestListComponent,
+    RouterModule
   ]
 })
 export class ProjectSettingsPage implements OnInit {
