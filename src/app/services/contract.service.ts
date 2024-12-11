@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { ApplicationConfigService } from "../core/config/application-config.service";
-import { map, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import { ContractStatus } from "../shared/enums/contract-status.enum";
 import { ContractType } from "../shared/enums/contract-type.enum";
 import { ContractListItemModel } from "../shared/models/contract/contract-list-item.model";
@@ -17,6 +17,7 @@ import { ContractHistoryModel } from "../shared/models/contract/contract-history
   providedIn: 'root',
 })
 export class ContractService {
+  refreshContract$ = new BehaviorSubject<boolean>(true)
   constructor(
     private http: HttpClient,
     private applicationConfigService: ApplicationConfigService

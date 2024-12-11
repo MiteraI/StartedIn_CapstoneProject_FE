@@ -102,6 +102,7 @@ export class ContractTableComponent  implements OnInit {
       .subscribe(result => {
         contract.contractStatus = 2;
         this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -116,6 +117,7 @@ export class ContractTableComponent  implements OnInit {
       )
       .subscribe(() => {
         this.notification.success("Thành công", "Xóa hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -146,6 +148,7 @@ export class ContractTableComponent  implements OnInit {
         contract.contractStatus = 5;
         contract.lastUpdatedTime = new Date().toISOString();
         this.notification.success("Thành công", "Kết thúc hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 
