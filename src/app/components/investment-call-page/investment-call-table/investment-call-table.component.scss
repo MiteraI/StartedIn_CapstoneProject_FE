@@ -17,3 +17,7 @@
 :host ::ng-deep .ant-table.ant-table-bordered > .ant-table-container {
   border-left: none;
 }
+
+:host ::ng-deep .ant-table-tbody :last-child > td {
+  border-bottom: none;
+}
