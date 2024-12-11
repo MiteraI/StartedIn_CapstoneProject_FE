@@ -34,13 +34,13 @@
   <tbody>
     @for (data of contractTable.data; track data.id) {
     <tr>
-      <td *ngIf="data.contractType == 2" [(nzExpand)]="data.expand"></td>
+      <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand"></td>
       <td *ngIf="data.contractType !== 2"></td>
-      <td>{{data.contractIdNumber}}</td>
-      <td>{{data.contractName}}</td>
+      <td>{{ data.contractIdNumber }}</td>
+      <td>{{ data.contractName }}</td>
       <td>
         <div class="flex justify-center">
-          {{getContractTypeLabel(data.contractType)}}
+          {{ getContractTypeLabel(data.contractType) }}
         </div>
       </td>
       <td>
@@ -56,18 +56,18 @@
       </td>
       <td>
         <div class="flex justify-center">
-          {{formatDate(data.lastUpdatedTime)}}
+          {{ formatDate(data.lastUpdatedTime) }}
         </div>
       </td>
       <td>
         <div class="flex justify-center">
-          {{getContractStatusLabel(data.contractStatus)}}
+          {{ getContractStatusLabel(data.contractStatus) }}
         </div>
       </td>
       <td>
         <div class="flex items-center space-x-2">
           <!-- View Button -->
-          <button 
+          <button
             class="text-blue-500 hover:text-blue-700"
             [routerLink]="[
               '/projects',
@@ -77,51 +77,54 @@
             ]">
             <mat-icon fontIcon="visibility"></mat-icon>
           </button>
-      
+
           <!-- Send Button (Visible for specific conditions) -->
-          <button 
-            *ngIf="data.contractStatus === 1 && isLeader" 
-            (click)="$event.stopPropagation(); sendContract(data)" 
+          <button
+            *ngIf="data.contractStatus === 1 && isLeader"
+            (click)="$event.stopPropagation(); sendContract(data)"
             class="text-blue-500 hover:text-blue-700">
             <mat-icon fontIcon="send"></mat-icon>
           </button>
-      
+
           <!-- Delete Button (Visible for specific conditions) -->
-          <button 
-            *ngIf="data.contractStatus === 1 && isLeader" 
-            (click)="$event.stopPropagation(); deleteContract(data)" 
+          <button
+            *ngIf="data.contractStatus === 1 && isLeader"
+            (click)="$event.stopPropagation(); deleteContract(data)"
             class="text-red-500 hover:text-red-700">
             <mat-icon fontIcon="delete_outline"></mat-icon>
           </button>
-      
+
           <!-- Download Button -->
-          <button 
-            *ngIf="data.contractStatus !== 1" 
-            (click)="$event.stopPropagation(); download(data)" 
+          <button
+            *ngIf="data.contractStatus !== 1"
+            (click)="$event.stopPropagation(); download(data)"
             class="text-green-500 hover:text-green-700">
             <mat-icon fontIcon="file_download"></mat-icon>
           </button>
-      
+
           <!-- Expire Button -->
-          <button 
-            *ngIf="data.contractStatus === 3" 
-            (click)="$event.stopPropagation(); expireContract(data)" 
+          <button
+            *ngIf="data.contractStatus === 3"
+            (click)="$event.stopPropagation(); expireContract(data)"
             class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="timer_off"></mat-icon>
           </button>
         </div>
-      </td>      
+      </td>
     </tr>
-    <tr *ngIf="data.contractType == 2" [nzExpand]="data.expand" >
-      <div style="font-size: larger ; display: flex; justify-content: space-around; margin-bottom: 10px;">
-        <p>Tổng số giải ngân: <strong>{{ data.totalDisbursementAmount | vndCurrency }}</strong></p>
-        <p>Đã giải ngân: <strong>{{ data.disbursedAmount | vndCurrency }}</strong></p>
-        <p>Chưa giải ngân: <strong>{{ data.pendingAmount | vndCurrency }}</strong></p>
-      </div>
+    <tr *ngIf="data.contractType === 2" [nzExpand]="data.expand" >
       <nz-table #innerTable [nzData]="data.disbursements" nzSize="small" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th></th>
+            <td [colSpan]="5">
+              <div class="flex justify-around text-lg my-2 space-x-4">
+                <div>Tổng giá trị: <strong>{{ data.totalDisbursementAmount | vndCurrency }}</strong></div>
+                <div>Đã giải ngân: <strong>{{ data.disbursedAmount | vndCurrency }}</strong></div>
+                <div>Chưa giải ngân: <strong>{{ data.pendingAmount | vndCurrency }}</strong></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th>Tiêu đề</th>
             <th>Ngày bắt đầu</th>
             <th>Hạn chót</th>
@@ -132,7 +135,6 @@
         <tbody>
           @for (data of innerTable.data; track data) {
           <tr>
-            <td class="bg-gray-500"></td>
             <td>{{ data.title }}</td>
             <td>{{ formatDateOnly(data.startDate) }}</td>
             <td>{{ formatDateOnly(data.endDate) }}</td>
