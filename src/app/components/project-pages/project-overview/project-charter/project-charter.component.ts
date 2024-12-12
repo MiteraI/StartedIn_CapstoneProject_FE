@@ -5,13 +5,15 @@ import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overv
 import { PhaseState } from 'src/app/shared/enums/phase-status.enum'
 import { PhaseStateLabels } from 'src/app/shared/enums/phase-status.enum'
 import { NzTableModule } from 'ng-zorro-antd/table'
+import { ProjectCharterDetailsComponent } from '../../../project-charter/project-charter-details/project-charter-details.component'
+import { ProjectDetailComponent } from 'src/app/components/project-charter/project-detail/project-detail.component'
 
 @Component({
   selector: 'app-project-charter',
   templateUrl: './project-charter.component.html',
   styleUrls: ['./project-charter.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTableModule],
+  imports: [CommonModule, NzTableModule, ProjectCharterDetailsComponent, ProjectDetailComponent],
 })
 export class ProjectCharterComponent implements OnInit {
   projectOverview: ProjectOveriewModel | undefined
@@ -21,6 +23,7 @@ export class ProjectCharterComponent implements OnInit {
     this.projectOverviewService.projectOverview$.subscribe((data) => {
       this.projectOverview = data
     })
+    console.log(this.projectOverview?.id)
   }
 
   // Labels for phases
