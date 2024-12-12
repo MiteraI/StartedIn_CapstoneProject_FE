@@ -26,6 +26,7 @@ import { AccountService } from 'src/app/core/auth/account.service';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-internal-contract',
@@ -43,9 +44,9 @@ import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
     NzIconModule,
     NzSelectModule,
     NzInputNumberModule,
-    IonicModule,
     ContractHistorySidebarComponent,
-    PercentFormatterPipe
+    PercentFormatterPipe,
+    MatIconModule
   ],
 })
 export class InternalContractPage implements OnInit, OnDestroy {

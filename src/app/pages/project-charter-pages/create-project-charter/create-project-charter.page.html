@@ -1,1 +1,6 @@
-<app-create-project-charter-form></app-create-project-charter-form>
+<app-view-title-bar [viewName]="'Tuyên Ngôn Dự Án'"></app-view-title-bar>
+
+<div class="flex gap-5 m-5 bg-white">
+  <app-project-detail class="w-1/2" [projectId]="projectId"></app-project-detail>
+  <app-project-charter-details [ProjectId]="projectId" class="w-1/2"></app-project-charter-details>
+</div>

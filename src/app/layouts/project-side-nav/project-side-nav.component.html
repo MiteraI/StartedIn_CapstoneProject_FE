@@ -14,7 +14,7 @@
         <hr class="ml-2 mr-4 flex-grow">
       </div>
       <div class="flex flex-col my-2">
-        @for (link of overviewSideNavLinks; track link.linkText) {
+        @for (link of overviewSideNavLinks; track link.linkName) {
           <div
             *ngIf="!link.hide"
             [routerLink]="['/projects', currentId, link.linkName]"
@@ -32,7 +32,7 @@
         <hr class="ml-2 mr-4 flex-grow">
       </div>
       <div class="flex flex-col my-2">
-        @for (link of projectSideNavLinks; track link.linkText) {
+        @for (link of projectSideNavLinks; track link.linkName) {
           <div
             *ngIf="!link.hide"
             [routerLink]="['/projects', currentId, link.linkName]"
@@ -50,7 +50,7 @@
         <hr class="ml-2 mr-4 flex-grow">
       </div>
       <div class="flex flex-col my-2">
-        @for (link of contractSideNavLinks; track link.linkText) {
+        @for (link of contractSideNavLinks; track link.linkName) {
           <div
             *ngIf="!link.hide"
             [routerLink]="['/projects', currentId, link.linkName]"
@@ -68,7 +68,7 @@
         <hr class="ml-2 mr-4 flex-grow">
       </div>
       <div *ngIf="showCall" class="flex flex-col my-2">
-        @for (link of callSideNavLinks; track link.linkText) {
+        @for (link of callSideNavLinks; track link.linkName) {
           <div
             *ngIf="!link.hide"
             [routerLink]="['/projects', currentId, link.linkName]"

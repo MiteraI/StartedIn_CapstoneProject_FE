@@ -21,6 +21,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { catchError, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
+import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 
 @Component({
   selector: 'app-contract-table',
@@ -36,7 +37,8 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
     CommonModule,
     NzAvatarModule,
     InitialsOnlyPipe, 
-    NzPopconfirmModule],
+    NzPopconfirmModule,
+    VndCurrencyPipe],
 })
 
 export class ContractTableComponent  implements OnInit {
@@ -83,6 +85,10 @@ export class ContractTableComponent  implements OnInit {
   formatDate(dateStr: string): string {
     return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
   }
+
+  formatDateOnly(dateStr: string): string {
+    return format(new Date(dateStr), 'dd/MM/yyyy');
+  }
   
   sendContract(contract: ContractListItemModel) {
     this.contractService
@@ -96,6 +102,7 @@ export class ContractTableComponent  implements OnInit {
       .subscribe(result => {
         contract.contractStatus = 2;
         this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -110,6 +117,7 @@ export class ContractTableComponent  implements OnInit {
       )
       .subscribe(() => {
         this.notification.success("Thành công", "Xóa hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -140,6 +148,7 @@ export class ContractTableComponent  implements OnInit {
         contract.contractStatus = 5;
         contract.lastUpdatedTime = new Date().toISOString();
         this.notification.success("Thành công", "Kết thúc hợp đồng thành công!", { nzDuration: 2000 });
+        this.contractService.refreshContract$.next(true)
       });
   }
 

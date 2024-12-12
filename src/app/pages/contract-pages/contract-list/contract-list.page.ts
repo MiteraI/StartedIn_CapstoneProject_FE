@@ -84,7 +84,7 @@ export class ContractListPage implements OnInit, OnDestroy {
     size: 10,
     total: 0
   };
-  isFetchAllContractLoading: any;
+  isFetchAllContractLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

@@ -1,0 +1,23 @@
+:host ::ng-deep .ant-table-expanded-row > td {
+  background-color: #faf9fd;
+}
+
+:host ::ng-deep :hover .ant-table-expanded-row > td {
+  background-color: #faf9fd;
+}
+
+:host ::ng-deep .ant-table-cell {
+  border-left: 1px solid #f0f0f0;
+}
+
+:host ::ng-deep .ant-table-expanded-row > .ant-table-cell {
+  border-left: none;
+}
+
+:host ::ng-deep .ant-table.ant-table-bordered > .ant-table-container {
+  border-left: none;
+}
+
+:host ::ng-deep .ant-table-tbody :last-child > td {
+  border-bottom: none;
+}
