@@ -1,0 +1,116 @@
+<!--------------------------------->
+<!-- Create Project Charter Form -->
+<!--------------------------------->
+<nz-skeleton [nzActive]="true" [nzLoading]="isLoading" [nzTitle]="{ width: '40%' }" [nzParagraph]="{ rows: 10, width: ['100%', '100%', '80%'] }">
+  <div class="flex flex-col gap-5">
+    <nz-collapse>
+      <nz-collapse-panel [nzHeader]="'Tuyên Ngôn Dự Án'" nzActive="true" class="bg-amber-200">
+        @if (!isCharterExist) {
+        <button nz-button nzType="primary" (click)="toggleCreate()">Tạo Tuyên Ngôn Dự Án</button>
+        }
+        <nz-collapse>
+          @if(isCharterExist) {
+          <nz-collapse-panel [nzHeader]="'Bối Cảnh Dự Án'" class="bg-amber-100">
+            <p>{{ projectCharter?.businessCase }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Mục Tiêu'" class="bg-amber-100">
+            <p>{{ projectCharter?.goal }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Mục Đích'" class="bg-amber-100">
+            <p>{{ projectCharter?.objective }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Phạm Vi'" class="bg-amber-100">
+            <p>{{ projectCharter?.scope }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Hạn Chế'" class="bg-amber-100">
+            <p>{{ projectCharter?.constraints }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Giả Định'" class="bg-amber-100">
+            <p>{{ projectCharter?.assumptions }}</p>
+          </nz-collapse-panel>
+          <nz-collapse-panel [nzHeader]="'Kết Quả Đầu Ra'" class="bg-amber-100">
+            <p>{{ projectCharter?.deliverables }}</p>
+          </nz-collapse-panel>
+          } @else {
+          <!-- UPDATE CHARTER TODO -->
+          <!-- <form [formGroup]="projectCharterForm" class="bg-white">
+            <div class="flex justify-end mb-6">
+              <span *ngIf="isCharterExist" nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
+            </div>
+            <div *ngIf="isEditable && isCharterExist" class="text-right">
+              <button [disabled]="projectCharterForm.invalid" class="rounded-md" nz-button nzType="primary" type="button" (click)="saveEdit()">Save</button>
+            </div>
+
+            <div class="space-y-4 mt-5">
+              <div *ngIf="!isCharterExist" class="flex justify-end items-center gap-4">
+                <button
+                  type="submit"
+                  class="bg-orange-500 text-white p-2 rounded-md shadow-md"
+                  [ngClass]="{
+                    'bg-orange-500 text-white': projectCharterForm.valid,
+                    'bg-gray-300 text-gray-500 cursor-not-allowed': projectCharterForm.invalid
+                  }"
+                  [disabled]="projectCharterForm.invalid"
+                >
+                  Submit
+                </button>
+                <mat-icon (click)="addMilestone()" class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md" fontIcon="add">add</mat-icon>
+              </div>
+            </div>
+          </form> -->
+          }
+        </nz-collapse>
+      </nz-collapse-panel>
+    </nz-collapse>
+    <!-- Phase/MileStone Section -->
+
+    @if (isCharterExist) {
+    <nz-collapse>
+      <nz-collapse-panel [nzHeader]="'Các Giai Đoạn'" nzActive="true" class="bg-amber-200">
+        <nz-table #nestedTable [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Giai Đoạn</th>
+              <th>Ngày Bắt Đầu</th>
+              <th>Ngày Kết Thúc</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (data of nestedTable.data; track data) {
+            <tr>
+              <td [(nzExpand)]="data.expand"></td>
+              <td>{{ data.phaseName }}</td>
+              <td>{{ data.startDate | date : 'dd/MM/yyyy' }}</td>
+              <td>{{ data.endDate | date : 'dd/MM/yyyy' }}</td>
+            </tr>
+            <tr [nzExpand]="data.expand">
+              <nz-table #innerTable [nzData]="data.milestones" nzSize="small" [nzShowPagination]="false">
+                <thead>
+                  <tr>
+                    <th>Cột Mốc</th>
+                    <th>Miêu Tả</th>
+                    <th>Bắt Đầu</th>
+                    <th>Kết Thúc</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (data of innerTable.data; track data) {
+                  <tr>
+                    <td>{{ data.title }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.startDate | date : 'dd/MM/yyyy' }}</td>
+                    <td>{{ data.endDate | date : 'dd/MM/yyyy' }}</td>
+                  </tr>
+                  }
+                </tbody>
+              </nz-table>
+            </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-collapse-panel>
+    </nz-collapse>
+    }
+  </div>
+</nz-skeleton>
