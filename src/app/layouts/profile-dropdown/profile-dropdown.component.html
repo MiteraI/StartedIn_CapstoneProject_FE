@@ -1,14 +1,16 @@
 <div>
   <div
     [matMenuTriggerFor]="profileMenu"
-    class="flex items-center cursor-pointer hover:text-purple-600 rounded py-2 px-6"
+    class="flex items-center cursor-pointer hover:text-purple-600 rounded py-2 md:px-6"
   >
     <img
       class="max-w-8 max-h-8 rounded-full"
       [src]="account?.profilePicture ?? 'https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar.png'"
     />
-    <span class="font-medium ml-4">{{ account?.fullName }}</span>
-    <mat-icon fontIcon="keyboard_arrow_down" class="ml-2"></mat-icon>
+    <div class="items-center hidden md:flex">
+      <span class="font-medium ml-4 hidden md:inline">{{ account?.fullName }}</span>
+      <mat-icon fontIcon="keyboard_arrow_down" class="ml-2"></mat-icon>
+    </div>
   </div>
 
   <mat-menu #profileMenu="matMenu" xPosition="before" class="max-w-96">

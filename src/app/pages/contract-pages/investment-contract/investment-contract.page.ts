@@ -27,6 +27,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -45,10 +46,10 @@ import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
-    IonicModule,
     VndCurrencyPipe,
     ContractHistorySidebarComponent,
-    PercentFormatterPipe
+    PercentFormatterPipe,
+    MatIconModule
   ]
 })
 export class InvestmentContractPage implements OnInit {

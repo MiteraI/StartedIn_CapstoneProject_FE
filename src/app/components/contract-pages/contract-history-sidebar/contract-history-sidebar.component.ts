@@ -88,7 +88,6 @@ export class ContractHistorySidebarComponent implements OnInit, AfterViewInit, O
       const footerRect = footer.getBoundingClientRect();
 
       this.height = footerRect.top - titleBarRect.bottom;
-      console.log('Distance between title bar and footer:', this.height);
     }
   }
 
