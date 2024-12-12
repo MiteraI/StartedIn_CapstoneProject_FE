@@ -3,7 +3,8 @@ export enum ContractStatus {
   SENT = 2,
   COMPLETED = 3,
   DECLINED = 4,
-  EXPIRED = 5
+  EXPIRED = 5,
+  WAITINGFORLIQUIDATION = 6
 }
 
 export const ContractStatusLabels: Record<ContractStatus, string> = {
@@ -11,5 +12,6 @@ export const ContractStatusLabels: Record<ContractStatus, string> = {
   [ContractStatus.SENT]: 'Đã gửi',
   [ContractStatus.COMPLETED]: 'Đã ký kết',
   [ContractStatus.DECLINED]: 'Bị từ chối',
-  [ContractStatus.EXPIRED]: 'Hết hạn'
+  [ContractStatus.EXPIRED]: 'Hết hạn',
+  [ContractStatus.WAITINGFORLIQUIDATION]: 'Chờ thanh lý'
 };
