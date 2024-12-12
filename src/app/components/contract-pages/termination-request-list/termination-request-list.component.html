@@ -1,0 +1,43 @@
+<div class="font-bold text-xl text-black flex items-center justify-between p-2 mb-2">
+  <div>Đã gửi</div>
+  <nz-select [(ngModel)]="filterMode" (ngModelChange)="filter()" class="min-w-32">
+    <nz-option [nzValue]="1" nzLabel="7 ngày qua"></nz-option>
+    <nz-option [nzValue]="2" nzLabel="30 ngày qua"></nz-option>
+    <nz-option [nzValue]="3" nzLabel="Tất cả"></nz-option>
+  </nz-select>
+</div>
+
+<div *ngIf="isLoading" class="flex justify-center">
+  <nz-spin nzSimple></nz-spin>
+</div>
+
+<div *ngIf="!isLoading && requests.length === 0" class="text-center text-gray-500">Không có yêu cầu hủy hợp đồng nào</div>
+
+<div *ngIf="!isLoading && requests.length > 0" class="space-y-4">
+  @for (request of filteredRequests; track request.id) {
+    <div
+      class="rounded-lg shadow p-4 flex items-center cursor-pointer"
+      [ngClass]="{
+        'bg-blue-50 hover:bg-blue-100': request.status === terminationStatus.PENDING,
+        'bg-green-50 hover:bg-green-100': request.status === terminationStatus.ACCEPTED,
+        'bg-red-50 hover:bg-red-100': request.status === terminationStatus.REJECTED,
+      }"
+      (click)="showRequestDetail(request)"
+    >
+      <div class="ml-2 flex-grow">
+        <div class="font-medium">Hợp đồng số: {{ request.contractIdNumber }}</div>
+        <div class="text-sm text-gray-500">Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}</div>
+      </div>
+
+      <div>
+        <span [ngClass]="{
+          'text-blue-500': request.status === terminationStatus.PENDING,
+          'text-green-500': request.status === terminationStatus.ACCEPTED,
+          'text-red-500': request.status === terminationStatus.REJECTED,
+        }">
+          ● {{ statusLabels[request.status] }}
+        </span>
+      </div>
+    </div>
+  }
+</div>

@@ -203,10 +203,13 @@ export const routes: Routes = [
         path: 'settings',
         loadComponent: () => import('./pages/project-pages/project-settings/project-settings.page').then((m) => m.ProjectSettingsPage),
       },
-
       {
         path: 'meeting',
         loadComponent: () => import('./pages/meeting/meeting.page').then((m) => m.MeetingPage),
+      },
+      {
+        path: 'termination-requests',
+        loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then( m => m.TerminationRequestsPage)
       },
     ],
   },

@@ -1,0 +1,57 @@
+<div class="overflow-hidden">
+  <div class="flex flex-col md:flex-row gap-4 mb-4">
+    <!-- Contract ID Number -->
+    <div class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Mã số hợp đồng</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ data.request.contractIdNumber || 'Không có dữ liệu' }}
+      </div>
+    </div>
+
+    <!-- Created Time -->
+    <div class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="access_time" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Ngày tạo</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ (data.request.createdTime | date:'dd/MM/yyyy') || 'Không có dữ liệu' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason -->
+  <div>
+    <div class="flex items-center">
+      <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
+      <span class="font-semibold text-gray-700">Lý do</span>
+    </div>
+    <div class="text-gray-800 ml-8">
+      {{ data.request.reason || 'Không có lý do' }}
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="flex justify-center">
+  <nz-spin nzSimple></nz-spin>
+</div>
+
+<!-- Danh sách bên liên quan -->
+<div *ngIf="!isLoading" class="mt-6">
+  <div
+    *ngFor="let user of data.request.userParties;"
+    class="rounded-lg shadow p-4 flex items-center cursor-pointer mb-4"
+    [ngClass]="{
+      'bg-blue-50 hover:bg-blue-100': user.isAgreed !== true && user.isAgreed !== false,
+      'bg-green-50 hover:bg-green-100': user.isAgreed === true,
+      'bg-red-50 hover:bg-red-100': user.isAgreed === false,
+    }"
+    (click)="redirectToUser(user.toId)"
+  >
+    <span class="font-bold mr-1">{{ user.toName }}</span>
+    {{ user.isAgreed === true ? 'đã chấp nhận' : (user.isAgreed === false ? 'đã từ chối' : 'đang xem xét')}} yêu cầu
+  </div>
+</div>
