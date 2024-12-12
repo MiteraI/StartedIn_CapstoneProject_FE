@@ -1,7 +1,7 @@
 <div class="font-bold text-3xl text-black flex items-end justify-center h-12">Yêu cầu hủy hợp đồng</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 overflow-y-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 relative">
   <app-termination-request-list [projectId]="projectId"></app-termination-request-list>
   <hr class="mx-4 lg:hidden" />
   <app-termination-confirmation-list [projectId]="projectId"></app-termination-confirmation-list>
-  <div class="border-r absolute right-1/2 hidden lg:block" [style.height]="height + 'px'"></div>
+  <div class="border-r absolute right-1/2 top-4 hidden lg:block" [style.height]="height + 'px'"></div>
 </div>
