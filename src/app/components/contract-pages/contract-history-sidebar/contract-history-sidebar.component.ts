@@ -50,7 +50,7 @@ export class ContractHistorySidebarComponent implements OnInit, AfterViewInit, O
         this.isDesktopView = isDesktop;
         this.isCollapsed = !isDesktop;
       });
-    afterNextRender(() => this.calculateDistance())
+    afterNextRender(() => this.calculateDistance());
   }
 
   ngAfterViewInit() {

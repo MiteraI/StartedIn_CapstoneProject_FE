@@ -10,7 +10,7 @@ export class TerminationConfirmationService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getList(projectId: string) {
-    const url = `/api/projects/${projectId}/termination-confirmations/`
+    const url = `/api/projects/${projectId}/termination-confirmations`
     return this.http.get<TerminationConfirmationModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 

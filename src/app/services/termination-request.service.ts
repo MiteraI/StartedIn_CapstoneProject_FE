@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { TerminationRequestModel } from '../shared/models/termination-request/termination-request.model'
+import { simulateGet, simulateGetList } from '../shared/mocks/termination-request-mock'
+import { of } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +17,9 @@ export class TerminationRequestService {
   }
 
   getList(projectId: string) {
-    const url = `/api/projects/${projectId}/termination-requests/`
-    return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
+    const url = `/api/projects/${projectId}/termination-requests`
+    return of(simulateGetList(projectId))
+    //return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 
   get(projectId: string, id: string) {
