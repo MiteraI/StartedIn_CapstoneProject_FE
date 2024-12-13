@@ -24,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LiquidationContractDetailModel } from 'src/app/shared/models/contract/liquidation-contract-detail.model';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
+import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 
 @Component({
   selector: 'app-liquidation-contract',
@@ -57,6 +58,8 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
 
   roleInTeam = TeamRole
   roleInTeamLabels = TeamRoleLabels
+
+  contractStatus = ContractStatus
 
   private currentUserId: string | null = null;
 
@@ -97,7 +100,7 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
         .sendContract(this.contractId!, this.project.id)
         .pipe(
           catchError((error) => {
-            this.notification.error('Lỗi', 'Gửi thỏa thuận thất bại!', { nzDuration: 2000 });
+            this.notification.error('Lỗi', 'Gửi hợp đồng thất bại!', { nzDuration: 2000 });
             return throwError(() => new Error(error.error));
           })
         )
