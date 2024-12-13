@@ -4,7 +4,8 @@ export enum DisbursementStatus {
   REJECTED = 3,
   FINISHED = 4,
   OVERDUE = 5,
-  ERROR = 6
+  ERROR = 6,
+  CANCELLED = 7,
 }
 
 export const DisbursementStatusLabels: Record<DisbursementStatus, string> = {
@@ -13,5 +14,6 @@ export const DisbursementStatusLabels: Record<DisbursementStatus, string> = {
   [DisbursementStatus.REJECTED]: 'Bị từ chối',
   [DisbursementStatus.FINISHED]: 'Đã hoàn tất',
   [DisbursementStatus.OVERDUE]: 'Quá hạn',
-  [DisbursementStatus.ERROR]: 'Lỗi'
+  [DisbursementStatus.ERROR]: 'Lỗi',
+  [DisbursementStatus.CANCELLED]: 'Đã huỷ'
 };

@@ -12,6 +12,7 @@ import { InvestmentContractDetailModel } from "../shared/models/contract/investm
 import { InternalContractCreateUpdateModel } from "../shared/models/contract/internal-contract-create-update.model";
 import { InternalContractDetailModel } from "../shared/models/contract/internal-contract-detail.model";
 import { ContractHistoryModel } from "../shared/models/contract/contract-history.model";
+import { LiquidationContractDetailModel } from "../shared/models/contract/liquidation-contract-detail.model";
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +52,12 @@ export class ContractService {
   getInvestmentContract(id: string, projectId: string): Observable<InvestmentContractDetailModel> {
     return this.http.get<InvestmentContractDetailModel>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/investment-contracts/${id}`)
+    );
+  }
+
+  getLiquidationContract(id: string, projectId: string): Observable<LiquidationContractDetailModel> {
+    return this.http.get<LiquidationContractDetailModel>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/liquidation-notes/${id}`)
     );
   }
 
