@@ -111,32 +111,17 @@
         routerLinkActive="text-green-600"
         class="py-3 px-4 font-medium hover:text-green-600 border-b-2 border-transparent hover:border-green-600"
       >
-        Thông tin
+        Thông Tin Dự Án
       </button>
-      <button
+      <!-- <button
         [routerLink]="['./charter']"
         routerLinkActive="text-green-600 "
         class="py-3 px-4 font-medium hover:text-green-600 border-b-2 border-transparent hover:border-green-600"
       >
         Điều lệ
-      </button>
+      </button> -->
     </div>
   </div>
 </div>
 
-<div class="flex justify-center w-full min-h-screen">
-  <!-- Left Banner -->
-  <div class="w-1/6 py-4 hidden md:block min-h-screen">
-    <img src="../../../assets/img/startedIn-banner.jpeg" class="h-full w-full" alt="vertical-banner" />
-  </div>
-
-  <!-- Content Section -->
-  <div class="w-full md:w-4/6 mx-8 justify-center my-4">
-    <router-outlet></router-outlet>
-  </div>
-
-  <!-- Right Banner -->
-  <div class="w-1/6 py-4 hidden md:block min-h-screen">
-    <img src="../../../assets/img/startedIn-banner.jpeg" class="h-full w-full" alt="vertical-banner" />
-  </div>
-</div>
+<app-project-charter class="" [projectId]="projectId"></app-project-charter>
