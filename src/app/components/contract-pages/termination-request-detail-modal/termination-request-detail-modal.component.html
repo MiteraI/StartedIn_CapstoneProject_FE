@@ -11,6 +11,17 @@
       </div>
     </div>
 
+    <!-- Created By -->
+    <div *ngIf="data.isLeader" class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="person" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Người gửi yêu cầu</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ data.request.fromName || 'Không có dữ liệu' }}
+      </div>
+    </div>
+
     <!-- Created Time -->
     <div class="flex-1">
       <div class="flex items-center">
@@ -33,25 +44,28 @@
       {{ data.request.reason || 'Không có lý do' }}
     </div>
   </div>
-</div>
 
-<div *ngIf="isLoading" class="flex justify-center">
-  <nz-spin nzSimple></nz-spin>
-</div>
+  <!-- Accept/Reject -->
+  <div *ngIf="data.isLeader" class="flex justify-end gap-2 mt-6">
+    <button
+      nz-button
+      nzType="primary"
+      class="px-6"
+      (click)="acceptRequest()"
+      [nzLoading]="isLoading"
+    >
+      Chấp nhận
+    </button>
 
-<!-- Danh sách bên liên quan -->
-<div *ngIf="!isLoading" class="mt-6">
-  <div
-    *ngFor="let user of data.request.userParties;"
-    class="rounded-lg shadow p-4 flex items-center cursor-pointer mb-4"
-    [ngClass]="{
-      'bg-blue-50 hover:bg-blue-100': user.isAgreed !== true && user.isAgreed !== false,
-      'bg-green-50 hover:bg-green-100': user.isAgreed === true,
-      'bg-red-50 hover:bg-red-100': user.isAgreed === false,
-    }"
-    (click)="redirectToUser(user.toId)"
-  >
-    <span class="font-bold mr-1">{{ user.toName }}</span>
-    {{ user.isAgreed === true ? 'đã chấp nhận' : (user.isAgreed === false ? 'đã từ chối' : 'đang xem xét')}} yêu cầu
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      class="px-6"
+      (click)="rejectRequest()"
+      [nzLoading]="isLoading"
+    >
+      Từ chối
+    </button>
   </div>
 </div>
