@@ -142,6 +142,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/milestone-page/milestone-view/milestone-view.component').then((m) => m.MilestoneViewComponent),
       },
       {
+        path: 'milestones/:milestoneId',
+        loadComponent: () => import('./components/milestone-page/milestone-details-page/milestone-details-page.component').then((m) => m.MilestoneDetailsPageComponent),
+      },
+      {
         path: 'others',
         canActivate: [mobileViewGuard],
         loadComponent: () => import('./layouts/mobile-project-details-navbar/mobile-project-details-navbar.component').then((m) => m.MobileProjectDetailsNavbarComponent),
