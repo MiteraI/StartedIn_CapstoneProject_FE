@@ -102,10 +102,18 @@
             <mat-icon fontIcon="file_download"></mat-icon>
           </button>
 
-          <!-- Expire Button -->
+          <!-- Expire Button (Leader) -->
           <button
-            *ngIf="data.contractStatus === 3"
+            *ngIf="data.contractStatus === 3 && isLeader"
             (click)="$event.stopPropagation(); expireContract(data)"
+            class="text-yellow-500 hover:text-yellow-700">
+            <mat-icon fontIcon="timer_off"></mat-icon>
+          </button>
+
+          <!-- Terminate Button (Not Leader) -->
+          <button
+            *ngIf="data.contractStatus === 3 && !isLeader"
+            (click)="$event.stopPropagation(); openTerminateModal(data)"
             class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="timer_off"></mat-icon>
           </button>
@@ -139,7 +147,7 @@
             <td>{{ formatDateOnly(data.startDate) }}</td>
             <td>{{ formatDateOnly(data.endDate) }}</td>
             <td>{{ data.amount | vndCurrency }}</td>
-            <td>{{getDisbursementStatusLabel(data.disbursementStatus)}}</td>
+            <td>{{ getDisbursementStatusLabel(data.disbursementStatus) }}</td>
           </tr>
           }
         </tbody>

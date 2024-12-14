@@ -7,6 +7,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzButtonModule } from 'ng-zorro-antd/button';
 import { TerminationRequestService } from 'src/app/services/termination-request.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { TerminationRequestModel } from 'src/app/shared/models/termination-request/termination-request.model';
@@ -14,6 +15,7 @@ import { differenceInDays } from 'date-fns'
 import { TerminationRequestDetailModalComponent } from 'src/app/components/contract-pages/termination-request-detail-modal/termination-request-detail-modal.component';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
 
 @Component({
   selector: 'app-termination-requests',
@@ -26,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
     NzSelectModule,
     NzSpinModule,
     NzModalModule,
+    NzButtonModule,
     MatIconModule
   ]
 })
@@ -95,6 +98,15 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
     });
   }
 
+  openAddModal() {
+    this.modalService.create({
+      nzTitle: 'Kết thúc hợp đồng',
+      nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId },
+      nzFooter: null
+    });
+  }
+
   filter() {
     this.filteredRequests = this.requests.filter(request => {
       if (this.filterMode === 1 && differenceInDays(new Date(), new Date(request.createdTime)) > 7) {
@@ -108,7 +120,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
 
   showRequestDetail(request: TerminationRequestModel) {
     this.modalService.create({
-      nzTitle: 'Chi tiết yêu cầu hủy hợp đồng',
+      nzTitle: 'Chi tiết yêu cầu kết thúc hợp đồng',
       nzContent: TerminationRequestDetailModalComponent,
       nzFooter: null,
       nzData: {
@@ -123,7 +135,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
   acceptRequest(request: TerminationRequestModel) {
     this.modalService.confirm({
       nzTitle: `Chấp nhận yêu cầu của ${request.fromName}?`,
-      nzContent: `Lý do hủy hợp đồng: ${request.reason}`,
+      nzContent: `Lý do kết thúc hợp đồng: ${request.reason}`,
       nzClosable: false,
       nzMaskClosable: true,
       nzOkText: 'Chấp nhận',
@@ -131,11 +143,11 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
       nzOnOk: () => {
         this.terminationRequestService.accept(this.projectId, request.id).subscribe({
           next: () => {
-            this.notification.success('Thành công', 'Đã chấp nhận yêu cầu hủy hợp đồng', { nzDuration: 2000 });
+            this.notification.success('Thành công', 'Đã chấp nhận yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
             this.loadReceivedRequests();
           },
           error: () => {
-            this.notification.error('Lỗi', 'Không thể chấp nhận yêu cầu hủy hợp đồng', { nzDuration: 2000 });
+            this.notification.error('Lỗi', 'Không thể chấp nhận yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
           }
         });
       }
@@ -145,7 +157,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
   rejectRequest(request: TerminationRequestModel) {
     this.modalService.confirm({
       nzTitle: `Từ chối yêu cầu của ${request.fromName}?`,
-      nzContent: `Lý do hủy hợp đồng: ${request.reason}`,
+      nzContent: `Lý do kết thúc hợp đồng: ${request.reason}`,
       nzClosable: false,
       nzMaskClosable: true,
       nzOkText: 'Từ chối',
@@ -153,11 +165,11 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
       nzOnOk: () => {
         this.terminationRequestService.reject(this.projectId, request.id).subscribe({
           next: () => {
-            this.notification.success('Thành công', 'Đã từ chối yêu cầu hủy hợp đồng', { nzDuration: 2000 });
+            this.notification.success('Thành công', 'Đã từ chối yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
             this.loadReceivedRequests();
           },
           error: () => {
-            this.notification.error('Lỗi', 'Không thể từ chối yêu cầu hủy hợp đồng', { nzDuration: 2000 });
+            this.notification.error('Lỗi', 'Không thể từ chối yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
           }
         });
       }

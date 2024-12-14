@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ContractService } from 'src/app/services/contract.service';
@@ -22,29 +22,31 @@ import { catchError, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
+import { TerminateContractModalComponent } from '../terminate-contract-modal/terminate-contract-modal.component';
 
 @Component({
   selector: 'app-contract-table',
   templateUrl: './contract-table.component.html',
   styleUrls: ['./contract-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule,
+  imports: [
+    NzTableModule,
     RouterModule,
-    NzDividerModule, 
-    MatIconModule, 
-    NzButtonModule, 
-    NzModalModule, 
+    NzDividerModule,
+    MatIconModule,
+    NzButtonModule,
+    NzModalModule,
     CommonModule,
     NzAvatarModule,
-    InitialsOnlyPipe, 
+    InitialsOnlyPipe,
     NzPopconfirmModule,
-    VndCurrencyPipe],
+    VndCurrencyPipe
+  ],
 })
 
 export class ContractTableComponent  implements OnInit {
   @Input({ required: true }) projectId!: string
-  @Input({ required: true }) listContract: SearchResponseModel<ContractListItemModel> = 
-  {
+  @Input({ required: true }) listContract: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
     size: 10,
@@ -56,7 +58,7 @@ export class ContractTableComponent  implements OnInit {
   constructor(
     private contractService: ContractService,
     private disbursementService: DisbursementService,
-    private modalService: NzModalModule,
+    private modalService: NzModalService,
     private router: Router,
     private route: ActivatedRoute,
     private roleService: RoleInTeamService,
@@ -68,8 +70,7 @@ export class ContractTableComponent  implements OnInit {
     });
   }
 
-  getContractTypeLabel(type: ContractType) : string
-  {
+  getContractTypeLabel(type: ContractType) : string {
     return ContractTypeLabels[type]
   }
 
@@ -77,9 +78,8 @@ export class ContractTableComponent  implements OnInit {
     return ContractStatusLabels[status]
   }
 
-  getDisbursementStatusLabel(status: DisbursementStatus) : string
-  {
-    return DisbursementStatusLabels[status]    
+  getDisbursementStatusLabel(status: DisbursementStatus) : string {
+    return DisbursementStatusLabels[status]
   }
 
   formatDate(dateStr: string): string {
@@ -89,7 +89,7 @@ export class ContractTableComponent  implements OnInit {
   formatDateOnly(dateStr: string): string {
     return format(new Date(dateStr), 'dd/MM/yyyy');
   }
-  
+
   sendContract(contract: ContractListItemModel) {
     this.contractService
       .sendContract(contract.id, this.projectId)
@@ -152,4 +152,12 @@ export class ContractTableComponent  implements OnInit {
       });
   }
 
+  openTerminateModal(contract: ContractListItemModel) {
+    this.modalService.create({
+      nzTitle: 'Kết thúc hợp đồng',
+      nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzFooter: null
+    });
+  }
 }
