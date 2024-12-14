@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ProjectOverviewService } from 'src/app/services/project-overview.service'
 import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
@@ -16,14 +16,11 @@ import { ProjectDetailComponent } from 'src/app/components/project-charter/proje
   imports: [CommonModule, NzTableModule, ProjectCharterDetailsComponent, ProjectDetailComponent],
 })
 export class ProjectCharterComponent implements OnInit {
-  projectOverview: ProjectOveriewModel | undefined
+  @Input({ required: true }) projectId: string = ''
   constructor(private projectOverviewService: ProjectOverviewService) {}
 
   ngOnInit() {
-    this.projectOverviewService.projectOverview$.subscribe((data) => {
-      this.projectOverview = data
-    })
-    console.log(this.projectOverview?.id)
+    console.log(this.projectId)
   }
 
   // Labels for phases

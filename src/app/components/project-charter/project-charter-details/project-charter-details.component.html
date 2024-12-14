@@ -6,7 +6,15 @@
     <nz-collapse>
       <nz-collapse-panel [nzHeader]="'Tuyên Ngôn Dự Án'" nzActive="true" class="bg-amber-200">
         @if (!isCharterExist) {
-        <button nz-button nzType="primary" (click)="toggleCreate()">Tạo Tuyên Ngôn Dự Án</button>
+        <p>
+          Chưa có tuyên ngôn dự án
+
+          <button nz-button nzType="link" (click)="toggleCreate()">Tạo Tuyên Ngôn Dự Án</button>
+        </p>
+        } @else {
+        <div *ngIf="!isOverview" class="flex justify-end mb-6">
+          <span nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
+        </div>
         }
         <nz-collapse>
           @if(isCharterExist) {
@@ -31,33 +39,6 @@
           <nz-collapse-panel [nzHeader]="'Kết Quả Đầu Ra'" class="bg-amber-100">
             <p>{{ projectCharter?.deliverables }}</p>
           </nz-collapse-panel>
-          } @else {
-          <!-- UPDATE CHARTER TODO -->
-          <!-- <form [formGroup]="projectCharterForm" class="bg-white">
-            <div class="flex justify-end mb-6">
-              <span *ngIf="isCharterExist" nz-icon nzType="edit" nzTheme="outline" class="cursor-pointer" (click)="toggleEdit()"></span>
-            </div>
-            <div *ngIf="isEditable && isCharterExist" class="text-right">
-              <button [disabled]="projectCharterForm.invalid" class="rounded-md" nz-button nzType="primary" type="button" (click)="saveEdit()">Save</button>
-            </div>
-
-            <div class="space-y-4 mt-5">
-              <div *ngIf="!isCharterExist" class="flex justify-end items-center gap-4">
-                <button
-                  type="submit"
-                  class="bg-orange-500 text-white p-2 rounded-md shadow-md"
-                  [ngClass]="{
-                    'bg-orange-500 text-white': projectCharterForm.valid,
-                    'bg-gray-300 text-gray-500 cursor-not-allowed': projectCharterForm.invalid
-                  }"
-                  [disabled]="projectCharterForm.invalid"
-                >
-                  Submit
-                </button>
-                <mat-icon (click)="addMilestone()" class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md" fontIcon="add">add</mat-icon>
-              </div>
-            </div>
-          </form> -->
           }
         </nz-collapse>
       </nz-collapse-panel>
@@ -67,10 +48,10 @@
     @if (isCharterExist) {
     <nz-collapse>
       <nz-collapse-panel [nzHeader]="'Các Giai Đoạn'" nzActive="true" class="bg-amber-200">
-        <nz-table #nestedTable [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
+        <nz-table #nestedTable nzSize="small" [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
           <thead>
             <tr>
-              <th></th>
+              <th nzWidth="10px" [nzAlign]="'center'"></th>
               <th>Giai Đoạn</th>
               <th>Ngày Bắt Đầu</th>
               <th>Ngày Kết Thúc</th>

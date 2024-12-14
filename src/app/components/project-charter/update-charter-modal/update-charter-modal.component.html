@@ -1,0 +1,41 @@
+<form [formGroup]="projectCharterForm" (ngSubmit)="saveEdit()" class="bg-white flex flex-col gap-5">
+  <div class="p-2 bg-amber-100 rounded-md">
+    <div>
+      <label class="block text-sm font-semibold p-2">BỐI CẢNH DỰ ÁN</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập bối cảnh dự án" formControlName="businessCase" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">MỤC TIÊU</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập mục tiêu" formControlName="goal" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">MỤC ĐÍCH</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập mục đích" formControlName="objective" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">PHẠM VI</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập phạm vi" formControlName="scope" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">HẠN CHẾ</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập hạn chế" formControlName="constraints" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">GIẢ ĐỊNH</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập giả định" formControlName="assumptions" class="rounded-md"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-semibold p-2">KẾT QUẢ ĐẦU RA</label>
+      <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập kết quả đầu ra" formControlName="deliverables" class="rounded-md"></textarea>
+    </div>
+  </div>
+  <div class="text-right">
+    <button [disabled]="projectCharterForm.invalid" class="rounded-md" nz-button nzType="primary" type="submit">Lưu</button>
+  </div>
+</form>
