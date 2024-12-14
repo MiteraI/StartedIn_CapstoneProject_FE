@@ -72,8 +72,8 @@
             [routerLink]="[
               '/projects',
               projectId,
-              data.contractType === 1 ? 'internal-contract' : 
-              data.contractType === 2 ? 'investment-contract' : 
+              data.contractType === 1 ? 'internal-contract' :
+              data.contractType === 2 ? 'investment-contract' :
               data.contractType === 3 ? 'liquidation-contract' : '',
               data.id
             ]"
@@ -119,6 +119,14 @@
             (click)="$event.stopPropagation(); openTerminateModal(data)"
             class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="timer_off"></mat-icon>
+          </button>
+
+          <!-- Liquidation Button (Leader) -->
+          <button
+            *ngIf="data.contractStatus === 6 && isLeader"
+            (click)="$event.stopPropagation(); openLiquidationModal(data)"
+            class="text-orange-500 hover:text-orange-700">
+            <mat-icon fontIcon="insert_page_break"></mat-icon>
           </button>
         </div>
       </td>

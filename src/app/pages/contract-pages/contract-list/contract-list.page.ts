@@ -24,6 +24,7 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { ContractTableComponent } from "../../../components/contract-pages/contract-table/contract-table.component";
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
+import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
 
 interface FilterOptions {
   contractIdNumber?: string;
@@ -322,6 +323,16 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.modalService.create({
       nzTitle: 'Kết thúc hợp đồng',
       nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzFooter: null
+    });
+  }
+
+  // liquidation stuff
+  openLiquidationModal(contract: ContractListItemModel) {
+    this.modalService.create({
+      nzTitle: 'Thanh lý hợp đồng',
+      nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null
     });

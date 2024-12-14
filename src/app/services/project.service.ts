@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, delay, map, Observable, of } from 'rxjs'
@@ -13,7 +13,7 @@ import { PayosInfoModel } from '../shared/models/project/payos-info.model'
 import { InvestmentCallStatus } from '../shared/enums/investment-call-status.enum'
 import { simulateStartupAPI } from '../shared/mocks/startup-samples'
 import { CheckProjectClosableModel } from '../shared/models/project/check-project-closable.model'
-import { mockCanCloseProject, mockCannotCloseProject, mockOnlyAssets, mockOnlyBudgetRemaining, mockOnlyContracts, mockOnlyDisbursements } from '../shared/mocks/close-data-samples'
+import { mockCanCloseProject, mockCannotCloseProject } from '../shared/mocks/close-data-samples'
 import { CheckUserLeaveableModel } from '../shared/models/project/check-user-leaveable.model'
 
 @Injectable({
