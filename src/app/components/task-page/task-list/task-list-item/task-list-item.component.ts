@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { Component, Input, OnInit } from '@angular/core'
 import { Task } from 'src/app/shared/models/task/task.model'
-import { DateDisplayPipe } from 'src/app/shared/pipes/date-display.pipe'
 import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 
 @Component({
@@ -9,7 +8,7 @@ import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
   templateUrl: './task-list-item.component.html',
   styleUrls: ['./task-list-item.component.scss'],
   standalone: true,
-  imports: [DateDisplayPipe, CommonModule]
+  imports: [CommonModule]
 })
 export class TaskListItemComponent implements OnInit {
   @Input({ required: true }) task: Task | null = null

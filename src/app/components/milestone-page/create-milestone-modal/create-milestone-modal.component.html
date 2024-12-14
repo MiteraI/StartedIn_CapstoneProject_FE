@@ -1,60 +1,96 @@
-<form [formGroup]="milestoneForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4">
-  <!-- Title Field -->
-  <nz-form-item>
-    <nz-form-label [nzRequired]="true">Tên Cột Mốc</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
-      <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" />
-    </nz-form-control>
-  </nz-form-item>
+<div class="flex flex-col h-[80vh]">
+  <div class="flex-1 overflow-y-auto">
+    <form [formGroup]="milestoneForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4">
+      <!-- Title Field -->
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">Tên Cột Mốc</nz-form-label>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
+          <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" />
+        </nz-form-control>
+      </nz-form-item>
 
-  <!-- Description Field -->
-  <nz-form-item>
-    <nz-form-label>Nội dung cột mốc</nz-form-label>
-    <nz-form-control>
-      <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc"></textarea>
-    </nz-form-control>
-  </nz-form-item>
+      <!-- Description Field -->
+      <nz-form-item>
+        <nz-form-label>Nội dung cột mốc</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc"></textarea>
+        </nz-form-control>
+      </nz-form-item>
 
-  <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <nz-form-item>
-      <nz-form-label>Ngày Bắt Đầu</nz-form-label>
-      <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
-        <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc"></nz-date-picker>
-      </nz-form-control>
-    </nz-form-item>
+      <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <nz-form-item>
+          <nz-form-label>Ngày Bắt Đầu</nz-form-label>
+          <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
+            <nz-date-picker formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
 
-    <nz-form-item>
-      <nz-form-label>Ngày Kết Thúc</nz-form-label>
-      <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
-        <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
-      </nz-form-control>
-    </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>Ngày Kết Thúc</nz-form-label>
+          <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
+            <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>Giai đoạn</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
+            <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
+            @for (phase of phases; track $index) {
+            <nz-option [nzValue]="phase.id" [nzLabel]="phase.phaseName"></nz-option>
+            } @if (isPhasesFetchLoading) {
+            <nz-option nzDisabled nzCustomContent>
+              <span nz-icon nzType="loading" class="loading-icon"></span>
+              Loading Data...
+            </nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <div class="flex justify-between items-center w-full">
+          <p>Cuộc Họp</p>
+          <button nz-button nzType="primary" (click)="openCreateMeetingModal()" type="button" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+            <mat-icon fontIcon="add_icon"></mat-icon>
+            Thêm Cuộc Họp
+          </button>
+        </div>
+        <nz-form-control>
+          <nz-table #basicTable nzSize="small" nzShowPagination="false" nzTableLayout="fixed" [nzData]="addingMeeting">
+            <thead>
+              <tr>
+                <th style="width: 40px"></th>
+                <th>Tiêu Đề</th>
+                <th>Ngày Họp</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of basicTable.data; track data.appointmentTime) {
+              <tr class="cursor-pointer">
+                <td [nzExpand]="expandSet.has(data.appointmentTime)" (nzExpandChange)="onExpandChange(data.appointmentTime, $event)"></td>
+                <td>{{ data.title }}</td>
+                <td>{{ data.appointmentTime | date : "d 'tháng' M, h:mm a" }}</td>
+              </tr>
+              <tr [nzExpand]="expandSet.has(data.appointmentTime)">
+                <!-- Meeting Description and Meeting Link -->
+                <span class="break-words">{{ data.description }}</span>
+                <br />
+                <a href="{{ data.meetingLink }}" target="_blank" class="text-blue-500">Link Họp</a>
+              </tr>
+              }
+            </tbody>
+          </nz-table>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
   </div>
 
-  <nz-form-item>
-      <nz-form-label>Giai đoạn</nz-form-label>
-      <nz-form-control>
-        <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
-          <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
-          @for (phase of phases; track $index) {
-          <nz-option [nzValue]="phase.id" [nzLabel]="phase.phaseName"></nz-option>
-          } @if (isPhasesFetchLoading) {
-          <nz-option nzDisabled nzCustomContent>
-            <span nz-icon nzType="loading" class="loading-icon"></span>
-            Loading Data...
-          </nz-option>
-          }
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
-  <!-- Submit Button -->
-  <nz-form-item>
-    <nz-form-control>
-      <div class="flex items-center justify-end">
-        <button nz-button nzType="default" [disabled]="milestoneForm.invalid">Tạo</button>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+  <div class="flex items-center justify-end px-4 py-2 bg-white border-t">
+    <!-- Submit Button -->
+    <button nz-button nzType="default" (click)="onSubmit()" [disabled]="milestoneForm.invalid">Tạo</button>
+  </div>
+</div>

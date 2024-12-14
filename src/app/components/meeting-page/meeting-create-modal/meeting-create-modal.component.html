@@ -12,7 +12,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Cột Mốc</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
-        <nz-select formControlName="milestoneId">
+        <nz-select formControlName="milestoneId" [nzDisabled]="nzModalData.appendMode">
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
           }
@@ -47,7 +47,9 @@
     <!-- Submit Button -->
     <nz-form-item>
       <nz-form-control>
-        <button [disabled]="meetingForm.invalid" nz-button nzType="primary">Submit</button>
+        <div class="flex justify-end">
+          <button [disabled]="meetingForm.invalid" nz-button nzType="primary">Tạo</button>
+        </div>
       </nz-form-control>
     </nz-form-item>
   </form>

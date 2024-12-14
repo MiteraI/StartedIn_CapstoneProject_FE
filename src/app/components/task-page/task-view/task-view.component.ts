@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs'
+import { debounceTime, distinctUntilChanged, map, Subject, takeUntil } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component'
 import { TaskTableComponent } from '../task-table/task-table.component'
@@ -43,6 +43,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   page: number = 1
   total: number = 0 //Total of tasks (filter or not)
   isFetchAllTaskLoading: boolean = false
+  milestoneIdParam = ''
   private searchSubject = new Subject<string>()
 
   constructor(
@@ -112,6 +113,11 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParams.pipe(map((params) => params['milestoneId'])).subscribe((milestoneId) => {
+      this.milestoneIdParam = milestoneId || ''
+      this.filter.milestoneId = this.milestoneIdParam
+    })
+
     this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
     if (this.isDesktopView) {
       this.size = 8

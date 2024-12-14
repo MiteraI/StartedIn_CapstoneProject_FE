@@ -29,16 +29,7 @@ interface MilestoneFilterOptions {
   templateUrl: './milestone-view.component.html',
   styleUrls: ['./milestone-view.component.scss'],
   standalone: true,
-  imports: [
-    FilterBarComponent,
-    MilestoneTableComponent,
-    MilestoneListComponent,
-    NzButtonModule,
-    MatIconModule,
-    NzModalModule,
-    MilestoneFilterComponent,
-    CommonModule,
-  ],
+  imports: [FilterBarComponent, MilestoneTableComponent, MilestoneListComponent, NzButtonModule, MatIconModule, NzModalModule, MilestoneFilterComponent, CommonModule],
 })
 export class MilestoneViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
@@ -71,20 +62,18 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     }
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
-      this.roleService.role$.subscribe(role => {
-        if (!role) return;
-        this.isLeader = role === TeamRole.LEADER;
+      this.roleService.role$.subscribe((role) => {
+        if (!role) return
+        this.isLeader = role === TeamRole.LEADER
       })
     })
     this.fetchMilestones(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
-    this.milestoneService.refreshMilestone$.pipe()
-    .subscribe(() => {
-      this.fetchMilestones(this.isDesktopView);
-    });
-
+    this.milestoneService.refreshMilestone$.pipe().subscribe(() => {      
+      this.fetchMilestones(this.isDesktopView)
+    })
   }
 
   ngOnDestroy() {
@@ -95,6 +84,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
       nzTitle: 'Cột Mốc Mới',
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '0px' },
       nzContent: CreateMilestoneModalComponent,
       nzData: {
         projectId: this.projectId,

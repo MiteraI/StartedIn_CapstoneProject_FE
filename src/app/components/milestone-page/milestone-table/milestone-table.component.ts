@@ -12,13 +12,14 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { format } from 'date-fns';
+import { RouterLink } from '@angular/router'
 
 @Component({
   selector: 'app-milestone-table',
   templateUrl: './milestone-table.component.html',
   styleUrls: ['./milestone-table.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule],
+  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule, RouterLink],
 })
 export class MilestoneTableComponent {
   @Output() pageChanged = new EventEmitter<number>()

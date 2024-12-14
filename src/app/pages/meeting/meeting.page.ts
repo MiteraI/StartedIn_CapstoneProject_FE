@@ -60,6 +60,7 @@ export class MeetingPage implements OnInit, OnDestroy {
       nzTitle: 'Tạo Cuộc Họp',
       nzData: {
         projectId: this.projectId,
+        appendMode: false,
         appointmentTime: this.selectedDate,
       },
       nzFooter: null,
