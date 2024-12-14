@@ -124,7 +124,7 @@ export class ContractService {
   }
 
   expireContract(id: string, projectId: string): Observable<any> {
-    return this.http.put(
+    return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/expiration`),
       null,
       { responseType: 'text' as 'json' }
@@ -142,5 +142,16 @@ export class ContractService {
     return this.http.get<ContractHistoryModel[]>(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/contracts/${id}/history`)
     );
+  }
+
+  addLiquidationNote(projectId: string, id: string, file: File): Observable<any> {
+    const url = `/api/projects/${projectId}/contracts/${id}/liquidation-notes`;
+    const formdata = new FormData();
+    formdata.append('uploadFile', file);
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(url),
+      formdata,
+      { responseType: 'text' as 'json' }
+    )
   }
 }

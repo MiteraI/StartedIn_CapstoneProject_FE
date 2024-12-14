@@ -23,6 +23,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { TerminateContractModalComponent } from '../terminate-contract-modal/terminate-contract-modal.component';
+import { LiquidationModalComponent } from '../liquidation-modal/liquidation-modal.component';
 
 @Component({
   selector: 'app-contract-table',
@@ -156,6 +157,15 @@ export class ContractTableComponent  implements OnInit {
     this.modalService.create({
       nzTitle: 'Kết thúc hợp đồng',
       nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzFooter: null
+    });
+  }
+
+  openLiquidationModal(contract: ContractListItemModel) {
+    this.modalService.create({
+      nzTitle: 'Thanh lý hợp đồng',
+      nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null
     });

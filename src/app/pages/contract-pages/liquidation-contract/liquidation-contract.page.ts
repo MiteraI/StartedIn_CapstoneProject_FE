@@ -61,30 +61,17 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
 
   contractStatus = ContractStatus
 
-  private currentUserId: string | null = null;
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private fb: FormBuilder,
     private contractService: ContractService,
-    private projectService: ProjectService,
     private notification: NzNotificationService,
     private accountService: AccountService,
     private roleService: RoleInTeamService,
   ) {}
 
   ngOnInit() {
-    this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
-      if (account) {
-        this.currentUserId = account.id;
-      }
-    });
-
-    this.roleService.role$.subscribe((role) => {
-    });
-
     this.route.data.subscribe((data) => {
       this.project = data['project'];
       this.contract = data['contract'];
@@ -94,20 +81,19 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
     });
   }
 
-
   send() {
     this.contractService
-        .sendContract(this.contractId!, this.project.id)
-        .pipe(
-          catchError((error) => {
-            this.notification.error('Lỗi', 'Gửi hợp đồng thất bại!', { nzDuration: 2000 });
-            return throwError(() => new Error(error.error));
-          })
-        )
-        .subscribe((response) => {
-          this.notification.success('Thành công', 'Gửi hợp đồng thành công!', { nzDuration: 2000 });
-          this.router.navigate(['projects', this.project.id, 'contracts']);
-        });
+      .sendContract(this.contractId!, this.project.id)
+      .pipe(
+        catchError((error) => {
+          this.notification.error('Lỗi', 'Gửi hợp đồng thất bại!', { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe((response) => {
+        this.notification.success('Thành công', 'Gửi hợp đồng thành công!', { nzDuration: 2000 });
+        this.router.navigate(['projects', this.project.id, 'contracts']);
+      });
   }
 
   showPreview() {

@@ -1,0 +1,35 @@
+<form [formGroup]="uploadForm" class="space-y-4 ant-modal-body">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Biên bản thanh lý hợp đồng (.docx hoặc .pdf)</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Vui lòng chọn biên bản thanh lý hợp đồng hợp lệ!">
+      <nz-upload
+        ngDefaultControl
+        formControlName="file"
+        [(nzFileList)]="fileList"
+        [nzBeforeUpload]="beforeUpload"
+        [nzRemove]="removeFile"
+        [nzMultiple]="false"
+        [nzShowUploadList]="true"
+        class="w-full"
+      >
+        <button nz-button class="w-full flex justify-center items-center">
+          <mat-icon fontIcon="file_upload"></mat-icon>
+          <span class="ml-2">Tải lên biên bản thanh lý hợp đồng</span>
+        </button>
+      </nz-upload>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="flex justify-end space-x-2">
+    <button nz-button (click)="closeModal()">Hủy</button>
+    <button
+      nz-button
+      nzType="primary"
+      [disabled]="uploadForm.invalid || fileList.length === 0"
+      [nzLoading]="isUploading"
+      (click)="handleUpload()"
+    >
+      Tải lên
+    </button>
+  </div>
+</form>
