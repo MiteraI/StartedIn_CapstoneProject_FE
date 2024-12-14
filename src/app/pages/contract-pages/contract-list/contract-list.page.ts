@@ -23,6 +23,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { ContractTableComponent } from "../../../components/contract-pages/contract-table/contract-table.component";
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
+import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
 
 interface FilterOptions {
   contractIdNumber?: string;
@@ -77,7 +78,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
-  listContract: SearchResponseModel<ContractListItemModel> = 
+  listContract: SearchResponseModel<ContractListItemModel> =
   {
     data: [],
     page: 1,
@@ -145,12 +146,12 @@ export class ContractListPage implements OnInit, OnDestroy {
           size: this.pageSize,
           total: result.total
         };
-  
+
         // Update contracts from listContract data
-        this.contracts = this.listContract.data.filter(c => 
+        this.contracts = this.listContract.data.filter(c =>
           this.isLeader || c.contractStatus !== ContractStatus.DRAFT
         );
-  
+
         this.totalRecords = this.listContract.total;
         this.groupContracts();
         this.isLoading = false;
@@ -316,6 +317,16 @@ export class ContractListPage implements OnInit, OnDestroy {
       });
   }
 
+  // terminate stuff
+  openTerminateModal(contract: ContractListItemModel) {
+    this.modalService.create({
+      nzTitle: 'Kết thúc hợp đồng',
+      nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzFooter: null
+    });
+  }
+
   // add stuff
   openAddModal() {
     this.modalService.create({
@@ -376,4 +387,4 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
   }
-} 
+}

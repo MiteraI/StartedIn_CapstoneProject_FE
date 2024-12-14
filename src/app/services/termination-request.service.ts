@@ -22,19 +22,14 @@ export class TerminationRequestService {
 
   getReceivedList(projectId: string) {
     const url = `/api/projects/${projectId}/received-termination-requests`
-    return of(simulateGetList(projectId)).pipe(delay(800));
-    //return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
+    //return of(simulateGetList(projectId)).pipe(delay(800));
+    return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 
   getSentList(projectId: string) {
     const url = `/api/projects/${projectId}/sent-termination-requests`
-    return of(simulateGetList(projectId)).pipe(delay(800));
-    //return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
-  }
-
-  get(projectId: string, id: string) {
-    const url = `/api/projects/${projectId}/termination-requests/${id}`
-    return this.http.get<TerminationRequestModel>(this.applicationConfigService.getEndpointFor(url))
+    //return of(simulateGetList(projectId)).pipe(delay(800));
+    return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 
   accept(projectId: string, id: string) {

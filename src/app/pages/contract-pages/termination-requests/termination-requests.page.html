@@ -1,11 +1,20 @@
-<div class="font-bold text-3xl text-black flex justify-center my-4">Yêu cầu hủy hợp đồng</div>
+<div class="font-bold text-3xl text-black flex justify-center my-4">Yêu cầu kết thúc hợp đồng</div>
 
-<div *ngIf="!isLeader" class="flex justify-center p-2 mb-2">
+<div *ngIf="!isLeader" class="flex items-center justify-center p-2 mb-2 space-x-2">
   <nz-select [(ngModel)]="filterMode" (ngModelChange)="filter()" class="min-w-32">
     <nz-option [nzValue]="1" nzLabel="7 ngày qua"></nz-option>
     <nz-option [nzValue]="2" nzLabel="30 ngày qua"></nz-option>
     <nz-option [nzValue]="3" nzLabel="Tất cả"></nz-option>
   </nz-select>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openAddModal()"
+    class="flex items-center justify-center"
+  >
+    <mat-icon fontIcon="add" class="-ml-2 mr-2"></mat-icon>
+    Tạo yêu cầu
+  </button>
 </div>
 
 <div *ngIf="isLoading" class="flex justify-center">
@@ -13,7 +22,7 @@
 </div>
 
 <div *ngIf="!isLoading && filteredRequests.length === 0" class="text-center text-gray-500">
-  Không có yêu cầu hủy hợp đồng nào
+  Không có yêu cầu kết thúc hợp đồng nào
 </div>
 
 <div
@@ -32,22 +41,21 @@
     >
       <div class="ml-2 flex-grow">
         <div class="font-medium">Hợp đồng số: {{ request.contractIdNumber }}</div>
-        <div *ngIf="!isLeader" class="text-sm text-gray-500">
-          Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
-        </div>
         <div *ngIf="isLeader" class="text-sm text-gray-500">
           Người gửi: {{ request.fromName }}
         </div>
-      </div>
-
-      <div *ngIf="!isLeader">
-        <span [ngClass]="{
-          'text-blue-500': request.isAgreed !== true && request.isAgreed !== false,
-          'text-green-500': request.isAgreed === true,
-          'text-red-500': request.isAgreed === false,
-        }">
-          ● {{ request.isAgreed === true ? 'Đã chấp nhận' : (request.isAgreed === false ? 'Đã từ chối' : 'Đang chờ') }}
-        </span>
+        <div class="text-sm text-gray-500">
+          Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
+        </div>
+        <div *ngIf="!isLeader" class="mt-2">
+          <span [ngClass]="{
+            'text-blue-500': request.isAgreed !== true && request.isAgreed !== false,
+            'text-green-500': request.isAgreed === true,
+            'text-red-500': request.isAgreed === false,
+          }">
+            ● {{ request.isAgreed === true ? 'Đã chấp nhận' : (request.isAgreed === false ? 'Đã từ chối' : 'Đang chờ') }}
+          </span>
+        </div>
       </div>
 
       <div *ngIf="isLeader" class="flex space-x-2">
