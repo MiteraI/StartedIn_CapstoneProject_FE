@@ -1,0 +1,71 @@
+<div class="overflow-hidden">
+  <div class="flex flex-col md:flex-row gap-4 mb-4">
+    <!-- Contract ID Number -->
+    <div class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Mã số hợp đồng</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ data.request.contractIdNumber || 'Không có dữ liệu' }}
+      </div>
+    </div>
+
+    <!-- Created By -->
+    <div *ngIf="data.isLeader" class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="person" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Người gửi yêu cầu</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ data.request.fromName || 'Không có dữ liệu' }}
+      </div>
+    </div>
+
+    <!-- Created Time -->
+    <div class="flex-1">
+      <div class="flex items-center">
+        <mat-icon fontIcon="access_time" class="text-gray-600 mr-2"></mat-icon>
+        <span class="font-semibold text-gray-700">Ngày tạo</span>
+      </div>
+      <div class="text-gray-800 ml-8">
+        {{ (data.request.createdTime | date:'dd/MM/yyyy') || 'Không có dữ liệu' }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason -->
+  <div>
+    <div class="flex items-center">
+      <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
+      <span class="font-semibold text-gray-700">Lý do</span>
+    </div>
+    <div class="text-gray-800 ml-8">
+      {{ data.request.reason || 'Không có lý do' }}
+    </div>
+  </div>
+
+  <!-- Accept/Reject -->
+  <div *ngIf="data.isLeader" class="flex justify-end gap-2 mt-6">
+    <button
+      nz-button
+      nzType="primary"
+      class="px-6"
+      (click)="acceptRequest()"
+      [nzLoading]="isLoading"
+    >
+      Chấp nhận
+    </button>
+
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      class="px-6"
+      (click)="rejectRequest()"
+      [nzLoading]="isLoading"
+    >
+      Từ chối
+    </button>
+  </div>
+</div>

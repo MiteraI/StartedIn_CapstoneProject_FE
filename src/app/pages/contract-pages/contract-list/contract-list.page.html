@@ -21,8 +21,16 @@
 <!-- Desktop View -->
 <div *ngIf="isDesktopView" class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <div class="flex justify-end mb-4">
-    <div *ngIf="isLeader" class="flex items-center gap-3">
+    <div class="flex items-center gap-3">
       <button
+        [routerLink]="['/projects', projectId, 'termination-requests']"
+        class="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-orange-600"
+      >
+        <mat-icon fontIcon="block" class="mr-2"></mat-icon>
+        Yêu cầu hủy hợp đồng
+      </button>
+      <button
+        *ngIf="isLeader"
         (click)="openAddModal()"
         class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
       >
@@ -64,10 +72,10 @@
           [routerLink]="[
             '/projects',
             projectId,
-            contract.contractType === contractTypes.INVESTMENT ? 'investment-contract' : 'internal-contract',
-            contract.id
-          ]"
-        >
+            contract.contractType === contractTypes.INVESTMENT ? 'investment-contract' :
+            contract.contractType === contractTypes.INTERNAL ? 'internal-contract' :
+            contract.contractType === contractTypes.LIQUIDATIONNOTE ? 'liquidation-contract' : '',
+            contract.id]">
           <div class="flex-1">
             <div class="text-2xl font-medium mr-2">{{ contract.contractName }}</div>
             <div class="text-xs text-gray-500 mt-1">{{ contract.contractIdNumber }}</div>
@@ -85,9 +93,8 @@
             <button (click)="$event.stopPropagation(); download(contract)" class="text-green-500 hover:text-green-700">
               <mat-icon fontIcon="file_download"></mat-icon>
             </button>
-            <button
-              *ngIf="contract.contractStatus === contractStatuses.COMPLETED"
-              (click)="$event.stopPropagation(); expireContract(contract)"
+            <button *ngIf="contract.contractStatus === contractStatuses.COMPLETED && contract.contractType !== contractTypes.LIQUIDATIONNOTE"
+              (click)="$event.stopPropagation()"
               class="text-yellow-500 hover:text-yellow-700"
             >
               <mat-icon fontIcon="timer_off"></mat-icon>

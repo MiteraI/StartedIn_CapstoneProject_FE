@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { ProjectService } from 'src/app/services/project.service'
-import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { CheckProjectClosableModel } from 'src/app/shared/models/project/check-project-closable.model'
 import { CommonModule } from '@angular/common'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
@@ -10,6 +9,7 @@ import { Router } from '@angular/router'
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
 import { MatIconModule } from '@angular/material/icon'
 import { ContractType } from 'src/app/shared/enums/contract-type.enum'
+import { NzNotificationService } from 'ng-zorro-antd/notification'
 
 @Component({
   selector: 'app-close-project-modal',
@@ -33,7 +33,7 @@ export class CloseProjectModalComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private modalRef: NzModalRef,
-    private antdNoti: AntdNotificationService,
+    private notification: NzNotificationService,
     private router: Router
   ) {}
 
@@ -48,7 +48,7 @@ export class CloseProjectModalComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.antdNoti.openErrorNotification('Lỗi', 'Không thể kiểm tra trạng thái đóng dự án');
+        this.notification.error('Lỗi', 'Không thể kiểm tra trạng thái đóng dự án', { nzDuration: 2000 });
         this.modalRef.close();
       }
     })
@@ -58,11 +58,11 @@ export class CloseProjectModalComponent implements OnInit {
     this.isLoading = true;
     this.projectService.closeProject(this.projectId).subscribe({
       next: () => {
-        this.antdNoti.openSuccessNotification('Thành công', 'Đã đóng dự án');
+        this.notification.success('Thành công', 'Đã đóng dự án', { nzDuration: 2000 });
         this.modalRef.close(true);
       },
       error: (error) => {
-        this.antdNoti.openErrorNotification('Lỗi', 'Không thể đóng dự án');
+        this.notification.success('Lỗi', 'Không thể đóng dự án', { nzDuration: 2000 });
         this.isLoading = false;
       }
     })

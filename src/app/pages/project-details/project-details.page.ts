@@ -23,7 +23,7 @@ export class ProjectDetailsPage implements OnInit, OnDestroy {
     private viewMode: ViewModeConfigService,
     private route: ActivatedRoute,
     private scrollService: ScrollService,
-    private roleInTeamService: RoleInTeamService
+    private roleService: RoleInTeamService
   ) {}
 
   ngOnInit(): void {
@@ -31,11 +31,11 @@ export class ProjectDetailsPage implements OnInit, OnDestroy {
     this.viewMode.isDesktopView$
       .pipe(takeUntil(this.destroy$))
       .subscribe((val) => (this.isDesktopView = val))
-    this.roleInTeamService.fetchRole().subscribe();
+    this.roleService.fetchRole().subscribe();
   }
 
   ngOnDestroy() {
-    this.roleInTeamService.clearRole();
+    this.roleService.clearRole();
     this.destroy$.next()
     this.destroy$.complete()
   }

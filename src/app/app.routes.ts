@@ -18,6 +18,7 @@ import { AdminProjectDataResolver } from './shared/resolvers/admin-project-data.
 import { UserDataResolver } from './shared/resolvers/user-data.resolver'
 import { ProfileDataResolver } from './shared/resolvers/profile-data.resolver'
 import { MentorGuard } from './shared/guards/mentor.guard'
+import { LiquidationContractDataResolver } from './shared/resolvers/liquidation-contract-data.resolver'
 
 export const routes: Routes = [
   {
@@ -127,6 +128,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/internal-contract/internal-contract.page').then((m) => m.InternalContractPage),
       },
       {
+        path: 'liquidation-contract/:contractId',
+        resolve: { project: ProjectDataResolver, contract: LiquidationContractDataResolver },
+        loadComponent: () => import('./pages/contract-pages/liquidation-contract/liquidation-contract.page').then((m) => m.LiquidationContractPage),
+      },
+      {
         path: 'disbursements',
         canActivate: [UserGuard],
         loadComponent: () => import('./pages/disbursement-pages/project-disbursement-list/project-disbursement-list.page').then((m) => m.ProjectDisbursementListPage),
@@ -207,10 +213,13 @@ export const routes: Routes = [
         path: 'settings',
         loadComponent: () => import('./pages/project-pages/project-settings/project-settings.page').then((m) => m.ProjectSettingsPage),
       },
-
       {
         path: 'meeting',
         loadComponent: () => import('./pages/meeting/meeting.page').then((m) => m.MeetingPage),
+      },
+      {
+        path: 'termination-requests',
+        loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then( m => m.TerminationRequestsPage)
       },
     ],
   },

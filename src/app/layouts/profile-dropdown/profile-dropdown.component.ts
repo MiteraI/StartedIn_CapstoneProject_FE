@@ -28,7 +28,7 @@ export class ProfileDropdownComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private roleInTeamService: RoleInTeamService
+    private roleService: RoleInTeamService
   ) {}
 
   logout() {
@@ -46,7 +46,7 @@ export class ProfileDropdownComponent implements OnInit, OnDestroy {
         this.authority = account!.authorities[0];
         this.isInvestor = this.authority === Authority.INVESTOR;
       })
-    this.roleInTeamService.role$
+    this.roleService.role$
       .pipe(takeUntil(this.destroyed$))
       .subscribe(role => this.role = role)
   }
