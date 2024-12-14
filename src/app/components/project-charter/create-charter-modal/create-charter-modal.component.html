@@ -1,0 +1,73 @@
+<form [formGroup]="projectCharterForm" (ngSubmit)="onSubmit()" class="bg-white flex flex-col">
+  <div class="flex gap-4">
+    <div class="w-1/2">
+      <p class="font-semibold text-xl text-gray-600 mb-2">Điều Lệ Dự Án</p>
+      <div class="p-2 bg-amber-100 rounded-md">
+        <div>
+          <label class="block text-sm font-semibold p-2">BỐI CẢNH DỰ ÁN</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập bối cảnh dự án" formControlName="businessCase" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">MỤC TIÊU</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập mục tiêu" formControlName="goal" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">MỤC ĐÍCH</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập mục đích" formControlName="objective" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">PHẠM VI</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập phạm vi" formControlName="scope" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">HẠN CHẾ</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập hạn chế" formControlName="constraints" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">GIẢ ĐỊNH</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập giả định" formControlName="assumptions" class="rounded-md"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold p-2">KẾT QUẢ ĐẦU RA</label>
+          <textarea nz-input [nzAutosize]="{ minRows: 2, maxRows: 6 }" placeholder="Nhập kết quả đầu ra" formControlName="deliverables" class="rounded-md"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col w-1/2">
+      <!------------------------------------------------->
+      <!-- Create Many Phases ----------------------->
+      <!------------------------------------------------->
+      <div class="flex justify-between">
+        <p class="font-semibold text-xl text-gray-600 mb-2">Giai Đoạn</p>
+        <mat-icon (click)="addMilestone()" class="text-right cursor-pointer text-white bg-green-500 rounded-full shadow-sm hover:shadow-md" fontIcon="add">add</mat-icon>
+      </div>
+      <div formArrayName="listCreatePhaseDtos">
+        @for (phase of listCreatePhaseDtos.controls; track $index; let i = $index) {
+        <div class="space-y-4 p-2 bg-amber-100 rounded-md mb-4" [formGroupName]="i">
+          <div class="flex flex-col">
+            <label class="text-gray-600 font-semibold text-sm p-2">GIAI ĐOẠN</label>
+            <input nz-input placeholder="Nhập giai đoạn" formControlName="phaseName" class="" />
+          </div>
+          <div class="flex flex-col">
+            <label class="text-gray-600 font-semibold text-sm p-2">NGÀY BẮT ĐẦU - KẾT THÚC</label>
+            <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="startEndDate" class="col-span-3"></nz-range-picker>
+          </div>
+          <div class="flex justify-end">
+            <mat-icon (click)="showConfirmDelete(i)" class="text-right cursor-pointer text-red-500">delete</mat-icon>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="flex">
+    <button nz-button nzSize="large" type="submit" nzType="primary" class="rounded-md ml-auto items-center" [disabled]="projectCharterForm.invalid">Tạo Tuyên Ngôn Dự Án</button>
+  </div>
+</form>

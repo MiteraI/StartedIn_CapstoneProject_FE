@@ -72,9 +72,12 @@
             [routerLink]="[
               '/projects',
               projectId,
-              data.contractType === 2 ? 'investment-contract' : 'internal-contract',
+              data.contractType === 1 ? 'internal-contract' : 
+              data.contractType === 2 ? 'investment-contract' : 
+              data.contractType === 3 ? 'liquidation-contract' : '',
               data.id
-            ]">
+            ]"
+          >
             <mat-icon fontIcon="visibility"></mat-icon>
           </button>
 
@@ -104,7 +107,7 @@
 
           <!-- Expire Button (Leader) -->
           <button
-            *ngIf="data.contractStatus === 3 && isLeader"
+            *ngIf="data.contractStatus === 3 && data.contractType !== 3 && isLeader"
             (click)="$event.stopPropagation(); expireContract(data)"
             class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="timer_off"></mat-icon>
