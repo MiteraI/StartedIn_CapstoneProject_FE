@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { DisbursementCreateModel } from 'src/app/shared/models/disbursement/disbursement-create.model';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -15,7 +14,7 @@ import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contr
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -72,8 +71,11 @@ export class InvestmentContractPage implements OnInit {
   disbursements: DisbursementCreateModel[] = [];
   disbursementTotalAmount: number = 0;
 
+  isLoading: boolean = false;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private location: Location,
     private fb: FormBuilder,
     private modalService: NzModalService,
@@ -185,9 +187,12 @@ export class InvestmentContractPage implements OnInit {
   }
 
   save() {
+    this.isLoading = true;
     this.createOrUpdateContract().subscribe(response => {
-      this.contractId = response.id
+      this.contractId = response.id;
+      this.isLoading = false;
       this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
+      this.router.navigate(['projects', this.project.id, 'contracts']);
     });
   }
 
@@ -195,6 +200,7 @@ export class InvestmentContractPage implements OnInit {
     if (!this.contractForm.valid) {
       return;
     }
+    this.isLoading = true;
     this.createOrUpdateContract()
       .subscribe(response => {
         this.notification.success("Thành công", "Lưu hợp đồng thành công!", { nzDuration: 2000 });
@@ -208,8 +214,10 @@ export class InvestmentContractPage implements OnInit {
             })
           )
           .subscribe(response => {
-            this.contractId = response.id
+            this.contractId = response.id;
+            this.isLoading = false;
             this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
+            this.router.navigate(['projects', this.project.id, 'contracts']);
           })
       })
   }
@@ -271,6 +279,7 @@ export class InvestmentContractPage implements OnInit {
   }
 
   download() {
+    this.isLoading = true;
     this.contractService
       .downloadContract(this.contractId!, this.project.id)
       .pipe(
@@ -280,6 +289,7 @@ export class InvestmentContractPage implements OnInit {
         })
       )
       .subscribe(response => {
+        this.isLoading = false;
         window.open(response.downLoadUrl, '_blank');
       });
   }
