@@ -1,0 +1,44 @@
+<div class="justify-end flex mb-2">
+  <button nz-button nzType="primary" (click)="openCreateMeetingModal()">+ Tạo lịch hẹn</button>
+</div>
+
+<nz-table
+  #nestedTable
+  [nzFrontPagination]="false"
+  [nzData]="listOfMeetings"
+  nzBordered="true"
+  nzSize="small"
+  [nzLoading]="isLoading"
+  [nzPageIndex]="page"
+  [nzPageSize]="pageSize"
+  [nzTotal]="total"
+  (nzPageIndexChange)="onPageIndexChange($event)"
+>
+  <thead>
+    <tr>
+      <th>Cột Mốc</th>
+      <th>Tiêu Đề</th>
+      <th nzWidth="200px">Thời Gian Bắt Đầu</th>
+      <th nzWidth="120px">Trạng Thái</th>
+      <th nzWidth="80px" nzAlign="right">Biên Bản</th>
+      <th nzWidth="20px"></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (meeting of listOfMeetings; track $index) {
+
+    <tr>
+      <td>{{ meeting.milestoneName }}</td>
+      <td>{{ meeting.title }}</td>
+      <td>{{ meeting.appointmentTime | date : 'hh:mm a - dd.MM.yy' }}</td>
+      <td>{{ MeetingLabel[meeting.status] }}</td>
+      <td nzAlign="center">
+        <button (click)="openMeetingNote()"><mat-icon class="text-blue-500 cursor-pointer"> description </mat-icon></button>
+      </td>
+      <td>
+        <button (click)="openMeetingDetail(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> info </mat-icon></button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</nz-table>

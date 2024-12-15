@@ -92,4 +92,9 @@ export class MeetingCreateModalComponent implements OnInit {
     const meetingData = this.meetingForm.value
     this.nzModalRef.close(meetingData)
   }
+
+  disabledDate = (current: Date): boolean => {
+    // Can only select today or future dates
+    return current && current < new Date()
+  }
 }

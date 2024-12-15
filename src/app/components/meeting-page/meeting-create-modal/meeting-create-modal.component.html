@@ -10,7 +10,7 @@
 
     <!-- Milestone select -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Cột Mốc</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24">Cột Mốc</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24">
         <nz-select formControlName="milestoneId" [nzDisabled]="nzModalData.appendMode">
           @for (milestone of milestones; track $index) {
@@ -24,7 +24,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Ngày Họp</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng chọn ngày cho cuộc họp">
-        <nz-date-picker nzShowTime formControlName="appointmentTime"></nz-date-picker>
+        <nz-date-picker [nzDisabledDate]="disabledDate" nzShowTime formControlName="appointmentTime"></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
 
