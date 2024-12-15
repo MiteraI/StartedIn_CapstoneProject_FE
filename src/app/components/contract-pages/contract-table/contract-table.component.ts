@@ -58,10 +58,8 @@ export class ContractTableComponent  implements OnInit {
   isLeader = false;
   constructor(
     private contractService: ContractService,
-    private disbursementService: DisbursementService,
     private modalService: NzModalService,
     private router: Router,
-    private route: ActivatedRoute,
     private roleService: RoleInTeamService,
     private notification: NzNotificationService) { }
 
@@ -163,11 +161,30 @@ export class ContractTableComponent  implements OnInit {
   }
 
   openLiquidationModal(contract: ContractListItemModel) {
+    if (contract.liquidationNoteId) {
+      this.router.navigate([
+        '/projects',
+        this.projectId,
+        'liquidation-contract',
+        contract.liquidationNoteId
+      ]);
+    }
     this.modalService.create({
       nzTitle: 'Thanh lý hợp đồng',
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null
     });
+  }
+
+  navigateToContract(contract: ContractListItemModel) {
+    this.router.navigate([
+      '/projects',
+      this.projectId,
+      contract.contractType === ContractType.INVESTMENT ? 'investment-contract' :
+      contract.contractType === ContractType.INTERNAL ? 'internal-contract' :
+      contract.contractType === ContractType.LIQUIDATIONNOTE ? 'liquidation-contract' : '',
+      contract.id
+    ])
   }
 }
