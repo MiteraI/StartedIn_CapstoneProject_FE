@@ -4,7 +4,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { catchError, throwError, Subject, takeUntil } from 'rxjs';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
@@ -79,8 +79,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
-  listContract: SearchResponseModel<ContractListItemModel> =
-  {
+  listContract: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
     size: 10,
@@ -90,6 +89,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private modalService: NzModalService,
     private contractService: ContractService,
     private notification: NzNotificationService,
@@ -330,6 +330,14 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   // liquidation stuff
   openLiquidationModal(contract: ContractListItemModel) {
+    if (contract.liquidationNoteId) {
+      this.router.navigate([
+        '/projects',
+        this.projectId,
+        'liquidation-contract',
+        contract.liquidationNoteId
+      ]);
+    }
     this.modalService.create({
       nzTitle: 'Thanh lý hợp đồng',
       nzContent: LiquidationModalComponent,
@@ -392,6 +400,18 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.pageSize = size;
     this.pageIndex = 1;
     this.filterContracts();
+  }
+
+  // navigation stuff
+  navigateToContract(contract: ContractListItemModel) {
+    this.router.navigate([
+      '/projects',
+      this.projectId,
+      contract.contractType === ContractType.INVESTMENT ? 'investment-contract' :
+      contract.contractType === ContractType.INTERNAL ? 'internal-contract' :
+      contract.contractType === ContractType.LIQUIDATIONNOTE ? 'liquidation-contract' : '',
+      contract.id
+    ])
   }
 
   ngOnDestroy() {

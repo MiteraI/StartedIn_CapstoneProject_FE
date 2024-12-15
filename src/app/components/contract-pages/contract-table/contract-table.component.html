@@ -33,7 +33,7 @@
   </thead>
   <tbody>
     @for (data of contractTable.data; track data.id) {
-    <tr>
+    <tr class="cursor-pointer" (click)="navigateToContract(data)">
       <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand"></td>
       <td *ngIf="data.contractType !== 2"></td>
       <td>{{ data.contractIdNumber }}</td>
@@ -66,21 +66,6 @@
       </td>
       <td>
         <div class="flex items-center space-x-2">
-          <!-- View Button -->
-          <button
-            class="text-blue-500 hover:text-blue-700"
-            [routerLink]="[
-              '/projects',
-              projectId,
-              data.contractType === 1 ? 'internal-contract' :
-              data.contractType === 2 ? 'investment-contract' :
-              data.contractType === 3 ? 'liquidation-contract' : '',
-              data.id
-            ]"
-          >
-            <mat-icon fontIcon="visibility"></mat-icon>
-          </button>
-
           <!-- Send Button (Visible for specific conditions) -->
           <button
             *ngIf="data.contractStatus === 1 && isLeader"
