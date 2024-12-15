@@ -7,7 +7,7 @@ import { InvestmentCallService } from 'src/app/services/investment-call.service'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { DatePipe } from '@angular/common'
+import { DatePipe, PercentPipe } from '@angular/common'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzInputModule } from 'ng-zorro-antd/input'
@@ -19,23 +19,14 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
   templateUrl: './create-investment-call-modal.component.html',
   styleUrls: ['./create-investment-call-modal.component.scss'],
   standalone: true,
-  imports: [
-    NzFormModule,
-    NzInputModule,
-    NzDatePickerModule,
-    ReactiveFormsModule,
-    NzButtonModule,
-    NzSelectModule,
-    NzIconModule,
-    NzInputNumberModule,
-  ],
-  providers: [DatePipe],
+  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzInputNumberModule, PercentPipe],
+  providers: [DatePipe, PercentPipe],
 })
 export class CreateInvestmentCallModalComponent {
   readonly nzModalData: any = inject(NZ_MODAL_DATA)
 
   investmentCallForm: FormGroup
-
+  remainingEquityShare: number = 0
   constructor(
     private fb: FormBuilder,
     private antdNoti: AntdNotificationService,
@@ -44,16 +35,21 @@ export class CreateInvestmentCallModalComponent {
     private datePipe: DatePipe
   ) {
     this.investmentCallForm = this.fb.group({
-      targetCall: [1, [Validators.required]],
+      valuePerPercentage: [1000000, [Validators.required]],
+      targetCall: [1000000, [Validators.required]],
       equityShareCall: [1, [Validators.required]],
       startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
     })
+
+    this.setupFormListeners()
+    this.remainingEquityShare = this.nzModalData.currentProject.remainingPercentOfShares
+    console.log(this.remainingEquityShare)
   }
 
-  vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
-  vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
-  vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
+  vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe()
+  vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value)
+  vndParser = (value: string) => value.replace(/\D/g, '') // remove all non-digits
 
   formatterPercent = (value: number): string => `${value} %`
   parserPercent = (value: string): string => value.replace(' %', '')
@@ -70,6 +66,7 @@ export class CreateInvestmentCallModalComponent {
   onSubmit() {
     if (this.investmentCallForm.valid) {
       const investmentCallData: InvestmentCallCreateModel = this.investmentCallForm.value
+      console.log(investmentCallData)
 
       let startDate = this.investmentCallForm.value.startDate
       if (startDate) {
@@ -95,5 +92,25 @@ export class CreateInvestmentCallModalComponent {
         },
       })
     }
+  }
+
+  setupFormListeners() {
+    // Combine changes from valuePerPercentage and equityShareCall
+    this.investmentCallForm.get('valuePerPercentage')?.valueChanges.subscribe(() => {
+      this.updateTargetCall()
+    })
+
+    this.investmentCallForm.get('equityShareCall')?.valueChanges.subscribe(() => {
+      this.updateTargetCall()
+    })
+  }
+
+  updateTargetCall() {
+    const valuePerPercentage = this.investmentCallForm.get('valuePerPercentage')?.value || 0
+    const equityShareCall = this.investmentCallForm.get('equityShareCall')?.value || 0
+    const targetCall = valuePerPercentage * equityShareCall
+
+    // Update the targetCall field
+    this.investmentCallForm.get('targetCall')?.setValue(targetCall, { emitEvent: false })
   }
 }

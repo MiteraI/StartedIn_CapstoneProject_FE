@@ -1,33 +1,33 @@
 <form [formGroup]="investmentCallForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4 py-2">
+  <div class="flex">
+    <!-- Value per percentage Field -->
+    <nz-form-item>
+      <nz-form-label [nzRequired]="true">Số tiền/% cổ phần</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
+        <nz-input-number class="w-60" formControlName="valuePerPercentage" [nzMin]="1000" [nzStep]="1000000" [nzFormatter]="vndFormatter" [nzParser]="vndParser" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Equity Share Call Field -->
+    <nz-form-item>
+      <nz-form-label [nzRequired]="true">Cổ phần(Còn lại: {{ remainingEquityShare / 100 | percent }})</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
+        <nz-input-number
+          formControlName="equityShareCall"
+          [nzMin]="1"
+          [nzMax]="remainingEquityShare"
+          [nzPrecision]="2"
+          [nzFormatter]="formatterPercent"
+          [nzParser]="parserPercent"
+        />
+      </nz-form-control>
+    </nz-form-item>
+  </div>
+
   <!-- Target Call Field -->
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Số vốn cần gọi</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
-      <!-- <input nz-input formControlName="targetCall" type="number" placeholder="Nhập mục tiêu cuộc gọi" /> -->
-      <nz-input-number
-        class="w-60"
-        formControlName="targetCall"
-        [nzMin]="1000"
-        [nzStep]="10000000"
-        [nzPrecision]="-3"
-        [nzFormatter]="vndFormatter"
-        [nzParser]="vndParser" />
-    </nz-form-control>
-  </nz-form-item>
-
-  <!-- Equity Share Call Field -->
-  <nz-form-item>
-    <nz-form-label [nzRequired]="true">Cổ phần cần gọi</nz-form-label>
-    <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
-      <!-- <input nz-input formControlName="equityShareCall" type="number" placeholder="Nhập cổ phần cuộc gọi" /> -->
-      <nz-input-number
-        formControlName="equityShareCall"
-        [nzMin]="1"
-        [nzMax]="100"
-        [nzPrecision]="2"
-        [nzFormatter]="formatterPercent"
-        [nzParser]="parserPercent" />
-    </nz-form-control>
+    <nz-form-control> <nz-input-number class="w-60" formControlName="targetCall" [nzFormatter]="vndFormatter" [nzParser]="vndParser" nzReadOnly="true" /> </nz-form-control>
   </nz-form-item>
 
   <!-- Start/End Date Field -->
