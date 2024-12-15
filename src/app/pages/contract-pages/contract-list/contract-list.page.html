@@ -86,14 +86,7 @@
               <mat-icon fontIcon="file_download"></mat-icon>
             </button>
             <button
-              *ngIf="contract.contractStatus === contractStatuses.COMPLETED && contract.contractType !== contractTypes.LIQUIDATIONNOTE && isLeader"
-              (click)="$event.stopPropagation(); expireContract(contract)"
-              class="text-yellow-500 hover:text-yellow-700"
-            >
-              <mat-icon fontIcon="timer_off"></mat-icon>
-            </button>
-            <button
-              *ngIf="contract.contractStatus === contractStatuses.COMPLETED && !isLeader"
+              *ngIf="contract.contractStatus === contractStatuses.COMPLETED && contract.contractType !== contractTypes.LIQUIDATIONNOTE"
               (click)="$event.stopPropagation(); openTerminateModal(contract)"
               class="text-yellow-500 hover:text-yellow-700"
             >

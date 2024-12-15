@@ -154,4 +154,15 @@ export class ContractService {
       { responseType: 'text' as 'json' }
     )
   }
+
+  terminate(projectId: string, id: string, file: File): Observable<any> {
+    const url = `/api/projects/${projectId}/contracts/${id}/leader-terminate`;
+    const formdata = new FormData();
+    formdata.append('uploadFile', file);
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(url),
+      formdata,
+      { responseType: 'text' as 'json' }
+    )
+  }
 }

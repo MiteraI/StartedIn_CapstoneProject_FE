@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
@@ -9,7 +9,6 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { ContractService } from 'src/app/services/contract.service';
-import { DisbursementService } from 'src/app/services/disbursement.service';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
@@ -155,7 +154,7 @@ export class ContractTableComponent  implements OnInit {
     this.modalService.create({
       nzTitle: 'Kết thúc hợp đồng',
       nzContent: TerminateContractModalComponent,
-      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
       nzFooter: null
     });
   }
