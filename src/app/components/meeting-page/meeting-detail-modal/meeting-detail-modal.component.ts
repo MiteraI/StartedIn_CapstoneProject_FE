@@ -4,14 +4,16 @@ import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions'
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
-import { DatePipe } from '@angular/common'
+import { CommonModule, DatePipe } from '@angular/common'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 @Component({
   selector: 'app-meeting-detail-modal',
   templateUrl: './meeting-detail-modal.component.html',
   styleUrls: ['./meeting-detail-modal.component.scss'],
   standalone: true,
-  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule],
+  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule],
 })
 export class MeetingDetailModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
@@ -32,10 +34,35 @@ export class MeetingDetailModalComponent implements OnInit {
       next: (response) => {
         this.meetingDetail = response
         this.loading = false
+        console.log('Meeting detail:', this.meetingDetail)
       },
       error: (error) => {
         this.nzMessage.error(error)
       },
     })
+  }
+
+  getStatusIcon(): string {
+    switch (this.meetingDetail.status) {
+      case MeetingStatus.PROPOSED:
+        return 'clock-circle'
+      case MeetingStatus.ONGOING:
+        return 'loading'
+      case MeetingStatus.FINISHED:
+        return 'check-circle'
+      case MeetingStatus.CANCELLED:
+        return 'close-circle'
+      default:
+        return 'question-circle'
+    }
+  }
+
+  getStatusTheme(): 'outline' | 'fill' {
+    return this.meetingDetail.status === MeetingStatus.ONGOING ? 'outline' : 'fill'
+  }
+
+  // Retrieve status label
+  getMeetingStatusLabel(status: MeetingStatus): string {
+    return MeetingLabel[status] || 'Không xác định'
   }
 }
