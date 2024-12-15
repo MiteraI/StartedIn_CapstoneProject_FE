@@ -21,6 +21,7 @@ interface IModalData {
   assetId: string
   projectId: string
   quantity: number
+  remainQuantity: number
 }
 
 @Component({
@@ -65,7 +66,7 @@ export class UpdateAssetModalComponent  implements OnInit {
     private assetService: AssetService,
   ) {
     this.assetForm = this.fb.group({
-      remainQuantity: [0, [Validators.required, Validators.min(0), Validators.max(this.nzModalData.quantity)]],
+      remainQuantity: [0, [Validators.required, Validators.min(0), Validators.max(this.nzModalData.remainQuantity)]],
       status: [null]
     })
   }
