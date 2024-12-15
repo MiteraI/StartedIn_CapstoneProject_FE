@@ -44,6 +44,7 @@
     [listContract]="listContract"
     [projectId]="projectId"
     [isFetchAllContractLoading]="isFetchAllContractLoading"
+    (refreshNeeded)="filterContracts()"
   ></app-contract-table>
 
   <div class="hidden md:flex justify-end mt-4">

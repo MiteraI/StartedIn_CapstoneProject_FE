@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -53,6 +53,7 @@ export class ContractTableComponent  implements OnInit {
     total: 0
   }
   @Input({ required: true }) isFetchAllContractLoading: boolean = false
+  @Output() refreshNeeded = new EventEmitter<void>();
 
   isLeader = false;
   constructor(
@@ -98,9 +99,9 @@ export class ContractTableComponent  implements OnInit {
         })
       )
       .subscribe(result => {
-        contract.contractStatus = 2;
+        contract.contractStatus = ContractStatus.SENT;
+        contract.lastUpdatedTime = new Date().toISOString();
         this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
-        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -114,8 +115,8 @@ export class ContractTableComponent  implements OnInit {
         })
       )
       .subscribe(() => {
+        this.listContract.data = this.listContract.data.filter(c => c.id !== contract.id)
         this.notification.success("Thành công", "Xóa hợp đồng thành công!", { nzDuration: 2000 });
-        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -146,7 +147,6 @@ export class ContractTableComponent  implements OnInit {
         contract.contractStatus = 5;
         contract.lastUpdatedTime = new Date().toISOString();
         this.notification.success("Thành công", "Kết thúc hợp đồng thành công!", { nzDuration: 2000 });
-        this.contractService.refreshContract$.next(true)
       });
   }
 
@@ -155,7 +155,8 @@ export class ContractTableComponent  implements OnInit {
       nzTitle: 'Kết thúc hợp đồng',
       nzContent: TerminateContractModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null
+      nzFooter: null,
+      nzOnOk: () => this.refreshNeeded.emit()
     });
   }
 
@@ -172,7 +173,8 @@ export class ContractTableComponent  implements OnInit {
       nzTitle: 'Thanh lý hợp đồng',
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
-      nzFooter: null
+      nzFooter: null,
+      nzOnOk: () => this.refreshNeeded.emit()
     });
   }
 

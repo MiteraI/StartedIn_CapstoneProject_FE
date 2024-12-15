@@ -259,23 +259,13 @@ export class ContractListPage implements OnInit, OnDestroy {
       )
       .subscribe(result => {
         contract.contractStatus = this.contractStatuses.SENT;
+        contract.lastUpdatedTime = new Date().toISOString();
+        this.groupContracts();
         this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
       });
   }
 
   // delete stuff
-  get canDeleteSelected() {
-    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.DRAFT);
-  }
-
-  deleteSelected() {
-    this.selectedContracts.forEach(c => this.deleteContract(c));
-  }
-
-  deleteSingle(contract: ContractListItemModel) {
-    this.deleteContract(contract);
-  }
-
   deleteContract(contract: ContractListItemModel) {
     this.contractService
       .deleteContract(contract.id, this.projectId)
@@ -293,14 +283,6 @@ export class ContractListPage implements OnInit, OnDestroy {
   }
 
   // expire stuff
-  get canExpireSelected() {
-    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.COMPLETED);
-  }
-
-  expireSelected() {
-    this.selectedContracts.forEach(c => this.expireContract(c));
-  }
-
   expireContract(contract: ContractListItemModel) {
     this.contractService
       .expireContract(contract.id, this.projectId)
@@ -324,7 +306,8 @@ export class ContractListPage implements OnInit, OnDestroy {
       nzTitle: 'Kết thúc hợp đồng',
       nzContent: TerminateContractModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null
+      nzFooter: null,
+      nzOnOk: () => this.filterContracts()
     });
   }
 
@@ -342,14 +325,15 @@ export class ContractListPage implements OnInit, OnDestroy {
       nzTitle: 'Thanh lý hợp đồng',
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
-      nzFooter: null
+      nzFooter: null,
+      nzOnOk: () => this.filterContracts()
     });
   }
 
   // add stuff
   openAddModal() {
     this.modalService.create({
-      nzTitle: 'Hợp Đồng Mới',
+      nzTitle: 'Hợp đồng mới',
       nzContent: NewContractModalComponent,
       nzFooter: null,
       nzData: this.projectId
@@ -357,14 +341,6 @@ export class ContractListPage implements OnInit, OnDestroy {
   }
 
   // download stuff
-  get canDownloadSelected() {
-    return this.selectedContracts.every(c => c.contractStatus !== ContractStatus.DRAFT);
-  }
-
-  downloadSelected() {
-    this.selectedContracts.forEach(c => this.download(c));
-  }
-
   download(contract: ContractListItemModel) {
     this.contractService
       .downloadContract(contract.id, this.projectId)
