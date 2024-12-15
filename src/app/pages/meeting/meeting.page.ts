@@ -11,13 +11,14 @@ import { NzModalService } from 'ng-zorro-antd/modal'
 import { MeetingDetailModalComponent } from 'src/app/components/meeting-page/meeting-detail-modal/meeting-detail-modal.component'
 import { MeetingCreateModalComponent } from 'src/app/components/meeting-page/meeting-create-modal/meeting-create-modal.component'
 import { Subscription } from 'rxjs'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
   selector: 'app-meeting',
   templateUrl: './meeting.page.html',
   styleUrls: ['./meeting.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzCalendarModule, NzBadgeModule, ViewTitleBarComponent],
+  imports: [CommonModule, FormsModule, NzCalendarModule, NzBadgeModule, ViewTitleBarComponent, NzToolTipModule],
 })
 export class MeetingPage implements OnInit, OnDestroy {
   constructor(private meetingService: MeetingService, private activatedRoute: ActivatedRoute, private modalService: NzModalService) {}
@@ -44,6 +45,9 @@ export class MeetingPage implements OnInit, OnDestroy {
     )
   }
 
+  getBadgeText(event: any): string {
+    return `${event.title} - ${new Date(event.appointmentTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+  }
   onSelectChange(date: Date): void {
     const selectedYear = date.getFullYear()
     if (selectedYear !== this.year) {

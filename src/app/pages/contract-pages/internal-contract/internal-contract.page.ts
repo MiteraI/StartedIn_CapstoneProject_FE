@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -67,6 +66,8 @@ export class InternalContractPage implements OnInit, OnDestroy {
   percentParser = (value: string) => value.replace('%', '');
 
   shareTotal: number = 0;
+
+  isLoading: boolean = false;
 
   private currentUserId: string | null = null;
 
@@ -168,9 +169,12 @@ export class InternalContractPage implements OnInit, OnDestroy {
   }
 
   save() {
+    this.isLoading = true;
     this.createOrUpdateContract().subscribe((response) => {
       this.contractId = response.id;
+      this.isLoading = false;
       this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 });
+      this.router.navigate(['projects', this.project.id, 'contracts']);
     });
   }
 
@@ -178,6 +182,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
     if (!this.contractForm.valid) {
       return;
     }
+    this.isLoading = true;
     this.createOrUpdateContract().subscribe((response) => {
       this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 });
       this.contractId = response.id;
@@ -190,6 +195,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
           })
         )
         .subscribe((response) => {
+          this.isLoading = false;
           this.notification.success('Thành công', 'Gửi hợp đồng thành công!', { nzDuration: 2000 });
           this.router.navigate(['projects', this.project.id, 'contracts']);
         });
@@ -231,6 +237,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
   }
 
   download() {
+    this.isLoading = true;
     this.contractService
       .downloadContract(this.contractId!, this.project.id)
       .pipe(
@@ -240,6 +247,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
         })
       )
       .subscribe((response) => {
+        this.isLoading = false;
         window.open(response.downLoadUrl, '_blank');
       });
   }
