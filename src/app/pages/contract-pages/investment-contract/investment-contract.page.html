@@ -123,20 +123,8 @@
         </nz-list>
       </div>
 
-      <div *ngIf="!isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="showPreview()">
-          Bản xem trước
-        </button>
-        <button nz-button nzType="default" (click)="save()">
-          Lưu
-        </button>
-        <button nz-button nzType="primary" (click)="saveAndSend()" [disabled]="!contractForm.valid">
-          Lưu & Gửi
-        </button>
-      </div>
-
-      <div *ngIf="isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="download()">
+      <div class="mt-6 text-right">
+        <button nz-button nzType="link" (click)="download()" [nzLoading]="isLoading">
           Tải xuống
         </button>
         <button nz-button nzType="primary" (click)="navigateBack()">
@@ -239,23 +227,28 @@
       </div>
 
       <div *ngIf="!isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
-          Bản xem trước
+        <button nz-button nzType="link" (click)="navigateBack()">
+          Quay lại
         </button>
-        <button nz-button nzType="default" (click)="save()">
+        <div class="flex-grow"></div>
+        <!-- <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
+          Bản xem trước
+        </button> -->
+        <button nz-button nzType="default" (click)="save()" [nzLoading]="isLoading">
           Lưu
         </button>
-        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()">
+        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()" [nzLoading]="isLoading">
           Lưu & Gửi
         </button>
       </div>
 
       <div *ngIf="isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="download()">
-          Tải xuống
-        </button>
-        <button nz-button nzType="primary" (click)="navigateBack()">
+        <button nz-button nzType="link" (click)="navigateBack()">
           Quay lại
+        </button>
+        <div class="flex-grow"></div>
+        <button nz-button nzType="primary" (click)="download()" [nzLoading]="isLoading">
+          Tải xuống
         </button>
       </div>
     </div>

@@ -1,18 +1,22 @@
 <app-view-title-bar viewName="Danh sách lịch hẹn"></app-view-title-bar>
 
-<nz-calendar [(ngModel)]="selectedDate" class="calendar" [nzMode]="'month'" (nzSelectChange)="onSelectChange($event)">
-  <ul *nzDateCell="let date">
-    <ng-container *ngFor="let event of meetingList; trackBy: getEvents">
-      <li *ngIf="isSameDay(event.appointmentTime, date)" (click)="onBadgeClick(event.id, $event)">
-        <nz-badge class="rounded-md px-1 hover:bg-gray-300" nzStatus="success" [nzText]="event.title"></nz-badge>
-      </li>
-    </ng-container>
-  </ul>
-  <ul *nzMonthCell="let month" class="events">
-    <ng-container *ngFor="let event of getMonthEvents(month)">
-      <li (click)="onBadgeClick(event.id, $event)">
-        <nz-badge class="rounded-md px-1 hover:bg-gray-300" nzStatus="success" [nzText]="event.title"></nz-badge>
-      </li>
-    </ng-container>
-  </ul>
-</nz-calendar>
+@if(isDesktopView){
+<div class="px-10 mt-5">
+  <p>
+    Bảng lịch hẹn
+    <nz-switch [(ngModel)]="isTable"></nz-switch>
+  </p>
+  @if(isTable){
+  <app-meeting-table [projectId]="projectId"></app-meeting-table>
+  } @else {
+
+  <app-meeting-calendar [projectId]="projectId"></app-meeting-calendar>
+  }
+</div>
+
+} @else {
+<div class="px-10">
+  <app-meeting-table [projectId]="projectId"></app-meeting-table>
+</div>
+
+}

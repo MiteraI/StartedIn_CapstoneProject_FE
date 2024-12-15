@@ -4,7 +4,7 @@ import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { catchError, throwError, Subject, takeUntil } from 'rxjs';
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType, ContractTypeLabels } from 'src/app/shared/enums/contract-type.enum';
@@ -23,6 +23,8 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { ContractTableComponent } from "../../../components/contract-pages/contract-table/contract-table.component";
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
+import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
+import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
 
 interface FilterOptions {
   contractIdNumber?: string;
@@ -77,8 +79,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
-  listContract: SearchResponseModel<ContractListItemModel> = 
-  {
+  listContract: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
     size: 10,
@@ -88,6 +89,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private modalService: NzModalService,
     private contractService: ContractService,
     private notification: NzNotificationService,
@@ -145,12 +147,12 @@ export class ContractListPage implements OnInit, OnDestroy {
           size: this.pageSize,
           total: result.total
         };
-  
+
         // Update contracts from listContract data
-        this.contracts = this.listContract.data.filter(c => 
+        this.contracts = this.listContract.data.filter(c =>
           this.isLeader || c.contractStatus !== ContractStatus.DRAFT
         );
-  
+
         this.totalRecords = this.listContract.total;
         this.groupContracts();
         this.isLoading = false;
@@ -257,23 +259,13 @@ export class ContractListPage implements OnInit, OnDestroy {
       )
       .subscribe(result => {
         contract.contractStatus = this.contractStatuses.SENT;
+        contract.lastUpdatedTime = new Date().toISOString();
+        this.groupContracts();
         this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
       });
   }
 
   // delete stuff
-  get canDeleteSelected() {
-    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.DRAFT);
-  }
-
-  deleteSelected() {
-    this.selectedContracts.forEach(c => this.deleteContract(c));
-  }
-
-  deleteSingle(contract: ContractListItemModel) {
-    this.deleteContract(contract);
-  }
-
   deleteContract(contract: ContractListItemModel) {
     this.contractService
       .deleteContract(contract.id, this.projectId)
@@ -291,14 +283,6 @@ export class ContractListPage implements OnInit, OnDestroy {
   }
 
   // expire stuff
-  get canExpireSelected() {
-    return this.selectedContracts.every(c => c.contractStatus === ContractStatus.COMPLETED);
-  }
-
-  expireSelected() {
-    this.selectedContracts.forEach(c => this.expireContract(c));
-  }
-
   expireContract(contract: ContractListItemModel) {
     this.contractService
       .expireContract(contract.id, this.projectId)
@@ -316,10 +300,40 @@ export class ContractListPage implements OnInit, OnDestroy {
       });
   }
 
+  // terminate stuff
+  openTerminateModal(contract: ContractListItemModel) {
+    this.modalService.create({
+      nzTitle: 'Kết thúc hợp đồng',
+      nzContent: TerminateContractModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
+      nzFooter: null,
+      nzOnOk: () => this.filterContracts()
+    });
+  }
+
+  // liquidation stuff
+  openLiquidationModal(contract: ContractListItemModel) {
+    if (contract.liquidationNoteId) {
+      this.router.navigate([
+        '/projects',
+        this.projectId,
+        'liquidation-contract',
+        contract.liquidationNoteId
+      ]);
+    }
+    this.modalService.create({
+      nzTitle: 'Thanh lý hợp đồng',
+      nzContent: LiquidationModalComponent,
+      nzData: { projectId: this.projectId, contractId: contract.id },
+      nzFooter: null,
+      nzOnOk: () => this.filterContracts()
+    });
+  }
+
   // add stuff
   openAddModal() {
     this.modalService.create({
-      nzTitle: 'New Contract',
+      nzTitle: 'Hợp đồng mới',
       nzContent: NewContractModalComponent,
       nzFooter: null,
       nzData: this.projectId
@@ -327,14 +341,6 @@ export class ContractListPage implements OnInit, OnDestroy {
   }
 
   // download stuff
-  get canDownloadSelected() {
-    return this.selectedContracts.every(c => c.contractStatus !== ContractStatus.DRAFT);
-  }
-
-  downloadSelected() {
-    this.selectedContracts.forEach(c => this.download(c));
-  }
-
   download(contract: ContractListItemModel) {
     this.contractService
       .downloadContract(contract.id, this.projectId)
@@ -372,8 +378,20 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.filterContracts();
   }
 
+  // navigation stuff
+  navigateToContract(contract: ContractListItemModel) {
+    this.router.navigate([
+      '/projects',
+      this.projectId,
+      contract.contractType === ContractType.INVESTMENT ? 'investment-contract' :
+      contract.contractType === ContractType.INTERNAL ? 'internal-contract' :
+      contract.contractType === ContractType.LIQUIDATIONNOTE ? 'liquidation-contract' : '',
+      contract.id
+    ])
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
-} 
+}

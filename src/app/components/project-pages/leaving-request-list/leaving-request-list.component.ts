@@ -5,9 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { LeavingRequestService } from 'src/app/services/leaving-request.service';
 import { LeavingRequestModel } from 'src/app/shared/models/leaving-request/leaving-request.model';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
-import { AntdNotificationService } from 'src/app/core/util/antd-notification.service';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-leaving-request-list',
@@ -31,7 +31,7 @@ export class LeavingRequestListComponent implements OnInit {
   constructor(
     private leavingRequestService: LeavingRequestService,
     private modalService: NzModalService,
-    private notification: AntdNotificationService
+    private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class LeavingRequestListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.openErrorNotification('Lỗi', 'Không thể tải danh sách yêu cầu rời dự án');
+        this.notification.error('Lỗi', 'Không thể tải danh sách yêu cầu rời dự án', { nzDuration: 2000 });
         this.isLoading = false;
       }
     });
@@ -63,11 +63,11 @@ export class LeavingRequestListComponent implements OnInit {
       nzOnOk: () => {
         this.leavingRequestService.accept(this.projectId, request.id).subscribe({
           next: () => {
-            this.notification.openSuccessNotification('Thành công', 'Đã chấp nhận yêu cầu rời dự án');
+            this.notification.success('Thành công', 'Đã chấp nhận yêu cầu rời dự án', { nzDuration: 2000 });
             this.loadRequests();
           },
           error: () => {
-            this.notification.openErrorNotification('Lỗi', 'Không thể chấp nhận yêu cầu rời dự án');
+            this.notification.error('Lỗi', 'Không thể chấp nhận yêu cầu rời dự án', { nzDuration: 2000 });
           }
         });
       }
@@ -85,11 +85,11 @@ export class LeavingRequestListComponent implements OnInit {
       nzOnOk: () => {
         this.leavingRequestService.reject(this.projectId, request.id).subscribe({
           next: () => {
-            this.notification.openSuccessNotification('Thành công', 'Đã từ chối yêu cầu rời dự án');
+            this.notification.success('Thành công', 'Đã từ chối yêu cầu rời dự án');
             this.loadRequests();
           },
           error: () => {
-            this.notification.openErrorNotification('Lỗi', 'Không thể từ chối yêu cầu rời dự án');
+            this.notification.error('Lỗi', 'Không thể từ chối yêu cầu rời dự án');
           }
         });
       }

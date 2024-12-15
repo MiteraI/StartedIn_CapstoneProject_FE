@@ -92,9 +92,12 @@
           (nzOpenChange)="handleOpenMilestoneSelect()"
           (nzScrollToBottom)="loadMoreMilestones()"
           [nzShowSearch]="true"
+          [nzDisabled]="!!nzModalData.milestoneId"
         >
           <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
-          @for (milestone of milestones; track $index) {
+          @if (!!nzModalData.milestoneId) {
+          <nz-option [nzValue]="nzModalData.milestoneId" [nzLabel]="nzModalData.milestoneName"></nz-option>
+          } @for (milestone of milestones; track $index) {
           <nz-option [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
           } @if (isMilestonesFetchLoading) {
           <nz-option nzDisabled nzCustomContent>

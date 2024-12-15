@@ -1,7 +1,77 @@
-<div class="font-bold text-3xl text-black flex items-end justify-center h-12">Yêu cầu hủy hợp đồng</div>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 relative">
-  <app-termination-request-list [projectId]="projectId"></app-termination-request-list>
-  <hr class="mx-4 lg:hidden" />
-  <app-termination-confirmation-list [projectId]="projectId"></app-termination-confirmation-list>
-  <div class="border-r absolute right-1/2 top-4 hidden lg:block" [style.height]="height + 'px'"></div>
+<div class="font-bold text-3xl text-black flex justify-center my-4">Yêu cầu kết thúc hợp đồng</div>
+
+<div *ngIf="!isLeader" class="flex items-center justify-center p-2 mb-2 space-x-2">
+  <nz-select [(ngModel)]="filterMode" (ngModelChange)="filter()" class="min-w-32">
+    <nz-option [nzValue]="1" nzLabel="7 ngày qua"></nz-option>
+    <nz-option [nzValue]="2" nzLabel="30 ngày qua"></nz-option>
+    <nz-option [nzValue]="3" nzLabel="Tất cả"></nz-option>
+  </nz-select>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openAddModal()"
+    class="flex items-center justify-center"
+  >
+    <mat-icon fontIcon="add" class="-ml-2 mr-2"></mat-icon>
+    Tạo yêu cầu
+  </button>
+</div>
+
+<div *ngIf="isLoading" class="flex justify-center">
+  <nz-spin nzSimple></nz-spin>
+</div>
+
+<div *ngIf="!isLoading && filteredRequests.length === 0" class="text-center text-gray-500">
+  Không có yêu cầu kết thúc hợp đồng nào
+</div>
+
+<div
+  *ngIf="!isLoading && filteredRequests.length > 0"
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
+>
+  @for (request of filteredRequests; track request.id) {
+    <div
+      class="rounded-lg shadow p-4 flex items-center cursor-pointer"
+      [ngClass]="{
+        'bg-blue-50 hover:bg-blue-100': request.isAgreed !== true && request.isAgreed !== false,
+        'bg-green-50 hover:bg-green-100': request.isAgreed === true,
+        'bg-red-50 hover:bg-red-100': request.isAgreed === false,
+      }"
+      (click)="showRequestDetail(request)"
+    >
+      <div class="ml-2 flex-grow">
+        <div class="font-medium">Hợp đồng số: {{ request.contractIdNumber }}</div>
+        <div *ngIf="isLeader" class="text-sm text-gray-500">
+          Người gửi: {{ request.fromName }}
+        </div>
+        <div class="text-sm text-gray-500">
+          Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
+        </div>
+        <div *ngIf="!isLeader" class="mt-2">
+          <span [ngClass]="{
+            'text-blue-500': request.isAgreed !== true && request.isAgreed !== false,
+            'text-green-500': request.isAgreed === true,
+            'text-red-500': request.isAgreed === false,
+          }">
+            ● {{ request.isAgreed === true ? 'Đã chấp nhận' : (request.isAgreed === false ? 'Đã từ chối' : 'Đang chờ') }}
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="isLeader" class="flex space-x-2">
+        <button
+          class="text-green-600 hover:text-green-800"
+          (click)="$event.stopPropagation(); acceptRequest(request)"
+          title="Chấp nhận">
+          <mat-icon fontIcon="check_circle"></mat-icon>
+        </button>
+        <button
+          class="text-red-600 hover:text-red-800"
+          (click)="$event.stopPropagation(); rejectRequest(request)"
+          title="Từ chối">
+          <mat-icon fontIcon="cancel"></mat-icon>
+        </button>
+      </div>
+    </div>
+  }
 </div>

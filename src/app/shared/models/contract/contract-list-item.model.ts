@@ -16,4 +16,5 @@ export type ContractListItemModel = {
   pendingAmount:number;
   disbursements: DisbursementContractList[];
   expand: boolean;
+  liquidationNoteId?: string;
 }

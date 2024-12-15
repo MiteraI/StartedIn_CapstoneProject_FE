@@ -9,12 +9,9 @@ const mockTerminationRequests: TerminationRequestModel[] = [
     fromId: 'user-1',
     fromName: 'Nguyễn Văn A',
     reason: 'Project completion',
+    isAgreed: true,
     createdTime: new Date('11/22/2024').toISOString(),
-    status: TerminationStatus.PENDING,
-    userParties: [
-      { toId: 'user-2', toName: 'Trần Thị B', isAgreed: true },
-      { toId: 'user-3', toName: 'Lê Văn C', isAgreed: false },
-    ],
+    lastUpdatedTime: new Date('11/22/2024').toISOString(),
   },
   {
     id: '2',
@@ -23,12 +20,9 @@ const mockTerminationRequests: TerminationRequestModel[] = [
     fromId: 'user-2',
     fromName: 'Trần Thị B',
     reason: 'Budget constraints',
+    isAgreed: false,
     createdTime: new Date('11/11/2023').toISOString(),
-    status: TerminationStatus.ACCEPTED,
-    userParties: [
-      { toId: 'user-1', toName: 'Nguyễn Văn A', isAgreed: true },
-      { toId: 'user-4', toName: 'Phạm Văn D', isAgreed: true },
-    ],
+    lastUpdatedTime: new Date('11/22/2024').toISOString(),
   },
   {
     id: '3',
@@ -37,11 +31,9 @@ const mockTerminationRequests: TerminationRequestModel[] = [
     fromId: 'user-3',
     fromName: 'Lê Văn C',
     reason: 'Change in project direction',
+    isAgreed: null,
     createdTime: new Date().toISOString(),
-    status: TerminationStatus.REJECTED,
-    userParties: [
-      { toId: 'user-5', toName: 'Nguyễn Thị E', isAgreed: false },
-    ],
+    lastUpdatedTime: new Date('11/22/2024').toISOString(),
   },
   {
     id: '4',
@@ -51,11 +43,7 @@ const mockTerminationRequests: TerminationRequestModel[] = [
     fromName: 'Phạm Văn D',
     reason: 'Legal issues',
     createdTime: new Date().toISOString(),
-    status: TerminationStatus.PENDING,
-    userParties: [
-      { toId: 'user-1', toName: 'Nguyễn Văn A', isAgreed: false },
-      { toId: 'user-2', toName: 'Trần Thị B', isAgreed: true },
-    ],
+    lastUpdatedTime: new Date('11/22/2024').toISOString(),
   },
   {
     id: '5',
@@ -64,12 +52,9 @@ const mockTerminationRequests: TerminationRequestModel[] = [
     fromId: 'user-5',
     fromName: 'Nguyễn Thị E',
     reason: 'Project cancellation',
+    isAgreed: true,
     createdTime: new Date().toISOString(),
-    status: TerminationStatus.ACCEPTED,
-    userParties: [
-      { toId: 'user-3', toName: 'Lê Văn C', isAgreed: true },
-      { toId: 'user-4', toName: 'Phạm Văn D', isAgreed: true },
-    ],
+    lastUpdatedTime: new Date('11/22/2024').toISOString(),
   },
 ];
 

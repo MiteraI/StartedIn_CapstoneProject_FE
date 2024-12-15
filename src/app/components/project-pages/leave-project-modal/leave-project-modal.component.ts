@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { ProjectService } from 'src/app/services/project.service'
-import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { CommonModule } from '@angular/common'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -14,6 +13,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { LeavingRequestService } from 'src/app/services/leaving-request.service'
+import { NzNotificationService } from 'ng-zorro-antd/notification'
 
 @Component({
   selector: 'app-leave-project-modal',
@@ -41,7 +41,7 @@ export class LeaveProjectModalComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private modalRef: NzModalRef,
-    private antdNoti: AntdNotificationService,
+    private notification: NzNotificationService,
     private router: Router,
     private fb: FormBuilder,
     private leavingRequestService: LeavingRequestService
@@ -61,7 +61,7 @@ export class LeaveProjectModalComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.antdNoti.openErrorNotification('Lỗi', 'Không thể kiểm tra trạng thái rời dự án');
+        this.notification.error('Lỗi', 'Không thể kiểm tra trạng thái rời dự án', { nzDuration: 2000 });
         this.modalRef.close();
       }
     })
@@ -72,11 +72,11 @@ export class LeaveProjectModalComponent implements OnInit {
       this.isLoading = true;
       this.leavingRequestService.create(this.projectId, this.leaveForm.value.reason).subscribe({
         next: () => {
-          this.antdNoti.openSuccessNotification('Thành công', 'Đã gửi yêu cầu rời dự án');
+          this.notification.success('Thành công', 'Đã gửi yêu cầu rời dự án', { nzDuration: 2000 });
           this.modalRef.close(true);
         },
         error: (error) => {
-          this.antdNoti.openErrorNotification('Lỗi', 'Không thể gửi yêu cầu rời dự án');
+          this.notification.error('Lỗi', 'Không thể gửi yêu cầu rời dự án', { nzDuration: 2000 });
           this.isLoading = false;
         }
       });

@@ -1,4 +1,4 @@
-<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
+<!-- <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
   <nz-descriptions [nzTitle]="meetingDetail.title" [nzSize]="'middle'">
     <nz-descriptions-item nzTitle="Chi tiết" [nzSpan]="3">{{ meetingDetail.description }}</nz-descriptions-item>
     <nz-descriptions-item nzTitle="Cột mốc" [nzSpan]="2">{{ meetingDetail.milestoneName }}</nz-descriptions-item>
@@ -8,4 +8,48 @@
     </nz-descriptions-item>
     <nz-descriptions-item nzTitle="Link cuộc họp" [nzSpan]="3">{{ meetingDetail.meetingLink }}</nz-descriptions-item>
   </nz-descriptions>
+</nz-skeleton> -->
+
+<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
+  <div class="modal-content">
+    <h2 class="text-xl font-bold text-center mb-4">{{ meetingDetail.title }}</h2>
+
+    <nz-descriptions [nzSize]="'middle'" [nzBordered]="true">
+      <nz-descriptions-item nzTitle="Chi tiết" [nzSpan]="3">
+        <i nz-icon nzType="info-circle" nzTheme="outline" class="mr-2"></i>
+        {{ meetingDetail.description || 'Không có thông tin' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Cột mốc" [nzSpan]="2">
+        <i nz-icon nzType="flag" nzTheme="outline" class="mr-2"></i>
+        {{ meetingDetail.milestoneName || 'Không xác định' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Trạng thái">
+        <i nz-icon [nzType]="getStatusIcon()" [nzTheme]="getStatusTheme()" class="mr-2"></i>
+        {{ getMeetingStatusLabel(meetingDetail.status) }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Thời gian" [nzSpan]="3">
+        <i nz-icon nzType="calendar" nzTheme="outline" class="mr-2"></i>
+        {{ meetingDetail.appointmentTime | date : 'dd/MM/yyyy HH:mm' }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Link cuộc họp" [nzSpan]="3">
+        <i nz-icon nzType="link" nzTheme="outline" class="mr-2"></i>
+        <a *ngIf="meetingDetail.meetingLink; else noLink" href="{{ meetingDetail.meetingLink }}" target="_blank"> Truy cập cuộc họp </a>
+        <ng-template #noLink>Không có liên kết</ng-template>
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="Ghi chú cuộc họp" [nzSpan]="3">
+        <ul>
+          @for (meetingNote of meetingDetail.meetingNotes; track $index) {
+          <li>
+            <a *ngIf="meetingDetail.meetingLink; else noLink" href="{{ meetingNote.meetingNoteLink }}" target="_blank">Meeting Note</a>
+          </li>
+          }
+        </ul>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </div>
 </nz-skeleton>

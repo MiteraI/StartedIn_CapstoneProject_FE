@@ -22,6 +22,8 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 
 interface IModalData {
   projectId: string
+  milestoneId: string
+  milestoneName: string
 }
 
 @Component({
@@ -76,68 +78,68 @@ export class CreateTaskModalComponent implements OnInit {
   milestonesTotal = 0
 
   disableStartDate = (startDate: Date): boolean => {
-    const endDate = this.taskForm.get('endDate')?.value;
-    const parentTask = this.otherTasks.find(t => t.id === this.taskForm.get('parentTask')?.value);
+    const endDate = this.taskForm.get('endDate')?.value
+    const parentTask = this.otherTasks.find((t) => t.id === this.taskForm.get('parentTask')?.value)
 
     if (parentTask) {
-      const parentTaskStart = new Date(parentTask.startDate);
-      const parentTaskEnd = new Date(parentTask.endDate);
+      const parentTaskStart = new Date(parentTask.startDate)
+      const parentTaskEnd = new Date(parentTask.endDate)
 
       // Start date should be within parent task dates
       if (startDate < parentTaskStart || startDate > parentTaskEnd) {
-        return true;
+        return true
       }
     }
 
-    const milestone = this.milestones.find(m => m.id === this.taskForm.get('milestone')?.value);
+    const milestone = this.milestones.find((m) => m.id === this.taskForm.get('milestone')?.value)
 
     if (milestone) {
-      const milestoneStart = new Date(milestone.startDate);
-      const milestoneEnd = new Date(milestone.endDate);
+      const milestoneStart = new Date(milestone.startDate)
+      const milestoneEnd = new Date(milestone.endDate)
 
       // Start date should be within milestone dates
       if (startDate < milestoneStart || startDate > milestoneEnd) {
-        return true;
+        return true
       }
     }
 
     // Start date cannot be after end date
-    return !!endDate && startDate > new Date(endDate);
-  };
+    return !!endDate && startDate > new Date(endDate)
+  }
 
   disableEndDate = (endDate: Date): boolean => {
-    const startDate = this.taskForm.get('startDate')?.value;
-    const parentTask = this.otherTasks.find(t => t.id === this.taskForm.get('parentTask')?.value);
+    const startDate = this.taskForm.get('startDate')?.value
+    const parentTask = this.otherTasks.find((t) => t.id === this.taskForm.get('parentTask')?.value)
 
     if (parentTask) {
-      const parentTaskStart = new Date(parentTask.startDate);
-      const parentTaskEnd = new Date(parentTask.endDate);
+      const parentTaskStart = new Date(parentTask.startDate)
+      const parentTaskEnd = new Date(parentTask.endDate)
 
       // End date should be within parent task dates
       if (endDate < parentTaskStart || endDate > parentTaskEnd) {
-        return true;
+        return true
       }
     }
 
-    const milestone = this.milestones.find(m => m.id === this.taskForm.get('milestone')?.value);
+    const milestone = this.milestones.find((m) => m.id === this.taskForm.get('milestone')?.value)
 
     if (milestone) {
-      const milestoneStart = new Date(milestone.startDate);
-      const milestoneEnd = new Date(milestone.endDate);
+      const milestoneStart = new Date(milestone.startDate)
+      const milestoneEnd = new Date(milestone.endDate)
 
       // End date should be within milestone dates
       if (endDate < milestoneStart || endDate > milestoneEnd) {
-        return true;
+        return true
       }
     }
 
     // End date cannot be before start date
-    return !!startDate && endDate < new Date(startDate);
-  };
+    return !!startDate && endDate < new Date(startDate)
+  }
 
   handleSelectParentTask(parentTaskId: string) {
     if (parentTaskId) {
-      this.taskForm.get('milestone')?.setValue(null);
+      this.taskForm.get('milestone')?.setValue(null)
     }
   }
 
@@ -156,31 +158,31 @@ export class CreateTaskModalComponent implements OnInit {
 
   handleSelectMilestone(milestoneId: string) {
     if (milestoneId) {
-      this.taskForm.get('parentTask')?.setValue(null);
+      this.taskForm.get('parentTask')?.setValue(null)
 
-      const milestone = this.milestones.find(m => m.id === milestoneId);
+      const milestone = this.milestones.find((m) => m.id === milestoneId)
       if (milestone) {
-        const startDate = this.taskForm.get('startDate')?.value;
-        const endDate = this.taskForm.get('endDate')?.value;
+        const startDate = this.taskForm.get('startDate')?.value
+        const endDate = this.taskForm.get('endDate')?.value
 
         // Check if current dates are within milestone range
         if (startDate) {
-          const taskStart = new Date(startDate);
-          const milestoneStart = new Date(milestone.startDate);
-          const milestoneEnd = new Date(milestone.endDate);
+          const taskStart = new Date(startDate)
+          const milestoneStart = new Date(milestone.startDate)
+          const milestoneEnd = new Date(milestone.endDate)
 
           if (taskStart < milestoneStart || taskStart > milestoneEnd) {
-            this.taskForm.patchValue({ startDate: null });
+            this.taskForm.patchValue({ startDate: null })
           }
         }
 
         if (endDate) {
-          const taskEnd = new Date(endDate);
-          const milestoneStart = new Date(milestone.startDate);
-          const milestoneEnd = new Date(milestone.endDate);
+          const taskEnd = new Date(endDate)
+          const milestoneStart = new Date(milestone.startDate)
+          const milestoneEnd = new Date(milestone.endDate)
 
           if (taskEnd < milestoneStart || taskEnd > milestoneEnd) {
-            this.taskForm.patchValue({ endDate: null });
+            this.taskForm.patchValue({ endDate: null })
           }
         }
       }
@@ -230,7 +232,7 @@ export class CreateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
             console.error('', error)
           }
@@ -248,11 +250,15 @@ export class CreateTaskModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
         }
       },
     })
+
+    if (this.nzModalData.milestoneId) {
+      this.taskForm.get('milestone')?.setValue(this.nzModalData.milestoneId)
+    }
   }
 
   private fetchTasks() {
@@ -271,7 +277,7 @@ export class CreateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -294,7 +300,7 @@ export class CreateTaskModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },

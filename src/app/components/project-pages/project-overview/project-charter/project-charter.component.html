@@ -1,8 +1,10 @@
-<div class="rounded-lg bg-white p-12 w-full">
-  <h1 class="text-2xl font-bold text-blue-600 mb-6">TUYÊN NGÔN DỰ ÁN</h1>
+<div class="flex items-center justify-center">
+  <div class="rounded-lg bg-white p-6 w-[80%]">
+    <h1 class="text-2xl font-bold text-blue-600 mb-6">TUYÊN NGÔN DỰ ÁN</h1>
 
-  <div class="flex gap-5 m-5 bg-white">
-    <app-project-detail class="w-1/2" [projectId]="projectOverview?.id!"></app-project-detail>
-    <app-project-charter-details class="w-1/2" [ProjectId]="projectOverview?.id!"></app-project-charter-details>
+    <div class="flex flex-col md:flex-row gap-5 m-5 bg-white">
+      <app-project-detail class="w-full md:w-1/" [projectId]="projectId"></app-project-detail>
+      <app-project-charter-details class="w-full md:w-1/" [ProjectId]="projectId" [isOverview]="true"></app-project-charter-details>
+    </div>
   </div>
 </div>

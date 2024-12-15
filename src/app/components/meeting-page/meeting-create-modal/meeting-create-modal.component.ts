@@ -7,6 +7,7 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { finalize, tap } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
@@ -33,7 +34,7 @@ export class MeetingCreateModalComponent implements OnInit {
     private meetingService: MeetingService
   ) {
     this.meetingForm = this.fb.group({
-      milestoneId: ['', [Validators.required]],
+      milestoneId: [''],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
       description: [''],
@@ -42,15 +43,22 @@ export class MeetingCreateModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loading = true
-    this.milestoneService.getMilestones(this.nzModalData.projectId, 1, 10).subscribe({
-      next: (milestones) => {
-        this.milestones = milestones.data
-        this.meetingForm.patchValue({ milestoneId: this.milestones[0].id })
-        console.log(this.meetingForm.value)
-        this.loading = false
-      },
-    })
+    if (!this.nzModalData.appendMode) {
+      this.milestoneService
+        .getMilestones(this.nzModalData.projectId, 1, 10)
+        .pipe(
+          tap(() => (this.loading = true)),
+          finalize(() => (this.loading = false))
+        )
+        .subscribe({
+          next: (milestones) => {
+            this.milestones = milestones.data
+            this.meetingForm.patchValue({ milestoneId: this.milestones[0].id })
+            console.log(this.meetingForm.value)
+            this.loading = false
+          },
+        })
+    }
   }
 
   submit() {
@@ -62,12 +70,11 @@ export class MeetingCreateModalComponent implements OnInit {
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn tạo cuộc họp này?',
       nzOnOk: () => {
-        this.createMeeting()
+        this.nzModalData.appendMode ? this.appendMeeting() : this.createMeeting()
         this.meetingService.refreshMeeting$.next(true)
         this.nzModalRef.close()
       },
     })
-    console.log(this.meetingForm.value)
   }
 
   createMeeting() {
@@ -79,5 +86,15 @@ export class MeetingCreateModalComponent implements OnInit {
         this.antdNoti.openErrorNotification('Thất bại', 'Tạo cuộc họp thất bại')
       },
     })
+  }
+
+  appendMeeting() {
+    const meetingData = this.meetingForm.value
+    this.nzModalRef.close(meetingData)
+  }
+
+  disabledDate = (current: Date): boolean => {
+    // Can only select today or future dates
+    return current && current < new Date()
   }
 }

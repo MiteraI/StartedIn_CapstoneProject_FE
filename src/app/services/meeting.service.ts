@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http'
 import { MeetingCreateModel } from '../shared/models/meeting/meeting-create.model'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { MeetingDetailModel } from '../shared/models/meeting/meeting-detail.model'
+import { SearchResponseModel } from '../shared/models/search-response.model'
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,10 @@ export class MeetingService {
   createMeeting(projectId: string, meeting: MeetingCreateModel) {
     const url = `/api/projects/${projectId}/appointments`
     return this.http.post(this.applicationConfigService.getEndpointFor(url), meeting)
+  }
+
+  getTableData(projectId: string, page: number, size: number): Observable<SearchResponseModel<MeetingDetailModel>> {
+    const url = `/api/projects/${projectId}/appointments?page=${page}&size=${size}`
+    return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url))
   }
 }

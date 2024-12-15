@@ -4,22 +4,31 @@ import { FormsModule } from '@angular/forms'
 import { RouterOutlet, RouterModule, ActivatedRoute } from '@angular/router'
 import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
 import { ProjectOverviewService } from 'src/app/services/project-overview.service'
+import { ProjectCharterComponent } from 'src/app/components/project-pages/project-overview/project-charter/project-charter.component'
 
 @Component({
   selector: 'app-project-overview',
   templateUrl: './project-overview.page.html',
   styleUrls: ['./project-overview.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, ProjectCharterComponent],
 })
 export class ProjectOverviewPage implements OnInit {
+  projectId = ''
   projectOverview: ProjectOveriewModel | undefined
-  constructor(private route: ActivatedRoute, private projectOverviewService: ProjectOverviewService) {}
-
-  ngOnInit() {
+  constructor(private route: ActivatedRoute, private projectOverviewService: ProjectOverviewService) {
     this.route.data.subscribe((data) => {
       this.projectOverview = data['projectOverview']
       this.projectOverviewService.setProjectOverview(this.projectOverview)
+      console.log(this.projectOverview)
+    })
+
+    //get project id from route
+    this.route.paramMap.subscribe((params) => {
+      this.projectId = params.get('projectId')!
+      console.log(params.get('projectId'))
     })
   }
+
+  ngOnInit() {}
 }

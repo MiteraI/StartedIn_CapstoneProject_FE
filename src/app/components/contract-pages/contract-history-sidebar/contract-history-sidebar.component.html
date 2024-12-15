@@ -9,6 +9,10 @@
       </div>
 
       <hr class="mx-4 mb-4" />
+      <div *ngIf="historyEntries.length === 0" class="text-center text-gray-500">
+        Chưa có lịch sử ký kết
+      </div>
+
       <div
         *ngFor="let entry of historyEntries"
         class="flex items-center rounded px-1 py-2 mx-2 my-1"

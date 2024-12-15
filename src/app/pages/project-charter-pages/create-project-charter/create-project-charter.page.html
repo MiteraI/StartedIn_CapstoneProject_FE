@@ -1,6 +1,6 @@
 <app-view-title-bar [viewName]="'Tuyên Ngôn Dự Án'"></app-view-title-bar>
 
-<div class="flex gap-5 m-5 bg-white">
-  <app-project-detail class="w-1/2" [projectId]="projectId"></app-project-detail>
-  <app-project-charter-details [ProjectId]="projectId" class="w-1/2"></app-project-charter-details>
+<div class="flex flex-col md:flex-row gap-5 m-5 bg-white">
+  <app-project-detail class="w-full md:w-1/2" [projectId]="projectId"></app-project-detail>
+  <app-project-charter-details [ProjectId]="projectId" class="w-full md:w-1/2"></app-project-charter-details>
 </div>

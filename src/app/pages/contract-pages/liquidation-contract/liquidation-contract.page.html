@@ -1,4 +1,4 @@
-<app-contract-history-sidebar *ngIf="contract && contract.contractStatus !== 1" [contractId]="contract.id" [projectId]="project.id">
+<app-contract-history-sidebar *ngIf="contract" [contractId]="contract.id" [projectId]="project.id">
   <div class="max-w-3xl mx-auto md:my-4 md:px-4">
     <div class="p-4 md:p-8 bg-white rounded border">
       <div class="font-bold text-3xl text-black mb-6 flex justify-center">Chi tiết biên bản</div>
@@ -64,7 +64,7 @@
                 class="bg-orange-600 text-xl"
               ></nz-avatar>
             </div>
-          
+
             <!-- Member Info -->
             <div class="ml-4">
               <div class="text-lg font-semibold text-gray-800">
@@ -78,20 +78,21 @@
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
 
       <!-- Hành động -->
-      <div class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="download()" style="margin-right: 8px;">
+      <div class="mt-6 flex">
+        <button nz-button nzType="link" (click)="navigateBack()">
+          Quay lại
+        </button>
+        <div class="flex-grow"></div>
+        <button nz-button nzType="link" (click)="download()" class="mr-2" [nzLoading]="isLoading">
           Tải xuống
         </button>
-        <button nz-button nzType="primary" type="submit" (click)="send()" style="margin-right: 8px;">
+        <button *ngIf="contract.contractStatus === 1" nz-button nzType="primary" (click)="send()" class="mr-2" [nzLoading]="isLoading">
           Gửi
-        </button>
-        <button nz-button nzType="primary" (click)="navigateBack()">
-          Quay lại
         </button>
       </div>
     </div>

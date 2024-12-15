@@ -7,6 +7,7 @@ import { CreateMilestone } from '../shared/models/milestone/milestone-create.mod
 import { Pagination } from '../shared/models/pagination.model'
 import { PhaseState } from '../shared/enums/phase-status.enum'
 import { MilestoneDetails } from '../shared/models/milestone/milestone-details.model'
+import { UpdateMilestone } from '../shared/models/milestone/milestone-update.model'
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +32,8 @@ export class MilestoneService {
     return this.http.post<CreateMilestone>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones`), milestone)
   }
 
-  updateMilestone(projectId: string, milestoneId: string, milestone: CreateMilestone): Observable<any> {
-    return this.http.put<CreateMilestone>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones/${milestoneId}`), milestone)
+  updateMilestone(projectId: string, milestoneId: string, milestone: UpdateMilestone): Observable<any> {
+    return this.http.put<UpdateMilestone>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones/${milestoneId}`), milestone)
   }
 
   deleteMilestone(projectId: string, milestoneId: string): Observable<any> {
