@@ -1,18 +1,26 @@
 <app-view-title-bar viewName="Danh sách lịch hẹn"></app-view-title-bar>
 
-<nz-calendar [(ngModel)]="selectedDate" class="calendar" [nzMode]="'month'" (nzSelectChange)="onSelectChange($event)">
-  <ul *nzDateCell="let date">
-    <ng-container *ngFor="let event of meetingList; trackBy: getEvents">
-      <li *ngIf="isSameDay(event.appointmentTime, date)" (click)="onBadgeClick(event.id, $event)">
-        <nz-badge class="rounded-md px-1 hover:bg-gray-300" nzStatus="success" [nzText]="event.title"></nz-badge>
-      </li>
-    </ng-container>
-  </ul>
-  <ul *nzMonthCell="let month" class="events">
-    <ng-container *ngFor="let event of getMonthEvents(month)">
-      <li (click)="onBadgeClick(event.id, $event)">
-        <nz-badge class="rounded-md px-1 hover:bg-gray-300" nzStatus="success" [nzText]="event.title"></nz-badge>
-      </li>
-    </ng-container>
-  </ul>
-</nz-calendar>
+<div class="px-10">
+  <nz-calendar [(ngModel)]="selectedDate" class="calendar" [nzMode]="'month'" (nzSelectChange)="onSelectChange($event)">
+    <ul *nzDateCell="let date">
+      <ng-container *ngFor="let event of meetingList; trackBy: getEvents">
+        <li *ngIf="isSameDay(event.appointmentTime, date)" (click)="onBadgeClick(event.id, $event)">
+          <div class="rounded-md px-1 hover:bg-green-300 bg-green-100">
+            <div class="font-semibold">{{ event.title }}</div>
+            <div>{{ event.appointmentTime | date: 'hh:mm a' }}</div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+    <ul *nzMonthCell="let month" class="events">
+      <ng-container *ngFor="let event of getMonthEvents(month)">
+        <li (click)="onBadgeClick(event.id, $event)">
+          <div class="rounded-md px-1 hover:bg-green-300 bg-green-100 mb-1">
+            <div class="font-semibold">{{ event.title }}</div>
+            <div>{{ event.appointmentTime | date: 'hh:mm a' }}</div>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </nz-calendar>
+</div>
