@@ -1,0 +1,132 @@
+<form [formGroup]="filterForm" class="ant-modal-body">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Khoảng thời gian gọi vốn</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-range-picker
+        class="w-full"
+        formControlName="dateRange"
+        nzFormat="yyyy-MM-dd"
+      ></nz-range-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số tiền cần gọi</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="fromTargetCall"
+          [nzMin]="0"
+          [nzStep]="1000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Từ"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="toTargetCall"
+          [nzMin]="0"
+          [nzStep]="1000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Đến"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số tiền đã gọi được</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="fromAmountRaised"
+          [nzMin]="0"
+          [nzStep]="1000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Từ"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="toAmountRaised"
+          [nzMin]="0"
+          [nzStep]="1000"
+          [nzPrecision]="-3"
+          [nzFormatter]="vndFormatter"
+          [nzParser]="vndParser"
+          nzPlaceHolder="Đến"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Số cổ phần cần gọi</nz-form-label>
+    <nz-form-control [nzSpan]="24" nzErrorTip="Khoảng tiền không hợp lệ!">
+      <div class="flex items-center gap-2">
+        <nz-input-number
+          class="w-full"
+          formControlName="fromEquityShareCall"
+          [nzMin]="0"
+          [nzStep]="1"
+          [nzPrecision]="-3"
+          nzPlaceHolder="Từ"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+        <span>-</span>
+        <nz-input-number
+          class="w-full"
+          formControlName="toEquityShareCall"
+          [nzMin]="0"
+          [nzStep]="1"
+          [nzPrecision]="-3"
+          nzPlaceHolder="Đến"
+          (ngModelChange)="validateAmountRange()"
+        ></nz-input-number>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select
+        class="w-full"
+        formControlName="status"
+        nzPlaceHolder="Chọn trạng thái"
+      >
+        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
+        <nz-option
+          *ngFor="let option of statusOptions"
+          [nzValue]="option.value"
+          [nzLabel]="option.label"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+</form>
+
+<div class="ant-modal-footer">
+  <button nz-button (click)="resetFilters()">
+    Đặt lại bộ lọc
+  </button>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="applyFilters()"
+  >
+    Lọc
+  </button>
+</div>
