@@ -16,6 +16,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { TaskStatus } from 'src/app/shared/enums/task-status.enum'
 import { TaskFilterComponent } from '../task-filter/task-filter.component'
+import { WebsocketService } from 'src/app/services/websocket.service'
 
 interface TaskFilterOptions {
   title?: string
@@ -52,6 +53,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private taskService: TaskService,
     private antdNoti: AntdNotificationService,
+    private websocketService: WebsocketService,
     private scrollService: ScrollService
   ) {}
 
@@ -124,19 +126,30 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     } else {
       this.size = 12
     }
+
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
+
     this.fetchTasks(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
+
     this.searchSubject.pipe(debounceTime(1000), distinctUntilChanged()).subscribe((searchText) => {
       this.filter = {
         ...this.filter,
         title: searchText,
       }
       this.fetchTasks(this.isDesktopView)
+    })
+
+    this.websocketService.websocketData.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      if (!data) return
+      if (data.action === 'update') {
+        const task = data.data as Task
+        this.taskList = this.taskList.map((t) => (t.id === task.id ? task : t))
+      }
     })
   }
 
