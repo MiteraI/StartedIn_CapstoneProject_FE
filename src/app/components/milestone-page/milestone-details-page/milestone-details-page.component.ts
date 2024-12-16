@@ -211,9 +211,9 @@ export class MilestoneDetailsPageComponent implements OnInit {
     this.fetchMilestoneDetail()
 
     // Refresh milestone list by observing refreshTask$ and refresh milestone details
-    this.taskService.refreshTask$.pipe(takeUntil(this.destroy$)).subscribe((val) => {
-      this.fetchMilestoneDetail()
-    })
+    // this.taskService.refreshTask$.pipe(takeUntil(this.destroy$)).subscribe((val) => {
+    //   this.fetchMilestoneDetail()
+    // })
   }
 
   private fetchMilestoneDetail() {
