@@ -151,13 +151,23 @@ export class ContractTableComponent  implements OnInit {
   }
 
   openTerminateModal(contract: ContractListItemModel) {
-    this.modalService.create({
-      nzTitle: 'Kết thúc hợp đồng',
-      nzContent: TerminateContractModalComponent,
-      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
-    });
+    if (this.isLeader) {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: LiquidationModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
+        nzFooter: null,
+        nzAfterClose: this.refreshNeeded
+      });
+    } else {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateContractModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id },
+        nzFooter: null,
+        nzAfterClose: this.refreshNeeded
+      });
+    }
   }
 
   openLiquidationModal(contract: ContractListItemModel) {
@@ -174,7 +184,7 @@ export class ContractTableComponent  implements OnInit {
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
+      nzAfterClose: this.refreshNeeded
     });
   }
 

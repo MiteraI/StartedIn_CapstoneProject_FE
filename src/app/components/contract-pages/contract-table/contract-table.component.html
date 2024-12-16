@@ -34,7 +34,7 @@
   <tbody>
     @for (data of contractTable.data; track data.id) {
     <tr class="cursor-pointer" (click)="navigateToContract(data)">
-      <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand"></td>
+      <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand" (click)="$event.stopPropagation()"></td>
       <td *ngIf="data.contractType !== 2"></td>
       <td>{{ data.contractIdNumber }}</td>
       <td>{{ data.contractName }}</td>

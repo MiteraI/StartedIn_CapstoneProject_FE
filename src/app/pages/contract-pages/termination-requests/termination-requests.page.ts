@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -119,7 +119,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
   }
 
   showRequestDetail(request: TerminationRequestModel) {
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'Chi tiết yêu cầu kết thúc hợp đồng',
       nzContent: TerminationRequestDetailModalComponent,
       nzFooter: null,
@@ -128,8 +128,10 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         isLeader: this.isLeader,
         request: request
       },
-      nzStyle: { width: '700px' }
+      nzStyle: { width: '700px' },
+      nzAfterClose: new EventEmitter<void>()
     });
+    modalRef.afterClose.subscribe(() => this.loadReceivedRequests())
   }
 
   acceptRequest(request: TerminationRequestModel) {

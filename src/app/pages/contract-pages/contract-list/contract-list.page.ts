@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
 import { format, isToday, isYesterday } from 'date-fns';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { ContractService } from 'src/app/services/contract.service';
@@ -79,6 +79,7 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   @ViewChild(ContractFilterComponent) filterComponent!: ContractFilterComponent;
   private destroy$ = new Subject<void>();
+
   listContract: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
@@ -302,13 +303,25 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   // terminate stuff
   openTerminateModal(contract: ContractListItemModel) {
-    this.modalService.create({
-      nzTitle: 'Kết thúc hợp đồng',
-      nzContent: TerminateContractModalComponent,
-      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null,
-      nzOnOk: () => this.filterContracts()
-    });
+    if (this.isLeader) {
+      const modalRef = this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: LiquidationModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
+        nzFooter: null,
+        nzAfterClose: new EventEmitter<void>()
+      });
+      modalRef.afterClose.subscribe(() => this.filterContracts());
+    } else {
+      const modalRef = this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateContractModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id },
+        nzFooter: null,
+        nzAfterClose: new EventEmitter<void>()
+      });
+      modalRef.afterClose.subscribe(() => this.filterContracts());
+    }
   }
 
   // liquidation stuff
@@ -321,13 +334,15 @@ export class ContractListPage implements OnInit, OnDestroy {
         contract.liquidationNoteId
       ]);
     }
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'Thanh lý hợp đồng',
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzOnOk: () => this.filterContracts()
+      nzAfterClose: new EventEmitter<void>()
     });
+
+    modalRef.afterClose.subscribe(() => this.filterContracts());
   }
 
   // add stuff

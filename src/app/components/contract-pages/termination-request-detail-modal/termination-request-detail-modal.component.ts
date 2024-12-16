@@ -49,7 +49,7 @@ export class TerminationRequestDetailModalComponent {
       next: (response) => {
         this.notification.success('', 'Chấp nhận yêu cầu thành công', { nzDuration: 2000 });
         this.isLoading = false;
-        this.modalRef.close();
+        this.modalRef.close(true);
       },
       error: (error) => {
         this.notification.error('Lỗi', 'Chấp nhận yêu cầu thất bại', { nzDuration: 2000 });
@@ -64,7 +64,7 @@ export class TerminationRequestDetailModalComponent {
       next: (response) => {
         this.notification.success('', 'Từ chối yêu cầu thành công', { nzDuration: 2000 });
         this.isLoading = false;
-        this.modalRef.close();
+        this.modalRef.close(true);
       },
       error: (error) => {
         this.notification.error('Lỗi', 'Từ chối yêu cầu thất bại', { nzDuration: 2000 });
