@@ -6,4 +6,5 @@ export type ProjectGeneralInformationModel = {
   logoUrl: string
   members: TeamMemberModel[]
   id: string
+  startDate: string
 }

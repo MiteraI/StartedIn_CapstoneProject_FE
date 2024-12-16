@@ -5,13 +5,14 @@ import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { ProjectGeneralInformationModel } from 'src/app/shared/models/project/project-general-info.model'
 import { TeamRoleLabels, TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-project-detail',
   templateUrl: './project-detail.component.html',
   styleUrls: ['./project-detail.component.scss'],
   standalone: true,
-  imports: [NzCollapseModule, NzTableModule, NzSkeletonModule],
+  imports: [NzCollapseModule, NzTableModule, NzSkeletonModule, CommonModule],
 })
 export class ProjectDetailComponent implements OnInit {
   projectGeneralInfo: ProjectGeneralInformationModel | undefined
