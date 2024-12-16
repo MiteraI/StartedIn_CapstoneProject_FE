@@ -1,4 +1,4 @@
-import { afterRender, Component, OnInit } from '@angular/core';
+import { afterRender, Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Chart } from 'chart.js/auto';
@@ -8,13 +8,18 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 import { catchError, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, VndCurrencyPipe, ViewTitleBarComponent]
+  imports: [CommonModule, 
+    VndCurrencyPipe, 
+    ViewTitleBarComponent,
+    NzTableModule]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null;
@@ -23,6 +28,7 @@ export class DashboardPage implements OnInit {
   disbursementChart: Chart | undefined;
   shareEquityChart: Chart<'pie', number[], string> | undefined;
 
+  @Input({ required: true }) isFetchAllContractLoading: boolean = false
   constructor(
     private route: ActivatedRoute,
     private dashboardService: DashboardService,
@@ -35,6 +41,9 @@ export class DashboardPage implements OnInit {
         this.createMilestoneCharts();
       }
     })
+  }
+  getTeamRoleLabel(type: TeamRole) : string {
+      return TeamRoleLabels[type]
   }
 
   ngOnInit() {
