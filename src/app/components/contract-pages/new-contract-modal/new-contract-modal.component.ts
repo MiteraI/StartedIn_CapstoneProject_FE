@@ -36,7 +36,7 @@ import { Router } from '@angular/router';
 export class NewContractModalComponent implements OnInit {
   touched: boolean = false;
   contractTypeOptions = Object.values(ContractType)
-    .filter(value => typeof value === 'number')
+    .filter(value => typeof value === 'number' && value !== ContractType.LIQUIDATIONNOTE)
     .map(value => ({
       value: value as ContractType,
       label: ContractTypeLabels[value as ContractType]

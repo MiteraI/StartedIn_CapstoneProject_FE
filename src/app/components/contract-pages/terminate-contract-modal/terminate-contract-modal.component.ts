@@ -14,6 +14,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum'
 import { catchError, throwError } from 'rxjs'
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
+import { ContractType } from 'src/app/shared/enums/contract-type.enum'
 
 interface IModalData {
   projectId: string;
@@ -105,7 +106,10 @@ export class TerminateContractModalComponent implements OnInit {
         })
       )
       .subscribe(response => {
-        this.contractList = [...this.contractList, ...response.data];
+        this.contractList = [
+          ...this.contractList,
+          ...response.data.filter(c => c.contractType !== ContractType.LIQUIDATIONNOTE)
+        ];
         this.isLoading = false;
       })
   }

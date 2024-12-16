@@ -56,6 +56,9 @@ export class ContractTableComponent  implements OnInit {
   @Output() refreshNeeded = new EventEmitter<void>();
 
   isLeader = false;
+  contractStatuses = ContractStatus;
+  statusLabels = ContractStatusLabels;
+
   constructor(
     private contractService: ContractService,
     private modalService: NzModalService,
@@ -73,16 +76,12 @@ export class ContractTableComponent  implements OnInit {
     return ContractTypeLabels[type]
   }
 
-  getContractStatusLabel(status: ContractStatus): string {
-    return ContractStatusLabels[status]
-  }
-
   getDisbursementStatusLabel(status: DisbursementStatus) : string {
     return DisbursementStatusLabels[status]
   }
 
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
+    return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
   }
 
   formatDateOnly(dateStr: string): string {
