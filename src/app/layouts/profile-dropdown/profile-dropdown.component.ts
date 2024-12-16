@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum'
 import { Authority, AuthorityLabels } from 'src/app/shared/constants/authority.constants'
+import { WebsocketService } from 'src/app/services/websocket.service'
 
 @Component({
   selector: 'app-profile-dropdown',
@@ -28,11 +29,13 @@ export class ProfileDropdownComponent implements OnInit, OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private roleService: RoleInTeamService
+    private roleService: RoleInTeamService,
+    private webSocketService: WebsocketService
   ) {}
 
   logout() {
     this.accountService.logout()
+    this.webSocketService.disconnect()
   }
 
   ngOnInit() {

@@ -13,13 +13,14 @@ import { AntdNotificationService } from 'src/app/core/util/antd-notification.ser
 import { NzProgressModule } from 'ng-zorro-antd/progress'
 import { format } from 'date-fns';
 import { RouterLink } from '@angular/router'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @Component({
   selector: 'app-milestone-table',
   templateUrl: './milestone-table.component.html',
   styleUrls: ['./milestone-table.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule, RouterLink],
+  imports: [CommonModule, NzTableModule, NzDividerModule, NzButtonModule, NzPopconfirmModule, NzProgressModule, RouterLink, NzIconModule],
 })
 export class MilestoneTableComponent {
   @Output() pageChanged = new EventEmitter<number>()
@@ -31,11 +32,16 @@ export class MilestoneTableComponent {
   @Input() size: number = 10
   @Input() page: number = 1
 
-  constructor(
-    private modalService: NzModalService,
-    private milestoneService: MilestoneService,
-    private antdNoti: AntdNotificationService
-  ) {}
+  expandSet = new Set<string>()
+  onExpandChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id)
+    } else {
+      this.expandSet.delete(id)
+    }
+  }
+
+  constructor(private modalService: NzModalService, private milestoneService: MilestoneService, private antdNoti: AntdNotificationService) {}
 
   openUpdateMilestoneModal(milestoneId: string) {
     const modalRef = this.modalService.create({
@@ -72,7 +78,8 @@ export class MilestoneTableComponent {
   onPageChange(page: number) {
     this.pageChanged.emit(page)
   }
+
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'dd/MM/yyyy');
+    return format(new Date(dateStr), 'dd/MM/yyyy')
   }
 }

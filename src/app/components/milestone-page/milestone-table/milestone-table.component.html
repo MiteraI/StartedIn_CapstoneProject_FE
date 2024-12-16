@@ -1,6 +1,5 @@
 <nz-table
-  #basicTable
-  nzSize="small"
+  #nestedTable
   [nzFrontPagination]="false"
   [nzLoading]="isFetchAllTaskLoading"
   [nzData]="milestoneList"
@@ -9,8 +8,9 @@
   [nzPageSize]="size"
   (nzPageIndexChange)="onPageChange($event)"
 >
-  <thead class="ant-table-thead">
+  <thead>
     <tr>
+      <th style="width: 30px"></th>
       <th>Tên Cột Mốc</th>
       <th>Ngày Bắt Đầu</th>
       <th>Ngày Kết Thúc</th>
@@ -20,8 +20,9 @@
     </tr>
   </thead>
   <tbody>
-    @for (data of basicTable.data; track data.id) {
+    @for (data of nestedTable.data; track data.id) {
     <tr>
+      <td [nzExpand]="expandSet.has(data.id)" [nzExpandIcon]="expandIcon"></td>
       <td>{{ data.title }}</td>
       <td>{{ formatDate(data.startDate) }}</td>
       <td>{{ formatDate(data.endDate) }}</td>
@@ -39,6 +40,37 @@
         <button nz-button nzType="primary" nzDanger (nzOnConfirm)="handleDeleteMilestone(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa cột mốc này không?">Xóa</button>
       </td>
     </tr>
+    @if (data.appointments.length > 0) {
+    <tr [nzExpand]="expandSet.has(data.id)">
+      <nz-table #innerTable [nzData]="data.appointments" nzSize="small" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th>Tên cuộc họp</th>
+            <th>Giờ Họp</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (data of innerTable.data; track data.id) {
+          <tr>
+            <td>{{ data.title }}</td>
+            <td>{{ data.appointmentTime | date : "d 'tháng' M, h:mm a" }}</td>
+            <td>
+              <button nz-button nzType="primary"><a [href]="data.meetingLink">Vào Meet</a></button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </nz-table>
+    </tr>
+    }
+    <ng-template #expandIcon>
+      @if (data.appointments.length > 0) { @if (!expandSet.has(data.id)) {
+      <span nz-icon nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(data.id, true)"></span>
+      } @else {
+      <span nz-icon nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(data.id, false)"></span>
+      } }
+    </ng-template>
     }
   </tbody>
 </nz-table>

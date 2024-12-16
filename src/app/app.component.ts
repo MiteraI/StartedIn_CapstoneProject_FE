@@ -1,6 +1,6 @@
 import { Component } from '@angular/core'
 import { IonApp } from '@ionic/angular/standalone'
-import { catchError, of, tap } from 'rxjs'
+import { BehaviorSubject, catchError, of, tap } from 'rxjs'
 import { AuthJwtService } from './core/auth/auth-jwt.service'
 import { NavigationStart, Router, RouterOutlet } from '@angular/router'
 import { StateStorageService } from './core/auth/state-storage.service'
@@ -9,6 +9,8 @@ import { HeaderComponent } from './layouts/header/header.component'
 import { FooterComponent } from './layouts/footer/footer.component'
 import { ViewModeConfigService } from './core/config/view-mode-config.service'
 import { ScrollService } from './core/util/scroll.service'
+import * as signalR from '@microsoft/signalr'
+import { WebsocketService } from './services/websocket.service'
 
 @Component({
   selector: 'app-root',
@@ -29,6 +31,7 @@ export class AppComponent {
     private stateStorage: StateStorageService,
     private accountService: AccountService,
     private viewMode: ViewModeConfigService,
+    private websocketService: WebsocketService,
     private scrollService: ScrollService
   ) {
     if (stateStorage.getRefreshToken()) {
@@ -57,9 +60,10 @@ export class AppComponent {
   }
 
   onScroll(event: any) {
-    const element = event.target;
+    const element = event.target
     if (element.scrollHeight - element.scrollTop <= element.clientHeight + 100) {
-      this.scrollService.emitScroll();
+      this.scrollService.emitScroll()
     }
   }
+
 }

@@ -6,6 +6,7 @@ import { TeamMemberModel } from '../user/team-member.model'
 import { Task } from './task.model'
 
 export type TaskDetails = {
+  id: string
   title: string
   description: string
   startDate: string

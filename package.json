@@ -32,6 +32,7 @@
     "@ionic/angular": "^8.0.0",
     "@maskito/angular": "^3.1.1",
     "@maskito/core": "^3.1.1",
+    "@microsoft/signalr": "^8.0.7",
     "@ng-icons/core": "^25.1.0",
     "@ng-icons/lucide": "^29.5.2",
     "chart.js": "^4.4.6",

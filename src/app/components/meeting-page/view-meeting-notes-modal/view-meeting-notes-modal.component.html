@@ -1,3 +1,61 @@
-<p>
-  view-meeting-notes-modal works!
-</p>
+<!-- <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload">
+  <button nz-button>
+    <span nz-icon nzType="upload"></span>
+    Chọn biên bản
+  </button>
+</nz-upload>
+<button nz-button nzType="primary" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0">
+  {{ uploading ? 'Uploading' : 'Start Upload' }}
+</button>
+
+<ul>
+  @for (meetingNote of meetingNotes; track $index) {
+  <li>
+    <a *ngIf="meetingNote.meetingNoteLink; else noLink" href="{{ meetingNote.meetingNoteLink }}" target="_blank">Meeting Note</a>
+  </li>
+  }
+  <ng-template #noLink>Không có liên kết</ng-template>
+</ul> -->
+
+<!-- Upload Section -->
+<div class="p-4 bg-gray-50 rounded-lg shadow-md">
+  <h3 class="text-lg font-semibold mb-4">Tải lên biên bản họp</h3>
+  <div class="flex items-center gap-4">
+    <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true" nzListType="text" class="upload-wrapper">
+      <button nz-button nzType="default" class="flex items-center">
+        <span nz-icon nzType="upload" class="mr-2"></span>
+        Chọn biên bản
+      </button>
+    </nz-upload>
+
+    <button nz-button nzType="primary" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0" class="ml-2">
+      {{ uploading ? 'Đang tải lên...' : 'Tải lên' }}
+    </button>
+  </div>
+</div>
+
+<!-- Meeting Notes Section -->
+<div class="mt-6 p-4 bg-white rounded-lg shadow-md">
+  <h3 class="text-lg font-semibold mb-4">Biên bản cuộc họp</h3>
+
+  <ul *ngIf="meetingNotes.length > 0; else noMeetingNotes" class="list-none">
+    @for (meetingNote of meetingNotes; track $index) {
+    <li class="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
+      <div class="flex items-center">
+        <span nz-icon nzType="file-text" class="text-blue-500 mr-2"></span>
+        <a *ngIf="meetingNote.meetingNoteLink; else noLink" [href]="meetingNote.meetingNoteLink" target="_blank" class="text-blue-600 hover:underline">
+          Meeting Note {{ $index + 1 }}
+        </a>
+        <ng-template #noLink>
+          <span class="text-gray-400">Không có liên kết</span>
+        </ng-template>
+      </div>
+    </li>
+    }
+  </ul>
+
+  <!-- Fallback for No Meeting Notes -->
+  <ng-template #noMeetingNotes>
+    <p class="text-gray-500 text-center">Chưa có biên bản nào được tải lên.</p>
+  </ng-template>
+</div>

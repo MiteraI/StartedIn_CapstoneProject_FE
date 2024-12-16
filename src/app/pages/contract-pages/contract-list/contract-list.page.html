@@ -127,7 +127,7 @@
         <div class="mt-3 flex justify-between items-end">
           <div>
             <div class="text-sm font-medium">
-              Ngày ký: {{ contract.lastUpdatedTime | date:'dd/MM/yyyy' }}
+              Ngày ký: {{ contract.validDate | date:'dd/MM/yyyy' }}
             </div>
             <div class="text-sm text-gray-500">
               Cập nhật cuối: {{ formatDate(contract.lastUpdatedTime) }}
