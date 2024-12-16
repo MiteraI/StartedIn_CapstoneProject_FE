@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { debounceTime, distinctUntilChanged, map, Subject, takeUntil } from 'rxjs'
+import { debounceTime, distinctUntilChanged, map, Subject, takeUntil, tap } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component'
 import { TaskTableComponent } from '../task-table/task-table.component'
@@ -17,6 +17,7 @@ import { ScrollService } from 'src/app/core/util/scroll.service'
 import { TaskStatus } from 'src/app/shared/enums/task-status.enum'
 import { TaskFilterComponent } from '../task-filter/task-filter.component'
 import { WebsocketService } from 'src/app/services/websocket.service'
+import { createData, deleteData, updateData } from 'src/app/core/util/websocket.utils'
 
 interface TaskFilterOptions {
   title?: string
@@ -144,13 +145,39 @@ export class TaskViewComponent implements OnInit, OnDestroy {
       this.fetchTasks(this.isDesktopView)
     })
 
-    this.websocketService.websocketData.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      if (!data) return
-      if (data.action === 'update') {
-        const task = data.data as Task
-        this.taskList = this.taskList.map((t) => (t.id === task.id ? task : t))
-      }
-    })
+    this.websocketService.websocketData
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((data) => {
+          if (!data) return
+          switch (data.action) {
+            case 'create':
+              // chekc pagination is on final page and array length is not equal to size
+              if (this.page * this.size >= this.total && this.taskList.length < this.size) {
+                this.taskList = createData(this.taskList, data.data) as Task[]
+              } else if (!this.isDesktopView) {
+                // is mobile, simply append end
+                this.taskList = createData(this.taskList, data.data) as Task[]
+              }
+              break
+            case 'update':
+              // check if data.id exist on current array
+              if (this.taskList.find((item) => item.id === data.data.id)) {
+                this.taskList = updateData(this.taskList, data.data) as Task[]
+              }
+              break
+            case 'delete':
+              if (this.page * this.size >= this.total && this.taskList.length < this.size) {
+                this.taskList = deleteData(this.taskList, data.data.id) as Task[]
+              } else if (!this.isDesktopView) {
+                // is mobile, simply append end
+                this.taskList = deleteData(this.taskList, data.data.id) as Task[]
+              }
+              break
+          }
+        })
+      )
+      .subscribe()
   }
 
   ngOnDestroy() {
