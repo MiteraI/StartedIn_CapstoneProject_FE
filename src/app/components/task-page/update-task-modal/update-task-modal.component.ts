@@ -142,62 +142,62 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   disableStartDate = (startDate: Date): boolean => {
-    const endDate = this.taskForm.get('endDate')?.value;
-    const parentTask = this.otherTasks.find(t => t.id === this.initialParentTaskId) ?? this.initialParentTask;
+    const endDate = this.taskForm.get('endDate')?.value
+    const parentTask = this.otherTasks.find((t) => t.id === this.initialParentTaskId) ?? this.initialParentTask
 
     if (parentTask) {
-      const parentTaskStart = new Date(parentTask.startDate);
-      const parentTaskEnd = new Date(parentTask.endDate);
+      const parentTaskStart = new Date(parentTask.startDate)
+      const parentTaskEnd = new Date(parentTask.endDate)
 
       // Start date should be within parent task dates
       if (startDate < parentTaskStart || startDate > parentTaskEnd) {
-        return true;
+        return true
       }
     }
 
-    const milestone = this.milestones.find(m => m.id === this.initialMilestoneId) ?? this.initialMilestone;
+    const milestone = this.milestones.find((m) => m.id === this.initialMilestoneId) ?? this.initialMilestone
     if (milestone) {
-      const milestoneStart = new Date(milestone.startDate);
-      const milestoneEnd = new Date(milestone.endDate);
+      const milestoneStart = new Date(milestone.startDate)
+      const milestoneEnd = new Date(milestone.endDate)
 
       // Start date should be within milestone dates
       if (startDate < milestoneStart || startDate > milestoneEnd) {
-        return true;
+        return true
       }
     }
 
     // Start date cannot be after end date
-    return !!endDate && startDate > new Date(endDate);
-  };
+    return !!endDate && startDate > new Date(endDate)
+  }
 
   disableEndDate = (endDate: Date): boolean => {
-    const startDate = this.taskForm.get('startDate')?.value;
-    const parentTask = this.otherTasks.find(t => t.id === this.initialParentTaskId) ?? this.initialParentTask;
+    const startDate = this.taskForm.get('startDate')?.value
+    const parentTask = this.otherTasks.find((t) => t.id === this.initialParentTaskId) ?? this.initialParentTask
 
     if (parentTask) {
-      const parentTaskStart = new Date(parentTask.startDate);
-      const parentTaskEnd = new Date(parentTask.endDate);
+      const parentTaskStart = new Date(parentTask.startDate)
+      const parentTaskEnd = new Date(parentTask.endDate)
 
       // End date should be within parent task dates
       if (endDate < parentTaskStart || endDate > parentTaskEnd) {
-        return true;
+        return true
       }
     }
 
-    const milestone = this.milestones.find(m => m.id === this.initialMilestoneId) ?? this.initialMilestone;
+    const milestone = this.milestones.find((m) => m.id === this.initialMilestoneId) ?? this.initialMilestone
     if (milestone) {
-      const milestoneStart = new Date(milestone.startDate);
-      const milestoneEnd = new Date(milestone.endDate);
+      const milestoneStart = new Date(milestone.startDate)
+      const milestoneEnd = new Date(milestone.endDate)
 
       // End date should be within milestone dates
       if (endDate < milestoneStart || endDate > milestoneEnd) {
-        return true;
+        return true
       }
     }
 
     // End date cannot be before start date
-    return !!startDate && endDate < new Date(startDate);
-  };
+    return !!startDate && endDate < new Date(startDate)
+  }
 
   onSubmit() {
     if (this.taskForm.valid && this.isInfoChanged) {
@@ -224,7 +224,6 @@ export class UpdateTaskModalComponent implements OnInit {
       this.taskService.updateTaskInfo(this.nzModalData.projectId, this.nzModalData.taskId, taskData).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Cập Nhật Tác Vụ Thành Công', '')
-          this.taskService.refreshTask$.next(true)
           this.nzModalRef.close(response)
         },
         error: (error: HttpErrorResponse) => {
@@ -263,7 +262,7 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   private handleMutualExclusion(milestoneSelected: boolean, value: string) {
-    if (!value) return;
+    if (!value) return
     if (milestoneSelected) {
       this.taskForm.patchValue({ parentTask: '' })
     } else {
@@ -286,20 +285,17 @@ export class UpdateTaskModalComponent implements OnInit {
 
   handleSelectParentTask(parentTaskId: string) {
     if (!parentTaskId) {
-      this.updateParentTask(
-        '',
-        () => this.updateMilestone(this.taskForm.get('milestone')?.value)
-      );
-      return;
+      this.updateParentTask('', () => this.updateMilestone(this.taskForm.get('milestone')?.value))
+      return
     }
 
-    this.handleMutualExclusion(false, parentTaskId);
+    this.handleMutualExclusion(false, parentTaskId)
   }
 
   updateParentTask(parentTaskId: string, callback: () => void = () => {}) {
     if (parentTaskId === this.initialParentTaskId) {
-      callback();
-      return;
+      callback()
+      return
     }
     this.taskService.updateParentTask(this.nzModalData.projectId, this.nzModalData.taskId, { parentTaskId: parentTaskId }).subscribe({
       next: (res) => {
@@ -329,7 +325,7 @@ export class UpdateTaskModalComponent implements OnInit {
           this.otherTasks = [...this.otherTasks, ...tasks]
           this.otherTasksTotal = val.total
           this.isOtherTasksFetchLoading = false
-          console.log(this.otherTasks);
+          console.log(this.otherTasks)
         },
         error: (error: HttpErrorResponse) => {
           this.isOtherTasksFetchLoading = false
@@ -390,39 +386,36 @@ export class UpdateTaskModalComponent implements OnInit {
 
   handleSelectMilestone(milestoneId: string) {
     if (!milestoneId) {
-      this.updateMilestone(
-        '',
-        () => this.updateParentTask(this.taskForm.get('parentTask')?.value)
-      );
-      return;
+      this.updateMilestone('', () => this.updateParentTask(this.taskForm.get('parentTask')?.value))
+      return
     }
 
-    this.handleMutualExclusion(true, milestoneId);
+    this.handleMutualExclusion(true, milestoneId)
 
     if (milestoneId) {
-      const milestone = this.milestones.find(m => m.id === milestoneId);
+      const milestone = this.milestones.find((m) => m.id === milestoneId)
       if (milestone) {
-        const startDate = this.taskForm.get('startDate')?.value;
-        const endDate = this.taskForm.get('endDate')?.value;
+        const startDate = this.taskForm.get('startDate')?.value
+        const endDate = this.taskForm.get('endDate')?.value
 
         // Check if current dates are within milestone range
         if (startDate) {
-          const taskStart = new Date(startDate);
-          const milestoneStart = new Date(milestone.startDate);
-          const milestoneEnd = new Date(milestone.endDate);
+          const taskStart = new Date(startDate)
+          const milestoneStart = new Date(milestone.startDate)
+          const milestoneEnd = new Date(milestone.endDate)
 
           if (taskStart < milestoneStart || taskStart > milestoneEnd) {
-            this.taskForm.patchValue({ startDate: null });
+            this.taskForm.patchValue({ startDate: null })
           }
         }
 
         if (endDate) {
-          const taskEnd = new Date(endDate);
-          const milestoneStart = new Date(milestone.startDate);
-          const milestoneEnd = new Date(milestone.endDate);
+          const taskEnd = new Date(endDate)
+          const milestoneStart = new Date(milestone.startDate)
+          const milestoneEnd = new Date(milestone.endDate)
 
           if (taskEnd < milestoneStart || taskEnd > milestoneEnd) {
-            this.taskForm.patchValue({ endDate: null });
+            this.taskForm.patchValue({ endDate: null })
           }
         }
       }
@@ -431,8 +424,8 @@ export class UpdateTaskModalComponent implements OnInit {
 
   updateMilestone(milestoneId: string, callback: () => void = () => {}) {
     if (milestoneId === this.initialMilestoneId) {
-      callback();
-      return;
+      callback()
+      return
     }
     this.taskService.updateTaskMilestone(this.nzModalData.projectId, this.nzModalData.taskId, { milestoneId: milestoneId }).subscribe({
       next: (res) => {
@@ -476,7 +469,7 @@ export class UpdateTaskModalComponent implements OnInit {
           this.milestones = [...this.milestones, ...moreMilestones]
           this.milestonesTotal = val.total
           this.isMilestonesFetchLoading = false
-          console.log(this.milestones);
+          console.log(this.milestones)
         },
         error: (error: HttpErrorResponse) => {
           this.isMilestonesFetchLoading = false
@@ -494,10 +487,12 @@ export class UpdateTaskModalComponent implements OnInit {
     this.taskService.deleteTask(this.nzModalData.projectId, this.nzModalData.taskId).subscribe({
       next: (res) => {
         this.antdNoti.openSuccessNotification('', 'Xóa tác vụ thành công')
+        this.nzModalRef.close()
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
+          this.nzModalRef.close()
         } else if (error.status === 500) {
           this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {

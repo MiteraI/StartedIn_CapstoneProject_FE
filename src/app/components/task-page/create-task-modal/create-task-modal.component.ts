@@ -225,7 +225,6 @@ export class CreateTaskModalComponent implements OnInit {
       this.taskService.createTask(this.nzModalData.projectId, taskData).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Tạo Tác Vụ Thành Công', '')
-          this.taskService.refreshTask$.next(true)
           this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {
