@@ -1,4 +1,4 @@
-<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="false" [nzParagraph]="{ rows: 12 }">
+<!-- <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="false" [nzParagraph]="{ rows: 12 }">
   <div class="flex flex-col gap-5">
     <nz-collapse>
       <nz-collapse-panel [nzHeader]="'Thông tin chung dự án'" nzActive="true" class="bg-purple-200">
@@ -31,6 +31,60 @@
               <td>{{ data.fullName }}</td>
               <td>{{ teamRoleLabels[data.roleInTeam] }}</td>
               <td>{{ data.email }}</td>
+            </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </div>
+</nz-skeleton> -->
+
+<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="false" [nzParagraph]="{ rows: 12 }">
+  <div class="gap-5 px-5 flex flex-col bg-white shadow-md pb-5">
+    <!-- Project Logo and General Info -->
+    <div class="flex items-center gap-6 bg-purple-200 rounded-lg">
+      <div class="p-5">
+        <img *ngIf="projectGeneralInfo?.logoUrl" [src]="projectGeneralInfo?.logoUrl" alt="Project Logo" class="w-20 h-20 rounded-full border-2 border-purple-400 shadow-md" />
+        <div *ngIf="!projectGeneralInfo?.logoUrl" class="w-20 h-20 rounded-full bg-gray-300 flex items-center justify-center">
+          <span nz-icon nzType="project" nzTheme="outline" class="text-3xl text-gray-500"></span>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-700">{{ projectGeneralInfo?.projectName }}</h2>
+        <p class="text-gray-600">
+          <span nz-icon nzType="calendar" nzTheme="outline"></span>
+          Ngày thành lập: {{ projectGeneralInfo?.startDate | date : 'dd-MM-yyyy' }}
+        </p>
+        <p class="text-gray-600">
+          <span nz-icon nzType="idcard" nzTheme="outline"></span>
+          Thông tin dự án: {{ projectGeneralInfo?.description }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Collapsible Sections -->
+    <nz-collapse>
+      <!-- Team Members Table -->
+      <nz-collapse-panel [nzHeader]="'Các thành viên dự án'" nzActive="true" class="bg-purple-200 rounded-lg">
+        <nz-table class="custom-table shadow-md" #teamMemberTable [nzShowPagination]="false" nzBordered="true" [nzData]="projectGeneralInfo?.members ?? []">
+          <thead>
+            <tr>
+              <th class="text-center bg-purple-100">Tên Thành Viên</th>
+              <th class="text-center bg-purple-100">Vai Trò</th>
+              <th class="text-center bg-purple-100">Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (data of teamMemberTable.data; track $index) {
+            <tr class="hover:bg-purple-50">
+              <td class="text-center">{{ data.fullName }}</td>
+              <td class="text-center">{{ teamRoleLabels[data.roleInTeam] }}</td>
+              <td class="text-center">
+                <a href="mailto:{{ data.email }}" class="text-purple-600 hover:text-purple-800">
+                  {{ data.email }}
+                </a>
+              </td>
             </tr>
             }
           </tbody>
