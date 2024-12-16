@@ -14,6 +14,7 @@ import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-i
 import { DealOfferService } from 'src/app/services/deal-offer.service'
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router'
+import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
 @Component({
   selector: 'app-investment-call-table',
   templateUrl: './investment-call-table.component.html',
@@ -29,7 +30,12 @@ import { ActivatedRoute, Router } from '@angular/router'
 })
 export class InvestmentCallTableComponent implements OnInit {
   @Input({ required: true }) projectId!: string
-  @Input({ required: true }) listInvestmentCall: InvestmentCallResponseDto[] = []
+  @Input({ required: true }) listInvestmentCall: SearchResponseModel<InvestmentCallResponseDto> = {
+      data: [],
+      page: 1,
+      size: 10,
+      total: 0
+    }
   @Input({ required: true }) isFetchAllCallLoading: boolean = false
 
   constructor(

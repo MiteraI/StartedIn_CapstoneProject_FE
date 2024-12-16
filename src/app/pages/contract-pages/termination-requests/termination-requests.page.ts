@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
@@ -29,7 +29,8 @@ import { TerminateContractModalComponent } from 'src/app/components/contract-pag
     NzSpinModule,
     NzModalModule,
     NzButtonModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ]
 })
 export class TerminationRequestsPage implements OnInit, OnDestroy {
@@ -119,7 +120,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
   }
 
   showRequestDetail(request: TerminationRequestModel) {
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'Chi tiết yêu cầu kết thúc hợp đồng',
       nzContent: TerminationRequestDetailModalComponent,
       nzFooter: null,
@@ -128,8 +129,10 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         isLeader: this.isLeader,
         request: request
       },
-      nzStyle: { width: '700px' }
+      nzStyle: { width: '700px' },
+      nzAfterClose: new EventEmitter<void>()
     });
+    modalRef.afterClose.subscribe(() => this.loadReceivedRequests())
   }
 
   acceptRequest(request: TerminationRequestModel) {

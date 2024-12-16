@@ -2,48 +2,31 @@
   <thead>
     <tr>
       <th></th>
-      <th class="p-4 text-left">
-        <div class="flex justify-center">
-          Mã hợp đồng
-        </div>
-      </th>
-      <th class="p-4 text-left">
-        <div class="flex justify-center">
-          Tên hợp đồng
-        </div>
-      </th>
-      <th class="p-4 text-left flex justify-center">Loại hợp đồng</th>
-      <th class="p-4 text-left">
-        <div class="flex justify-center">
-          Các bên liên quan
-        </div>
-      </th>
-      <th class="p-4 text-left">
-        <div class="flex justify-center">
-          Lần cập nhật cuối
-        </div>
-      </th>
-      <th class="p-4 text-left">
-        <div class="flex justify-center">
-          Trạng thái
-        </div>
-      </th>
-      <th class="p-4 text-left"></th>
+      <th class="p-4">Hợp đồng</th>
+      <th class="p-4 hidden lg:table-cell">Các bên liên quan</th>
+      <th class="p-4">Ngày ký</th>
+      <th class="p-4 hidden lg:table-cell">Cập nhật cuối</th>
+      <th class="p-4">Trạng thái</th>
+      <th class="p-4"></th>
     </tr>
   </thead>
   <tbody>
     @for (data of contractTable.data; track data.id) {
     <tr class="cursor-pointer" (click)="navigateToContract(data)">
-      <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand"></td>
+      <td *ngIf="data.contractType === 2" [(nzExpand)]="data.expand" (click)="$event.stopPropagation()"></td>
       <td *ngIf="data.contractType !== 2"></td>
-      <td>{{ data.contractIdNumber }}</td>
-      <td>{{ data.contractName }}</td>
       <td>
-        <div class="flex justify-center">
+        <div class="text-base font-bold">{{ data.contractName }}</div>
+        <div class="text-xs text-gray-500 mb-1">{{ data.contractIdNumber }}</div>
+        <span class="text-sm font-medium py-0.5 px-4 rounded-2xl" [ngClass]="{
+          'text-blue-500 bg-blue-100': data.contractType === 1,
+          'text-green-500 bg-green-100': data.contractType === 2,
+          'text-yellow-500 bg-yellow-100': data.contractType === 3
+        }">
           {{ getContractTypeLabel(data.contractType) }}
-        </div>
+        </span>
       </td>
-      <td>
+      <td class="hidden lg:table-cell">
         <div class="flex justify-center">
           <nz-avatar
             *ngFor="let party of data.parties"
@@ -56,12 +39,24 @@
       </td>
       <td>
         <div class="flex justify-center">
+          {{ data.validDate | date:'dd/MM/yyyy' }}
+        </div>
+      </td>
+      <td class="hidden lg:table-cell">
+        <div class="flex justify-center">
           {{ formatDate(data.lastUpdatedTime) }}
         </div>
       </td>
       <td>
-        <div class="flex justify-center">
-          {{ getContractStatusLabel(data.contractStatus) }}
+        <div class="p-2 rounded-2xl text-center font-medium" [ngClass]="{
+          'text-gray-500 bg-gray-100': data.contractStatus === contractStatuses.DRAFT,
+          'text-blue-500 bg-blue-100': data.contractStatus === contractStatuses.SENT,
+          'text-green-500 bg-green-100': data.contractStatus === contractStatuses.COMPLETED,
+          'text-red-500 bg-red-100': data.contractStatus === contractStatuses.DECLINED,
+          'text-orange-500 bg-orange-100': data.contractStatus === contractStatuses.EXPIRED,
+          'text-yellow-500 bg-yellow-100': data.contractStatus === contractStatuses.WAITING_FOR_LIQUIDATION
+        }">
+          {{ statusLabels[data.contractStatus] }}
         </div>
       </td>
       <td>

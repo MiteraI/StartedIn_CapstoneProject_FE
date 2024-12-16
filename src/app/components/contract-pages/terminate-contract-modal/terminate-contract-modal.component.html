@@ -3,11 +3,7 @@
     <mat-icon fontIcon="warning" class="text-red-600"></mat-icon>
     <div class="text-red-600 font-medium ml-2">Cảnh báo:</div>
   </div>
-  <ul *ngIf="data.isLeader" class="list-disc list-inside space-y-2 mt-2 ml-2">
-    <li>Hãy đảm bảo rằng bạn đã thông báo cho các bên liên quan của hợp đồng</li>
-    <li>Nếu như bạn kết thúc hợp đồng mà không có lý do chính đáng và/hoặc không tuân theo các điều khoản của hợp đồng, bạn có thể sẽ phải chịu trách nhiệm pháp lý. Trong trường hợp này, StartedIn không có trách nhiệm hỗ trợ về mặt pháp lý cho bạn</li>
-  </ul>
-  <ul *ngIf="!data.isLeader" class="list-disc list-inside space-y-2 mt-2 ml-2">
+  <ul class="list-disc list-inside space-y-2 mt-2 ml-2">
     <li>Yêu cầu kết thúc hợp đồng của bạn sẽ được gửi đến trưởng nhóm</li>
     <li>Bạn sẽ phải chờ trưởng nhóm liên hệ với các bên liên quan (nếu có) và phê duyệt yêu cầu</li>
     <li>Sau khi phê duyệt yêu cầu, trưởng nhóm sẽ gửi cho bạn một biên bản thanh lý hợp đồng</li>

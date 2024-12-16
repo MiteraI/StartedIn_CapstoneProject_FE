@@ -1,6 +1,6 @@
 <div class="w-full">
   <div *ngIf="isDesktopView" class="flex items-center justify-between px-6 max-w-7xl mx-auto w-full my-4">
-    <div class="text-xl font-medium mr-10">
+    <div class="text-xl font-bold mr-10">
       {{ viewName }}
     </div>
     <div class="flex-grow flex space-x-2">
@@ -34,7 +34,7 @@
   </div>
   <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between my-2">
     @if (!isSearching) {
-      <span class="ml-6 my-2 text-lg">{{ viewName }}</span>
+      <span class="ml-6 my-2 text-lg font-bold">{{ viewName }}</span>
     } @else {
       <mat-icon (click)="closeSearchBarMobile()" fontIcon="close" class="ml-4"></mat-icon>
       <div class="mt-0.5">

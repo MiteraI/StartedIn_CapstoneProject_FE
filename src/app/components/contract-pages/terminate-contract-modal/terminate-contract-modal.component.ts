@@ -14,11 +14,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum'
 import { catchError, throwError } from 'rxjs'
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
+import { ContractType } from 'src/app/shared/enums/contract-type.enum'
 
 interface IModalData {
   projectId: string;
   contractId?: string;
-  isLeader?: boolean;
 }
 
 @Component({
@@ -64,41 +64,22 @@ export class TerminateContractModalComponent implements OnInit {
   submitRequest() {
     if (this.terminateForm.valid) {
       this.isLoading = true;
-      if (this.data.isLeader) {
-        this.contractService
-          .terminate(
-            this.data.projectId,
-            this.terminateForm.value.contractId,
-            this.terminateForm.value.reason
-          ).subscribe({
-            next: () => {
-              this.notification.success('Thành công', 'Đã kết thúc hợp đồng', { nzDuration: 2000 });
-              this.isLoading = false;
-              this.modalRef.close(true);
-            },
-            error: (error) => {
-              this.notification.error('Lỗi', 'Không thể kết thúc hợp đồng', { nzDuration: 2000 });
-              this.isLoading = false;
-            }
-          });
-      } else {
-        this.terminationRequestService
-          .create(
-            this.data.projectId,
-            this.terminateForm.value.contractId,
-            this.terminateForm.value.reason
-          ).subscribe({
-            next: () => {
-              this.notification.success('Thành công', 'Đã gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
-              this.isLoading = false;
-              this.modalRef.close(true);
-            },
-            error: (error) => {
-              this.notification.error('Lỗi', 'Không thể gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
-              this.isLoading = false;
-            }
-          });
-      }
+      this.terminationRequestService
+        .create(
+          this.data.projectId,
+          this.terminateForm.value.contractId,
+          this.terminateForm.value.reason
+        ).subscribe({
+          next: () => {
+            this.notification.success('Thành công', 'Đã gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
+            this.isLoading = false;
+            this.modalRef.close(true);
+          },
+          error: (error) => {
+            this.notification.error('Lỗi', 'Không thể gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
+            this.isLoading = false;
+          }
+        });
     }
   }
 
@@ -125,7 +106,10 @@ export class TerminateContractModalComponent implements OnInit {
         })
       )
       .subscribe(response => {
-        this.contractList = [...this.contractList, ...response.data];
+        this.contractList = [
+          ...this.contractList,
+          ...response.data.filter(c => c.contractType !== ContractType.LIQUIDATIONNOTE)
+        ];
         this.isLoading = false;
       })
   }

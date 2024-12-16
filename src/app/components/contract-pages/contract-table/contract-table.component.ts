@@ -56,6 +56,9 @@ export class ContractTableComponent  implements OnInit {
   @Output() refreshNeeded = new EventEmitter<void>();
 
   isLeader = false;
+  contractStatuses = ContractStatus;
+  statusLabels = ContractStatusLabels;
+
   constructor(
     private contractService: ContractService,
     private modalService: NzModalService,
@@ -73,16 +76,12 @@ export class ContractTableComponent  implements OnInit {
     return ContractTypeLabels[type]
   }
 
-  getContractStatusLabel(status: ContractStatus): string {
-    return ContractStatusLabels[status]
-  }
-
   getDisbursementStatusLabel(status: DisbursementStatus) : string {
     return DisbursementStatusLabels[status]
   }
 
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
+    return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
   }
 
   formatDateOnly(dateStr: string): string {
@@ -151,13 +150,23 @@ export class ContractTableComponent  implements OnInit {
   }
 
   openTerminateModal(contract: ContractListItemModel) {
-    this.modalService.create({
-      nzTitle: 'Kết thúc hợp đồng',
-      nzContent: TerminateContractModalComponent,
-      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
-    });
+    if (this.isLeader) {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: LiquidationModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
+        nzFooter: null,
+        nzAfterClose: this.refreshNeeded
+      });
+    } else {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateContractModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id },
+        nzFooter: null,
+        nzAfterClose: this.refreshNeeded
+      });
+    }
   }
 
   openLiquidationModal(contract: ContractListItemModel) {
@@ -174,7 +183,7 @@ export class ContractTableComponent  implements OnInit {
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
+      nzAfterClose: this.refreshNeeded
     });
   }
 

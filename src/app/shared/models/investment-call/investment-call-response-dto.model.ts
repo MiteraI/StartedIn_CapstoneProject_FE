@@ -8,8 +8,8 @@ export type InvestmentCallResponseDto = {
   amountRaised: number
   remainAvailableEquityShare: number
   equityShareCall: number
-  startDate: string
-  endDate: string
+  startDate: Date
+  endDate: Date
   status: InvestmentCallStatus
   totalInvestor: number
   expand: boolean

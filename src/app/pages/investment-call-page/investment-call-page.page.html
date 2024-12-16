@@ -1,4 +1,20 @@
-<app-view-title-bar viewName="Các Đợt Gọi Vốn"></app-view-title-bar>
+<app-filter-bar
+  viewName="Danh mục gọi vốn"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-investment-call-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-investment-call-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-investment-call-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-investment-call-filter>
+  </div>
+</app-filter-bar>
 
 @if (isDesktopView) {
 <div class="flex flex-col m-3 gap-y-4">
@@ -7,6 +23,17 @@
     Tạo Gọi Vốn
   </button>
   <app-investment-call-table [projectId]="projectId" [listInvestmentCall]="listInvestmentCall" [isFetchAllCallLoading]="isFetchAllCallLoading"></app-investment-call-table>
+  <div class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="totalRecords"
+      [(nzPageIndex)]="pageIndex"
+      [(nzPageSize)]="pageSize"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
 </div>
 } @else {
 <div class="overflow-y-auto">

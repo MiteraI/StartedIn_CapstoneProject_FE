@@ -21,3 +21,7 @@
 :host ::ng-deep .ant-table-tbody :last-child > td {
   border-bottom: none;
 }
+
+:host ::ng-deep .ant-table-thead > tr > th {
+  text-align: center;
+}

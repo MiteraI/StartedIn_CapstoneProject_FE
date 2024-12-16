@@ -28,32 +28,32 @@
   <table class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
-        <th class="p-4 text-left w-1/4">Tên tài sản</th>
-        <th class="p-4 text-left w-1/6">Số seri</th>
-        <th class="p-4 text-left">Số lượng</th>
-        <th class="p-4 text-left">Còn lại</th>
-        <th class="p-4 text-left">Giá</th>
-        <th class="p-4 text-left">Ngày mua</th>
-        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-center">Tên tài sản</th>
+        <th class="p-4 text-center">Số seri</th>
+        <th class="p-4 text-center">Số lượng ban đầu</th>
+        <th class="p-4 text-center">Tồn kho</th>
+        <th class="p-4 text-center">Giá</th>
+        <th class="p-4 text-center">Ngày mua</th>
+        <th class="p-4 text-center">Trạng thái</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let asset of assets" class="border-b hover:bg-gray-50 cursor-pointer">
-        <td class="p-4">
+        <td class="p-4 text-center">
           <div class="font-medium hover:font-bold">{{asset.assetName}}</div>
         </td>
-        <td class="p-4">
+        <td class="p-4 text-center">
           <div class="text-gray-600">{{asset.serialNumber}}</div>
         </td>
-        <td class="p-4">
+        <td class="p-4 text-center">
           <div class="text-gray-600 flex justify-center">{{asset.quantity}}</div>
         </td>
-        <td class="p-4">
+        <td class="p-4 text-center">
           <div class="text-gray-600 flex justify-center">{{asset.remainQuantity}}</div>
         </td>
-        <td class="p-4 text-gray-600">{{ asset.price | vndCurrency }}</td>
-        <td class="p-4 text-gray-600">{{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}</td>
-        <td class="p-4">
+        <td class="p-4 text-gray-600 text-center">{{ asset.price | vndCurrency }}</td>
+        <td class="p-4 text-gray-600 text-center">{{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}</td>
+        <td class="p-4 text-center">
           <span
             [ngClass]="{
               'text-green-500': asset.status === assetStatuses.AVAILABLE,
