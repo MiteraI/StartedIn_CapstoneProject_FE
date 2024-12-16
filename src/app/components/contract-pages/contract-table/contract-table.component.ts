@@ -156,8 +156,9 @@ export class ContractTableComponent  implements OnInit {
       nzContent: TerminateContractModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
       nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
+      nzAfterClose: this.refreshNeeded
     });
+
   }
 
   openLiquidationModal(contract: ContractListItemModel) {
@@ -174,7 +175,7 @@ export class ContractTableComponent  implements OnInit {
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzOnOk: () => this.refreshNeeded.emit()
+      nzAfterClose: this.refreshNeeded
     });
   }
 
