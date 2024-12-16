@@ -17,4 +17,5 @@ export type ContractListItemModel = {
   disbursements: DisbursementContractList[];
   expand: boolean;
   liquidationNoteId?: string;
+  validDate?: string;
 }
