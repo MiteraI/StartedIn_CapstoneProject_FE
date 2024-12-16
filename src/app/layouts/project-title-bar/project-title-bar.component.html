@@ -25,7 +25,7 @@
 
   <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between">
     <mat-icon (click)="navigateBack()" fontIcon="chevron_left" class="ml-3 scale-125"></mat-icon>
-    <div class="font-medium text-xl text-ellipsis text-center flex-grow">
+    <div class="font-bold text-xl text-ellipsis text-center flex-grow">
       {{ project?.projectName || 'Startup của bạn' }}
     </div>
     <div class="flex items-center">

@@ -1,4 +1,26 @@
-<div class="font-bold text-3xl text-black flex justify-center my-4">Yêu cầu kết thúc hợp đồng</div>
+<div class="border-b border-gray-300">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex">
+      <a
+        [routerLink]="['/projects', projectId, 'contracts']"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+        [class.border-transparent]="true"
+        [class.text-gray-500]="true"
+      >
+        <mat-icon fontIcon="history_edu"></mat-icon>
+        <span class="hidden md:inline ml-1">Hợp đồng</span>
+      </a>
+      <a
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="block"></mat-icon>
+        <span class="hidden md:inline ml-1">Yêu cầu kết thúc hợp đồng</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="font-bold text-2xl md:text-3xl text-black flex justify-center my-4">Yêu cầu kết thúc hợp đồng</div>
 
 <div *ngIf="!isLeader" class="flex items-center justify-center p-2 mb-2 space-x-2">
   <nz-select [(ngModel)]="filterMode" (ngModelChange)="filter()" class="min-w-32">

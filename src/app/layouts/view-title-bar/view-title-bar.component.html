@@ -3,12 +3,12 @@
     *ngIf="isDesktopView" class="flex items-center px-6 max-w-7xl mx-auto w-full my-4"
     [ngClass]="{'justify-center': centered}"
   >
-    <div class="text-xl font-medium mr-10 my-2">
+    <div class="text-xl font-bold mr-10 my-2">
       {{ viewName }}
     </div>
   </div>
   <div *ngIf="!isDesktopView" class="flex items-center w-full justify-between my-2">
-    <span class="ml-6 my-2 text-lg">{{ viewName }}</span>
+    <span class="ml-6 my-2 text-lg font-bold">{{ viewName }}</span>
   </div>
   <hr class="mx-6" />
 </div>

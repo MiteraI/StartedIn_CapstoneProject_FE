@@ -5,7 +5,7 @@ export enum ContractType {
 }
 
 export const ContractTypeLabels: Record<ContractType, string> = {
-  [ContractType.INVESTMENT]: 'Đầu tư',
-  [ContractType.INTERNAL]: 'Nội bộ',
+  [ContractType.INVESTMENT]: 'Hợp đồng đầu tư',
+  [ContractType.INTERNAL]: 'Hợp đồng nội bộ',
   [ContractType.LIQUIDATIONNOTE]: 'Biên bản thanh lý'
 };

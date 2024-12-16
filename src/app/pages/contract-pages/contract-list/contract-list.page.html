@@ -1,5 +1,27 @@
+<div class="border-b border-gray-300">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex">
+      <a
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="history_edu"></mat-icon>
+        <span class="hidden md:inline ml-1">Hợp đồng</span>
+      </a>
+      <a
+        [routerLink]="['/projects', projectId, 'termination-requests']"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300"
+        [class.border-transparent]="true"
+        [class.text-gray-500]="true"
+      >
+        <mat-icon fontIcon="block"></mat-icon>
+        <span class="hidden md:inline ml-1">Yêu cầu kết thúc hợp đồng</span>
+      </a>
+    </div>
+  </div>
+</div>
+
 <app-filter-bar
-  viewName="Danh mục hợp đồng"
+  viewName="Hợp đồng"
   [searchValue]="filter.contractName ?? ''"
   (searchString)="onSearch($event)"
   (filterMenuOpened)="onFilterMenuOpened()"
@@ -21,18 +43,10 @@
 <!-- Desktop View -->
 <div *ngIf="isDesktopView" class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <div class="flex justify-end mb-4">
-    <div class="flex items-center gap-3">
+    <div *ngIf="isLeader" class="flex items-center gap-3">
       <button
-        [routerLink]="['/projects', projectId, 'termination-requests']"
-        class="flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-orange-600"
-      >
-        <mat-icon fontIcon="block" class="mr-2"></mat-icon>
-        Yêu cầu kết thúc hợp đồng
-      </button>
-      <button
-        *ngIf="isLeader"
         (click)="openAddModal()"
-        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+        class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
       >
         <mat-icon fontIcon="add" class="mr-2"></mat-icon>
         Tạo hợp đồng
@@ -62,6 +76,13 @@
 
 <!-- Mobile View -->
 <div *ngIf="!isDesktopView" class="p-4">
+  <button
+    (click)="openAddModal()"
+    class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 w-full mb-4"
+  >
+    <mat-icon fontIcon="add" class="mr-2"></mat-icon>
+    Tạo hợp đồng
+  </button>
   <ng-container *ngFor="let group of contractGroups; index as i">
     <div class="bg-gray-100 px-3 py-1 font-medium">
       {{ formatGroupHeader(keys[i]) }}
@@ -105,8 +126,11 @@
 
         <div class="mt-3 flex justify-between items-end">
           <div>
+            <div class="text-sm font-medium">
+              Ngày ký: {{ contract.lastUpdatedTime | date:'dd/MM/yyyy' }}
+            </div>
             <div class="text-sm text-gray-500">
-              {{ formatDate(contract.lastUpdatedTime) }}
+              Cập nhật cuối: {{ formatDate(contract.lastUpdatedTime) }}
             </div>
             <div class="mt-1">
               <span [ngClass]="{
@@ -114,7 +138,8 @@
                 'text-blue-500': contract.contractStatus === contractStatuses.SENT,
                 'text-green-500': contract.contractStatus === contractStatuses.COMPLETED,
                 'text-red-500': contract.contractStatus === contractStatuses.DECLINED,
-                'text-orange-500': contract.contractStatus === contractStatuses.EXPIRED
+                'text-orange-500': contract.contractStatus === contractStatuses.EXPIRED,
+                'text-yellow-500': contract.contractStatus === contractStatuses.WAITING_FOR_LIQUIDATION
               }">
                 ● {{ statusLabels[contract.contractStatus] }}
               </span>

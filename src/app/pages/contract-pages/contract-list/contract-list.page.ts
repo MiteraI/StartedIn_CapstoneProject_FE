@@ -207,11 +207,11 @@ export class ContractListPage implements OnInit, OnDestroy {
     const date = new Date(dateStr);
     if (isToday(date)) return 'Hôm nay';
     if (isYesterday(date)) return 'Hôm qua';
-    return format(date, 'yyyy/MM/dd');
+    return format(date, 'dd/MM/yyyy');
   }
 
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'HH:mm dd/MM/yyyy');
+    return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
   }
 
   isSelected(contract: ContractListItemModel): boolean {
