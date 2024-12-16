@@ -13,6 +13,7 @@ import { ContractService } from 'src/app/services/contract.service';
 interface IModalData {
   projectId: string;
   contractId: string;
+  isFromLeader?: boolean;
 }
 
 @Component({
@@ -73,18 +74,33 @@ export class LiquidationModalComponent implements OnInit {
     if (this.uploadForm.invalid || !this.fileList.length) return;
 
     this.isUploading = true;
-    this.contractService.addLiquidationNote(this.data.projectId, this.data.contractId, this.fileList[0] as any)
-      .pipe(
-        catchError(error => {
-          this.notification.error('Lỗi', 'Tải lên biên bản thanh lý thất bại!');
-          this.isUploading = false;
-          return throwError(() => new Error(error.error));
-        })
-      )
-      .subscribe(() => {
-        this.notification.success('Thành công', 'Tải lên biên bản thanh lý thành công!');
-        this.modalRef.close(true);
-      },);
+    if (this.data.isFromLeader) {
+      this.contractService.terminate(this.data.projectId, this.data.contractId, this.fileList[0] as any)
+        .pipe(
+          catchError(error => {
+            this.notification.error('Lỗi', 'Kết thúc hợp đồng thất bại!');
+            this.isUploading = false;
+            return throwError(() => new Error(error.error));
+          })
+        )
+        .subscribe(() => {
+          this.notification.success('Thành công', 'Kết thúc hợp đồng thành công!');
+          this.modalRef.close(true);
+        });
+    } else {
+      this.contractService.addLiquidationNote(this.data.projectId, this.data.contractId, this.fileList[0] as any)
+        .pipe(
+          catchError(error => {
+            this.notification.error('Lỗi', 'Tải lên biên bản thanh lý thất bại!');
+            this.isUploading = false;
+            return throwError(() => new Error(error.error));
+          })
+        )
+        .subscribe(() => {
+          this.notification.success('Thành công', 'Tải lên biên bản thanh lý thành công!');
+          this.modalRef.close(true);
+        });
+    }
   }
 
   closeModal(): void {

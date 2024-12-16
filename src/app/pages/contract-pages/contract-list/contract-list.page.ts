@@ -303,15 +303,25 @@ export class ContractListPage implements OnInit, OnDestroy {
 
   // terminate stuff
   openTerminateModal(contract: ContractListItemModel) {
-    const modalRef = this.modalService.create({
-      nzTitle: 'Kết thúc hợp đồng',
-      nzContent: TerminateContractModalComponent,
-      nzData: { projectId: this.projectId, contractId: contract.id, isLeader: this.isLeader },
-      nzFooter: null,
-      nzAfterClose: new EventEmitter<void>()
-    });
-
-    modalRef.afterClose.subscribe(() => this.filterContracts());
+    if (this.isLeader) {
+      const modalRef = this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: LiquidationModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
+        nzFooter: null,
+        nzAfterClose: new EventEmitter<void>()
+      });
+      modalRef.afterClose.subscribe(() => this.filterContracts());
+    } else {
+      const modalRef = this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateContractModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id },
+        nzFooter: null,
+        nzAfterClose: new EventEmitter<void>()
+      });
+      modalRef.afterClose.subscribe(() => this.filterContracts());
+    }
   }
 
   // liquidation stuff
