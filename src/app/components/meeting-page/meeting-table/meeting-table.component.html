@@ -3,7 +3,6 @@
 </div>
 
 <nz-table
-  #nestedTable
   [nzFrontPagination]="false"
   [nzData]="listOfMeetings"
   nzBordered="true"
@@ -13,6 +12,7 @@
   [nzPageSize]="pageSize"
   [nzTotal]="total"
   (nzPageIndexChange)="onPageIndexChange($event)"
+  class="custom-table"
 >
   <thead>
     <tr>
@@ -33,7 +33,7 @@
       <td>{{ meeting.appointmentTime | date : 'hh:mm a - dd.MM.yy' }}</td>
       <td>{{ MeetingLabel[meeting.status] }}</td>
       <td nzAlign="center">
-        <button (click)="openMeetingNote()"><mat-icon class="text-blue-500 cursor-pointer"> description </mat-icon></button>
+        <button (click)="openMeetingNote(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> description </mat-icon></button>
       </td>
       <td>
         <button (click)="openMeetingDetail(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> info </mat-icon></button>
