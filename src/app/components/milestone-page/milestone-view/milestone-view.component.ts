@@ -5,7 +5,7 @@ import { MilestoneListComponent } from '../milestone-list/milestone-list.compone
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { Subject, takeUntil } from 'rxjs'
+import { finalize, Subject, takeUntil, tap } from 'rxjs'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { ActivatedRoute } from '@angular/router'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
@@ -71,7 +71,7 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
-    this.milestoneService.refreshMilestone$.pipe().subscribe(() => {      
+    this.milestoneService.refreshMilestone$.pipe().subscribe(() => {
       this.fetchMilestones(this.isDesktopView)
     })
   }
@@ -100,10 +100,13 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMilestones(isDesktop: boolean) {
-    this.isFetchAllMilestonesLoading = true
     this.milestoneService
       .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        tap(() => (this.isFetchAllMilestonesLoading = true)),
+        finalize(() => (this.isFetchAllMilestonesLoading = false))
+      )
       .subscribe({
         next: (val) => {
           if (isDesktop) {
@@ -112,10 +115,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
             this.milestoneList = [...this.milestoneList, ...val.data]
           }
           this.total = val.total
-          this.isFetchAllMilestonesLoading = false
         },
         error: (error: HttpErrorResponse) => {
-          this.isFetchAllMilestonesLoading = false
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
