@@ -10,18 +10,19 @@ import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail
 import { DatePipe } from '@angular/common'
 import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule],
 })
 export class MeetingTableComponent implements OnInit {
   @Input({ required: true }) projectId = ''
   page = 1
-  pageSize = 6
+  pageSize = 5
   total = 0
   listOfMeetings: MeetingDetailModel[] = []
 
@@ -32,7 +33,16 @@ export class MeetingTableComponent implements OnInit {
   constructor(private modalService: NzModalService, private meetingService: MeetingService) {}
 
   ngOnInit() {
-    this.getTableData()
+    // subsribe to refresh table data
+    // this.meetingService.refreshMeeting$.subscribe(() => {
+    //   this.getTableData()
+    // })
+
+    this.meetingService.refreshMeeting$.subscribe((shouldRefresh) => {
+      if (shouldRefresh) {
+        this.getTableData()
+      }
+    })
   }
 
   private getTableData() {
@@ -55,13 +65,13 @@ export class MeetingTableComponent implements OnInit {
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '16px' },
       nzContent: MeetingCreateModalComponent,
-      nzTitle: 'Tạo Cuộc Họp',
       nzData: {
         projectId: this.projectId,
         appendMode: false,
-        appointmentTime: Date.now(),
+        appointmentTime: new Date().toISOString(),
       },
       nzFooter: null,
+      nzWidth: '700px',
     })
   }
 
