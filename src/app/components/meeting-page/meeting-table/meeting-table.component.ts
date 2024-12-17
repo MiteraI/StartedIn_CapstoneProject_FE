@@ -10,13 +10,14 @@ import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail
 import { DatePipe } from '@angular/common'
 import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule],
 })
 export class MeetingTableComponent implements OnInit {
   @Input({ required: true }) projectId = ''

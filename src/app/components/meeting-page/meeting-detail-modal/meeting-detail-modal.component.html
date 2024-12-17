@@ -42,6 +42,8 @@
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Ghi chú cuộc họp" [nzSpan]="3">
+        <!-- Only show when meeting finished -->
+        @if(meetingDetail.status === 3) {
         <ul>
           @for (meetingNote of meetingDetail.meetingNotes; track $index) {
           <li>
@@ -49,6 +51,14 @@
           </li>
           }
         </ul>
+        }@else {
+        <ul>
+          <li>
+            <i nz-icon nzType="lock" nzTheme="outline" class="mr-2"></i>
+            Chỉ khả dụng khi cuộc họp kết thúc
+          </li>
+        </ul>
+        }
       </nz-descriptions-item>
     </nz-descriptions>
   </div>
