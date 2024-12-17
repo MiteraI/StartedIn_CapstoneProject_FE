@@ -49,13 +49,13 @@ export class MeetingCalendarComponent implements OnInit, OnDestroy {
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '16px' },
       nzContent: MeetingCreateModalComponent,
-      nzTitle: 'Tạo Cuộc Họp',
       nzData: {
         projectId: this.projectId,
         appendMode: false,
         appointmentTime: this.selectedDate,
       },
       nzFooter: null,
+      nzWidth: '700px',
     })
   }
 

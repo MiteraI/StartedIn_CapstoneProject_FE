@@ -22,7 +22,7 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 export class MeetingTableComponent implements OnInit {
   @Input({ required: true }) projectId = ''
   page = 1
-  pageSize = 6
+  pageSize = 5
   total = 0
   listOfMeetings: MeetingDetailModel[] = []
 
@@ -33,7 +33,16 @@ export class MeetingTableComponent implements OnInit {
   constructor(private modalService: NzModalService, private meetingService: MeetingService) {}
 
   ngOnInit() {
-    this.getTableData()
+    // subsribe to refresh table data
+    // this.meetingService.refreshMeeting$.subscribe(() => {
+    //   this.getTableData()
+    // })
+
+    this.meetingService.refreshMeeting$.subscribe((shouldRefresh) => {
+      if (shouldRefresh) {
+        this.getTableData()
+      }
+    })
   }
 
   private getTableData() {
@@ -56,13 +65,13 @@ export class MeetingTableComponent implements OnInit {
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '16px' },
       nzContent: MeetingCreateModalComponent,
-      nzTitle: 'Tạo Cuộc Họp',
       nzData: {
         projectId: this.projectId,
         appendMode: false,
-        appointmentTime: Date.now(),
+        appointmentTime: new Date().toISOString(),
       },
       nzFooter: null,
+      nzWidth: '700px',
     })
   }
 
