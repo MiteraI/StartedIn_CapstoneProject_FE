@@ -25,8 +25,9 @@
       <!-- Left side info -->
       <div class="flex flex-col">
         <span class="text-gray-600 mb-1">
-          Người đầu tư: <strong class="text-green-300">{{ investmentCall.totalInvestor }}</strong></span
-        >
+          Người đầu tư: <strong class="text-green-300">{{ investmentCall.totalInvestor }}</strong
+          ><i nz-icon nzType="info-circle" class="ml-2 text-blue-500 cursor-pointer" (click)="openDealListModal()"></i
+        ></span>
         <div>
           Cổ Phần:
           <span class="text-sm text-green-600 mb-1">{{ investmentCall.remainAvailableEquityShare / 100 | percent }}</span

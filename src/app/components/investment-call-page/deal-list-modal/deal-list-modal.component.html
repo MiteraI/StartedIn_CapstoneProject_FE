@@ -1,0 +1,28 @@
+<ng-container *ngIf="deals?.length">
+  <ul class="space-y-2">
+    <li *ngFor="let deal of deals" class="p-4 border-b last:border-0">
+      <div class="flex justify-between text-sm text-gray-700">
+        <div class="flex flex-col">
+          <span class="font-semibold">{{ deal.investorName }}</span>
+          <span class="text-gray-500">Số tiền: {{ deal.amount | currency }}</span>
+          <span class="text-gray-500">Cổ phần đề nghị: {{ deal.equityShareOffer | percent }}</span>
+          <span class="text-gray-500">Điều kiện: {{ deal.termCondition }}</span>
+        </div>
+        <div class="flex flex-col items-end">
+          <span
+            [ngClass]="{
+              'text-green-500': deal.dealStatus === 2,
+              'text-yellow-500': deal.dealStatus === 1,
+              'text-red-500': deal.dealStatus === 3
+            }"
+          >
+            {{ DealStatusLabels[deal.dealStatus] }}
+          </span>
+        </div>
+      </div>
+    </li>
+  </ul>
+</ng-container>
+<ng-container *ngIf="!deals?.length">
+  <p class="text-center text-gray-500">Không có dữ liệu</p>
+</ng-container>
