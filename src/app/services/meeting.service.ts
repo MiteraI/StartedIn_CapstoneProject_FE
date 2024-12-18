@@ -33,4 +33,9 @@ export class MeetingService {
     const url = `/api/projects/${projectId}/appointments?page=${page}&size=${size}`
     return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url))
   }
+
+  cancelMeeting(projectId: string, meetingId: string) {
+    const url = `/api/projects/${projectId}/appointments/${meetingId}/cancel`
+    return this.http.delete(this.applicationConfigService.getEndpointFor(url), {})
+  }
 }

@@ -48,7 +48,7 @@ export class MeetingCreateModalComponent implements OnInit {
       this.milestoneService.getMilestones(this.nzModalData.projectId, 1, 10).subscribe({
         next: (milestones) => {
           this.milestones = milestones.data
-          this.meetingForm.patchValue({ milestoneId: this.milestones[0].id })
+          // this.meetingForm.patchValue({ milestoneId: this.milestones[0].id })
           console.log(this.meetingForm.value)
           this.loading = false
         },
@@ -98,8 +98,8 @@ export class MeetingCreateModalComponent implements OnInit {
   }
 
   disabledDate = (current: Date): boolean => {
-    // Can only select today or future dates
-    return current && current < new Date()
+    // Disable dates before today
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0))
   }
 
   closeModal() {
