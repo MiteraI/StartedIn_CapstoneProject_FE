@@ -8,6 +8,6 @@ export enum MeetingStatus {
 export const MeetingLabel: Record<MeetingStatus, string> = {
   [MeetingStatus.PROPOSED]: 'Đã tạo',
   [MeetingStatus.ONGOING]: 'Đang diễn ra',
-  [MeetingStatus.FINISHED]: 'Hoành thành',
+  [MeetingStatus.FINISHED]: 'Hoàn thành',
   [MeetingStatus.CANCELLED]: 'Hủy',
 }
