@@ -19,7 +19,7 @@
       <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
-          <nz-option nzLabel="Không có" nzValue=""></nz-option>
+          <nz-option nzLabel="Không có" [nzValue]="null"></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
           }

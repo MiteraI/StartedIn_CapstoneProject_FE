@@ -36,6 +36,6 @@ export class MeetingService {
 
   cancelMeeting(projectId: string, meetingId: string) {
     const url = `/api/projects/${projectId}/appointments/${meetingId}/cancel`
-    return this.http.delete(this.applicationConfigService.getEndpointFor(url), {})
+    return this.http.delete(this.applicationConfigService.getEndpointFor(url), { responseType: 'text' })
   }
 }

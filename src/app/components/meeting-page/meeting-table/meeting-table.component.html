@@ -47,7 +47,7 @@
       </td>
       <td class="flex gap-2">
         <button (click)="openMeetingDetail(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> info </mat-icon></button>
-        @if (meeting.status === 3){
+        @if (meeting.status === 3 || meeting.status === 4) {
         <button><mat-icon class="text-gray-300 cursor-not-allowed"> block </mat-icon></button>
         } @else {
         <button (click)="openCancelMeetingModal(meeting)"><mat-icon class="text-red-500 cursor-pointer"> block </mat-icon></button>
