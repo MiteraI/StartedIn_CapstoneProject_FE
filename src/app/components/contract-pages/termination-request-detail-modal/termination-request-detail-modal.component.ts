@@ -43,33 +43,7 @@ export class TerminationRequestDetailModalComponent {
     this.modalRef.close();
   }
 
-  acceptRequest() {
-    this.isLoading = true;
-    this.terminationRequestService.accept(this.data.projectId, this.data.request.id).subscribe({
-      next: (response) => {
-        this.notification.success('', 'Chấp nhận yêu cầu thành công', { nzDuration: 2000 });
-        this.isLoading = false;
-        this.modalRef.close(true);
-      },
-      error: (error) => {
-        this.notification.error('Lỗi', 'Chấp nhận yêu cầu thất bại', { nzDuration: 2000 });
-        this.isLoading = false;
-      }
-    })
-  }
-
-  rejectRequest() {
-    this.isLoading = true;
-    this.terminationRequestService.reject(this.data.projectId, this.data.request.id).subscribe({
-      next: (response) => {
-        this.notification.success('', 'Từ chối yêu cầu thành công', { nzDuration: 2000 });
-        this.isLoading = false;
-        this.modalRef.close(true);
-      },
-      error: (error) => {
-        this.notification.error('Lỗi', 'Từ chối yêu cầu thất bại', { nzDuration: 2000 });
-        this.isLoading = false;
-      }
-    })
+  close() {
+    this.modalRef.close();
   }
 }

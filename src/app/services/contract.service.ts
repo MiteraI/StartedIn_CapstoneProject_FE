@@ -13,6 +13,7 @@ import { InternalContractCreateUpdateModel } from "../shared/models/contract/int
 import { InternalContractDetailModel } from "../shared/models/contract/internal-contract-detail.model";
 import { ContractHistoryModel } from "../shared/models/contract/contract-history.model";
 import { LiquidationContractDetailModel } from "../shared/models/contract/liquidation-contract-detail.model";
+import { TerminateMeetingModel } from "../shared/models/contract/terminate-meeting.model";
 
 @Injectable({
   providedIn: 'root',
@@ -155,6 +156,15 @@ export class ContractService {
     )
   }
 
+  cancelLiquidation(projectId: string, id: string): Observable<any> {
+    const url = `/api/projects/${projectId}/contracts/${id}/liquidation-cancel`;
+    return this.http.put(
+      this.applicationConfigService.getEndpointFor(url),
+      null,
+      { responseType: 'text' as 'json' }
+    )
+  }
+
   terminate(projectId: string, id: string, file: File): Observable<any> {
     const url = `/api/projects/${projectId}/contracts/${id}/leader-terminate`;
     const formdata = new FormData();
@@ -162,6 +172,15 @@ export class ContractService {
     return this.http.post(
       this.applicationConfigService.getEndpointFor(url),
       formdata,
+      { responseType: 'text' as 'json' }
+    )
+  }
+
+  createTerminateMeeting(projectId: string, id: string, meeting: TerminateMeetingModel): Observable<any> {
+    const url = `/api/projects/${projectId}/contracts/${id}/terminated-meeting`;
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(url),
+      meeting,
       { responseType: 'text' as 'json' }
     )
   }

@@ -1,0 +1,83 @@
+<!-- Form -->
+<form nz-form [formGroup]="meetingForm" (ngSubmit)="submit()" nzLayout="vertical">
+  <div class="text-gray-500 mb-4">Bạn sẽ cần phải tổ chức một cuộc họp với các bên liên quan khác để thanh lý hợp đồng</div>
+  <div *ngIf="data.request" class="mb-4">
+    <div class="flex items-center">
+      <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
+      <span class="font-semibold text-gray-700">Lý do kết thúc hợp đồng</span>
+    </div>
+    <div class="text-gray-800 ml-8">
+      {{ data.request.reason || 'Không có lý do' }}
+    </div>
+  </div>
+  <!-- Title -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Tiêu đề</nz-form-label>
+    <nz-form-control nzErrorTip="Vui lòng nhập tiêu đề">
+      <nz-input-group>
+        <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc họp"/>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Appointment Time -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Ngày họp</nz-form-label>
+    <nz-form-control nzErrorTip="Vui lòng chọn ngày">
+      <nz-input-group>
+        <nz-date-picker
+          formControlName="appointmentTime"
+          [nzDisabledDate]="disabledDate"
+          nzShowTime
+          nzPlaceHolder="Chọn ngày và giờ"
+          class="w-full"
+        ></nz-date-picker>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Meeting Link -->
+  <nz-form-item>
+    <nz-form-label nzRequired>Link cuộc họp</nz-form-label>
+    <nz-form-control [nzErrorTip]="meetingForm.get('meetingLink')?.hasError('required') ? 'Vui lòng nhập link' : 'Link không hợp lệ'">
+      <nz-input-group>
+        <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/abc-defg-hij" />
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Description -->
+  <nz-form-item>
+    <nz-form-label>Thông tin buổi họp</nz-form-label>
+    <nz-form-control>
+      <div class="flex items-start relative">
+        <!-- Textarea -->
+        <textarea
+          nz-input
+          formControlName="description"
+          placeholder="Mô tả chi tiết cuộc họp"
+          nzAutosize
+        ></textarea>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Submit Button -->
+  <div class="flex justify-end mt-6">
+    <button
+      nz-button
+      nzType="link"
+      (click)="closeModal()"
+    >
+      Hủy
+    </button>
+    <button
+      type="submit"
+      [disabled]="meetingForm.invalid"
+      nz-button
+      nzType="primary"
+    >
+      {{ data.request ? 'Chấp nhận' : 'OK'}}
+    </button>
+  </div>
+</form>
