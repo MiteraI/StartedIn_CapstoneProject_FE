@@ -45,27 +45,15 @@
     </div>
   </div>
 
-  <!-- Accept/Reject -->
-  <div *ngIf="data.isLeader" class="flex justify-end gap-2 mt-6">
+  <div class="flex justify-end gap-2 mt-6">
     <button
       nz-button
       nzType="primary"
       class="px-6"
-      (click)="acceptRequest()"
+      (click)="close()"
       [nzLoading]="isLoading"
     >
-      Chấp nhận
-    </button>
-
-    <button
-      nz-button
-      nzDanger
-      nzType="primary"
-      class="px-6"
-      (click)="rejectRequest()"
-      [nzLoading]="isLoading"
-    >
-      Từ chối
+      Đóng
     </button>
   </div>
 </div>

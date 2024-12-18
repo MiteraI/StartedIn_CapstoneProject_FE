@@ -23,6 +23,7 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { TerminateContractModalComponent } from '../terminate-contract-modal/terminate-contract-modal.component';
 import { LiquidationModalComponent } from '../liquidation-modal/liquidation-modal.component';
+import { TerminateMeetingModalComponent } from '../terminate-meeting-modal/terminate-meeting-modal.component';
 
 @Component({
   selector: 'app-contract-table',
@@ -153,9 +154,10 @@ export class ContractTableComponent  implements OnInit {
     if (this.isLeader) {
       this.modalService.create({
         nzTitle: 'Kết thúc hợp đồng',
-        nzContent: LiquidationModalComponent,
-        nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
+        nzContent: TerminateMeetingModalComponent,
+        nzData: { projectId: this.projectId, contractId: contract.id },
         nzFooter: null,
+        nzStyle: { top: '40px' },
         nzAfterClose: this.refreshNeeded
       });
     } else {

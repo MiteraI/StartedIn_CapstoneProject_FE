@@ -4,6 +4,7 @@ import { ApplicationConfigService } from '../core/config/application-config.serv
 import { TerminationRequestModel } from '../shared/models/termination-request/termination-request.model'
 import { simulateGetList } from '../shared/mocks/termination-request-mock'
 import { delay, of } from 'rxjs'
+import { TerminateMeetingModel } from '../shared/models/contract/terminate-meeting.model'
 
 @Injectable({
   providedIn: 'root',
@@ -32,11 +33,11 @@ export class TerminationRequestService {
     return this.http.get<TerminationRequestModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 
-  accept(projectId: string, id: string) {
+  accept(projectId: string, id: string, meeting: TerminateMeetingModel) {
     const url = `/api/projects/${projectId}/termination-requests/${id}/accept`
-    return this.http.put(
+    return this.http.post(
       this.applicationConfigService.getEndpointFor(url),
-      null,
+      meeting,
       { responseType: 'text' as 'json' }
     )
   }
