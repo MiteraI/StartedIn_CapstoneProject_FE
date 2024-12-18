@@ -8,6 +8,7 @@ import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingListModel } from 'src/app/shared/models/meeting/meeting-list.model'
 import { MeetingCreateModalComponent } from '../meeting-create-modal/meeting-create-modal.component'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
+import { MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 
 @Component({
   selector: 'app-meeting-calendar',
@@ -17,9 +18,12 @@ import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-det
   imports: [CommonModule, NzCalendarModule, FormsModule],
 })
 export class MeetingCalendarComponent implements OnInit, OnDestroy {
+  MeetingStatus = MeetingStatus
+
   meetingList: MeetingListModel[] | undefined
   @Input({ required: true }) projectId = ''
   year = new Date().getFullYear()
+  month = new Date().getMonth()
   selectedDate: Date = new Date()
 
   constructor(private modalService: NzModalService, private meetingService: MeetingService) {}
@@ -38,8 +42,16 @@ export class MeetingCalendarComponent implements OnInit, OnDestroy {
 
   onSelectChange(date: Date): void {
     const selectedYear = date.getFullYear()
+    const selectedMonth = date.getMonth()
+
     if (selectedYear !== this.year) {
       this.fetchYearEvents(selectedYear)
+      this.month = selectedMonth 
+      return
+    }
+    if (selectedMonth !== this.month) {
+      this.month = selectedMonth
+      return
     }
     this.openCreateMeetingModal()
   }

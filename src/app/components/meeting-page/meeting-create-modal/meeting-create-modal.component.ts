@@ -34,7 +34,7 @@ export class MeetingCreateModalComponent implements OnInit {
     private meetingService: MeetingService
   ) {
     this.meetingForm = this.fb.group({
-      milestoneId: [''],
+      milestoneId: [null],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
       description: [''],
