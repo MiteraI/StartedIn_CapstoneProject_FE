@@ -8,16 +8,18 @@ import { ViewMeetingNotesModalComponent } from '../view-meeting-notes-modal/view
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { DatePipe } from '@angular/common'
-import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum'
+import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule, NzTagModule, NzMessageModule],
 })
 export class MeetingTableComponent implements OnInit {
   @Input({ required: true }) projectId = ''
@@ -30,7 +32,7 @@ export class MeetingTableComponent implements OnInit {
 
   isLoading = false
 
-  constructor(private modalService: NzModalService, private meetingService: MeetingService) {}
+  constructor(private modalService: NzModalService, private meetingService: MeetingService, private messageService: NzMessageService) {}
 
   ngOnInit() {
     // subsribe to refresh table data
@@ -101,5 +103,43 @@ export class MeetingTableComponent implements OnInit {
   onPageIndexChange(newPage: number): void {
     this.page = newPage
     this.getTableData()
+  }
+
+  getStatusColor(status: MeetingStatus): string {
+    switch (status) {
+      case MeetingStatus.PROPOSED:
+        return 'blue'
+      case MeetingStatus.ONGOING:
+        return 'gold'
+      case MeetingStatus.FINISHED:
+        return 'green'
+      case MeetingStatus.CANCELLED:
+        return 'red'
+      default:
+        return 'default'
+    }
+  }
+
+  openCancelMeetingModal(meetingDetail: MeetingDetailModel) {
+    const modalRef = this.modalService.confirm({
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hủy cuộc họp này?',
+      nzOnOk: () => {
+        this.cancelMeeting(meetingDetail)
+      },
+    })
+  }
+
+  cancelMeeting(meetingDetail: MeetingDetailModel) {
+    this.meetingService.cancelMeeting(this.projectId, meetingDetail.id).subscribe({
+      next: () => {
+        this.meetingService.refreshMeeting$.next(true)
+        this.messageService.success('Hủy cuộc họp thành công')
+      },
+      error: (error) => {
+        console.error('Error:', error)
+        this.messageService.error(error.error)
+      },
+    })
   }
 }

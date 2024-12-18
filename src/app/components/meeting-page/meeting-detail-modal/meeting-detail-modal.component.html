@@ -1,15 +1,3 @@
-<!-- <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
-  <nz-descriptions [nzTitle]="meetingDetail.title" [nzSize]="'middle'">
-    <nz-descriptions-item nzTitle="Chi tiết" [nzSpan]="3">{{ meetingDetail.description }}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Cột mốc" [nzSpan]="2">{{ meetingDetail.milestoneName }}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Trạng thái">{{ meetingDetail.status }}</nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Thời gian" [nzSpan]="3">
-      {{ meetingDetail.appointmentTime | date : 'dd/MM/yyyy HH:mm' }}
-    </nz-descriptions-item>
-    <nz-descriptions-item nzTitle="Link cuộc họp" [nzSpan]="3">{{ meetingDetail.meetingLink }}</nz-descriptions-item>
-  </nz-descriptions>
-</nz-skeleton> -->
-
 <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
   <div class="modal-content">
     <h2 class="text-xl font-bold text-center mb-4">{{ meetingDetail.title }}</h2>
@@ -26,7 +14,7 @@
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Trạng thái">
-        <i nz-icon [nzType]="getStatusIcon()" [nzTheme]="getStatusTheme()" class="mr-2"></i>
+        <i nz-icon [nzType]="getStatusIcon()" [nzTheme]="getStatusTheme()" [ngClass]="getStatusColor()" class="mr-2"></i>
         {{ getMeetingStatusLabel(meetingDetail.status) }}
       </nz-descriptions-item>
 
@@ -47,7 +35,7 @@
         <ul>
           @for (meetingNote of meetingDetail.meetingNotes; track $index) {
           <li>
-            <a *ngIf="meetingDetail.meetingLink; else noLink" href="{{ meetingNote.meetingNoteLink }}" target="_blank">Meeting Note</a>
+            <a *ngIf="meetingDetail.meetingLink; else noLink" href="{{ meetingNote.meetingNoteLink }}" target="_blank">{{ meetingNote.fileName }}</a>
           </li>
           }
         </ul>
