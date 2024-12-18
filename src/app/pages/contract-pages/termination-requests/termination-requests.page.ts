@@ -16,6 +16,7 @@ import { TerminationRequestDetailModalComponent } from 'src/app/components/contr
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
+import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
 
 @Component({
   selector: 'app-termination-requests',
@@ -132,29 +133,24 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
       nzStyle: { width: '700px' },
       nzAfterClose: new EventEmitter<void>()
     });
-    modalRef.afterClose.subscribe(() => this.loadReceivedRequests())
+    modalRef.afterClose.subscribe(() => this.isLeader ? this.loadReceivedRequests() : this.loadSentRequests())
   }
 
   acceptRequest(request: TerminationRequestModel) {
-    this.modalService.confirm({
-      nzTitle: `Chấp nhận yêu cầu của ${request.fromName}?`,
-      nzContent: `Lý do kết thúc hợp đồng: ${request.reason}`,
+    const modalRef = this.modalService.create({
+      nzTitle: `Chấp nhận yêu cầu kết thúc hợp đồng của ${request.fromName}`,
+      nzContent: TerminateMeetingModalComponent,
       nzClosable: false,
       nzMaskClosable: true,
-      nzOkText: 'Chấp nhận',
-      nzOkType: 'primary',
-      nzOnOk: () => {
-        this.terminationRequestService.accept(this.projectId, request.id).subscribe({
-          next: () => {
-            this.notification.success('Thành công', 'Đã chấp nhận yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
-            this.loadReceivedRequests();
-          },
-          error: () => {
-            this.notification.error('Lỗi', 'Không thể chấp nhận yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
-          }
-        });
-      }
+      nzFooter: null,
+      nzData: {
+        projectId: this.projectId,
+        request: request
+      },
+      nzStyle: { top: '40px' },
+      nzAfterClose: new EventEmitter<void>()
     });
+    modalRef.afterClose.subscribe(() => this.loadReceivedRequests());
   }
 
   rejectRequest(request: TerminationRequestModel) {
