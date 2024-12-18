@@ -145,10 +145,10 @@ export class RecruitmentViewComponent implements OnInit {
       nzContent: RecruitmentDetailsDialogComponent,
       nzFooter: null,
       nzStyle: { top: '20px' },
-      nzBodyStyle: { padding: '0px' },
+      nzBodyStyle: { padding: '0px', height: '80vh' },
       nzData: {
         projectId: this.projectId,
-        previewMode: true,
+        previewMode: true, //inside project
       },
     })
   }

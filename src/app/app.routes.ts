@@ -49,7 +49,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/payment-pages/payment-success/payment-success.page').then((m) => m.PaymentSuccessPage),
   },
   {
-    path: 'explore-team',
+    path: 'team-explore',
     loadComponent: () => import('./components/find-team-page/find-team-view/find-team-view.component').then((m) => m.FindTeamViewComponent),
   },
   {
