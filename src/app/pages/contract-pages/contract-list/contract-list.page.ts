@@ -25,6 +25,7 @@ import { ContractTableComponent } from "../../../components/contract-pages/contr
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model';
 import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
 import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
+import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
 
 interface FilterOptions {
   contractIdNumber?: string;
@@ -306,9 +307,10 @@ export class ContractListPage implements OnInit, OnDestroy {
     if (this.isLeader) {
       const modalRef = this.modalService.create({
         nzTitle: 'Kết thúc hợp đồng',
-        nzContent: LiquidationModalComponent,
+        nzContent: TerminateMeetingModalComponent,
         nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
         nzFooter: null,
+        nzStyle: { top: '40px' },
         nzAfterClose: new EventEmitter<void>()
       });
       modalRef.afterClose.subscribe(() => this.filterContracts());

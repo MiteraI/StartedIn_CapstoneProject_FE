@@ -1,18 +1,25 @@
-<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzParagraph]="false">
+<div class="p-6 bg-white rounded-lg shadow-md max-w-2xl mx-auto">
+  <!-- Form Header -->
+  <h2 class="text-2xl font-semibold mb-6 text-gray-800">Tạo Lịch Họp</h2>
+
+  <!-- Form -->
   <form nz-form [formGroup]="meetingForm" (ngSubmit)="submit()" nzLayout="vertical">
     <!-- Title -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Tiêu Đề</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập tiêu đề">
-        <input nz-input formControlName="title" placeholder="Họp tiến độ" />
+      <nz-form-label nzRequired>Tiêu Đề</nz-form-label>
+      <nz-form-control nzErrorTip="Vui lòng nhập tiêu đề">
+        <nz-input-group nzPrefixIcon="edit">
+          <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc họp" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
+        </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Milestone select -->
+    <!-- Milestone Selection -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24">Cột Mốc</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24">
-        <nz-select formControlName="milestoneId" [nzDisabled]="nzModalData.appendMode">
+      <nz-form-label>Cột Mốc</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
+          <nz-option nzLabel="Không có" [nzValue]="null"></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
           }
@@ -22,35 +29,47 @@
 
     <!-- Appointment Time -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Ngày Họp</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng chọn ngày cho cuộc họp">
-        <nz-date-picker [nzDisabledDate]="disabledDate" nzShowTime formControlName="appointmentTime"></nz-date-picker>
-      </nz-form-control>
-    </nz-form-item>
-
-    <!-- Description -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24">Thông tin buổi họp</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24">
-        <textarea nz-input formControlName="description" placeholder="Báo cáo tiến độ dự án cuối năm"></textarea>
+      <nz-form-label nzRequired>Ngày Họp</nz-form-label>
+      <nz-form-control nzErrorTip="Vui lòng chọn ngày">
+        <nz-input-group nzPrefixIcon="calendar">
+          <nz-date-picker formControlName="appointmentTime" [nzDisabledDate]="disabledDate" nzShowTime placeholder="Chọn ngày và giờ" class="rounded-lg w-full"></nz-date-picker>
+        </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
     <!-- Meeting Link -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Link cuộc họp</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập link cuộc họp">
-        <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/own-rajx-xosj" />
+      <nz-form-label nzRequired>Link Cuộc Họp</nz-form-label>
+      <nz-form-control [nzErrorTip]="meetingForm.get('meetingLink')?.hasError('required') ? 'Vui lòng nhập link' : 'Link không hợp lệ'">
+        <nz-input-group nzPrefixIcon="link">
+          <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/abc-defg-hij" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <!-- Description -->
+    <nz-form-item>
+      <nz-form-label>Thông Tin Buổi Họp</nz-form-label>
+      <nz-form-control>
+        <div class="flex items-start relative">
+          <!-- Icon -->
+          <i nz-icon nzType="file-text" nzTheme="outline" class="absolute top-2 left-4 z-10"></i>
+          <!-- Textarea -->
+          <textarea
+            nz-input
+            formControlName="description"
+            placeholder="Mô tả chi tiết cuộc họp"
+            nzAutosize
+            class="pl-10 rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500 w-full"
+          ></textarea>
+        </div>
       </nz-form-control>
     </nz-form-item>
 
     <!-- Submit Button -->
-    <nz-form-item>
-      <nz-form-control>
-        <div class="flex justify-end">
-          <button [disabled]="meetingForm.invalid" nz-button nzType="primary">Tạo</button>
-        </div>
-      </nz-form-control>
-    </nz-form-item>
+    <div class="flex justify-end mt-6">
+      <button type="submit" [disabled]="meetingForm.invalid" nz-button nzType="primary" class="text-white font-semibold rounded-lg">
+        <i nz-icon nzType="check" nzTheme="outline"></i> Tạo Lịch Họp
+      </button>
+    </div>
   </form>
-</nz-skeleton>
+</div>

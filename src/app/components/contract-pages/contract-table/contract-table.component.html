@@ -60,7 +60,7 @@
         </div>
       </td>
       <td>
-        <div class="flex items-center space-x-2">
+        <div class="flex justify-center space-x-2">
           <!-- Send Button (Visible for specific conditions) -->
           <button
             *ngIf="data.contractStatus === 1 && isLeader"
@@ -95,7 +95,9 @@
 
           <!-- Liquidation Button (Leader) -->
           <button
-            *ngIf="data.contractStatus === 6 && isLeader"
+            *ngIf="data.contractStatus === 6
+              && isLeader
+              && data.meetingStatus === 3"
             (click)="$event.stopPropagation(); openLiquidationModal(data)"
             class="text-orange-500 hover:text-orange-700">
             <mat-icon fontIcon="insert_page_break"></mat-icon>

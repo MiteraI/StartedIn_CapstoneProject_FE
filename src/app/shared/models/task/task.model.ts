@@ -14,7 +14,6 @@ export type Task = {
   createdTime: string,
   manHour: number,
   actualFinishAt: string,
-  actualStartAt: string,
   actualManHour: number,
   assignees: AssigneeInTask[],
   expand: boolean,
