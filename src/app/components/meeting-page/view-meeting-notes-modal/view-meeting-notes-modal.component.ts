@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzMessageService } from 'ng-zorro-antd/message'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload'
 import { MeetingNoteService } from 'src/app/services/meeting-note.service'
 import { MeetingNoteDetail } from 'src/app/shared/models/meeting/meeting-note/meeting-note-detail.model'
@@ -12,7 +13,7 @@ import { MeetingNoteDetail } from 'src/app/shared/models/meeting/meeting-note/me
   templateUrl: './view-meeting-notes-modal.component.html',
   styleUrls: ['./view-meeting-notes-modal.component.scss'],
   standalone: true,
-  imports: [NzUploadModule, NzButtonModule, CommonModule],
+  imports: [NzUploadModule, NzButtonModule, CommonModule, NzSkeletonModule],
 })
 export class ViewMeetingNotesModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
@@ -21,6 +22,7 @@ export class ViewMeetingNotesModalComponent implements OnInit {
   meetingId: string
   projectId: string
 
+  loading = false
   uploading = false
   fileList: NzUploadFile[] = []
 
@@ -39,17 +41,18 @@ export class ViewMeetingNotesModalComponent implements OnInit {
     const formData = new FormData()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.fileList.forEach((file: any) => {
-      formData.append('Note', file)
+      formData.append('Notes', file)
     })
 
     this.uploading = true
-    console.log('File list:', this.fileList[0])
+    console.log('File list:', this.fileList)
     this.meetingNoteService.uploadMeetingNote(this.projectId, this.meetingId, formData).subscribe({
       next: (response) => {
         console.log(response)
         // Append the new note to the meetingNotes list
-        this.meetingNotes = [...this.meetingNotes, response]
-
+        response.forEach((element) => {
+          this.meetingNotes = [...this.meetingNotes, element]
+        })
         // Reset the file list
         this.fileList = []
 
@@ -65,6 +68,18 @@ export class ViewMeetingNotesModalComponent implements OnInit {
     })
   }
   ngOnInit() {
+    this.loading = true
+    //get meeting notes
+    this.meetingNoteService.getMeetingNotes(this.projectId, this.meetingId).subscribe({
+      next: (response) => {
+        this.meetingNotes = response
+        this.loading = false
+      },
+      error: (error) => {
+        console.error('Error:', error)
+        this.loading = false
+      },
+    })
     console.log('Meeting notes:', this.meetingNotes)
   }
 }

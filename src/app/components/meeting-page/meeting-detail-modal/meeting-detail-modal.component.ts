@@ -65,4 +65,19 @@ export class MeetingDetailModalComponent implements OnInit {
   getMeetingStatusLabel(status: MeetingStatus): string {
     return MeetingLabel[status] || 'Không xác định'
   }
+
+  getStatusColor(): string {
+    switch (this.meetingDetail.status) {
+      case MeetingStatus.PROPOSED:
+        return 'text-blue-500'
+      case MeetingStatus.ONGOING:
+        return 'text-yellow-500'
+      case MeetingStatus.FINISHED:
+        return 'text-green-500'
+      case MeetingStatus.CANCELLED:
+        return 'text-red-500'
+      default:
+        return 'text-gray-500'
+    }
+  }
 }
