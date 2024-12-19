@@ -62,6 +62,11 @@ body {
 
 img.ant-image-preview-img { display: inline-block; } /* Fix image ng-zorro preview */
 
+ul { // Fix list style, overwrite tailwind base
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+
 :root {
   --font-sans: '';
 }

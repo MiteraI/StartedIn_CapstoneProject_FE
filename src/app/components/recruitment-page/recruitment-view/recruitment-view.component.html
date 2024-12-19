@@ -28,7 +28,7 @@
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Nội dung bài đăng</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung bài đăng'">
-      <textarea nz-input formControlName="content" placeholder="Nhập nội dung bài đăng" class="w-full"></textarea>
+      <editor apiKey="gbbclodsil0inb6iugu2rn9fi76vkegxb9rw5gbttyjk1pef" [init]="init" formControlName="content"></editor>
     </nz-form-control>
   </nz-form-item>
 
@@ -82,7 +82,7 @@
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Nội dung bài đăng</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung bài đăng'">
-      <textarea nz-input formControlName="content" placeholder="Nhập nội dung bài đăng" class="w-full" (input)="onInfoChange()"></textarea>
+      <editor apiKey="gbbclodsil0inb6iugu2rn9fi76vkegxb9rw5gbttyjk1pef" [init]="init" formControlName="content"></editor>
     </nz-form-control>
   </nz-form-item>
 

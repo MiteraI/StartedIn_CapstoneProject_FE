@@ -9,4 +9,6 @@ export type RecruitmentPost = {
     leaderName: string,
     leaderAvatarUrl: string,
     logoUrl: string,
+    createdTime: string,
+    lastUpdatedTime: string
 }

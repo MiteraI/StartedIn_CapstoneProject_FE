@@ -19,7 +19,7 @@ import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
-import { Subject, takeUntil } from 'rxjs'
+import { finalize, Subject, takeUntil } from 'rxjs'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
@@ -575,44 +575,45 @@ export class UpdateTaskModalComponent implements OnInit {
   ngOnInit() {
     if (this.nzModalData.taskId) {
       this.isFetchTaskDetailsLoading = true
-      this.taskService.getTaskDetails(this.nzModalData.projectId, this.nzModalData.taskId).subscribe({
-        next: (task) => {
-          this.initialAssigneeIds = task.assignees.map((user) => user.id)
-          this.initialStatus = task.status
-          this.initialParentTaskId = task.parentTask === null ? '' : task.parentTask.id
-          this.initialParentTask = task.parentTask
-          this.initialMilestoneId = task.milestone === null ? '' : task.milestone.id
-          this.initialMilestone = task.milestone
-          this.subTasks = task.subTasks
-          this.commentList = task.taskComments
-          this.attachmentList = task.taskAttachments
-          this.taskForm.setValue(
-            {
-              title: task.title,
-              description: task.description,
-              startDate: this.datePipe.transform(task.startDate, 'yyyy-MM-dd HH:00:00'),
-              endDate: this.datePipe.transform(task.endDate, 'yyyy-MM-dd HH:00:00'),
-              status: task.status,
-              manHour: task.manHour,
-              parentTask: task.parentTask === null ? '' : task.parentTask.id,
-              milestone: task.milestone === null ? '' : task.milestone.id,
-              assignees: task.assignees.map((user) => user.id),
-              taskComment: '',
-            },
-            { emitEvent: false }
-          )
-          this.isFetchTaskDetailsLoading = false
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error)
-          } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else {
-          }
-          this.isFetchTaskDetailsLoading = false
-        },
-      })
+      this.taskService
+        .getTaskDetails(this.nzModalData.projectId, this.nzModalData.taskId)
+        .pipe(finalize(() => (this.isFetchTaskDetailsLoading = false)))
+        .subscribe({
+          next: (task) => {
+            this.initialAssigneeIds = task.assignees.map((user) => user.id)
+            this.initialStatus = task.status
+            this.initialParentTaskId = task.parentTask === null ? '' : task.parentTask.id
+            this.initialParentTask = task.parentTask
+            this.initialMilestoneId = task.milestone === null ? '' : task.milestone.id
+            this.initialMilestone = task.milestone
+            this.subTasks = task.subTasks
+            this.commentList = task.taskComments
+            this.attachmentList = task.taskAttachments
+            this.taskForm.setValue(
+              {
+                title: task.title,
+                description: task.description,
+                startDate: this.datePipe.transform(task.startDate, 'yyyy-MM-dd HH:00:00'),
+                endDate: this.datePipe.transform(task.endDate, 'yyyy-MM-dd HH:00:00'),
+                status: task.status,
+                manHour: task.expectedManHour,
+                parentTask: task.parentTask === null ? '' : task.parentTask.id,
+                milestone: task.milestone === null ? '' : task.milestone.id,
+                assignees: task.assignees.map((user) => user.id),
+                taskComment: '',
+              },
+              { emitEvent: false }
+            )
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 400) {
+              this.antdNoti.openErrorNotification('', error.error)
+            } else if (error.status === 500) {
+              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            } else {
+            }
+          },
+        })
     }
 
     this.projectService.getMembers(this.nzModalData.projectId).subscribe({
