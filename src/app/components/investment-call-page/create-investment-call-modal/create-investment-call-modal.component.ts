@@ -38,7 +38,6 @@ export class CreateInvestmentCallModalComponent {
       valuePerPercentage: [1000000, [Validators.required]],
       targetCall: [1000000, [Validators.required]],
       equityShareCall: [1, [Validators.required]],
-      startDate: [null, [Validators.required]],
       endDate: [null, [Validators.required]],
     })
 
@@ -53,14 +52,11 @@ export class CreateInvestmentCallModalComponent {
 
   formatterPercent = (value: number): string => `${value} %`
   parserPercent = (value: string): string => value.replace(' %', '')
-  disabledStartDate = (current: Date): boolean => {
-    const endDate = this.investmentCallForm.get('endDate')?.value
-    return current < new Date(new Date().setHours(0, 0, 0, 0)) || (endDate && current > new Date(endDate)) // Disable dates before today and after the selected end date
-  }
-
+  
   disabledEndDate = (current: Date): boolean => {
-    const startDate = this.investmentCallForm.get('startDate')?.value
-    return current < (startDate ?? new Date()) // Disable dates before the selected start date
+    const today = new Date(); // Lấy ngày hiện tại
+    today.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây về 0 để so sánh chính xác
+    return current < today; // Vô hiệu hóa ngày hôm nay và tất cả các ngày trước
   }
 
   onSubmit() {
@@ -68,17 +64,11 @@ export class CreateInvestmentCallModalComponent {
       const investmentCallData: InvestmentCallCreateModel = this.investmentCallForm.value
       console.log(investmentCallData)
 
-      let startDate = this.investmentCallForm.value.startDate
-      if (startDate) {
-        startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd')
-      }
-
       let endDate = this.investmentCallForm.value.endDate
       if (endDate) {
         endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd')
       }
 
-      investmentCallData.startDate = startDate
       investmentCallData.endDate = endDate
 
       this.investmentCallService.createInvestmentCall(this.nzModalData.projectId, investmentCallData).subscribe({

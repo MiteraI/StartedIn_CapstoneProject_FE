@@ -1,3 +1,7 @@
 :host ::ng-deep .upload-container > div {
   width: 100%;
 }
+
+.title-recruitment input[nz-input] {
+  width: 500px; /* Hoặc kích thước cụ thể như '300px' */
+}

@@ -20,8 +20,8 @@
       <td class="text-green-500">{{ data.amountRaised | number }}</td>
       <td>{{ data.equityShareCall / 100 | percent }}</td>
       <td>{{ data.remainAvailableEquityShare / 100 | percent }}</td>
-      <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, Y") }}</td>
-      <td>{{ data.endDate === null ? 'Không Có Ngày kết thúc' : (data.endDate | date : "d 'tháng' M, Y") }}</td>
+      <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "dd 'tháng' MM, yyyy") }}</td>
+      <td>{{ data.endDate === null ? 'Không Có Ngày kết thúc' : (data.endDate | date : "dd 'tháng' MM, yyyy") }}</td>
       <td [ngClass]="{ 'text-red-500': data.status === 2, 'text-green-500': data.status === 1 }">{{ getStatusLabel(data.status) }}</td>
       <td>{{ data.totalInvestor }}</td>
     </tr>

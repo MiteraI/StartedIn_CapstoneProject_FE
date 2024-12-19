@@ -12,8 +12,8 @@
   <div class="flex justify-between">
     <nz-form-item>
       <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
-      <nz-form-control [nzErrorTip]="'Vui lòng nhập tựa đề bài đăng'">
-        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" />
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập tựa đề bài đăng'" >
+        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" style="width: 1000px; border-radius: 10px; border-color: gainsboro;"/>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
@@ -65,9 +65,9 @@
 <form [formGroup]="recruitmentForm" nz-form nzLayout="vertical" class="bg-white mx-8 p-4">
   <div class="flex justify-between">
     <nz-form-item>
-      <nz-form-label [nzRequired]="true">Tựa đề bài đăng</nz-form-label>
+      <nz-form-label [nzRequired]="true" >Tựa đề bài đăng</nz-form-label>
       <nz-form-control [nzErrorTip]="'Vui lòng nhập tựa đề bài đăng'">
-        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" (input)="onInfoChange()" />
+        <input nz-input formControlName="title" placeholder="Nhập tựa đề bài đăng" (input)="onInfoChange()" style="width: 1000px; border-radius: 10px; border-color: gainsboro;"/>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>

@@ -1,3 +1,16 @@
 :host {
     height: 100%;
 }
+
+.custom-purple-btn {
+    background-color: #a25cd4; /* Màu tím */
+    border-color: #a25cd4;
+    color: #fff; /* Màu chữ */
+    border-radius: 10px;
+  }
+  
+  .custom-purple-btn:hover {
+    background-color: #773ea8; /* Màu tím đậm hơn khi hover */
+    border-color: #773ea8;
+    border-radius: 10px;
+  }
