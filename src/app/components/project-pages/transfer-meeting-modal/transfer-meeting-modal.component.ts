@@ -8,20 +8,16 @@ import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
-import { ContractService } from 'src/app/services/contract.service'
-import { TerminationRequestService } from 'src/app/services/termination-request.service'
-import { TerminationRequestModel } from 'src/app/shared/models/termination-request/termination-request.model'
+import { LeaderTransferService } from 'src/app/services/leader-transfer.service'
 
 interface IModalData {
-  projectId: string,
-  contractId?: string,
-  request?: TerminationRequestModel
+  projectId: string
 }
 
 @Component({
-  selector: 'app-terminate-meeting-modal',
-  templateUrl: './terminate-meeting-modal.component.html',
-  styleUrls: ['./terminate-meeting-modal.component.scss'],
+  selector: 'app-transfer-meeting-modal',
+  templateUrl: './transfer-meeting-modal.component.html',
+  styleUrls: ['./transfer-meeting-modal.component.scss'],
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -34,16 +30,16 @@ interface IModalData {
     MatIconModule
   ],
 })
-export class TerminateMeetingModalComponent implements OnInit {
+export class TransferMeetingModalComponent implements OnInit {
   data: IModalData = inject(NZ_MODAL_DATA);
   meetingForm!: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private nzModalRef: NzModalRef,
-    private terminationRequestService: TerminationRequestService,
-    private contractService: ContractService
+    private leaderTransferService: LeaderTransferService
   ) { }
 
   ngOnInit() {
@@ -68,31 +64,19 @@ export class TerminateMeetingModalComponent implements OnInit {
       this.meetingForm.patchValue({ meetingLink: sanitizedLink });
     }
 
-    if (this.data.contractId) {
-      this.contractService
-        .createTerminateMeeting(this.data.projectId, this.data.contractId, this.meetingForm.value)
-        .subscribe({
-          next: () => {
-            this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
-            this.nzModalRef.close();
-          },
-          error: (error) => {
-            this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
-          },
-        });
-    } else if (this.data.request) {
-      this.terminationRequestService
-        .accept(this.data.projectId, this.data.request.id, this.meetingForm.value)
-        .subscribe({
-          next: () => {
-            this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
-            this.nzModalRef.close();
-          },
-          error: (error) => {
-            this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
-          },
-        });
-    }
+    this.isLoading = true;
+    this.leaderTransferService
+      .create(this.data.projectId, this.meetingForm.value)
+      .subscribe({
+        next: () => {
+          this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
+          this.nzModalRef.close();
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
+        },
+      });
   }
 
   disabledDate = (current: Date): boolean => {

@@ -7,7 +7,7 @@ import { LeaderTransfer } from '../shared/models/leader-transfer/leader-transfer
 @Injectable({
   providedIn: 'root',
 })
-export class TerminationRequestService {
+export class LeaderTransferService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   create(projectId: string, meeting: TransferMeetingModel) {
