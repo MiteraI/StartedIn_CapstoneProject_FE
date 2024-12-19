@@ -13,16 +13,32 @@ import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-det
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
+import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
+import { MeetingFilterComponent } from '../meeting-filter/meeting-filter.component'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule, NzTagModule, NzMessageModule],
+  imports: [
+    NzTableModule, 
+    NzButtonModule, 
+    MatIconModule, 
+    DatePipe, 
+    NzToolTipModule, 
+    NzTagModule, 
+    NzMessageModule],
 })
 export class MeetingTableComponent implements OnInit {
   @Input({ required: true }) projectId = ''
+  @Input({ required: true }) listMeeting: SearchResponseModel<MeetingDetailModel> = {
+      data: [],
+      page: 1,
+      size: 10,
+      total: 0
+    }
+    @Input({ required: true }) isFetchAllMeetingLoading: boolean = false  
   page = 1
   pageSize = 5
   total = 0

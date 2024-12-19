@@ -5,6 +5,7 @@ import { MeetingCreateModel } from '../shared/models/meeting/meeting-create.mode
 import { BehaviorSubject, Observable } from 'rxjs'
 import { MeetingDetailModel } from '../shared/models/meeting/meeting-detail.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
+import { MeetingStatus } from '../shared/enums/meeting-status.enum'
 
 @Injectable({
   providedIn: 'root',
@@ -29,8 +30,25 @@ export class MeetingService {
     return this.http.post(this.applicationConfigService.getEndpointFor(url), meeting)
   }
 
-  getTableData(projectId: string, page: number, size: number): Observable<SearchResponseModel<MeetingDetailModel>> {
-    const url = `/api/projects/${projectId}/appointments?page=${page}&size=${size}`
+  getTableData(
+    projectId: string, 
+    page: number, 
+    size: number,
+    milestoneId?: string,
+    title?: string,
+    fromDate?: Date,
+    toDate?: Date,
+    meetingStatus?: MeetingStatus,
+    isDescending?: boolean
+  ): Observable<SearchResponseModel<MeetingDetailModel>> {
+    const query = (milestoneId ? `milestoneId=${milestoneId}&`:'')
+    + (title?.trim() ? `contractName=${title.trim()}&` : '')
+    + (fromDate ? `fromDate=${fromDate.toISOString().split('T')[0]}&` : '')
+    + (toDate ? `toDate=${toDate.toISOString().split('T')[0]}&` : '')
+    + (meetingStatus ? `meetingStatus=${meetingStatus}&` : '')
+    + (isDescending? `is=${isDescending}&` : '')
+    +  `page=${page}&size=${size}`
+    const url = `/api/projects/${projectId}/appointments?${query}`;
     return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url))
   }
 

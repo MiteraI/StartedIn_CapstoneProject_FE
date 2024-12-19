@@ -1,4 +1,20 @@
-<app-view-title-bar viewName="Danh sách lịch hẹn"></app-view-title-bar>
+<app-filter-bar
+  viewName="Danh mục các cuộc họp"
+  (filterMenuOpened)="onFilterMenuOpened()"
+>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-meeting-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-meeting-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-meeting-filter
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-meeting-filter>
+  </div>
+</app-filter-bar>
 
 @if(isDesktopView){
 <div class="px-10 mt-5">
@@ -7,16 +23,25 @@
     <nz-switch [(ngModel)]="isTable"></nz-switch>
   </p>
   @if(isTable){
-  <app-meeting-table [projectId]="projectId"></app-meeting-table>
-  } @else {
+  <app-meeting-table 
+  [listMeeting]="listMeeting"
+  [projectId]="projectId"
+  [isFetchAllMeetingLoading]="isFetchAllMeetingLoading"
+  (refreshNeeded)="filterMeetings()"></app-meeting-table>
 
+  } @else {
+  
   <app-meeting-calendar [projectId]="projectId"></app-meeting-calendar>
   }
 </div>
 
 } @else {
 <div class="px-10">
-  <app-meeting-table [projectId]="projectId"></app-meeting-table>
+  <app-meeting-table 
+  [listMeeting]="listMeeting"
+  [projectId]="projectId"
+  [isFetchAllMeetingLoading]="isFetchAllMeetingLoading"
+  (refreshNeeded)="filterMeetings()"></app-meeting-table>
 </div>
 
 }
