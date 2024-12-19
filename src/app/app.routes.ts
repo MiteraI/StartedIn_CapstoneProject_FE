@@ -223,7 +223,7 @@ export const routes: Routes = [
       },
       {
         path: 'members',
-        loadComponent: () => import('./pages/members/members.page').then( m => m.MembersPage)
+        loadComponent: () => import('./pages/project-pages/members/members.page').then( m => m.MembersPage)
       },
     ],
   },

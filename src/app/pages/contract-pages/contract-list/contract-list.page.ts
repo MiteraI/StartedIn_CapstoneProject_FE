@@ -318,7 +318,7 @@ export class ContractListPage implements OnInit, OnDestroy {
       const modalRef = this.modalService.create({
         nzTitle: 'Kết thúc hợp đồng',
         nzContent: TerminateContractModalComponent,
-        nzData: { projectId: this.projectId, contractId: contract.id },
+        nzData: {projectId: this.projectId, contractId: contract.id },
         nzFooter: null,
         nzAfterClose: new EventEmitter<void>()
       });
