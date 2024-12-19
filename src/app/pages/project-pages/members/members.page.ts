@@ -209,7 +209,7 @@ export class MembersPage implements OnInit {
   }
 
   openTransferLeaderModal() {
-    const nonLeaderMembers = this.members.filter(m => m.roleInTeam !== TeamRole.LEADER);
+    const nonLeaderMembers = this.members.filter(m => m.roleInTeam === TeamRole.MEMBER);
 
     this.modalService.create({
       nzTitle: 'Chuyển giao quyền nhóm trưởng',
