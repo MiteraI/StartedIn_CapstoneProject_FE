@@ -1,0 +1,27 @@
+<form [formGroup]="transferForm" class="space-y-4 ant-modal-body">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24" class="font-bold">Nhóm trưởng mới</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select class="w-full" formControlName="newLeaderId" nzPlaceHolder="Chọn nhóm trưởng mới">
+        <nz-option
+          *ngFor="let member of data.members"
+          [nzValue]="member.id"
+          [nzLabel]="member.fullName"
+        ></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="flex justify-end space-x-2">
+    <button nz-button (click)="closeModal()">Hủy</button>
+    <button
+      nz-button
+      nzType="primary"
+      [disabled]="transferForm.invalid"
+      [nzLoading]="isLoading"
+      (click)="handleSubmit()"
+    >
+      OK
+    </button>
+  </div>
+</form>

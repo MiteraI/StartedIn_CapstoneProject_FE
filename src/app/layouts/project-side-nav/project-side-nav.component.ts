@@ -71,6 +71,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   }[] = [
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
+    { linkName: 'members', iconName: 'group', linkText: 'Thành viên' },
   ]
 
   projectSideNavLinks: {

@@ -1,14 +1,7 @@
 <!-- Form -->
 <form nz-form [formGroup]="meetingForm" (ngSubmit)="submit()" nzLayout="vertical">
-  <div class="text-gray-500 mb-4">Bạn sẽ cần phải tổ chức một cuộc họp với các bên liên quan khác để thanh lý hợp đồng</div>
-  <div *ngIf="data.request" class="mb-4">
-    <div class="flex items-center">
-      <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
-      <span class="font-semibold text-gray-700">Lý do kết thúc hợp đồng</span>
-    </div>
-    <div class="text-gray-800 ml-8">
-      {{ data.request.reason || 'Không có lý do' }}
-    </div>
+  <div class="text-gray-500 mb-4">
+    Bạn sẽ cần phải tổ chức một cuộc họp với các thành viên và quyết định ai sẽ là nhóm trưởng mới
   </div>
   <!-- Title -->
   <nz-form-item>
@@ -76,8 +69,9 @@
       [disabled]="meetingForm.invalid"
       nz-button
       nzType="primary"
+      [nzLoading]="isLoading"
     >
-      {{ data.request ? 'Chấp nhận' : 'OK' }}
+      Tạo
     </button>
   </div>
 </form>
