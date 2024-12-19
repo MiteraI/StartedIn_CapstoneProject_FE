@@ -35,6 +35,7 @@
     "@microsoft/signalr": "^8.0.7",
     "@ng-icons/core": "^25.1.0",
     "@ng-icons/lucide": "^29.5.2",
+    "@tinymce/tinymce-angular": "^8.0.1",
     "chart.js": "^4.4.6",
     "class-variance-authority": "^0.6.0",
     "clsx": "^2.1.1",
@@ -42,6 +43,7 @@
     "ng-zorro-antd": "^18.1.1",
     "rxjs": "~7.8.0",
     "StartedIn_CapstoneProject_FE": "file:",
+    "tinymce": "^7.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
   },

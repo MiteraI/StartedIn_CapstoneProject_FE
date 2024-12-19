@@ -34,14 +34,10 @@
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
                 "output": "/assets/"
-              }
+              },
+              { "glob": "**/*", "input": "node_modules/tinymce", "output": "/tinymce/" }
             ],
-            "styles": [
-              "src/theme.less",
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/global.scss",
-              "src/theme/variables.scss"
-            ],
+            "styles": ["src/theme.less", "@angular/material/prebuilt-themes/azure-blue.css", "src/global.scss", "src/theme/variables.scss"],
             "scripts": []
           },
           "configurations": {
@@ -116,11 +112,7 @@
                 "output": "assets"
               }
             ],
-            "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/global.scss",
-              "src/theme/variables.scss"
-            ],
+            "styles": ["@angular/material/prebuilt-themes/azure-blue.css", "src/global.scss", "src/theme/variables.scss"],
             "scripts": []
           },
           "configurations": {
@@ -140,9 +132,7 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@ionic/angular-toolkit"
-    ],
+    "schematicCollections": ["@ionic/angular-toolkit"],
     "analytics": "ffcbfdf4-76ca-4274-9940-3e8173bae377"
   },
   "schematics": {

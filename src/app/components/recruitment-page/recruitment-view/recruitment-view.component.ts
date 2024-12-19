@@ -14,16 +14,24 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RecruitmentDetailsDialogComponent } from '../../find-team-page/recruitment-details-dialog/recruitment-details-dialog.component'
 import { ApplicantListDialogComponent } from '../applicant-list-dialog/applicant-list-dialog.component'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 
 @Component({
   selector: 'app-recruitment-view',
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule],
+  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule, EditorModule],
 })
 export class RecruitmentViewComponent implements OnInit {
   recruitmentForm: FormGroup
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {
+      this.onInfoChange()
+    },
+  }
   // fileList for upload related to ngZorro
   fileList: NzUploadFile[] = []
 

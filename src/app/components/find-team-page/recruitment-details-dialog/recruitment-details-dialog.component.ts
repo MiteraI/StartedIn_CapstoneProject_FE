@@ -3,7 +3,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { NZ_MODAL_DATA, NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RecruitmentService } from 'src/app/services/recruitment.service'
 import { RecruitmentPostDetails } from 'src/app/shared/models/recruitment/recruitment-post-details.model'
-import { NzImageModule } from 'ng-zorro-antd/image'
+import { NzImage, NzImageModule, NzImageService } from 'ng-zorro-antd/image'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { RecruitmentApplyDialogComponent } from '../recruitment-apply-dialog/recruitment-apply-dialog.component'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
@@ -31,6 +31,8 @@ export class RecruitmentDetailsDialogComponent implements OnInit {
     // if last updated time is newer than created time, return last updated time
     return this.post.lastUpdatedTime > this.post.createdTime ? this.post.lastUpdatedTime : this.post.createdTime
   }
+
+    private nzImageService = inject(NzImageService)
   constructor(private recruitmentService: RecruitmentService, private modalService: NzModalService) {}
 
   openRecruitmentApplyDialog() {
@@ -46,6 +48,14 @@ export class RecruitmentDetailsDialogComponent implements OnInit {
       },
     })
   }
+
+  onClickPreview(): void {
+      this.nzImageService.preview(
+        this.post.recruitmentImgs.map((img) => {
+          return { src: img.imageUrl, alt: img.fileName } as NzImage
+        })
+      )
+    }
 
   ngOnInit() {
     if (!this.nzModalData.previewMode) {
