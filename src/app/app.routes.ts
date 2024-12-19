@@ -221,6 +221,10 @@ export const routes: Routes = [
         path: 'termination-requests',
         loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then( m => m.TerminationRequestsPage)
       },
+      {
+        path: 'members',
+        loadComponent: () => import('./pages/members/members.page').then( m => m.MembersPage)
+      },
     ],
   },
   {

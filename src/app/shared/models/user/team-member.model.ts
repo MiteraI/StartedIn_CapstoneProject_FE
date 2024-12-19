@@ -5,4 +5,5 @@ export type TeamMemberModel = {
   fullName: string;
   roleInTeam: TeamRole;
   email: string;
+  profilePicture: string;
 }
