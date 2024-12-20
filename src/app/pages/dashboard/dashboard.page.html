@@ -69,13 +69,13 @@
       <div class="text-xl md:text-2xl font-semibold mb-4">Tổng quan công việc</div>
       
       <div class="flex justify-between items-center pb-5">
-          <span class="text-gray-600 md:text-lg">Tổng số công việc: {{ dashboard.totalTask }}</span>
+          <span class="text-gray-600 md:text-lg font-semibold">Tổng số công việc: {{ dashboard.totalTask }}</span>
       </div>
   
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- Công việc đã hoàn thành -->
           <div>
-              <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành</div>
+              <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành: {{ getTaskCount(dashboard.completedTasks) }} </div>
               <div *ngIf="dashboard.completedTasks.length === 0" class="flex items-center justify-center p-3" style="max-height: 250px;">
                 <p>Không có công việc hoàn thành nào.</p>
               </div>
@@ -135,7 +135,7 @@
   
           <!-- Công việc quá hạn -->
           <div>
-              <div class="font-semibold mb-4 text-red-600">Công việc quá hạn</div>
+              <div class="font-semibold mb-4 text-red-600">Công việc quá hạn: {{ getTaskCount(dashboard.overdueTasks) }}</div>
               <div *ngIf="dashboard.overdueTasks.length === 0" class="flex items-center justify-center p-3" style="max-height: 250px;">
                 <p>Không có công việc quá hạn nào.</p>
               </div>

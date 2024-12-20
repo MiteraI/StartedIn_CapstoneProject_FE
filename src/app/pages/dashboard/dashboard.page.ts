@@ -12,6 +12,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { TaskStatus } from 'src/app/shared/enums/task-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -68,6 +69,16 @@ export class DashboardPage implements OnInit {
           .map((assignee: any) => `${assignee.fullName} (${assignee.actualManHour || 'N/A'})`)
           .join(', ')
       : '';
+  }
+
+  getTaskCount(task: any): number {
+    let completedCount = 0;
+    if (Array.isArray(task)) {
+      task.forEach(t => {
+        completedCount++;
+      });
+    } 
+    return completedCount;
   }
 
   private loadDashboardData() {
