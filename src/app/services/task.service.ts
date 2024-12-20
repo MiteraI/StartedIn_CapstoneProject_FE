@@ -16,7 +16,7 @@ import { UpdateTaskMilestone } from '../shared/models/task/update-task-milestone
 @Injectable({
   providedIn: 'root',
 })
-export class TaskService {  
+export class TaskService {
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   createTask(projectId: string, createTask: CreateTask) {
@@ -74,5 +74,9 @@ export class TaskService {
 
   deleteTask(projectId: string, taskId: string) {
     return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}`))
+  }
+
+  logTime(projectId: string, taskId: string, time: number) {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/log-time`), time)
   }
 }
