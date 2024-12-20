@@ -19,25 +19,25 @@
         <nz-collapse>
           @if(isCharterExist) {
           <nz-collapse-panel [nzHeader]="'Bối Cảnh Dự Án'" class="bg-purple-100">
-            <p>{{ projectCharter?.businessCase }}</p>
+            <div [innerHTML]="projectCharter?.businessCase"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Mục Tiêu'" class="bg-purple-100">
-            <p>{{ projectCharter?.goal }}</p>
+            <div [innerHTML]="projectCharter?.goal"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Mục Đích'" class="bg-purple-100">
-            <p>{{ projectCharter?.objective }}</p>
+            <div [innerHTML]="projectCharter?.objective"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Phạm Vi'" class="bg-purple-100">
-            <p>{{ projectCharter?.scope }}</p>
+            <div [innerHTML]="projectCharter?.scope"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Hạn Chế'" class="bg-purple-100">
-            <p>{{ projectCharter?.constraints }}</p>
+            <div [innerHTML]="projectCharter?.constraints"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Giả Định'" class="bg-purple-100">
-            <p>{{ projectCharter?.assumptions }}</p>
+            <div [innerHTML]="projectCharter?.assumptions"></div>
           </nz-collapse-panel>
           <nz-collapse-panel [nzHeader]="'Kết Quả Đầu Ra'" class="bg-purple-100">
-            <p>{{ projectCharter?.deliverables }}</p>
+            <div [innerHTML]="projectCharter?.deliverables"></div>
           </nz-collapse-panel>
           }
         </nz-collapse>
