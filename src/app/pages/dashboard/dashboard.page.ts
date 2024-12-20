@@ -10,6 +10,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,7 +20,8 @@ import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
   imports: [CommonModule, 
     VndCurrencyPipe, 
     ViewTitleBarComponent,
-    NzTableModule]
+    NzTableModule,
+    MatIconModule]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null;
@@ -53,6 +55,14 @@ export class DashboardPage implements OnInit {
       this.projectId = params.get('id')!;
       this.loadDashboardData();
     });
+  }
+
+  getAssigneeNames(task: any): string {
+    return task.assignees && task.assignees.length > 0
+      ? task.assignees
+          .map((assignee: any) => `${assignee.fullName} (${assignee.actualManHour || 'N/A'})`)
+          .join(', ')
+      : '';
   }
 
   private loadDashboardData() {
