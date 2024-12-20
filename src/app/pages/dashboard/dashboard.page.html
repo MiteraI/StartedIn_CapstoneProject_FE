@@ -5,6 +5,17 @@
   </div>
 
   <div *ngIf="dashboard" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Navigation to create project approval -->
+    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+      <div class="flex justify-between items-center">
+        <div>
+          <div class="font-semibold text-lg">Yêu cầu duyệt dự án</div>
+          <div class="text-gray-500">Bạn có thể gửi yêu cầu để admin duyệt dự án lên chính thức</div>
+        </div>
+        <div><button (click)="openRequestAppovalModal()" nz-button nzType="primary">Gửi yêu cầu</button></div>
+      </div>
+    </div>
+
     <!-- Budget Section -->
     <div class="bg-white rounded-lg shadow p-6">
       <div class="text-xl md:text-2xl font-semibold mb-16">Tổng ngân sách hiện tại</div>
@@ -29,9 +40,7 @@
       <div class="mt-4 space-y-2">
         <div class="flex flex-wrap justify-between items-center">
           <span class="text-gray-600 block w-full md:inline">Tổng dự án:</span>
-          <span class="font-semibold">
-            {{ dashboard.disbursedAmount | vndCurrency }} / {{ (dashboard.disbursedAmount + dashboard.remainingDisbursement) | vndCurrency }}
-          </span>
+          <span class="font-semibold"> {{ dashboard.disbursedAmount | vndCurrency }} / {{ (dashboard.disbursedAmount + dashboard.remainingDisbursement) | vndCurrency }} </span>
         </div>
         <div *ngIf="dashboard.selfDisbursedAmount" class="flex flex-wrap justify-between items-center">
           <span class="text-gray-600 block w-full md:inline">Cá nhân:</span>
@@ -54,15 +63,15 @@
     <div class="bg-white rounded-lg shadow p-6">
       <div class="text-xl md:text-2xl font-semibold mb-4">Tiến độ cột mốc</div>
 
-        <div *ngFor="let milestone of dashboard.milestoneProgress" class="flex items-center justify-between hover:bg-slate-100 px-4 py-2 rounded-lg">
-          <span class="flex-1 md:text-xl">{{ milestone.title }}</span>
-          <div class="w-16 h-16 relative">
-            <canvas [id]="'milestone-' + milestone.id"></canvas>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-sm font-semibold">{{ milestone.progress ?? 0 }}%</span>
-            </div>
+      <div *ngFor="let milestone of dashboard.milestoneProgress" class="flex items-center justify-between hover:bg-slate-100 px-4 py-2 rounded-lg">
+        <span class="flex-1 md:text-xl">{{ milestone.title }}</span>
+        <div class="w-16 h-16 relative">
+          <canvas [id]="'milestone-' + milestone.id"></canvas>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-sm font-semibold">{{ milestone.progress ?? 0 }}%</span>
           </div>
         </div>
+      </div>
     </div>
 
     <div class="bg-white rounded-lg shadow p-6 lg:col-span-2 pt-4">
@@ -85,7 +94,8 @@
               [nzData]="dashboard.completedTasks"
               [nzLoading]="isFetchAllContractLoading"
               [nzBordered]="true"
-              [nzScroll]="{ y: '150px' }">
+              [nzScroll]="{ y: '150px' }"
+            >
               <thead>
                 <tr>
                   <th nzWidth="40px" [nzAlign]="'center'"></th>
@@ -98,41 +108,39 @@
               </thead>
               <tbody>
                 @for (data of completedTaskTable.data; track data.id) {
-                  <tr>
-                    <td [(nzExpand)]="data.expand"></td>
-                    <td class="text-xs">{{ data.title }}</td>
-                    <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
-                  </tr>
-                  <tr [nzExpand]="data.expand" >
-                    <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                      <thead>
-                        <tr>
-                          <td [colSpan]="5">
-                            <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
-                              Danh sách thành viên đang tham gia
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th class="text-xs">Email</th>
-                          <th class="text-xs">Người thực hiện</th>
-                          <th class="text-xs">Số giờ đã làm</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (data of innerTable.data; track data) {
-                        <tr>
-                          <td class="text-xs">{{ data.email }}</td>
-                          <td class="text-xs">{{ data.fullName }}</td>
-                          <td class="text-xs">{{ data.actualManHour }}</td>
-                        </tr>
-                        }
-                      </tbody>
-                    </nz-table>
-                  </tr>
+                <tr>
+                  <td [(nzExpand)]="data.expand"></td>
+                  <td class="text-xs">{{ data.title }}</td>
+                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                </tr>
+                <tr [nzExpand]="data.expand">
+                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
+                    <thead>
+                      <tr>
+                        <td [colSpan]="5">
+                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">Danh sách thành viên đang tham gia</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="text-xs">Email</th>
+                        <th class="text-xs">Người thực hiện</th>
+                        <th class="text-xs">Số giờ đã làm</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (data of innerTable.data; track data) {
+                      <tr>
+                        <td class="text-xs">{{ data.email }}</td>
+                        <td class="text-xs">{{ data.fullName }}</td>
+                        <td class="text-xs">{{ data.actualManHour }}</td>
+                      </tr>
+                      }
+                    </tbody>
+                  </nz-table>
+                </tr>
                 }
               </tbody>
             </nz-table>
@@ -178,7 +186,8 @@
               [nzData]="dashboard.overdueTasks"
               [nzLoading]="isFetchAllContractLoading"
               [nzBordered]="true"
-              [nzScroll]="{ y: '150px' }">
+              [nzScroll]="{ y: '150px' }"
+            >
               <thead>
                 <tr>
                   <th nzWidth="40px" [nzAlign]="'center'"></th>
@@ -191,41 +200,39 @@
               </thead>
               <tbody>
                 @for (data of overdueTaskTable.data; track data.id) {
-                  <tr>
-                    <td [(nzExpand)]="data.expand"></td>
-                    <td class="text-xs">{{ data.title }}</td>
-                    <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                    <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
-                  </tr>
-                  <tr [nzExpand]="data.expand" >
-                    <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                      <thead>
-                        <tr>
-                          <td [colSpan]="5">
-                            <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
-                              Danh sách thành viên đang tham gia
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th class="text-xs">Email</th>
-                          <th class="text-xs">Người thực hiện</th>
-                          <th class="text-xs">Số giờ đã làm</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (data of innerTable.data; track data) {
-                        <tr>
-                          <td class="text-xs">{{ data.email }}</td>
-                          <td class="text-xs">{{ data.fullName }}</td>
-                          <td class="text-xs">{{ data.actualManHour }}</td>
-                        </tr>
-                        }
-                      </tbody>
-                    </nz-table>
-                  </tr>
+                <tr>
+                  <td [(nzExpand)]="data.expand"></td>
+                  <td class="text-xs">{{ data.title }}</td>
+                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                </tr>
+                <tr [nzExpand]="data.expand">
+                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
+                    <thead>
+                      <tr>
+                        <td [colSpan]="5">
+                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">Danh sách thành viên đang tham gia</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th class="text-xs">Email</th>
+                        <th class="text-xs">Người thực hiện</th>
+                        <th class="text-xs">Số giờ đã làm</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (data of innerTable.data; track data) {
+                      <tr>
+                        <td class="text-xs">{{ data.email }}</td>
+                        <td class="text-xs">{{ data.fullName }}</td>
+                        <td class="text-xs">{{ data.actualManHour }}</td>
+                      </tr>
+                      }
+                    </tbody>
+                  </nz-table>
+                </tr>
                 }
               </tbody>
             </nz-table>
@@ -259,6 +266,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>

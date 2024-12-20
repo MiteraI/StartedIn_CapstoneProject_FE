@@ -8,15 +8,17 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzButtonModule } from 'ng-zorro-antd/button'
 @Component({
   selector: 'app-meeting-detail-modal',
   templateUrl: './meeting-detail-modal.component.html',
   styleUrls: ['./meeting-detail-modal.component.scss'],
   standalone: true,
-  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule],
+  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule, NzButtonModule],
 })
 export class MeetingDetailModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
+  MeetingStatus = MeetingStatus
 
   meetingId: string = ''
   projectId: string = ''
@@ -29,6 +31,10 @@ export class MeetingDetailModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.fetchMeetingDetail()
+  }
+
+  fetchMeetingDetail() {
     this.loading = true
     this.meetingService.getMeetingDetails(this.projectId, this.meetingId).subscribe({
       next: (response) => {
@@ -41,7 +47,6 @@ export class MeetingDetailModalComponent implements OnInit {
       },
     })
   }
-
   getStatusIcon(): string {
     switch (this.meetingDetail.status) {
       case MeetingStatus.PROPOSED:
@@ -79,5 +84,31 @@ export class MeetingDetailModalComponent implements OnInit {
       default:
         return 'text-gray-500'
     }
+  }
+
+  startMeeting() {
+    this.meetingService.startMeeting(this.projectId, this.meetingId).subscribe({
+      next: () => {
+        this.nzMessage.success('Bắt đầu cuộc họp thành công')
+        this.meetingService.refreshMeeting$.next(true)
+        this.fetchMeetingDetail()
+      },
+      error: (error) => {
+        this.nzMessage.error(error)
+      },
+    })
+  }
+
+  endMeeting() {
+    this.meetingService.cancelMeeting(this.projectId, this.meetingId).subscribe({
+      next: () => {
+        this.nzMessage.success('Kết thúc cuộc họp thành công')
+        this.meetingService.refreshMeeting$.next(true)
+        this.fetchMeetingDetail()
+      },
+      error: (error) => {
+        this.nzMessage.error(error)
+      },
+    })
   }
 }

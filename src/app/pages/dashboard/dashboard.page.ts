@@ -1,16 +1,19 @@
-import { afterRender, Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { Chart } from 'chart.js/auto';
-import { DashboardModel } from 'src/app/shared/models/dashboard/dashboard.model';
-import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
-import { DashboardService } from 'src/app/services/dashboard.service';
-import { catchError, throwError } from 'rxjs';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { afterRender, Component, Input, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { ActivatedRoute } from '@angular/router'
+import { Chart } from 'chart.js/auto'
+import { DashboardModel } from 'src/app/shared/models/dashboard/dashboard.model'
+import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
+import { DashboardService } from 'src/app/services/dashboard.service'
+import { catchError, throwError } from 'rxjs'
+import { NzNotificationService } from 'ng-zorro-antd/notification'
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
+import { RequestApprovalModalComponent } from 'src/app/components/project-approval-pages/request-approval-modal/request-approval-modal.component'
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -24,42 +27,40 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
     ViewTitleBarComponent,
     NzTableModule,
     NzSpinModule,
-    MatIconModule]
+    MatIconModule, 
+    NzButtonModule, 
+    NzModalModule]
 })
 export class DashboardPage implements OnInit {
-  dashboard: DashboardModel | null = null;
-  projectId: string = '';
-  chartsRendered: boolean = false;
-  disbursementChart: Chart | undefined;
-  shareEquityChart: Chart<'pie', number[], string> | undefined;
-  isLoading = true;
+  dashboard: DashboardModel | null = null
+  projectId: string = ''
+  chartsRendered: boolean = false
+  disbursementChart: Chart | undefined
+  shareEquityChart: Chart<'pie', number[], string> | undefined
+  isLoading = true
 
   @Input({ required: true }) isFetchAllContractLoading: boolean = false
-  constructor(
-    private route: ActivatedRoute,
-    private dashboardService: DashboardService,
-    private notification: NzNotificationService,
-  ) {
+  constructor(private route: ActivatedRoute, private dashboardService: DashboardService, private notification: NzNotificationService, private modalService: NzModalService) {
     afterRender(() => {
       if (!this.chartsRendered) {
-        this.createDisbursementChart();
-        this.createShareEquityChart();
-        this.createMilestoneCharts();
+        this.createDisbursementChart()
+        this.createShareEquityChart()
+        this.createMilestoneCharts()
       }
     })
   }
 
-  getTeamRoleLabel(type: TeamRole) : string {
+  getTeamRoleLabel(type: TeamRole): string {
     return TeamRoleLabels[type]
   }
 
   ngOnInit() {
-    this.route.parent?.paramMap.subscribe(params => {
-      if (!params.get('id')) return;
+    this.route.parent?.paramMap.subscribe((params) => {
+      if (!params.get('id')) return
 
-      this.projectId = params.get('id')!;
-      this.loadDashboardData();
-    });
+      this.projectId = params.get('id')!
+      this.loadDashboardData()
+    })
   }
 
   getAssigneeNames(task: any): string {
@@ -71,39 +72,33 @@ export class DashboardPage implements OnInit {
   }
 
   private loadDashboardData() {
-    this.isLoading = true;
+    this.isLoading = true
     this.dashboardService
       .getDashboard(this.projectId)
       .pipe(
-        catchError(error => {
-          this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 });
-          this.isLoading = false;
-          return throwError(() => error);
+        catchError((error) => {
+          this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 })
+          this.isLoading = false
+          return throwError(() => error)
         })
       )
-      .subscribe(data => {
-        this.dashboard = data;
-        this.isLoading = false;
-      });
+      .subscribe((data) => {
+        this.dashboard = data
+        this.isLoading = false
+      })
   }
 
   private createDisbursementChart() {
-    const canvas = document.getElementById('disbursementChart') as HTMLCanvasElement;
-    if (!canvas || !this.dashboard) return;
+    const canvas = document.getElementById('disbursementChart') as HTMLCanvasElement
+    if (!canvas || !this.dashboard) return
 
-    const labels = this.dashboard.selfDisbursedAmount ? ['Tổng dự án', 'Cá nhân'] : ['Tổng dự án'];
-    const disbursedData = this.dashboard.selfDisbursedAmount ? [
-      this.dashboard.disbursedAmount / 1000,
-      this.dashboard.selfDisbursedAmount / 1000
-    ] : [
-      this.dashboard.disbursedAmount / 1000
-    ];
-    const remainingData = this.dashboard.selfRemainingDisbursement ? [
-      this.dashboard.remainingDisbursement / 1000,
-      this.dashboard.selfRemainingDisbursement / 1000
-    ] : [
-      this.dashboard.remainingDisbursement / 1000
-    ]
+    const labels = this.dashboard.selfDisbursedAmount ? ['Tổng dự án', 'Cá nhân'] : ['Tổng dự án']
+    const disbursedData = this.dashboard.selfDisbursedAmount
+      ? [this.dashboard.disbursedAmount / 1000, this.dashboard.selfDisbursedAmount / 1000]
+      : [this.dashboard.disbursedAmount / 1000]
+    const remainingData = this.dashboard.selfRemainingDisbursement
+      ? [this.dashboard.remainingDisbursement / 1000, this.dashboard.selfRemainingDisbursement / 1000]
+      : [this.dashboard.remainingDisbursement / 1000]
 
     this.disbursementChart = new Chart(canvas, {
       type: 'bar',
@@ -113,14 +108,14 @@ export class DashboardPage implements OnInit {
           {
             label: 'Đã giải ngân',
             data: disbursedData,
-            backgroundColor: ['#10B981']
+            backgroundColor: ['#10B981'],
           },
           {
             label: 'Chưa giải ngân',
             data: remainingData,
-            backgroundColor: ['#4F46E5']
-          }
-        ]
+            backgroundColor: ['#4F46E5'],
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -130,68 +125,82 @@ export class DashboardPage implements OnInit {
             stacked: true,
             title: {
               display: true,
-              text: '(nghìn đồng)'
-            }
+              text: '(nghìn đồng)',
+            },
           },
           y: {
-            stacked: true
-          }
-        }
-      }
-    });
+            stacked: true,
+          },
+        },
+      },
+    })
 
-    this.chartsRendered = true;
+    this.chartsRendered = true
   }
 
   private createShareEquityChart() {
-    const canvas = document.getElementById('shareEquityChart') as HTMLCanvasElement;
-    if (!canvas || !this.dashboard) return;
+    const canvas = document.getElementById('shareEquityChart') as HTMLCanvasElement
+    if (!canvas || !this.dashboard) return
 
     this.shareEquityChart = new Chart(canvas, {
       type: 'pie',
       data: {
         labels: ['Sở hữu'],
-        datasets: [{
-          data: [this.dashboard.shareEquityPercentage, 100 - this.dashboard.shareEquityPercentage],
-          backgroundColor: ['#4F46E5', '#E5E7EB']
-        }]
+        datasets: [
+          {
+            data: [this.dashboard.shareEquityPercentage, 100 - this.dashboard.shareEquityPercentage],
+            backgroundColor: ['#4F46E5', '#E5E7EB'],
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom'
-          }
-        }
-      }
-    });
+            position: 'bottom',
+          },
+        },
+      },
+    })
 
-    this.chartsRendered = true;
+    this.chartsRendered = true
   }
 
   private createMilestoneCharts() {
-    this.dashboard?.milestoneProgress.forEach(milestone => {
-      const canvas = document.getElementById(`milestone-${milestone.id}`) as HTMLCanvasElement;
-      if (!canvas) return;
+    this.dashboard?.milestoneProgress.forEach((milestone) => {
+      const canvas = document.getElementById(`milestone-${milestone.id}`) as HTMLCanvasElement
+      if (!canvas) return
 
       new Chart(canvas, {
         type: 'doughnut',
         data: {
-          datasets: [{
-            data: [milestone.progress ?? 0, 100 - (milestone.progress ?? 0)],
-            backgroundColor: ['#4F46E5', '#E5E7EB']
-          }]
+          datasets: [
+            {
+              data: [milestone.progress ?? 0, 100 - (milestone.progress ?? 0)],
+              backgroundColor: ['#4F46E5', '#E5E7EB'],
+            },
+          ],
         },
         options: {
           responsive: true,
           cutout: '80%',
           plugins: {
             legend: {
-              display: false
-            }
-          }
-        }
-      });
-    });
+              display: false,
+            },
+          },
+        },
+      })
+    })
+  }
+
+  openRequestAppovalModal() {
+    this.modalService.create({
+      nzTitle: 'Yêu cầu phê duyệt',
+      nzContent: RequestApprovalModalComponent,
+      nzData: { projectId: this.projectId },
+      nzFooter: null,
+      nzWidth: '800px',
+    })
   }
 }
