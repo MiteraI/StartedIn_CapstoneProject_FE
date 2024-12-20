@@ -160,7 +160,7 @@
                         <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
                         <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
                     </div>
-                </div>
+                  </div>
             </div>
           </div>
         </div>
@@ -236,23 +236,23 @@
             <div *ngFor="let task of dashboard.overdueTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
                 <div class="font-semibold text-base text-red-700 mb-1" style="font-size: 1rem">{{ task.title }}</div>
                 <div class="text-xs text-gray-600">
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
-                        {{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
-                    </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
-                        {{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
-                    </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer (giờ)</mat-icon>
-                        {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}
-                    </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
-                        <span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
-                        <span *ngIf="!task.assignees || task.assignees.length === 0"> Không xác định</span>
-                    </div>
+                  <div class="mb-1">
+                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
+                      <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+                  </div>
+                  <div class="mb-1">
+                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
+                      <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
+                  </div>
+                  <div class="mb-1">
+                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
+                      <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}
+                  </div>
+                  <div class="mb-1">
+                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
+                      <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
+                      <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
+                  </div>
                 </div>
             </div>
           </div>
