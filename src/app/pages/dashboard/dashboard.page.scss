@@ -2,14 +2,11 @@
     background-color: #faf5ff;
 }
 
-.text-sm {
-  font-size: 0.875rem;
+.custom-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-.text-gray-600 {
-  color: #4b5563;
-}
-
-.mb-1 {
-  margin-bottom: 0.25rem;
+.custom-scroll::-webkit-scrollbar {
+  display: none; /* Webkit-based browsers */
 }
