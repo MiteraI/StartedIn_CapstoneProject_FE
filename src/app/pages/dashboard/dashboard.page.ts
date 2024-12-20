@@ -15,6 +15,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RequestApprovalModalComponent } from 'src/app/components/project-approval-pages/request-approval-modal/request-approval-modal.component'
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { TaskStatus } from 'src/app/shared/enums/task-status.enum';
 
 @Component({
   selector: 'app-dashboard',
@@ -69,6 +70,16 @@ export class DashboardPage implements OnInit {
           .map((assignee: any) => `${assignee.fullName} (${assignee.actualManHour || 'N/A'})`)
           .join(', ')
       : '';
+  }
+
+  getTaskCount(task: any): number {
+    let completedCount = 0;
+    if (Array.isArray(task)) {
+      task.forEach(t => {
+        completedCount++;
+      });
+    } 
+    return completedCount;
   }
 
   private loadDashboardData() {

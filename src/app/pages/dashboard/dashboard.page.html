@@ -76,194 +76,131 @@
 
     <div class="bg-white rounded-lg shadow p-6 lg:col-span-2 pt-4">
       <div class="text-xl md:text-2xl font-semibold mb-4">Tổng quan công việc</div>
+      
       <div class="flex justify-between items-center pb-5">
-        <span class="text-gray-600 md:text-lg">Tổng số công việc: {{ dashboard.totalTask }}</span>
+          <span class="text-gray-600 md:text-lg font-semibold">Tổng số công việc: {{ dashboard.totalTask }}</span>
       </div>
-
+  
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Công việc đã hoàn thành -->
-        <div>
-          <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành</div>
 
-          <!-- Table View (Desktop) -->
-          <div class="hidden lg:block">
-            <nz-table
-              #completedTaskTable
-              nzSize="small"
-              [nzFrontPagination]="false"
-              [nzData]="dashboard.completedTasks"
-              [nzLoading]="isFetchAllContractLoading"
-              [nzBordered]="true"
-              [nzScroll]="{ y: '150px' }"
-            >
-              <thead>
-                <tr>
-                  <th nzWidth="40px" [nzAlign]="'center'"></th>
-                  <th nzWidth="120px" class="text-xs">Tên công việc</th>
-                  <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
-                  <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
-                  <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
-                  <th nzWidth="80px" class="text-xs">Số giờ làm</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (data of completedTaskTable.data; track data.id) {
-                <tr>
-                  <td [(nzExpand)]="data.expand"></td>
-                  <td class="text-xs">{{ data.title }}</td>
-                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
-                </tr>
-                <tr [nzExpand]="data.expand">
-                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                    <thead>
-                      <tr>
-                        <td [colSpan]="5">
-                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">Danh sách thành viên đang tham gia</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="text-xs">Email</th>
-                        <th class="text-xs">Người thực hiện</th>
-                        <th class="text-xs">Số giờ đã làm</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of innerTable.data; track data) {
-                      <tr>
-                        <td class="text-xs">{{ data.email }}</td>
-                        <td class="text-xs">{{ data.fullName }}</td>
-                        <td class="text-xs">{{ data.actualManHour }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </nz-table>
-                </tr>
-                }
-              </tbody>
-            </nz-table>
-          </div>
-
-          <!-- Block Card View (Mobile) -->
-          <div class="block lg:hidden overflow-y-auto custom-scroll" style="max-height: 250px; font-size: 1rem; line-height: 1.3; padding: 0.6rem;">
-            <div *ngFor="let task of dashboard.completedTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
-                <div class="font-semibold text-base text-green-700 mb-1" style="font-size: 1rem">{{ task.title }}</div>
-                <div class="text-xs text-gray-600">
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
-                        <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+          <!-- Công việc đã hoàn thành -->
+          <div>
+              <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành: {{ getTaskCount(dashboard.completedTasks) }} </div>
+              <div *ngIf="dashboard.completedTasks.length === 0" class="flex items-center justify-center p-3" style="max-height: 250px;">
+                <p>Không có công việc hoàn thành nào.</p>
+              </div>
+              <!-- Block Card View (Mobile) -->
+              <div class="block lg:hidden overflow-y-auto custom-scroll mb-6" style="max-height: 250px;">
+                  <div *ngFor="let task of dashboard.completedTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
+                      <div class="font-semibold text-base text-green-700 mb-1">{{ task.title }}</div>
+                      <div class="text-xs text-gray-600">
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
+                              <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
+                              <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
+                              <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 0 }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
+                              <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
+                              <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  
+              <!-- Block Card View (Desktop) -->
+              <div class="hidden lg:block overflow-y-auto custom-scroll" style="max-height: 250px;">
+                <div *ngFor="let task of dashboard.completedTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
+                    <div class="font-semibold text-base text-green-700 mb-1">{{ task.title }}</div>
+                    <div class="text-xs text-gray-600">
+                        <div class="mb-1">
+                            <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
+                            <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+                        </div>
+                        <div class="mb-1">
+                            <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
+                            <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
+                        </div>
+                        <div class="mb-1">
+                            <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
+                            <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 0 }}
+                        </div>
+                        <div class="mb-1">
+                            <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
+                            <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
+                            <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
+                        </div>
                     </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
-                        <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
-                    </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
-                        <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}
-                    </div>
-                    <div class="mb-1">
-                        <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
-                        <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
-                        <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
-                    </div>
-                  </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Công việc quá hạn -->
-        <div>
-          <div class="font-semibold mb-4 text-red-600">Công việc quá hạn</div>
-
-          <!-- Table View (Desktop) -->
-          <div class="hidden lg:block">
-            <nz-table
-              #overdueTaskTable
-              nzSize="small"
-              [nzFrontPagination]="false"
-              [nzData]="dashboard.overdueTasks"
-              [nzLoading]="isFetchAllContractLoading"
-              [nzBordered]="true"
-              [nzScroll]="{ y: '150px' }"
-            >
-              <thead>
-                <tr>
-                  <th nzWidth="40px" [nzAlign]="'center'"></th>
-                  <th nzWidth="120px" class="text-xs">Tên công việc</th>
-                  <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
-                  <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
-                  <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
-                  <th nzWidth="80px" class="text-xs">Số giờ làm</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (data of overdueTaskTable.data; track data.id) {
-                <tr>
-                  <td [(nzExpand)]="data.expand"></td>
-                  <td class="text-xs">{{ data.title }}</td>
-                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
-                </tr>
-                <tr [nzExpand]="data.expand">
-                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                    <thead>
-                      <tr>
-                        <td [colSpan]="5">
-                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">Danh sách thành viên đang tham gia</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="text-xs">Email</th>
-                        <th class="text-xs">Người thực hiện</th>
-                        <th class="text-xs">Số giờ đã làm</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of innerTable.data; track data) {
-                      <tr>
-                        <td class="text-xs">{{ data.email }}</td>
-                        <td class="text-xs">{{ data.fullName }}</td>
-                        <td class="text-xs">{{ data.actualManHour }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </nz-table>
-                </tr>
-                }
-              </tbody>
-            </nz-table>
-          </div>
-
-          <!-- Block Card View (Mobile) -->
-          <div class="block lg:hidden overflow-y-auto custom-scroll" style="max-height: 250px; font-size: 1rem; line-height: 1.3; padding: 0.6rem;">
-            <div *ngFor="let task of dashboard.overdueTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
-                <div class="font-semibold text-base text-red-700 mb-1" style="font-size: 1rem">{{ task.title }}</div>
-                <div class="text-xs text-gray-600">
-                  <div class="mb-1">
-                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
-                      <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
-                  </div>
-                  <div class="mb-1">
-                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
-                      <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
-                  </div>
-                  <div class="mb-1">
-                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
-                      <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}
-                  </div>
-                  <div class="mb-1">
-                      <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
-                      <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
-                      <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
-                  </div>
                 </div>
             </div>
+            
           </div>
-        </div>
+  
+          <!-- Công việc quá hạn -->
+          <div>
+              <div class="font-semibold mb-4 text-red-600">Công việc quá hạn: {{ getTaskCount(dashboard.overdueTasks) }}</div>
+              <div *ngIf="dashboard.overdueTasks.length === 0" class="flex items-center justify-center p-3" style="max-height: 250px;">
+                <p>Không có công việc quá hạn nào.</p>
+              </div>
+              <!-- Block Card View (Mobile) -->
+              <div class="block lg:hidden overflow-y-auto custom-scroll mb-6" style="max-height: 250px;">
+                  <div *ngFor="let task of dashboard.overdueTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
+                      <div class="font-semibold text-base text-red-700 mb-1">{{ task.title }}</div>
+                      <div class="text-xs text-gray-600">
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
+                              <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
+                              <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
+                              <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 0 }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
+                              <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
+                              <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  
+              <!-- Block Card View (Desktop) -->
+              <div class="hidden lg:block overflow-y-auto custom-scroll" style="max-height: 250px;">
+                  <div *ngFor="let task of dashboard.overdueTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
+                      <div class="font-semibold text-base text-red-700 mb-1">{{ task.title }}</div>
+                      <div class="text-xs text-gray-600">
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">access_time</mat-icon> 
+                              <strong> Thời gian: </strong>{{ (task.startDate || task.endDate) ? (task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định') + ' - ' + (task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">check_circle</mat-icon> 
+                              <strong> Hoàn thành: </strong>{{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">timer</mat-icon>
+                              <strong> Số giờ đã làm (giờ): </strong> {{ task.actualManHour ? task.actualManHour : 0 }}
+                          </div>
+                          <div class="mb-1">
+                              <mat-icon class="mat-icon-inline" aria-hidden="true" style="font-size: medium; vertical-align: middle;">people</mat-icon> 
+                              <strong> Thực hiện bởi: </strong><span *ngIf="getAssigneeNames(task)"> {{ getAssigneeNames(task) }}</span>
+                              <span *ngIf="!task.assignees || task.assignees.length === 0"> Chưa có</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
