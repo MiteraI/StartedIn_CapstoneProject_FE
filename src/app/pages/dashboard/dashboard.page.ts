@@ -14,13 +14,22 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RequestApprovalModalComponent } from 'src/app/components/project-approval-pages/request-approval-modal/request-approval-modal.component'
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, VndCurrencyPipe, ViewTitleBarComponent, NzTableModule, NzSpinModule, NzButtonModule, NzModalModule],
+  imports: [
+    CommonModule,
+    VndCurrencyPipe,
+    ViewTitleBarComponent,
+    NzTableModule,
+    NzSpinModule,
+    MatIconModule, 
+    NzButtonModule, 
+    NzModalModule]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null
@@ -52,6 +61,14 @@ export class DashboardPage implements OnInit {
       this.projectId = params.get('id')!
       this.loadDashboardData()
     })
+  }
+
+  getAssigneeNames(task: any): string {
+    return task.assignees && task.assignees.length > 0
+      ? task.assignees
+          .map((assignee: any) => `${assignee.fullName} (${assignee.actualManHour || 'N/A'})`)
+          .join(', ')
+      : '';
   }
 
   private loadDashboardData() {
