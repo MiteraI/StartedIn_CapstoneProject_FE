@@ -50,9 +50,11 @@ export class MembersPage implements OnInit {
   projectId!: string;
   members: TeamMemberModel[] = [];
   equities: ShareEquityItemModel[] = [];
-  filteredMembers: (TeamMemberModel & { equity: number })[] = [];
+  fullList: (TeamMemberModel & { equity: number })[] = [];
+  filteredList: (TeamMemberModel & { equity: number })[] = [];
 
   searchText: string = '';
+  roleFilter: 'all' | 'member' | 'mentor' | 'investor' = 'all';
   sortBy: 'name' | 'email' | 'role' | 'equity' = 'name';
   ascending: boolean = true;
 
@@ -143,7 +145,7 @@ export class MembersPage implements OnInit {
   }
 
   private combineData() {
-    this.filteredMembers = this.members.map(member => ({
+    this.fullList = this.members.map(member => ({
       ...member,
       equity: this.equities.find(e => e.userId === member.id)?.percentage || 0
     }));
@@ -151,17 +153,28 @@ export class MembersPage implements OnInit {
   }
 
   applyFilters() {
-    let filtered = [...this.filteredMembers];
+    this.filteredList = [...this.fullList];
+
+    if (this.roleFilter === 'member') {
+      this.filteredList = this.filteredList.filter(member =>
+        member.roleInTeam === TeamRole.LEADER ||
+        member.roleInTeam === TeamRole.MEMBER
+      );
+    } else if (this.roleFilter === 'mentor') {
+      this.filteredList = this.filteredList.filter(member => member.roleInTeam === TeamRole.MENTOR);
+    } else if (this.roleFilter === 'investor') {
+      this.filteredList = this.filteredList.filter(member => member.roleInTeam === TeamRole.INVESTOR);
+    }
 
     if (this.searchText) {
       const search = this.searchText.toLowerCase();
-      filtered = filtered.filter(member =>
+      this.filteredList = this.filteredList.filter(member =>
         member.fullName.toLowerCase().includes(search) ||
         member.email.toLowerCase().includes(search)
       );
     }
 
-    filtered.sort((a, b) => {
+    this.filteredList.sort((a, b) => {
       let comparison = 0;
       switch (this.sortBy) {
         case 'name':
@@ -179,8 +192,6 @@ export class MembersPage implements OnInit {
       }
       return this.ascending ? comparison : -comparison;
     });
-
-    this.filteredMembers = filtered;
   }
 
   toggleSort(field: 'name' | 'email' | 'role' | 'equity') {

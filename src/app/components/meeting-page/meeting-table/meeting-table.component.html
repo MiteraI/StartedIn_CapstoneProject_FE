@@ -4,13 +4,13 @@
 
 <nz-table
   [nzFrontPagination]="false"
-  [nzData]="listOfMeetings"
+  [nzData]="listMeeting.data"
   nzBordered="true"
   nzSize="small"
   [nzLoading]="isLoading"
-  [nzPageIndex]="page"
-  [nzPageSize]="pageSize"
-  [nzTotal]="total"
+  [nzPageIndex]="listMeeting.page"
+  [nzPageSize]="listMeeting.size"
+  [nzTotal]="listMeeting.total"
   (nzPageIndexChange)="onPageIndexChange($event)"
   class="custom-table"
 >
@@ -25,7 +25,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (meeting of listOfMeetings; track $index) {
+    @for (meeting of listMeeting.data; track $index) {
 
     <tr>
       <td>{{ meeting.title }}</td>

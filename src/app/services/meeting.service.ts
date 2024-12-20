@@ -31,8 +31,8 @@ export class MeetingService {
   }
 
   getTableData(
-    projectId: string, 
-    page: number, 
+    projectId: string,
+    page: number,
     size: number,
     milestoneId?: string,
     title?: string,
@@ -41,14 +41,15 @@ export class MeetingService {
     meetingStatus?: MeetingStatus,
     isDescending?: boolean
   ): Observable<SearchResponseModel<MeetingDetailModel>> {
-    const query = (milestoneId ? `milestoneId=${milestoneId}&`:'')
-    + (title?.trim() ? `contractName=${title.trim()}&` : '')
-    + (fromDate ? `fromDate=${fromDate.toISOString().split('T')[0]}&` : '')
-    + (toDate ? `toDate=${toDate.toISOString().split('T')[0]}&` : '')
-    + (meetingStatus ? `meetingStatus=${meetingStatus}&` : '')
-    + (isDescending? `is=${isDescending}&` : '')
-    +  `page=${page}&size=${size}`
-    const url = `/api/projects/${projectId}/appointments?${query}`;
+    const query =
+      (milestoneId ? `MilestoneId=${milestoneId}&` : '') +
+      (title?.trim() ? `Title=${title.trim()}&` : '') +
+      (fromDate ? `FromDate=${fromDate.toISOString().split('T')[0]}&` : '') +
+      (toDate ? `ToDate=${toDate.toISOString().split('T')[0]}&` : '') +
+      (meetingStatus ? `MeetingStatus=${meetingStatus}&` : '') +
+      (isDescending ? `IsDescending=${isDescending}&` : '') +
+      `page=${page}&size=${size}`
+    const url = `/api/projects/${projectId}/appointments?${query}`
     return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url))
   }
 

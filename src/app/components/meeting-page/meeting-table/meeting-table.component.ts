@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { NzTableModule } from 'ng-zorro-antd/table'
@@ -14,61 +14,57 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
-import { MeetingFilterComponent } from '../meeting-filter/meeting-filter.component'
+import { catchError, throwError } from 'rxjs'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [
-    NzTableModule, 
-    NzButtonModule, 
-    MatIconModule, 
-    DatePipe, 
-    NzToolTipModule, 
-    NzTagModule, 
-    NzMessageModule],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule, NzTagModule, NzMessageModule],
 })
-export class MeetingTableComponent implements OnInit {
+export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
-  @Input({ required: true }) listMeeting: SearchResponseModel<MeetingDetailModel> = {
-      data: [],
-      page: 1,
-      size: 10,
-      total: 0
-    }
-    @Input({ required: true }) isFetchAllMeetingLoading: boolean = false  
-  page = 1
-  pageSize = 5
-  total = 0
-  listOfMeetings: MeetingDetailModel[] = []
+  @Input({ required: true }) filterResult: FilterOptions = {}
+
+  listMeeting: SearchResponseModel<MeetingDetailModel> = {
+    data: [],
+    page: 1,
+    size: 5,
+    total: 0,
+  }
 
   readonly MeetingLabel = MeetingLabel
 
   isLoading = false
 
   constructor(private modalService: NzModalService, private meetingService: MeetingService, private messageService: NzMessageService) {}
+  ngOnChanges(changes: SimpleChanges): void {
+    // If filterResult changes, filter meetings
+    if (changes['filterResult'] && !changes['filterResult'].firstChange) {
+      const previousValue = changes['filterResult'].previousValue
+      const currentValue = changes['filterResult'].currentValue
+
+      if (JSON.stringify(previousValue) !== JSON.stringify(currentValue)) {
+        this.filterMeetings()
+      }
+    }
+  }
 
   ngOnInit() {
     // subsribe to refresh table data
-    // this.meetingService.refreshMeeting$.subscribe(() => {
-    //   this.getTableData()
-    // })
-
-    this.meetingService.refreshMeeting$.subscribe((shouldRefresh) => {
-      if (shouldRefresh) {
-        this.getTableData()
-      }
+    this.meetingService.refreshMeeting$.subscribe(() => {
+      this.getTableData()
     })
+
   }
 
   private getTableData() {
     this.isLoading = true
-    this.meetingService.getTableData(this.projectId, this.page, this.pageSize).subscribe({
+    this.meetingService.getTableData(this.projectId, this.listMeeting.page, this.listMeeting.size).subscribe({
       next: (data) => {
-        this.listOfMeetings = data.data
-        this.total = data.total
+        this.listMeeting.data = data.data
+        this.listMeeting.total = data.total
         this.isLoading = false
       },
       error: (error) => {
@@ -117,7 +113,7 @@ export class MeetingTableComponent implements OnInit {
   }
 
   onPageIndexChange(newPage: number): void {
-    this.page = newPage
+    this.listMeeting.page = newPage
     this.getTableData()
   }
 
@@ -158,4 +154,47 @@ export class MeetingTableComponent implements OnInit {
       },
     })
   }
+
+  filterMeetings(append: boolean = false) {
+    this.isLoading = true
+    this.meetingService
+      .getTableData(
+        this.projectId,
+        this.listMeeting.page,
+        this.listMeeting.size,
+        this.filterResult.milestoneId,
+        this.filterResult.title,
+        this.filterResult.fromDate,
+        this.filterResult.toDate,
+        this.filterResult.meetingStatus,
+        this.filterResult.isDescending
+      )
+      .pipe(
+        catchError((error) => {
+          this.messageService.error('Lấy danh sách hợp đồng thất bại!')
+          return throwError(() => new Error(error.error))
+        })
+      )
+      .subscribe((result) => {
+        // Update listContract with the new data
+        this.listMeeting = {
+          data: append ? [...this.listMeeting.data, ...result.data] : result.data,
+          page: this.listMeeting.page,
+          size: this.listMeeting.size,
+          total: result.total,
+        }
+        this.listMeeting.data = this.listMeeting.data
+        this.listMeeting.total = this.listMeeting.total
+        this.isLoading = false
+      })
+  }
+}
+
+interface FilterOptions {
+  milestoneId?: string
+  title?: string
+  fromDate?: Date
+  toDate?: Date
+  meetingStatus?: MeetingStatus
+  isDescending?: boolean
 }

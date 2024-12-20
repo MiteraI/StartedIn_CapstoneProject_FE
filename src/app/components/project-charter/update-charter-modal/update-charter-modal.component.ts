@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzMessageService } from 'ng-zorro-antd/message'
@@ -12,15 +13,23 @@ import { ProjectCharter } from 'src/app/shared/models/project-charter/project-ch
 
 @Component({
   selector: 'app-update-charter-modal',
-  templateUrl: './update-charter-modal.component.html',
+  templateUrl:'./update-charter-modal.component.html',
   styleUrls: ['./update-charter-modal.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, NzButtonModule, NzInputModule],
+  imports: [ReactiveFormsModule, CommonModule, NzButtonModule, NzInputModule, EditorModule],
 })
 export class UpdateCharterModalComponent implements OnInit {
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {
+      this.onInfoChange()
+    },
+  }
   projectCharter: ProjectCharter | undefined
   readonly nzModalData = inject(NZ_MODAL_DATA)
   projectCharterForm: FormGroup
+  isUpdating = false  
 
   constructor(private modal: NzModalService, private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService, private messageService: NzMessageService) {
     this.projectCharter = this.nzModalData.projectCharter
@@ -65,5 +74,9 @@ export class UpdateCharterModalComponent implements OnInit {
       },
       nzOnCancel: () => console.log('Cancel'),
     })
+  }
+
+  onInfoChange() {
+    this.isUpdating = true
   }
 }

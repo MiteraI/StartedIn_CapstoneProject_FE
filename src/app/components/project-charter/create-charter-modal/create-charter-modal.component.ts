@@ -2,6 +2,7 @@ import { CommonModule, DatePipe } from '@angular/common'
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core'
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatIconModule } from '@angular/material/icon'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzInputModule } from 'ng-zorro-antd/input'
@@ -17,14 +18,22 @@ import { ProjectModel } from 'src/app/shared/models/project/project.model'
   templateUrl: './create-charter-modal.component.html',
   styleUrls: ['./create-charter-modal.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatIconModule, NzDatePickerModule, NzButtonModule, NzInputModule],
+  imports: [ReactiveFormsModule, CommonModule, MatIconModule, NzDatePickerModule, NzButtonModule, NzInputModule,EditorComponent,EditorModule],
   providers: [DatePipe],
 })
 export class CreateCharterModalComponent implements OnInit {
   isLoading = false
+  isUpdating = false
   projectCharterForm: FormGroup
   projectId: string = ''
   currentProject: ProjectModel | undefined
+  init: EditorComponent['init'] = {
+      plugins: 'lists link code help wordcount',
+      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+      setup: () => {
+        this.onInfoChange()
+      },
+    }
 
   readonly nzModalData = inject(NZ_MODAL_DATA)
   constructor(
@@ -140,5 +149,9 @@ export class CreateCharterModalComponent implements OnInit {
     })
     this.listCreatePhaseDtos.push(phaseForm)
     this.cdr.detectChanges()
+  }
+
+  onInfoChange() {
+    this.isUpdating = true
   }
 }

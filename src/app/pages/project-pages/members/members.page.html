@@ -107,6 +107,73 @@
     </button>
   </div>
 
+  <div class="border-b border-gray-300">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex">
+        <a
+          *ngIf="roleFilter !== 'all'"
+          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          (click)="roleFilter = 'all'; applyFilters()"
+        >
+          <mat-icon fontIcon="group"></mat-icon>
+          <span class="hidden md:inline ml-1">Tất cả</span>
+        </a>
+        <a
+          *ngIf="roleFilter === 'all'"
+          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+        >
+          <mat-icon fontIcon="group"></mat-icon>
+          <span class="hidden md:inline ml-1">Tất cả</span>
+        </a>
+        <a
+          *ngIf="roleFilter !== 'member'"
+          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          (click)="roleFilter = 'member'; applyFilters()"
+        >
+          <mat-icon fontIcon="person"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
+        </a>
+        <a
+          *ngIf="roleFilter === 'member'"
+          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+        >
+          <mat-icon fontIcon="person"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
+        </a>
+        <a
+          *ngIf="roleFilter !== 'mentor'"
+          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          (click)="roleFilter= 'mentor'; applyFilters()"
+        >
+          <mat-icon fontIcon="school"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
+        </a>
+        <a
+          *ngIf="roleFilter === 'mentor'"
+          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+        >
+          <mat-icon fontIcon="school"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
+        </a>
+        <a
+          *ngIf="roleFilter !== 'investor'"
+          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+          (click)="roleFilter = 'investor'; applyFilters()"
+        >
+          <mat-icon fontIcon="work"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
+        </a>
+        <a
+          *ngIf="roleFilter === 'investor'"
+          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+        >
+          <mat-icon fontIcon="work"></mat-icon>
+          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Loading Spinner -->
   <div *ngIf="isMembersLoading" class="flex justify-center">
     <nz-spin nzSimple></nz-spin>
@@ -115,7 +182,7 @@
   <!-- Member List -->
   <div class="space-y-4">
     <div
-      *ngFor="let member of filteredMembers"
+      *ngFor="let member of filteredList"
       class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap items-center justify-between hover:shadow-md transition-shadow cursor-pointer"
       [routerLink]="['/users', member.id]"
     >
