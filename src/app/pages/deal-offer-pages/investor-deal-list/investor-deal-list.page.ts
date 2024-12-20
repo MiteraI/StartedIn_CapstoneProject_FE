@@ -105,6 +105,7 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
       )
       .pipe(
         catchError(error => {
+          this.isLoading = false;
           this.notification.error("Lỗi", "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
@@ -147,6 +148,7 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
 
   deleteSelected() {
     // Implement delete functionality
+    this.selectedOffers.forEach(deal => this.deleteOffer(deal));
     this.dealOffers = this.dealOffers.filter(
       offer => !this.selectedOffers.some(o => o.id === offer.id)
     );
@@ -155,7 +157,18 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
 
   deleteOffer(offer: InvestorDealItem) {
     // Delete single offer (mobile view)
-    this.dealOffers = this.dealOffers.filter(o => o.id !== offer.id);
+    this.dealOfferService
+      .cancelDeal(offer.id)
+      .pipe(
+        catchError(error => {
+          this.notification.error("Lỗi", "Xóa thỏa thuận thất bại!", { nzDuration: 2000 });
+          return throwError(() => new Error(error.error));
+        })
+      )
+      .subscribe(() => {
+        this.notification.success("Thành công", "Xóa thỏa thuận thành công!", { nzDuration: 2000 })
+        this.dealOffers = this.dealOffers.filter(o => o.id !== offer.id);
+      });
   }
 
   onSearch(searchText: string) {

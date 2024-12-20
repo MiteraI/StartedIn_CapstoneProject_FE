@@ -72,6 +72,7 @@ export class MeetingCreateModalComponent implements OnInit {
     this.modalService.confirm({
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn tạo cuộc họp này?',
+      nzCancelText: 'Đóng',
       nzOnOk: () => {
         this.nzModalData.appendMode ? this.appendMeeting() : this.createMeeting()
       },

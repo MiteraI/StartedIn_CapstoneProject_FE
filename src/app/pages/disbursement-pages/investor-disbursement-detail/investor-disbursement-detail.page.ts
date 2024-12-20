@@ -70,6 +70,7 @@ export class InvestorDisbursementDetailPage implements OnInit {
       nzTitle: 'Giải ngân',
       nzContent: DisburseModalComponent,
       nzData: { disbursement: this.disbursement, isLoading: this.isLoading },
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         return componentInstance.handleConfirm();
       }
@@ -81,6 +82,7 @@ export class InvestorDisbursementDetailPage implements OnInit {
       nzTitle: 'Từ chối giải ngân',
       nzContent: RejectDisbursementFormComponent,
       nzData: this.disbursement,
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         const reason = componentInstance.rejectForm.get('reason')!.value;
         this.isLoading = true;

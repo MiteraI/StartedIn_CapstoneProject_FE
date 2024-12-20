@@ -177,6 +177,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       nzContent: `Xác nhận ${disbursement.investorName} đã giải ngân cho ${disbursement.title}?`,
       nzOkText: 'Xác nhận',
       nzOkType: 'primary',
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.disbursementService
           .confirmDisbursement(disbursement.id, this.projectId)
