@@ -10,22 +10,31 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { format } from 'date-fns';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-share-equities',
   templateUrl: './share-equities.page.html',
   styleUrls: ['./share-equities.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzDatePickerModule]
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzDatePickerModule,
+    NzSpinModule
+  ]
 })
 export class ShareEquitiesPage implements OnInit {
+  projectId: string = '';
+  selectedDate: Date = new Date();
   equities: ShareEquityItemModel[] = [];
+
   chart: Chart<'doughnut', number[], string> | undefined;
   chartRendered: boolean = false;
-  projectId: string = '';
   totalPercentage: number = 0;
-  selectedDate: Date = new Date();
   stakeholderTypes = TeamRoleLabels;
+
+  isLoading = true;
 
   constructor(
     private shareEquityService: ShareEquityService,
@@ -49,11 +58,12 @@ export class ShareEquitiesPage implements OnInit {
 
   private loadEquities() {
     const formattedDate = format(this.selectedDate, 'yyyy-MM-dd');
-
+    this.isLoading = true;
     this.shareEquityService
       .getEquities(this.projectId, formattedDate)
       .pipe(
         catchError(error => {
+          this.isLoading = false;
           this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 });
           return throwError(() => error);
         })
@@ -62,6 +72,7 @@ export class ShareEquitiesPage implements OnInit {
         this.equities = equities;
         this.totalPercentage = equities.reduce((sum, equity) => sum + equity.percentage, 0);
         this.createChart();
+        this.isLoading = false;
       });
   }
 

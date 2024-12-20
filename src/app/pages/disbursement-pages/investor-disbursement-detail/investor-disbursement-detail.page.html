@@ -37,6 +37,7 @@
             <button
               (click)="openRejectModal()"
               class="flex items-center space-x-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              [disabled]="isLoading"
             >
               <mat-icon fontIcon="close"></mat-icon>
               <span>Từ chối</span>
@@ -44,6 +45,7 @@
             <button
               (click)="openDisburseModal()"
               class="flex items-center space-x-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              [disabled]="isLoading"
             >
               <mat-icon fontIcon="payments"></mat-icon>
               <span>Giải ngân</span>

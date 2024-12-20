@@ -25,7 +25,7 @@
     <div class="flex flex-col md:flex-row gap-3">
       <button
         (click)="openImportModal()"
-        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+        class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
       >
         <mat-icon fontIcon="file_upload" class="mr-2"></mat-icon>
         Import người dùng
@@ -33,7 +33,7 @@
     </div>
   </div>
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left w-16"></th>
@@ -95,7 +95,7 @@
   </table>
 
   <!-- Desktop Pagination -->
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -155,7 +155,7 @@
   </div>
 
   <!-- Mobile Loading Spinner -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
   <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">

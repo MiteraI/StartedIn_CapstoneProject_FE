@@ -17,7 +17,7 @@
   <!-- Desktop Selection Actions -->
   <div class="flex flex-col justify-end md:flex-row mb-4">
     <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
-      <button (click)="openAddModal()" class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">
+      <button (click)="openAddModal()" class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
         <mat-icon fontIcon="add" class="mr-2"></mat-icon>
         Tạo tài sản
       </button>
@@ -25,7 +25,7 @@
   </div>
 
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border">
+  <table *ngIf="!isLoading" class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-center">Tên tài sản</th>
@@ -86,7 +86,7 @@
   </table>
 
   <!-- Pagination -->
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -100,40 +100,40 @@
 
   <!--Mobile View-->
   <div class="md:hidden space-y-4">
-    <div 
-      *ngFor="let asset of assets" 
+    <div
+      *ngFor="let asset of assets"
       class="border p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white"
     >
       <div class="flex justify-between items-start">
         <!-- Asset Details -->
         <div class="space-y-2">
           <div class="font-medium text-xl text-gray-800">{{ asset.assetName }}</div>
-          
+
           <div class="text-sm text-gray-600">
             <span class="font-semibold">Số seri: </span>
             <span class="text-gray-800">{{ asset.serialNumber }}</span>
           </div>
-  
+
           <div class="text-sm text-gray-600">
             <span class="font-semibold">Số lượng: </span>
             <span class="text-gray-800">{{ asset.quantity }}</span>
           </div>
-  
+
           <div class="text-sm text-gray-600">
             <span class="font-semibold">Còn lại: </span>
             <span class="text-gray-800">{{ asset.remainQuantity }}</span>
           </div>
-  
+
           <div class="text-sm text-gray-600">
             <span class="font-semibold">Giá: </span>
             <span class="text-gray-800">{{ asset.price | vndCurrency }}</span>
           </div>
-  
+
           <div class="text-sm text-gray-600">
             <span class="font-semibold">Ngày mua: </span>
             <span class="text-gray-800">{{ formatDate(asset.purchaseDate) }}</span>
           </div>
-  
+
           <div class="text-sm">
             <span class="font-semibold text-gray-600">Trạng thái: </span>
             <span
@@ -148,7 +148,7 @@
             </span>
           </div>
         </div>
-  
+
         <!-- Action Buttons -->
         <div *ngIf="isLeader" class="flex space-x-2 mt-2">
           <button
@@ -172,8 +172,10 @@
   </div>
 
   <!-- Mobile Loading Spinner -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">Bạn đã xem hết các tài sản!</div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các tài sản!
+  </div>
 </div>

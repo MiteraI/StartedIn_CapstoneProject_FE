@@ -1,11 +1,7 @@
-@if (isFetchAllCallLoading) {
-<div class="fixed top-1/2 left-1/2 -translate-x-1/2">
-  <nz-spin nzSimple></nz-spin>
-</div>
-} @else { @if (investmentCallList.data.length !== 0) { @for (investmentCall of investmentCallList.data; track investmentCall.id) {
+@if (investmentCallList.data.length !== 0) { @for (investmentCall of investmentCallList.data; track investmentCall.id) {
 <app-investment-call-list-item [investmentCall]="investmentCall"></app-investment-call-list-item>
 } } @else {
 <div class="fixed top-1/2 left-1/2 -translate-x-1/2">
   <span>Không có cuộc gọi vốn nào</span>
 </div>
-} }
+}

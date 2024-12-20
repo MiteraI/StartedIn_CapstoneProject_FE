@@ -95,11 +95,6 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/contract-pages/contract-list/contract-list.page').then((m) => m.ContractListPage),
       },
       {
-        path: 'deals',
-        canActivate: [UserGuard],
-        loadComponent: () => import('./pages/deal-offer-pages/project-deal-list/project-deal-list.page').then((m) => m.ProjectDealListPage),
-      },
-      {
         path: 'deals/:dealId',
         canActivate: [UserGuard],
         resolve: { deal: ProjectDealDataResolver },

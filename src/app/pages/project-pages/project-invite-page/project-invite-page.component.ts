@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { AccountService } from 'src/app/core/auth/account.service';
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service';
 import { RecruitInviteService } from 'src/app/services/recruit-invite.service';
@@ -13,13 +14,14 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
   templateUrl: './project-invite-page.component.html',
   styleUrls: ['./project-invite-page.component.scss'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NzSpinModule],
 })
 export class ProjectInvitePage implements OnInit {
   projectId: string = '';
   role: any;
   projectOverview: any; // Property to store project invite overview data
   isAuthen: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
     private recruitInviteService: RecruitInviteService,
@@ -49,26 +51,23 @@ export class ProjectInvitePage implements OnInit {
     }
   }
 
-  redirectToLogin()
-  {
+  redirectToLogin() {
     this.router.navigate(['/login'])
   }
 
   ngOnInit() {
     this.projectId = this.route.snapshot.params['projectId'];
     this.role = TeamRole[this.route.snapshot.params['role'].toUpperCase()];
-    this.accountService.isAuthenticated$.subscribe(data => {
-      this.isAuthen = data;
-      console.log(data);
-    })
+    this.accountService.isAuthenticated$.subscribe(data => this.isAuthen = data);
+    this.isLoading = true;
     this.recruitInviteService.getProjectInviteOverview(this.projectId).subscribe({
       next: (data) => {
         this.projectOverview = data;
-        console.log('Project Overview:', this.projectOverview);
+        this.isLoading = false;
       },
       error: (error: HttpErrorResponse) => {
         this.antdNoti.openErrorNotification('Lỗi', 'Không thể tải dữ liệu lời mời dự án');
-        console.error('Error fetching project invite overview:', error);
+        this.isLoading = false;
       },
     });
   }

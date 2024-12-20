@@ -33,6 +33,7 @@ export class ProjectDisbursementDetailPage implements OnInit {
   disbursement!: DisbursementDetailModel;
   disbursementStatuses = DisbursementStatus;
   statusLabels = DisbursementStatusLabels;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,17 +69,22 @@ export class ProjectDisbursementDetailPage implements OnInit {
       nzTitle: 'Xác nhận đã giải ngân',
       nzContent: `Xác nhận ${this.disbursement.investorName} đã giải ngân cho ${this.disbursement.title}?`,
       nzOkText: 'Xác nhận',
-      nzOkType: 'primary',
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
+        this.isLoading = true;
         this.disbursementService
           .confirmDisbursement(this.disbursement.id, this.projectId)
           .pipe(
             catchError(error => {
+              this.isLoading = false;
               this.notification.error("Lỗi", "Xác nhận giải ngân thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
-          .subscribe(() => this.disbursement.disbursementStatus = DisbursementStatus.FINISHED);
+          .subscribe(() => {
+            this.disbursement.disbursementStatus = DisbursementStatus.FINISHED
+            this.isLoading = false;
+          });
       }
     });
   }

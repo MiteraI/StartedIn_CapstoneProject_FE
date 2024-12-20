@@ -19,8 +19,13 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="isSummaryLoading" class="bg-white rounded-lg shadow p-6 mb-6">
+    <div *ngIf="isLoading" class="flex justify-center p-4">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  </div>
   <!-- Transaction Summary -->
-  <div class="bg-white rounded-lg shadow p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div *ngIf="!isSummaryLoading" class="bg-white rounded-lg shadow p-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
     <div>
       <div class="text-xl md:text-2xl font-semibold mb-6 text-center">Tổng ngân sách hiện tại</div>
       <div class="text-center text-3xl md:text-5xl font-bold mb-6">{{ currentBudget | vndCurrency }}</div>
@@ -43,7 +48,7 @@
     <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
       <button
         (click)="showTypeModal()"
-        class="flex items-center justify-center px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+        class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
       >
         <mat-icon fontIcon="add" class="mr-2"></mat-icon>
         Tạo giao dịch
@@ -52,7 +57,7 @@
   </div>
 
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border">
+  <table *ngIf="!isLoading" class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Giao dịch</th>
@@ -95,7 +100,7 @@
   </table>
 
   <!-- Desktop Pagination -->
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -134,8 +139,8 @@
     </div>
   </div>
 
-  <!-- Mobile Loading Spinner -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
   <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
