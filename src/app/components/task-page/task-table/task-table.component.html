@@ -32,9 +32,11 @@
       <td>{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
       <td>{{ data.createdBy }}</td>
       <td>
-        <button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Chi Tiết</button>
+        <button nz-button nzType="text" (click)="openUpdateTaskModal(data.id)"><i class="text-blue-500" nz-icon nzType="info-circle" nzTheme="outline"></i></button>
         <nz-divider nzType="vertical"></nz-divider>
-        <button nz-button nzType="primary" nzDanger (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa</button>
+        <button nz-button nzType="text" nzDanger (nzOnConfirm)="handleDeleteTask(data.id)" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">
+          <i nz-icon nzType="delete" nzTheme="outline"></i>
+        </button>
       </td>
     </tr>
     }
