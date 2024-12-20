@@ -46,14 +46,13 @@ import { TerminateMeetingModalComponent } from '../terminate-meeting-modal/termi
 })
 
 export class ContractTableComponent  implements OnInit {
-  @Input({ required: true }) projectId!: string
+  @Input({ required: true }) projectId!: string;
   @Input({ required: true }) listContract: SearchResponseModel<ContractListItemModel> = {
     data: [],
     page: 1,
     size: 10,
     total: 0
-  }
-  @Input({ required: true }) isFetchAllContractLoading: boolean = false
+  };
   @Output() refreshNeeded = new EventEmitter<void>();
 
   isLeader = false;

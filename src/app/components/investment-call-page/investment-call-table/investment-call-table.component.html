@@ -1,4 +1,10 @@
-<nz-table #investmentCallTable nzSize="small" [nzFrontPagination]="false" [nzData]="listInvestmentCall.data" [nzLoading]="isFetchAllCallLoading" [nzBordered]="true">
+<nz-table
+  #investmentCallTable
+  nzSize="small"
+  [nzFrontPagination]="false"
+  [nzData]="listInvestmentCall.data"
+  nzBordered
+>
   <thead>
     <tr>
       <th></th>
@@ -20,20 +26,22 @@
       <td class="text-green-500">{{ data.amountRaised | number }}</td>
       <td>{{ data.equityShareCall / 100 | percent }}</td>
       <td>{{ data.remainAvailableEquityShare / 100 | percent }}</td>
-      <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "dd 'tháng' MM, yyyy") }}</td>
-      <td>{{ data.endDate === null ? 'Không Có Ngày kết thúc' : (data.endDate | date : "dd 'tháng' MM, yyyy") }}</td>
-      <td [ngClass]="{ 'text-red-500': data.status === 2, 'text-green-500': data.status === 1 }">{{ getStatusLabel(data.status) }}</td>
+      <td>{{ data.startDate === null ? 'Không có ngày bắt đầu' : (data.startDate | date : "dd 'tháng' MM, yyyy") }}</td>
+      <td>{{ data.endDate === null ? 'Không có ngày kết thúc' : (data.endDate | date : "dd 'tháng' MM, yyyy") }}</td>
+      <td [ngClass]="{ 'text-red-500': data.status === 2, 'text-green-500': data.status === 1 }">
+        {{ getStatusLabel(data.status) }}
+      </td>
       <td>{{ data.totalInvestor }}</td>
     </tr>
     <tr [nzExpand]="data.expand">
       <nz-table #innerTable [nzData]="data.dealOffers" nzSize="small" [nzShowPagination]="false">
         <thead>
           <tr>
-            <th>Nhà Đầu Tư</th>
-            <th>Số Tiền Đầu Tư</th>
-            <th>Số Cổ Phần</th>
-            <th>Điều Khoản</th>
-            <th>Trạng Thái</th>
+            <th>Nhà đầu tư</th>
+            <th>Số tiền đầu tư</th>
+            <th>Số cổ phần</th>
+            <th>Điều khoản</th>
+            <th>Trạng thái</th>
             <th></th>
           </tr>
         </thead>
@@ -44,7 +52,12 @@
             <td class="text-green-500">{{ data.amount | number }}</td>
             <td>{{ data.equityShareOffer / 100 | percent }}</td>
             <td>{{ data.termCondition }}</td>
-            <td [ngClass]="{ 'text-orange-700':data.dealStatus === 4, 'text-red-500': data.dealStatus === 3, 'text-green-500': data.dealStatus === 2, 'text-gray-500': data.dealStatus === 1 }">
+            <td [ngClass]="{
+              'text-orange-700':data.dealStatus === 4,
+              'text-red-500': data.dealStatus === 3,
+              'text-green-500': data.dealStatus === 2,
+              'text-gray-500': data.dealStatus === 1
+            }">
               {{ getDealStatusLabel(data.dealStatus) }}
             </td>
             <td class="p-4" (click)="$event.stopPropagation()">

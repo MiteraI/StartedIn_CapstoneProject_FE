@@ -17,7 +17,14 @@ import { Authority } from 'src/app/shared/constants/authority.constants'
   templateUrl: './project-list.page.html',
   styleUrls: ['./project-list.page.scss'],
   standalone: true,
-  imports: [RouterModule, CommonModule, UserProjectCardComponent, NzButtonModule, NzModalModule, NzSpinModule],
+  imports: [
+    RouterModule,
+    CommonModule,
+    UserProjectCardComponent,
+    NzButtonModule,
+    NzModalModule,
+    NzSpinModule
+  ],
 })
 export class ProjectListPage implements OnInit, OnDestroy {
   userProjects: UserProjectsModel | undefined
@@ -44,7 +51,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
 
   openCreateProjectModal() {
     const modalRef = this.modalService.create({
-      nzTitle: 'Tạo Dự Án Mới',
+      nzTitle: 'Tạo dự án mới',
       nzContent: ProjectCreateModalComponent,
       nzFooter: null,
     })

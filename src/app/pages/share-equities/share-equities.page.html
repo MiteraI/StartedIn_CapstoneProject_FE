@@ -1,10 +1,10 @@
 <div class="min-h-[70vh] max-w-7xl mx-auto p-4">
-  <!-- Flex container to arrange Chart and List side by side -->
-  <div class="flex flex-wrap lg:flex-nowrap space-x-6">
+  <!-- Grid container to arrange Chart and List side by side -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Chart Section (Left) -->
-    <div class="bg-white rounded-lg shadow-sm p-6 w-full lg:w-1/2 mb-6 lg:mb-0">
-      <div class="flex items-center justify-between mb-6">
-        <div class="text-xl font-semibold">Tổng quan phân chia cổ phần</div>
+    <div class="bg-white rounded-lg shadow-sm p-6">
+      <div *ngIf="!isLoading" class="flex flex-wrap items-center justify-between mb-6 space-y-2">
+        <div class="text-xl font-semibold w-fit mr-2">Tổng quan phân chia cổ phần</div>
         <nz-date-picker
           [(ngModel)]="selectedDate"
           (ngModelChange)="onDateChange($event)"
@@ -15,12 +15,16 @@
       <div class="aspect-square max-w-md mx-auto pt-20">
         <canvas id="equityChart"></canvas>
       </div>
+      <!-- Loading spinner -->
+      <div *ngIf="isLoading" class="flex justify-center p-4">
+        <nz-spin nzSimple></nz-spin>
+      </div>
     </div>
 
     <!-- List Section (Right) -->
-    <div class="min-h-[70vh] bg-white rounded-lg shadow-sm p-6 w-full lg:w-1/2">
+    <div class="min-h-[70vh] bg-white rounded-lg shadow-sm p-6">
       <div class="text-xl font-semibold mb-4">Danh sách cổ đông</div>
-      <div class="space-y-4 overflow-y-auto pt-6" style="max-height: 1000px; padding-right: 20px;">
+      <div *ngIf="!isLoading" class="space-y-4 overflow-y-auto pt-6 pr-5 max-h-[1000px]">
         <div *ngFor="let equity of equities" class="border-b pb-4">
           <div class="flex justify-between items-center">
             <div>
@@ -44,6 +48,10 @@
             </div>
           </div>
         </div>
+      </div>
+      <!-- Loading spinner -->
+      <div *ngIf="isLoading" class="flex justify-center p-4">
+        <nz-spin nzSimple></nz-spin>
       </div>
     </div>
   </div>

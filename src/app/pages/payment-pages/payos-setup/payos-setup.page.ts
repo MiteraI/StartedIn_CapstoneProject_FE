@@ -31,6 +31,7 @@ export class PayosSetupPage implements OnInit {
   payosForm!: FormGroup;
   projectId!: string;
   showKeys: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -80,15 +81,17 @@ export class PayosSetupPage implements OnInit {
   onSubmit() {
     if (this.payosForm.valid) {
       const payosInfo: PayosInfoModel = this.payosForm.value;
-
+      this.isLoading = true;
       this.projectService.updatePayosInfo(this.projectId, payosInfo)
         .pipe(
           catchError(error => {
+            this.isLoading = false;
             this.notification.error('Lỗi', 'Cập nhật thông tin PayOS thất bại', { nzDuration: 2000 });
             return throwError(() => error);
           })
         )
         .subscribe(() => {
+          this.isLoading = false;
           this.notification.success('Thành công', 'Đã cập nhật thông tin PayOS', { nzDuration: 2000 });
         });
     }

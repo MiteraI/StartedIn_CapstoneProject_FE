@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { MatIconModule } from '@angular/material/icon'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
-import { Subject, switchMap, takeUntil, finalize, catchError, throwError } from 'rxjs'
+import { Subject, takeUntil, catchError, throwError } from 'rxjs'
 import { NzModalService } from 'ng-zorro-antd/modal'
 import { ActivatedRoute } from '@angular/router'
 import { CreateInvestmentCallModalComponent } from 'src/app/components/investment-call-page/create-investment-call-modal/create-investment-call-modal.component'
@@ -23,6 +23,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { FilterBarComponent } from '../../layouts/filter-bar/filter-bar.component'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 interface FilterOptions {
   startDate?: Date
@@ -49,6 +50,7 @@ interface FilterOptions {
     InvestmentCallTableComponent,
     InvestmentCallListComponent,
     NzPaginationModule,
+    NzSpinModule,
     FilterBarComponent,
     InvestmentCallFilterComponent,
   ],
@@ -64,8 +66,6 @@ export class InvestmentCallPagePage implements OnInit {
     total: 0,
   }
   investmentCalls: InvestmentCallResponseDto[] = []
-
-  isFetchAllCallLoading: boolean = false
   currentProject: ProjectOveriewModel | undefined
 
   filter: FilterOptions = {}
@@ -93,7 +93,9 @@ export class InvestmentCallPagePage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((val) => (this.isDesktopView = val))
+    this.viewMode.isDesktopView$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((val) => (this.isDesktopView = val))
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
       this.roleService.role$.subscribe((role) => {
@@ -132,6 +134,7 @@ export class InvestmentCallPagePage implements OnInit {
       this.currentProject = data
     })
   }
+
   filterInvestmentCalls(append: boolean = false) {
     this.isLoading = true
     this.investmentCallService
@@ -151,6 +154,7 @@ export class InvestmentCallPagePage implements OnInit {
       )
       .pipe(
         catchError((error) => {
+          this.isLoading = false
           this.notification.error('Lỗi', 'Lấy danh sách gọi vốn thất bại!', { nzDuration: 2000 })
           return throwError(() => new Error(error.error))
         })

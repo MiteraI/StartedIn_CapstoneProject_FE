@@ -53,13 +53,13 @@
   </div>
 
   <app-contract-table
+    *ngIf="!isLoading"
     [listContract]="listContract"
     [projectId]="projectId"
-    [isFetchAllContractLoading]="isFetchAllContractLoading"
     (refreshNeeded)="filterContracts()"
   ></app-contract-table>
 
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -69,6 +69,10 @@
       (nzPageIndexChange)="onPageIndexChange($event)"
       (nzPageSizeChange)="onPageSizeChange($event)"
     ></nz-pagination>
+  </div>
+
+  <div *ngIf="isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
   </div>
 </div>
 
@@ -159,10 +163,10 @@
     </div>
   </ng-container>
 
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+  <div *ngIf="isEndOfList" class="text-center text-gray-500 py-4">
     Bạn đã xem hết các hợp đồng!
   </div>
 </div>

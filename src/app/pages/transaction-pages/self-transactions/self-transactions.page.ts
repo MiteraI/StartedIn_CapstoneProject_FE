@@ -57,7 +57,7 @@ export class SelfTransactionsPage implements OnInit, OnDestroy {
   transactionTypes = TransactionType;
   typeLabels = TransactionTypeLabels;
 
-  isLoading = false;
+  isLoading = true;
   isDesktopView = false;
 
   @ViewChild(TransactionFilterComponent) filterComponent!: TransactionFilterComponent;
@@ -106,6 +106,7 @@ export class SelfTransactionsPage implements OnInit, OnDestroy {
       )
       .pipe(
         catchError(error => {
+          this.isLoading = false;
           this.notification.error("Lỗi", "Lấy danh sách giao dịch thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })

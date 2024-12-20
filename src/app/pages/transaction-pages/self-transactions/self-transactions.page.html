@@ -20,7 +20,7 @@
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Giao dịch</th>
@@ -63,7 +63,7 @@
   </table>
 
   <!-- Desktop Pagination -->
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -102,8 +102,8 @@
     </div>
   </div>
 
-  <!-- Mobile Loading Spinner -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
   <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
