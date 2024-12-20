@@ -57,4 +57,14 @@ export class MeetingService {
     const url = `/api/projects/${projectId}/appointments/${meetingId}/cancel`
     return this.http.delete(this.applicationConfigService.getEndpointFor(url), { responseType: 'text' })
   }
+
+  startMeeting(projectId: string, meetingId: string) {
+    const url = `/api/projects/${projectId}/appointments/${meetingId}/start`
+    return this.http.put(this.applicationConfigService.getEndpointFor(url), '', { responseType: 'text' })
+  }
+
+  completMeeting(projectId: string, meetingId: string) {
+    const url = `/api/projects/${projectId}/appointments/${meetingId}/complete`
+    return this.http.put(this.applicationConfigService.getEndpointFor(url), '', { responseType: 'text' })
+  }
 }

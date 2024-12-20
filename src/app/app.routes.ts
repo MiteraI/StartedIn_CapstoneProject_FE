@@ -214,11 +214,11 @@ export const routes: Routes = [
       },
       {
         path: 'termination-requests',
-        loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then( m => m.TerminationRequestsPage)
+        loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then((m) => m.TerminationRequestsPage),
       },
       {
         path: 'members',
-        loadComponent: () => import('./pages/project-pages/members/members.page').then( m => m.MembersPage)
+        loadComponent: () => import('./pages/project-pages/members/members.page').then((m) => m.MembersPage),
       },
     ],
   },
