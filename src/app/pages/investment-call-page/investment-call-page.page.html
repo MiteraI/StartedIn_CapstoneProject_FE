@@ -20,10 +20,14 @@
 <div class="flex flex-col m-3 gap-y-4">
   <button (click)="openCreateInvestmentCallModal()" class="ml-auto flex items-center gap-2" nz-button nzType="primary">
     <mat-icon fontIcon="add_icon" />
-    Tạo Gọi Vốn
+    Tạo đợt gọi vốn
   </button>
-  <app-investment-call-table [projectId]="projectId" [listInvestmentCall]="listInvestmentCall" [isFetchAllCallLoading]="isFetchAllCallLoading"></app-investment-call-table>
-  <div class="hidden md:flex justify-end mt-4">
+  <app-investment-call-table
+    *ngIf="!isLoading"
+    [projectId]="projectId"
+    [listInvestmentCall]="listInvestmentCall"
+  ></app-investment-call-table>
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -34,12 +38,27 @@
       (nzPageSizeChange)="onPageSizeChange($event)"
     ></nz-pagination>
   </div>
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="flex justify-center p-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
 </div>
 } @else {
 <div class="overflow-y-auto">
-  <div (click)="openCreateInvestmentCallModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+  <div
+    (click)="openCreateInvestmentCallModal()"
+    class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-12 min-w-12 rounded-lg opacity-80"
+  >
     <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
   </div>
-  <app-investment-call-list [investmentCallList]="listInvestmentCall" [projectId]="projectId" [isFetchAllCallLoading]="isFetchAllCallLoading"></app-investment-call-list>
+  <app-investment-call-list
+    *ngIf="!isLoading"
+    [investmentCallList]="listInvestmentCall"
+    [projectId]="projectId"
+  ></app-investment-call-list>
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="flex justify-center p-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
 </div>
 }

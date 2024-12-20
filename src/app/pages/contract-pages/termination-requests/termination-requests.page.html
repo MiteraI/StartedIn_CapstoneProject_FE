@@ -49,49 +49,50 @@
   *ngIf="!isLoading && filteredRequests.length > 0"
   class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
 >
-  @for (request of filteredRequests; track request.id) {
-    <div
-      class="rounded-lg shadow p-4 flex items-center cursor-pointer"
-      [ngClass]="{
-        'bg-blue-50 hover:bg-blue-100': request.isAgreed !== true && request.isAgreed !== false,
-        'bg-green-50 hover:bg-green-100': request.isAgreed === true,
-        'bg-red-50 hover:bg-red-100': request.isAgreed === false,
-      }"
-      (click)="showRequestDetail(request)"
-    >
-      <div class="ml-2 flex-grow">
-        <div class="font-medium">Hợp đồng số: {{ request.contractIdNumber }}</div>
-        <div *ngIf="isLeader" class="text-sm text-gray-500">
-          Người gửi: {{ request.fromName }}
-        </div>
-        <div class="text-sm text-gray-500">
-          Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
-        </div>
-        <div *ngIf="!isLeader" class="mt-2">
-          <span [ngClass]="{
-            'text-blue-500': request.isAgreed !== true && request.isAgreed !== false,
-            'text-green-500': request.isAgreed === true,
-            'text-red-500': request.isAgreed === false,
-          }">
-            ● {{ request.isAgreed === true ? 'Đã chấp nhận' : (request.isAgreed === false ? 'Đã từ chối' : 'Đang chờ') }}
-          </span>
-        </div>
+  <div
+    *ngFor="let request of filteredRequests"
+    class="rounded-lg shadow p-4 flex items-center cursor-pointer"
+    [ngClass]="{
+      'bg-blue-50 hover:bg-blue-100': request.isAgreed !== true && request.isAgreed !== false,
+      'bg-green-50 hover:bg-green-100': request.isAgreed === true,
+      'bg-red-50 hover:bg-red-100': request.isAgreed === false,
+    }"
+    (click)="showRequestDetail(request)"
+  >
+    <div class="ml-2 flex-grow">
+      <div class="font-medium">Hợp đồng số: {{ request.contractIdNumber }}</div>
+      <div *ngIf="isLeader" class="text-sm text-gray-500">
+        Người gửi: {{ request.fromName }}
       </div>
-
-      <div *ngIf="isLeader" class="flex space-x-2">
-        <button
-          class="text-green-600 hover:text-green-800"
-          (click)="$event.stopPropagation(); acceptRequest(request)"
-          title="Chấp nhận">
-          <mat-icon fontIcon="check_circle"></mat-icon>
-        </button>
-        <button
-          class="text-red-600 hover:text-red-800"
-          (click)="$event.stopPropagation(); rejectRequest(request)"
-          title="Từ chối">
-          <mat-icon fontIcon="cancel"></mat-icon>
-        </button>
+      <div class="text-sm text-gray-500">
+        Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
+      </div>
+      <div *ngIf="!isLeader" class="mt-2">
+        <span [ngClass]="{
+          'text-blue-500': request.isAgreed !== true && request.isAgreed !== false,
+          'text-green-500': request.isAgreed === true,
+          'text-red-500': request.isAgreed === false,
+        }">
+          ● {{ request.isAgreed === true ? 'Đã chấp nhận' : (request.isAgreed === false ? 'Đã từ chối' : 'Đang chờ') }}
+        </span>
       </div>
     </div>
-  }
+
+    <div *ngIf="isLeader" class="flex space-x-2">
+      <button
+        class="text-green-600 hover:text-green-800"
+        (click)="$event.stopPropagation(); acceptRequest(request)"
+        title="Chấp nhận"
+      >
+        <mat-icon fontIcon="check_circle"></mat-icon>
+      </button>
+      <button
+        class="text-red-600 hover:text-red-800"
+        (click)="$event.stopPropagation(); rejectRequest(request)"
+        title="Từ chối"
+      >
+        <mat-icon fontIcon="cancel"></mat-icon>
+      </button>
+    </div>
+  </div>
 </div>

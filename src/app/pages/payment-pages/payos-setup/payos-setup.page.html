@@ -76,7 +76,9 @@
           nzType="primary"
           type="submit"
           [disabled]="!payosForm.valid"
-          class="px-6">
+          class="px-6"
+          [nzLoading]="isLoading"
+        >
           Lưu thông tin
         </button>
       </div>

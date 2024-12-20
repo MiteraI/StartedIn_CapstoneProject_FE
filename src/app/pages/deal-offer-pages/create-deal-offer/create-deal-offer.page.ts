@@ -40,6 +40,8 @@ export class CreateDealOfferPage implements OnInit {
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
+  isLoading = false;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -67,15 +69,19 @@ export class CreateDealOfferPage implements OnInit {
         ...this.dealOfferForm.value,
         projectId: this.route.snapshot.paramMap.get('projectId')!
       };
+      this.isLoading = true;
       this.dealOfferService
         .postDealOffer(dealOffer)
         .pipe(
           catchError(error => {
             this.notification.error("Lỗi", "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
+            this.isLoading = false;
             return throwError(() => new Error(error.error));
           })
         )
         .subscribe(result => {
+          this.isLoading = false;
+          this.notification.success("Thành công", "Tạo thỏa thuận thành công!", { nzDuration: 2000 });
           this.router.navigate(['deals']);
         });
     }

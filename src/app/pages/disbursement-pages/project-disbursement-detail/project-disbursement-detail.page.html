@@ -38,6 +38,7 @@
             <button
               (click)="confirmDisbursement()"
               class="flex items-center space-x-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              [disabled]="isLoading"
             >
               <mat-icon fontIcon="check"></mat-icon>
               <span>Xác nhận giải ngân</span>

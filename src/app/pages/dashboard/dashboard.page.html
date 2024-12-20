@@ -1,5 +1,9 @@
 <app-view-title-bar viewName="Dashboard"></app-view-title-bar>
 <div class="max-w-7xl mx-auto p-4">
+  <div *ngIf="isLoading" class="flex justify-center p-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+
   <div *ngIf="dashboard" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Budget Section -->
     <div class="bg-white rounded-lg shadow p-6">
@@ -66,12 +70,12 @@
       <div class="flex justify-between items-center pb-5">
         <span class="text-gray-600 md:text-lg">Tổng số công việc: {{ dashboard.totalTask }}</span>
       </div>
-    
+
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Công việc đã hoàn thành -->
         <div>
           <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành</div>
-          
+
           <!-- Table View (Desktop) -->
           <div class="hidden lg:block">
             <nz-table
@@ -133,7 +137,7 @@
               </tbody>
             </nz-table>
           </div>
-    
+
           <!-- Block Card View (Mobile) -->
           <div class="block lg:hidden overflow-y-auto custom-scroll" style="max-height: 250px; font-size: 1rem; line-height: 1.3; padding: 0.6rem;">
             <div *ngFor="let task of dashboard.completedTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
@@ -160,11 +164,11 @@
             </div>
           </div>
         </div>
-    
+
         <!-- Công việc quá hạn -->
         <div>
           <div class="font-semibold mb-4 text-red-600">Công việc quá hạn</div>
-    
+
           <!-- Table View (Desktop) -->
           <div class="hidden lg:block">
             <nz-table
@@ -226,7 +230,7 @@
               </tbody>
             </nz-table>
           </div>
-    
+
           <!-- Block Card View (Mobile) -->
           <div class="block lg:hidden overflow-y-auto custom-scroll" style="max-height: 250px; font-size: 1rem; line-height: 1.3; padding: 0.6rem;">
             <div *ngFor="let task of dashboard.overdueTasks" class="border border-gray-300 rounded-lg p-3 mb-3 shadow-sm">
@@ -254,7 +258,7 @@
           </div>
         </div>
       </div>
-    </div>    
+    </div>
 
   </div>
 </div>

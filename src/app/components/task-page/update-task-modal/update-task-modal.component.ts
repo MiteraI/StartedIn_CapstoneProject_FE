@@ -1,12 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, inject, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
-import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { TaskService } from 'src/app/services/task.service'
@@ -30,6 +30,9 @@ import { TaskCommentService } from 'src/app/services/task-comment.service'
 import { NzUploadModule, NzUploadFile } from 'ng-zorro-antd/upload'
 import { MatIconModule } from '@angular/material/icon'
 import { TaskAttachmentService } from 'src/app/services/task-attachment.service'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
+import { UserService } from 'src/app/services/user.service'
+import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
 
 interface IModalData {
   taskId: string
@@ -47,6 +50,7 @@ interface IModalData {
     NzButtonModule,
     NzInputModule,
     ReactiveFormsModule,
+    FormsModule,
     CommonModule,
     NzSelectModule,
     NzTableModule,
@@ -56,6 +60,7 @@ interface IModalData {
     NzTagModule,
     NzUploadModule,
     MatIconModule,
+    NzPopoverModule,
   ],
   providers: [DatePipe],
 })
@@ -116,6 +121,13 @@ export class UpdateTaskModalComponent implements OnInit {
 
   isFetchTaskDetailsLoading: boolean = false
 
+  // log time vars
+  loggedHours: number = 0
+  isVisibleLogTimeModal: boolean = false
+
+  //current user
+  currentUser: FullProfile | undefined
+
   constructor(
     private fb: FormBuilder,
     private datePipe: DatePipe,
@@ -125,7 +137,8 @@ export class UpdateTaskModalComponent implements OnInit {
     private projectService: ProjectService,
     private taskCommentService: TaskCommentService,
     private taskAttachmentService: TaskAttachmentService,
-    private nzModalRef: NzModalRef
+    private nzModalRef: NzModalRef,
+    private userService: UserService
   ) {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -589,6 +602,7 @@ export class UpdateTaskModalComponent implements OnInit {
             this.subTasks = task.subTasks
             this.commentList = task.taskComments
             this.attachmentList = task.taskAttachments
+            this.loggedHours = task.actualManHour
             this.taskForm.setValue(
               {
                 title: task.title,
@@ -614,6 +628,8 @@ export class UpdateTaskModalComponent implements OnInit {
             }
           },
         })
+
+      this.getCurrentUser()
     }
 
     this.projectService.getMembers(this.nzModalData.projectId).subscribe({
@@ -636,4 +652,50 @@ export class UpdateTaskModalComponent implements OnInit {
     const selectedUsers: string[] = this.taskForm.get('assignees')?.value || []
     this.filteredUsers = this.users.filter((user) => !selectedUsers.includes(user.id))
   }
+
+  // log time section
+  closeLogtime() {
+    this.isVisibleLogTimeModal = false
+  }
+
+  handleLogTime() {
+    this.taskService.logTime(this.nzModalData.projectId, this.nzModalData.taskId, this.loggedHours).subscribe({
+      next: (res) => {
+        this.antdNoti.openSuccessNotification('', 'Đã ghi nhận thời gian làm việc')
+        this.isVisibleLogTimeModal = false
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
+  }
+  //get current user
+  getCurrentUser() {
+    return this.userService.getFullProfile().subscribe({
+      next: (res) => {
+        this.currentUser = res
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
+    })
+  }
+
+  //check if the task is assigned to current user
+  isAssignedToMe(): boolean {
+    return this.initialAssigneeIds.includes(this.currentUser?.id ?? '')
+  }
+  ///////////////////////////////////////////////////////
+  // End of log time section ////////////////////////////
+  ///////////////////////////////////////////////////////
 }

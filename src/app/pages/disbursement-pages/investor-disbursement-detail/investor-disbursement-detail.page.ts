@@ -34,6 +34,7 @@ export class InvestorDisbursementDetailPage implements OnInit {
   disbursement!: DisbursementDetailModel;
   disbursementStatuses = DisbursementStatus;
   statusLabels = DisbursementStatusLabels;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -68,7 +69,8 @@ export class InvestorDisbursementDetailPage implements OnInit {
     this.modalService.create({
       nzTitle: 'Giải ngân',
       nzContent: DisburseModalComponent,
-      nzData: this.disbursement,
+      nzData: { disbursement: this.disbursement, isLoading: this.isLoading },
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         return componentInstance.handleConfirm();
       }
@@ -80,17 +82,23 @@ export class InvestorDisbursementDetailPage implements OnInit {
       nzTitle: 'Từ chối giải ngân',
       nzContent: RejectDisbursementFormComponent,
       nzData: this.disbursement,
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         const reason = componentInstance.rejectForm.get('reason')!.value;
+        this.isLoading = true;
         this.disbursementService
           .rejectDisbursement(this.disbursement.id, reason)
           .pipe(
             catchError(error => {
+              this.isLoading = false;
               this.notification.error("Lỗi", "Từ chối giải ngân thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
-          .subscribe(response => this.disbursement.disbursementStatus = DisbursementStatus.REJECTED);
+          .subscribe(() => {
+            this.disbursement.disbursementStatus = DisbursementStatus.REJECTED;
+            this.isLoading = false;
+          });
       }
     });
   }

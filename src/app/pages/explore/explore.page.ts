@@ -82,6 +82,7 @@ export class InvestorExploreProjectsPage implements OnInit, OnDestroy {
       )
       .pipe(
         catchError(error => {
+          this.isLoading = false;
           this.notification.error("Error", "Failed to fetch startup list!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
@@ -90,17 +91,11 @@ export class InvestorExploreProjectsPage implements OnInit, OnDestroy {
         this.projects = append ? [...this.projects, ...result.data] : result.data;
         this.totalRecords = result.total;
         this.isLoading = false;
-        console.log(result);
-        console.log(this.pageIndex);
-        console.log(this.pageSize);
-
       });
   }
 
   get filterData() {
-    return {
-      ...this.filter
-    };
+    return { ...this.filter };
   }
 
   onFilterApplied(filterResult: any) {

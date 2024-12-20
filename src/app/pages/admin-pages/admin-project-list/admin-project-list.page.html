@@ -22,7 +22,7 @@
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left"></th>
@@ -56,8 +56,12 @@
             {{ statusLabels[project.projectStatus] }}
           </span>
         </td>
-        <td *ngIf="project.projectStatus === projectStatus.CONSTRUCTING" class="p-4">
-          <button (click)="$event.stopPropagation(); verifyProject(project)" class="text-green-500 hover:text-green-700">
+        <td class="p-4">
+          <button
+            *ngIf="project.projectStatus === projectStatus.CONSTRUCTING"
+            (click)="$event.stopPropagation(); verifyProject(project)"
+            class="text-green-500 hover:text-green-700"
+          >
             <mat-icon fontIcon="verified"></mat-icon>
           </button>
         </td>
@@ -66,7 +70,7 @@
   </table>
 
   <!-- Desktop Pagination -->
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -101,8 +105,8 @@
     </div>
   </div>
 
-  <!-- Mobile Loading Spinner -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
   <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">

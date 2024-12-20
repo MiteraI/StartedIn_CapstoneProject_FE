@@ -161,6 +161,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
       nzMaskClosable: true,
       nzOkText: 'Từ chối',
       nzOkDanger: true,
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.terminationRequestService.reject(this.projectId, request.id).subscribe({
           next: () => {

@@ -136,6 +136,8 @@ export class MeetingTableComponent implements OnInit, OnChanges {
     const modalRef = this.modalService.confirm({
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn hủy cuộc họp này?',
+      nzOkText: 'Tạo',
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.cancelMeeting(meetingDetail)
       },

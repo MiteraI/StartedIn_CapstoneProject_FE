@@ -1,5 +1,12 @@
 <div class="flex justify-center pt-20">
-  <div class="p-12 bg-white rounded-lg shadow-lg max-w-4xl">
+  <div *ngIf="isLoading" class="p-12 bg-white rounded-lg shadow-lg max-w-4xl">
+    <!-- Loading spinner -->
+    <div class="flex justify-center p-4">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading" class="p-12 bg-white rounded-lg shadow-lg max-w-4xl">
     <!-- Project Logo -->
     <div class="flex justify-center mb-6">
       <img
@@ -9,12 +16,12 @@
       />
     </div>
     <!-- Project Name -->
-    <p
-      class="text-3xl sm:text-4xl font-bold text-center text-orange-500 mb-4 pt-5"
-    >
+    <p class="text-3xl sm:text-4xl font-bold text-center text-orange-500 mb-4 pt-5">
       {{ projectOverview?.projectName }}
     </p>
-    <p class="text-xl sm:text-2xl font-bold text-center mb-4">{{projectOverview.leader.fullName}} đã mời bạn vào dự án</p>
+    <p class="text-xl sm:text-2xl font-bold text-center mb-4">
+      {{ projectOverview.leader.fullName }} đã mời bạn vào dự án
+    </p>
     <!-- Hiển thị nếu chưa đăng nhập -->
     <ng-container *ngIf="!isAuthen; else projectInfo">
       <!-- Thông báo chưa đăng nhập -->
