@@ -66,119 +66,169 @@
       <div class="flex justify-between items-center pb-5">
         <span class="text-gray-600 md:text-lg">Tổng số công việc: {{ dashboard.totalTask }}</span>
       </div>
+    
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+        <!-- Công việc đã hoàn thành -->
         <div>
           <div class="font-semibold mb-4 text-green-600">Công việc đã hoàn thành</div>
-          <nz-table #completedTaskTable nzSize="small" [nzFrontPagination]="false" [nzData]="dashboard.completedTasks" [nzLoading]="isFetchAllContractLoading" [nzBordered]="true" [nzScroll]="{ y: '150px' }">
-            <thead>
-              <tr>
-                <th nzWidth="40px" [nzAlign]="'center'"></th>
-                <th nzWidth="120px" class="text-xs">Tên công việc</th>
-                <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
-                <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
-                <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
-                <th nzWidth="80px" class="text-xs">Số giờ làm</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (data of completedTaskTable.data; track data.id){
+          
+          <!-- Table View (Desktop) -->
+          <div class="hidden lg:block">
+            <nz-table
+              #completedTaskTable
+              nzSize="small"
+              [nzFrontPagination]="false"
+              [nzData]="dashboard.completedTasks"
+              [nzLoading]="isFetchAllContractLoading"
+              [nzBordered]="true"
+              [nzScroll]="{ y: '150px' }">
+              <thead>
                 <tr>
-                  <td [(nzExpand)]="data.expand"></td>  
-                  <td class="text-xs">{{ data.title }}</td>
-                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                  <th nzWidth="40px" [nzAlign]="'center'"></th>
+                  <th nzWidth="120px" class="text-xs">Tên công việc</th>
+                  <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
+                  <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
+                  <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
+                  <th nzWidth="80px" class="text-xs">Số giờ làm</th>
                 </tr>
-                <tr [nzExpand]="data.expand" >
-                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                    <thead>
-                      <tr>
-                        <td [colSpan]="5">
-                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
-                            Danh sách thành viên đang tham gia
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="text-xs">Email</th>
-                        <th class="text-xs">Người thực hiện</th>
-                        <th class="text-xs">Số giờ đã làm</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of innerTable.data; track data) {
-                      <tr>
-                        <td class="text-xs">{{ data.email }}</td>
-                        <td class="text-xs">{{ data.fullName }}</td>
-                        <td class="text-xs">{{ data.actualManHour }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </nz-table>
-                </tr>
-              }
-            </tbody>
-          </nz-table>
+              </thead>
+              <tbody>
+                @for (data of completedTaskTable.data; track data.id) {
+                  <tr>
+                    <td [(nzExpand)]="data.expand"></td>
+                    <td class="text-xs">{{ data.title }}</td>
+                    <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                  </tr>
+                  <tr [nzExpand]="data.expand" >
+                    <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <td [colSpan]="5">
+                            <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
+                              Danh sách thành viên đang tham gia
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th class="text-xs">Email</th>
+                          <th class="text-xs">Người thực hiện</th>
+                          <th class="text-xs">Số giờ đã làm</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (data of innerTable.data; track data) {
+                        <tr>
+                          <td class="text-xs">{{ data.email }}</td>
+                          <td class="text-xs">{{ data.fullName }}</td>
+                          <td class="text-xs">{{ data.actualManHour }}</td>
+                        </tr>
+                        }
+                      </tbody>
+                    </nz-table>
+                  </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+    
+          <!-- Block Card View (Mobile) -->
+          <div class="block lg:hidden">
+            <div *ngFor="let task of dashboard.completedTasks" class="bg-gray-100 border border-gray-300 rounded-lg p-4 mb-4 shadow-sm">
+              <div class="font-semibold text-lg text-green-700 mb-2">{{ task.title }}</div>
+              <div class="text-sm text-gray-600">
+                <div class="mb-1"><span class="font-semibold">Ngày bắt đầu:</span> {{ task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Ngày hoàn thành:</span> {{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Ngày kết thúc:</span> {{ task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Số giờ làm:</span> {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}</div>
+              </div>
+            </div>
+          </div>
         </div>
-      
+    
+        <!-- Công việc quá hạn -->
         <div>
           <div class="font-semibold mb-4 text-red-600">Công việc quá hạn</div>
-          <nz-table #overdueTaskTable nzSize="small" [nzFrontPagination]="false" [nzData]="dashboard.overdueTasks" [nzLoading]="isFetchAllContractLoading" [nzBordered]="true" [nzScroll]="{ y: '150px' }">
-            <thead>
-              <tr>
-                <th nzWidth="40px" [nzAlign]="'center'"></th>
-                <th nzWidth="120px" class="text-xs">Tên công việc</th>
-                <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
-                <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
-                <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
-                <th nzWidth="80px" class="text-xs">Số giờ làm</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (data of overdueTaskTable.data; track data.id){
+    
+          <!-- Table View (Desktop) -->
+          <div class="hidden lg:block">
+            <nz-table
+              #overdueTaskTable
+              nzSize="small"
+              [nzFrontPagination]="false"
+              [nzData]="dashboard.overdueTasks"
+              [nzLoading]="isFetchAllContractLoading"
+              [nzBordered]="true"
+              [nzScroll]="{ y: '150px' }">
+              <thead>
                 <tr>
-                  <td [(nzExpand)]="data.expand"></td>  
-                  <td class="text-xs">{{ data.title }}</td>
-                  <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
-                  <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                  <th nzWidth="40px" [nzAlign]="'center'"></th>
+                  <th nzWidth="120px" class="text-xs">Tên công việc</th>
+                  <th nzWidth="100px" class="text-xs">Ngày bắt đầu</th>
+                  <th nzWidth="120px" class="text-xs">Ngày hoàn thành</th>
+                  <th nzWidth="100px" class="text-xs">Ngày kết thúc</th>
+                  <th nzWidth="80px" class="text-xs">Số giờ làm</th>
                 </tr>
-                <tr [nzExpand]="data.expand" >
-                  <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
-                    <thead>
-                      <tr>
-                        <td [colSpan]="5">
-                          <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
-                            Danh sách thành viên đang tham gia
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th class="text-xs">Email</th>
-                        <th class="text-xs">Người thực hiện</th>
-                        <th class="text-xs">Số giờ đã làm</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @for (data of innerTable.data; track data) {
-                      <tr>
-                        <td class="text-xs">{{ data.email }}</td>
-                        <td class="text-xs">{{ data.fullName }}</td>
-                        <td class="text-xs">{{ data.actualManHour }}</td>
-                      </tr>
-                      }
-                    </tbody>
-                  </nz-table>
-                </tr>
-              }
-            </tbody>
-          </nz-table>
+              </thead>
+              <tbody>
+                @for (data of overdueTaskTable.data; track data.id) {
+                  <tr>
+                    <td [(nzExpand)]="data.expand"></td>
+                    <td class="text-xs">{{ data.title }}</td>
+                    <td class="text-xs">{{ data.startDate ? (data.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.actualFinishAt ? (data.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.endDate ? (data.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</td>
+                    <td class="text-xs">{{ data.actualManHour ? data.actualManHour : 'Không xác định' }}</td>
+                  </tr>
+                  <tr [nzExpand]="data.expand" >
+                    <nz-table #innerTable [nzData]="data.assignees" nzSize="small" [nzShowPagination]="false">
+                      <thead>
+                        <tr>
+                          <td [colSpan]="5">
+                            <div class="flex justify-around font-bold my-2 space-x-4 text-xs">
+                              Danh sách thành viên đang tham gia
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th class="text-xs">Email</th>
+                          <th class="text-xs">Người thực hiện</th>
+                          <th class="text-xs">Số giờ đã làm</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (data of innerTable.data; track data) {
+                        <tr>
+                          <td class="text-xs">{{ data.email }}</td>
+                          <td class="text-xs">{{ data.fullName }}</td>
+                          <td class="text-xs">{{ data.actualManHour }}</td>
+                        </tr>
+                        }
+                      </tbody>
+                    </nz-table>
+                  </tr>
+                }
+              </tbody>
+            </nz-table>
+          </div>
+    
+          <!-- Block Card View (Mobile) -->
+          <div class="block lg:hidden">
+            <div *ngFor="let task of dashboard.overdueTasks" class="bg-gray-100 border border-red-300 rounded-lg p-4 mb-4 shadow-sm">
+              <div class="font-semibold text-lg text-red-700 mb-2">{{ task.title }}</div>
+              <div class="text-sm text-gray-600">
+                <div class="mb-1"><span class="font-semibold">Ngày bắt đầu:</span> {{ task.startDate ? (task.startDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Ngày hoàn thành:</span> {{ task.actualFinishAt ? (task.actualFinishAt | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Ngày kết thúc:</span> {{ task.endDate ? (task.endDate | date: 'dd/MM/yyyy') : 'Không xác định' }}</div>
+                <div class="mb-1"><span class="font-semibold">Số giờ làm:</span> {{ task.actualManHour ? task.actualManHour : 'Không xác định' }}</div>
+              </div>
+            </div>
+          </div>
         </div>
-
       </div>
-    </div>
+    </div>    
+
   </div>
 </div>
