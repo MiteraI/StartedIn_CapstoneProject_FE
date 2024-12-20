@@ -100,7 +100,7 @@ export class MeetingDetailModalComponent implements OnInit {
   }
 
   endMeeting() {
-    this.meetingService.cancelMeeting(this.projectId, this.meetingId).subscribe({
+    this.meetingService.completeMeeting(this.projectId, this.meetingId).subscribe({
       next: () => {
         this.nzMessage.success('Kết thúc cuộc họp thành công')
         this.meetingService.refreshMeeting$.next(true)

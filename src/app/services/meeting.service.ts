@@ -63,7 +63,7 @@ export class MeetingService {
     return this.http.put(this.applicationConfigService.getEndpointFor(url), '', { responseType: 'text' })
   }
 
-  completMeeting(projectId: string, meetingId: string) {
+  completeMeeting(projectId: string, meetingId: string) {
     const url = `/api/projects/${projectId}/appointments/${meetingId}/complete`
     return this.http.put(this.applicationConfigService.getEndpointFor(url), '', { responseType: 'text' })
   }

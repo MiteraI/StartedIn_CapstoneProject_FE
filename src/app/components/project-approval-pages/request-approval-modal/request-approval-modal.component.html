@@ -16,8 +16,8 @@
         <!-- Reason Input -->
         <div class="mb-4">
           <label class="block text-gray-700 font-medium mb-2">Lý do yêu cầu phê duyệt:</label>
-          <textarea formControlName="reason" rows="4" class="w-full" placeholder="Nhập lý do yêu cầu phê duyệt" nz-input></textarea>
-          <div *ngIf="approvalRequestForm.get('reason')?.invalid && approvalRequestForm.get('reason')?.touched" class="text-red-500 text-sm">Lý do là bắt buộc.</div>
+          <textarea formControlName="requestReason" rows="4" class="w-full" placeholder="Nhập lý do yêu cầu phê duyệt" nz-input></textarea>
+          <div *ngIf="approvalRequestForm.get('requestReason')?.invalid && approvalRequestForm.get('requestReason')?.touched" class="text-red-500 text-sm">Lý do là bắt buộc.</div>
         </div>
 
         <!-- File Upload -->
