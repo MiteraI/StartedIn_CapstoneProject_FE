@@ -10,6 +10,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -17,10 +18,12 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [CommonModule, 
-    VndCurrencyPipe, 
+  imports: [
+    CommonModule,
+    VndCurrencyPipe,
     ViewTitleBarComponent,
     NzTableModule,
+    NzSpinModule,
     MatIconModule]
 })
 export class DashboardPage implements OnInit {
@@ -29,6 +32,7 @@ export class DashboardPage implements OnInit {
   chartsRendered: boolean = false;
   disbursementChart: Chart | undefined;
   shareEquityChart: Chart<'pie', number[], string> | undefined;
+  isLoading = true;
 
   @Input({ required: true }) isFetchAllContractLoading: boolean = false
   constructor(
@@ -44,8 +48,9 @@ export class DashboardPage implements OnInit {
       }
     })
   }
+
   getTeamRoleLabel(type: TeamRole) : string {
-      return TeamRoleLabels[type]
+    return TeamRoleLabels[type]
   }
 
   ngOnInit() {
@@ -66,15 +71,20 @@ export class DashboardPage implements OnInit {
   }
 
   private loadDashboardData() {
+    this.isLoading = true;
     this.dashboardService
       .getDashboard(this.projectId)
       .pipe(
         catchError(error => {
           this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 });
+          this.isLoading = false;
           return throwError(() => error);
         })
       )
-      .subscribe(data => this.dashboard = data);
+      .subscribe(data => {
+        this.dashboard = data;
+        this.isLoading = false;
+      });
   }
 
   private createDisbursementChart() {

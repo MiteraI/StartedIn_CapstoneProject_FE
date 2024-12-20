@@ -74,7 +74,7 @@ export class ContractListPage implements OnInit, OnDestroy {
   typeLabels = ContractTypeLabels;
   statusLabels = ContractStatusLabels;
 
-  isLoading = false;
+  isLoading = true;
   isDesktopView = false;
   isLeader = false;
 
@@ -87,7 +87,6 @@ export class ContractListPage implements OnInit, OnDestroy {
     size: 10,
     total: 0
   };
-  isFetchAllContractLoading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

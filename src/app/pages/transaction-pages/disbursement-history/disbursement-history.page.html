@@ -50,9 +50,11 @@
 <div class="p-4 max-w-7xl mx-auto">
   <!-- Grid Layout for Both Desktop and Mobile -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <div *ngFor="let transaction of transactions"
-         class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
-         [routerLink]="[transaction.id]">
+    <div
+      *ngFor="let transaction of transactions"
+      class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+      [routerLink]="[transaction.id]"
+    >
       <!-- Card Header -->
       <div class="p-4 border-b border-gray-100">
         <div class="flex items-center justify-between">
@@ -106,7 +108,7 @@
   </div>
 
   <!-- Pagination -->
-  <div class="mt-6 flex justify-center md:justify-end">
+  <div *ngIf="!isLoading" class="mt-6 flex justify-center md:justify-end">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -119,7 +121,7 @@
   </div>
 
   <!-- Loading State -->
-  <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+  <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
 

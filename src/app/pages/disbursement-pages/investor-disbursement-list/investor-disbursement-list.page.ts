@@ -178,6 +178,7 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
       nzTitle: 'Giải ngân',
       nzContent: DisburseModalComponent,
       nzData: disbursement,
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         return componentInstance.handleConfirm();
       }
@@ -189,6 +190,7 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
       nzTitle: 'Từ chối giải ngân',
       nzContent: RejectDisbursementFormComponent,
       nzData: disbursement,
+      nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         const reason = componentInstance.rejectForm.get('reason')!.value;
         this.disbursementService

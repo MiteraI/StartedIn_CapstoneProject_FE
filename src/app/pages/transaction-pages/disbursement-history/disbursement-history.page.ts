@@ -91,6 +91,7 @@ export class DisbursementHistoryPage implements OnInit, OnDestroy {
 
   filterTransactions(append: boolean = false) {
     this.isLoading = true;
+    if (!append) this.transactions = [];
     this.transactionService
       .getSelfTransactionList(
         this.pageIndex,
@@ -106,6 +107,7 @@ export class DisbursementHistoryPage implements OnInit, OnDestroy {
       )
       .pipe(
         catchError(error => {
+          this.isLoading = false;
           this.notification.error("Lỗi", "Lấy lịch sử giải ngân thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })

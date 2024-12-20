@@ -59,7 +59,7 @@ export class LeavingRequestListComponent implements OnInit {
       nzClosable: false,
       nzMaskClosable: true,
       nzOkText: 'Chấp nhận',
-      nzOkType: 'primary',
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.leavingRequestService.accept(this.projectId, request.id).subscribe({
           next: () => {
@@ -82,6 +82,7 @@ export class LeavingRequestListComponent implements OnInit {
       nzMaskClosable: true,
       nzOkText: 'Từ chối',
       nzOkDanger: true,
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.leavingRequestService.reject(this.projectId, request.id).subscribe({
           next: () => {

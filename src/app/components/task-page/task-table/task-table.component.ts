@@ -11,11 +11,12 @@ import { AntdNotificationService } from 'src/app/core/util/antd-notification.ser
 import { TaskService } from 'src/app/services/task.service'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzTagModule } from 'ng-zorro-antd/tag'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @Component({
   selector: 'app-task-table',
   standalone: true,
-  imports: [NzTableModule, NzDividerModule, NzButtonModule, NzModalModule, CommonModule, NzPopconfirmModule, NzTagModule],
+  imports: [NzTableModule, NzDividerModule, NzButtonModule, NzModalModule, CommonModule, NzPopconfirmModule, NzTagModule, NzIconModule],
   templateUrl: './task-table.component.html',
   styleUrls: ['./task-table.component.scss'],
 })

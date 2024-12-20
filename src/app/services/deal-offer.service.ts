@@ -116,4 +116,10 @@ export class DealOfferService {
       null
     );
   }
+
+  cancelDeal(id: string): Observable<any> {
+    return this.http.delete(
+      this.applicationConfigService.getEndpointFor(`/api/deal-offers/${id}`),
+    );
+  }
 }

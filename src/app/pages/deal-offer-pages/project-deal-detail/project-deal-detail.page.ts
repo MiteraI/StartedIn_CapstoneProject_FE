@@ -40,10 +40,11 @@ export class ProjectDealDetailPage implements OnInit {
 
   acceptDeal() {
     this.modalService.confirm({
-      nzTitle: 'Accept Deal',
-      nzContent: `Are you sure you want to accept this deal from ${this.deal?.investorName}?`,
-      nzOkText: 'Accept',
+      nzTitle: 'Chấp nhận thỏa thuận',
+      nzContent: `Chấp nhận thỏa thuận đầu tư của ${this.deal?.investorName}?`,
+      nzOkText: 'Chấp nhận',
       nzOkType: 'primary',
+      nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.dealOfferService.acceptDeal(this.deal!.id, this.projectId)
           .pipe(
@@ -53,6 +54,7 @@ export class ProjectDealDetailPage implements OnInit {
             })
           )
           .subscribe(() => {
+            this.notification.success("Thành công", "Chấp nhận thỏa thuận thành công!", { nzDuration: 2000 });
             this.deal = { ...this.deal!, dealStatus: DealStatus.ACCEPTED };
           });
       }
@@ -61,9 +63,10 @@ export class ProjectDealDetailPage implements OnInit {
 
   rejectDeal() {
     this.modalService.confirm({
-      nzTitle: 'Reject Deal',
-      nzContent: `Are you sure you want to reject this deal from ${this.deal?.investorName}?`,
-      nzOkText: 'Reject',
+      nzTitle: 'Từ chối thỏa thuận',
+      nzContent: `Từ chối thỏa thuận đầu tư của ${this.deal?.investorName}?`,
+      nzOkText: 'Từ chối',
+      nzCancelText: 'Hủy',
       nzOkDanger: true,
       nzOnOk: () => {
         this.dealOfferService.rejectDeal(this.deal!.id, this.projectId)
@@ -74,6 +77,7 @@ export class ProjectDealDetailPage implements OnInit {
             })
           )
           .subscribe(() => {
+            this.notification.success("Thành công", "Từ chối thỏa thuận thành công!", { nzDuration: 2000 });
             this.deal = { ...this.deal!, dealStatus: DealStatus.REJECTED };
           });
       }

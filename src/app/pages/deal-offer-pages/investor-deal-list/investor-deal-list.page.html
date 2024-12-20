@@ -18,7 +18,7 @@
   </div>
 
   <!-- Desktop Table View -->
-  <table class="w-full hidden md:table overflow-y-auto">
+  <table *ngIf="!isLoading" class="w-full hidden md:table overflow-y-auto">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left w-12">
@@ -78,7 +78,7 @@
     </tbody>
   </table>
 
-  <div class="hidden md:flex justify-end mt-4">
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination
       [nzTotal]="totalRecords"
       [(nzPageIndex)]="pageIndex"
@@ -134,7 +134,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="!isDesktopView && isLoading" class="flex justify-center py-4">
+    <div *ngIf="isLoading" class="flex justify-center py-4">
       <nz-spin nzSimple></nz-spin>
     </div>
     <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">

@@ -71,7 +71,7 @@
       </nz-form-item>
 
       <div class="flex justify-end mt-6 space-x-4">
-        <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid">
+        <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid" [nzLoading]="isLoading">
           Tạo
         </button>
       </div>
