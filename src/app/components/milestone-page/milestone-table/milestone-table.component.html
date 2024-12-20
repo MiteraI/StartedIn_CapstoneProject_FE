@@ -56,7 +56,19 @@
             <td>{{ data.title }}</td>
             <td>{{ data.appointmentTime | date : "d 'tháng' M, h:mm a" }}</td>
             <td>
-              <button nz-button nzType="primary"><a [href]="data.meetingLink">Vào Meet</a></button>
+              <ng-container *ngIf="data.status === 3; else checkCancelled">
+                <span style="color: #b70abd; font-weight: bolder;">Cuộc họp đã kết thúc</span>
+              </ng-container>
+              <ng-template #checkCancelled>
+                <ng-container *ngIf="data.status === 4; else activeMeeting">
+                  <span style="color: #fa1414; font-weight: bolder;">Cuộc họp đã bị huỷ</span>
+                </ng-container>
+              </ng-template>
+              <ng-template #activeMeeting>
+                <button nz-button nzType="primary">
+                  <a [href]="data.meetingLink">Vào Meet</a>
+                </button>
+              </ng-template>
             </td>
           </tr>
           }

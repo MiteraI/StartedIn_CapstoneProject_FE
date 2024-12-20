@@ -49,7 +49,7 @@ export class RequestApprovalModalComponent implements OnInit {
     this.getCurrentUser()
 
     this.approvalRequestForm = this.fb.group({
-      reason: ['', [Validators.required, Validators.maxLength(500)]],
+      requestReason: ['', [Validators.required, Validators.maxLength(500)]],
     })
   }
 
