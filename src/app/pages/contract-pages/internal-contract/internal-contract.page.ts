@@ -233,7 +233,13 @@ export class InternalContractPage implements OnInit, OnDestroy {
   }
 
   showPreview() {
-    alert('not implemented');
+    this.isLoading = true;
+    this.createOrUpdateContract().subscribe((response) => {
+      this.contractId = response.id;
+      this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 });
+      this.isLoading = false;
+      this.download();
+    });
   }
 
   download() {
@@ -242,6 +248,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
       .downloadContract(this.contractId!, this.project.id)
       .pipe(
         catchError((error) => {
+          this.isLoading = false;
           this.notification.error('Lỗi', 'Tải hợp đồng thất bại!', { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })

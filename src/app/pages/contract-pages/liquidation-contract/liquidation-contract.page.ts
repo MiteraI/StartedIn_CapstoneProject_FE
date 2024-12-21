@@ -96,10 +96,6 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
       });
   }
 
-  showPreview() {
-    alert('not implemented');
-  }
-
   download() {
     this.isLoading = true;
     this.contractService

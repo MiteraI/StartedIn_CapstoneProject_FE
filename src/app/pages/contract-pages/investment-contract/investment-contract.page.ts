@@ -275,7 +275,13 @@ export class InvestmentContractPage implements OnInit {
   }
 
   showPreview() {
-    alert('not implemented');
+    this.isLoading = true;
+    this.createOrUpdateContract().subscribe((response) => {
+      this.contractId = response.id;
+      this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 });
+      this.isLoading = false;
+      this.download();
+    });
   }
 
   download() {
