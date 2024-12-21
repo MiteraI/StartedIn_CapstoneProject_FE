@@ -8,6 +8,7 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { NZ_MODAL_DATA, NzModalService } from 'ng-zorro-antd/modal'
 import { catchError, tap } from 'rxjs'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { ProjectCharterUpdateModel } from 'src/app/shared/models/project-charter/project-charter-update.model'
 import { ProjectCharter } from 'src/app/shared/models/project-charter/project-charter.model'
 
@@ -30,6 +31,7 @@ export class UpdateCharterModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
   projectCharterForm: FormGroup
   isUpdating = false  
+  editorKey = EDITOR_KEY
 
   constructor(private modal: NzModalService, private formBuilder: FormBuilder, private projectCharterService: ProjectCharterService, private messageService: NzMessageService) {
     this.projectCharter = this.nzModalData.projectCharter

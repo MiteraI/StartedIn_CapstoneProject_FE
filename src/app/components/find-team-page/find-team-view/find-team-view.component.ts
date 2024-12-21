@@ -59,7 +59,7 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
         nzFooter: null,
         nzStyle: { top: '20px' },
         nzBodyStyle: { padding: '0px', height: '80vh' },
-        nzData: {
+        nzData: { 
           recruitmentId: this.currentPostId,
           previewMode: false, //outside project
         },

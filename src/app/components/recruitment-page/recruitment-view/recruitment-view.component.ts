@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -15,17 +15,46 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RecruitmentDetailsDialogComponent } from '../../find-team-page/recruitment-details-dialog/recruitment-details-dialog.component'
 import { ApplicantListDialogComponent } from '../applicant-list-dialog/applicant-list-dialog.component'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { RecruitmentPostDetailsComponent } from '../../find-team-page/recruitment-post-details/recruitment-post-details.component'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
+import { finalize, Subject, takeUntil } from 'rxjs'
+import { CommonModule } from '@angular/common'
+import { NzCollapseModule } from 'ng-zorro-antd/collapse'
+import { Applicant } from 'src/app/shared/models/recruit-invite/applicant.model'
+import { RecruitInviteService } from 'src/app/services/recruit-invite.service'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { ApplicationStatus, ApplicationStatusColors, ApplicationStatusLabels } from 'src/app/shared/enums/application-status.enum'
+import { DateDisplayPipe } from 'src/app/shared/pipes/date-display.pipe'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @Component({
   selector: 'app-recruitment-view',
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule, EditorModule],
+  imports: [
+    NzFormModule,
+    NzUploadModule,
+    MatIconModule,
+    NzButtonModule,
+    ReactiveFormsModule,
+    NzSwitchModule,
+    NzTagModule,
+    NzModalModule,
+    EditorModule,
+    RecruitmentPostDetailsComponent,
+    CommonModule,
+    NzCollapseModule,
+    NzTableModule,
+    NzIconModule,
+    DateDisplayPipe,
+  ],
 })
-export class RecruitmentViewComponent implements OnInit {
+export class RecruitmentViewComponent implements OnInit, OnDestroy {
   recruitmentForm: FormGroup
   init: EditorComponent['init'] = {
+    branding: false,
     plugins: 'lists link code help wordcount',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
@@ -38,17 +67,41 @@ export class RecruitmentViewComponent implements OnInit {
   // recruitmentFileList for display related to recruitment post
   recruitmentFileList: RecruitmentImage[] = []
 
+  // to init the application table
+  isCollapseOpen = false
+  isCollapseEverOpened = false
+  applicantList: Applicant[] = []
+  isApplicantTableLoading = false
+  applicationStatus = ApplicationStatusLabels
+  expandSet = new Set<string>()
+  onExpandChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id)
+    } else {
+      this.expandSet.delete(id)
+    }
+  }
+  getStatusColor(status: ApplicationStatus): string {
+    return ApplicationStatusColors[status]
+  }
+
   projectId = ''
   recruitmentId = ''
+  triggerPostDetailsReload = 0
   isUpdating = false
   isCreateMode = true
+  editorKey = EDITOR_KEY
+  isDesktopView = true
+  destroy$ = new Subject<void>()
 
   constructor(
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private antdNoti: AntdNotificationService,
     private recruitmentService: RecruitmentService,
-    private modalService: NzModalService
+    private recruitInviteService: RecruitInviteService,
+    private modalService: NzModalService,
+    private viewMode: ViewModeConfigService
   ) {
     this.recruitmentForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -80,7 +133,7 @@ export class RecruitmentViewComponent implements OnInit {
           // Remove this file from the fileList
           this.fileList = this.fileList.filter((f) => f.uid !== file.uid)
           this.recruitmentFileList.push(res)
-          console.log(this.recruitmentFileList)
+          this.triggerPostDetailsReload++
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
@@ -115,6 +168,44 @@ export class RecruitmentViewComponent implements OnInit {
     this.isUpdating = true
   }
 
+  onCollapseOpen($event: any) {
+    this.isCollapseOpen = $event
+
+    if (this.isCollapseEverOpened === false) {
+      this.recruitInviteService
+        .getRecruitmentApplications(this.projectId)
+        .pipe(finalize(() => (this.isApplicantTableLoading = false)))
+        .subscribe((applicants) => {
+          this.applicantList = applicants
+        })
+      this.isCollapseEverOpened = true
+    }
+  }
+
+  acceptApplicant(applicant: string) {
+    this.recruitInviteService.acceptApplication(this.projectId, applicant).subscribe({
+      next: (res: any) => {
+        this.antdNoti.openSuccessNotification('', res)
+        this.applicantList = this.applicantList.filter((a) => a.id !== applicant)
+      },
+      error: (err) => {
+        this.antdNoti.openErrorNotification('', err.error)
+      },
+    })
+  }
+
+  rejectApplicant(applicant: string) {
+    this.recruitInviteService.rejectApplication(this.projectId, applicant).subscribe({
+      next: (res: any) => {
+        this.antdNoti.openSuccessNotification('', res)
+        this.applicantList = this.applicantList.filter((a) => a.id !== applicant)
+      },
+      error: (err) => {
+        this.antdNoti.openErrorNotification('', err.error)
+      },
+    })
+  }
+
   onSubmit() {
     if (this.recruitmentForm.valid) {
       if (this.isCreateMode) {
@@ -136,6 +227,7 @@ export class RecruitmentViewComponent implements OnInit {
         this.recruitmentService.updateRecruitmentPost(this.projectId, { ...this.recruitmentForm.value }).subscribe({
           next: (res) => {
             this.antdNoti.openSuccessNotification('', 'Cập nhật bài tuyển dụng thành công')
+            this.triggerPostDetailsReload++
           },
           error: (err) => {
             this.antdNoti.openErrorNotification('', 'Đã có lỗi xảy ra')
@@ -166,7 +258,7 @@ export class RecruitmentViewComponent implements OnInit {
       nzTitle: 'Danh Sách Ứng Tuyển',
       nzContent: ApplicantListDialogComponent,
       nzFooter: null,
-      nzStyle: { top: '20px', width: 'auto', maxWidth: '90vw' },
+      nzStyle: { top: '20px', width: 'auto', maxWidth: '98vw' },
       nzBodyStyle: { padding: '0px' },
       nzData: {
         projectId: this.projectId,
@@ -176,19 +268,22 @@ export class RecruitmentViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+    this.activatedRoute.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.projectId = value.get('id')!
     })
     this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
       next: (res) => {
         this.isCreateMode = false
         //map res to form
-        this.recruitmentForm.setValue({
-          title: res.title,
-          content: res.content,
-          isOpen: res.isOpen,
-          files: [],
-        })
+        this.recruitmentForm.setValue(
+          {
+            title: res.title,
+            content: res.content,
+            isOpen: res.isOpen,
+            files: [],
+          },
+          { emitEvent: false }
+        )
         this.recruitmentFileList = res.recruitmentImgs
         this.recruitmentId = res.id
       },
@@ -196,5 +291,14 @@ export class RecruitmentViewComponent implements OnInit {
         this.isCreateMode = true
       },
     })
+
+    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((isDesktop) => {
+      this.isDesktopView = isDesktop
+    })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

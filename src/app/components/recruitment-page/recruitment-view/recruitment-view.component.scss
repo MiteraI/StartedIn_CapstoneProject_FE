@@ -5,3 +5,7 @@
 .title-recruitment input[nz-input] {
   width: 500px; /* Hoặc kích thước cụ thể như '300px' */
 }
+
+:host ::ng-deep .ant-collapse-content-box {
+  @apply p-1
+}
