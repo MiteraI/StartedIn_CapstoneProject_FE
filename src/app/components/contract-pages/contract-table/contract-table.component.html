@@ -91,9 +91,17 @@
             <mat-icon fontIcon="file_download"></mat-icon>
           </button>
 
+          <button
+            *ngIf="data.contractStatus === contractStatuses.SENT"
+            (click)="$event.stopPropagation(); cancelSign(data)"
+            class="text-red-500 hover:text-red-700"
+          >
+            <mat-icon fontIcon="close"></mat-icon>
+          </button>
+
           <!-- Terminate Button -->
           <button
-            *ngIf="data.contractStatus === 3 && data.contractType !== 3"
+            *ngIf="data.contractStatus === contractStatuses.COMPLETED && data.contractType !== 3"
             (click)="$event.stopPropagation(); openTerminateModal(data)"
             class="text-yellow-500 hover:text-yellow-700">
             <mat-icon fontIcon="timer_off"></mat-icon>
@@ -101,7 +109,7 @@
 
           <!-- Liquidation Button (Leader) -->
           <button
-            *ngIf="data.contractStatus === 6
+            *ngIf="data.contractStatus === contractStatuses.WAITING_FOR_LIQUIDATION
               && isLeader
               && data.meetingStatus === 3"
             (click)="$event.stopPropagation(); openLiquidationModal(data)"
