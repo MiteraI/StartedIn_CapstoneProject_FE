@@ -64,6 +64,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   transactionTypes = TransactionType;
   typeLabels = TransactionTypeLabels;
+  typeFilter?: TransactionType;
 
   isLoading = true;
   isSummaryLoading = true;
@@ -219,5 +220,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
         this.inAmount = summary.inAmount;
         this.outAmount = summary.outAmount;
       });
+  }
+
+  applyFilters() {
+    this.filter = {
+      ...this.filter,
+      type: this.typeFilter
+    };
+    this.pageIndex = 1;
+    this.filterTransactions();
   }
 }

@@ -56,6 +56,7 @@ export class SelfTransactionsPage implements OnInit, OnDestroy {
 
   transactionTypes = TransactionType;
   typeLabels = TransactionTypeLabels;
+  typeFilter?: TransactionType;
 
   isLoading = true;
   isDesktopView = false;
@@ -161,6 +162,15 @@ export class SelfTransactionsPage implements OnInit, OnDestroy {
 
   onPageSizeChange(pageSize: number) {
     this.pageSize = pageSize;
+    this.pageIndex = 1;
+    this.filterTransactions();
+  }
+
+  applyFilters() {
+    this.filter = {
+      ...this.filter,
+      type: this.typeFilter
+    };
     this.pageIndex = 1;
     this.filterTransactions();
   }
