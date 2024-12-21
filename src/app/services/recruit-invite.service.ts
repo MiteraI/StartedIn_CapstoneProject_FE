@@ -26,7 +26,9 @@ export class RecruitInviteService {
 
   applyRecruitment(projectId: string, recruitmentId: string, data: ApplyRecruitment) {
     const formData = new FormData()
-    formData.append('cvFile', data.cvFile)
+    for (const file of data.cvFiles) {
+      formData.append('cvFiles', file)
+    }
     return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/recruitments/${recruitmentId}/apply`), formData, {
       responseType: 'text' as 'json',
     })

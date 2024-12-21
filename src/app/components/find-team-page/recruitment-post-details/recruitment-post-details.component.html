@@ -10,7 +10,9 @@
   </div>
   <div class="flex justify-between items-center">
     <span class="text-2xl font-semibold text-purple-400">{{ postDetails.title }}</span>
+    @if (!isPreview) {
     <button nz-button nzType="primary" class="my-2 w-1/4 custom-purple-btn" (click)="openRecruitmentApplyDialog()">Ứng Tuyển</button>
+    }
   </div>
   <span class="text-sm my-2">Đăng ngày: {{ newestTime | date : "d 'tháng' M Y, h:mm a" }}</span>
   <div class="flex items-center my-2">
@@ -42,7 +44,9 @@
         <!-- Second image with overlay -->
         <div class="relative w-full h-full">
           <img nz-image [nzSrc]="img.imageUrl" [alt]="img.fileName" class="w-full h-full object-cover" />
-          <div (click)="onClickPreview()" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl">+{{ postDetails.recruitmentImgs.length - 1 }}</div>
+          <div (click)="onClickPreview()" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl">
+            +{{ postDetails.recruitmentImgs.length - 1 }}
+          </div>
         </div>
         } @else {
         <!-- Additional images are hidden from view but still in nz-image-group -->

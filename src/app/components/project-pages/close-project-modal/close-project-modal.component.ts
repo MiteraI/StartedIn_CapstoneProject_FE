@@ -60,6 +60,7 @@ export class CloseProjectModalComponent implements OnInit {
       next: () => {
         this.notification.success('Thành công', 'Đã đóng dự án', { nzDuration: 2000 });
         this.modalRef.close(true);
+        this.router.navigate(['/projects']);
       },
       error: (error) => {
         this.notification.success('Lỗi', 'Không thể đóng dự án', { nzDuration: 2000 });

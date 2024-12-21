@@ -53,6 +53,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
     const modalRef = this.modalService.create({
       nzTitle: 'Tạo dự án mới',
       nzContent: ProjectCreateModalComponent,
+      nzStyle: { top: '20px' },
       nzFooter: null,
     })
   }
