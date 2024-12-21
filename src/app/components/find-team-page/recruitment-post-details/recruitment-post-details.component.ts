@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
 import { finalize, Subject, take, takeUntil, tap } from 'rxjs'
 import { RecruitmentService } from 'src/app/services/recruitment.service'
 import { RecruitmentPostDetails } from 'src/app/shared/models/recruitment/recruitment-post-details.model'
@@ -17,7 +17,7 @@ import { RecruitmentApplyDialogComponent } from '../recruitment-apply-dialog/rec
   standalone: true,
   imports: [CommonModule, NzSpinModule, NzAvatarModule, NzImageModule, NzButtonModule, NzModalModule],
 })
-export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy {
+export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy, OnChanges {
   @Input({ required: true })
   set currentPostId(postId: string) {
     if (postId) {
@@ -26,6 +26,7 @@ export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy {
   }
   @Input() isDesktopView: boolean = true
   @Input() isPreview: boolean = false
+  @Input() reloadFromUpdate: number = 0
 
   postDetails: RecruitmentPostDetails = {} as RecruitmentPostDetails
 
@@ -40,6 +41,12 @@ export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy {
 
   private nzImageService = inject(NzImageService)
   constructor(private recruitmentService: RecruitmentService, private modalService: NzModalService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['reloadTrigger']) {
+      this.fetchPostDetails(this.postDetails.id)
+    }
+  }
 
   openRecruitmentApplyDialog() {
     this.modalService.create({

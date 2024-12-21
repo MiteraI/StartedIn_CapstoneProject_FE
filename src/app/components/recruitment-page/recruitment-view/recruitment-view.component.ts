@@ -18,8 +18,15 @@ import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { RecruitmentPostDetailsComponent } from '../../find-team-page/recruitment-post-details/recruitment-post-details.component'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
-import { Subject, takeUntil } from 'rxjs'
+import { finalize, Subject, takeUntil } from 'rxjs'
 import { CommonModule } from '@angular/common'
+import { NzCollapseModule } from 'ng-zorro-antd/collapse'
+import { Applicant } from 'src/app/shared/models/recruit-invite/applicant.model'
+import { RecruitInviteService } from 'src/app/services/recruit-invite.service'
+import { NzTableModule } from 'ng-zorro-antd/table'
+import { ApplicationStatus, ApplicationStatusColors, ApplicationStatusLabels } from 'src/app/shared/enums/application-status.enum'
+import { DateDisplayPipe } from 'src/app/shared/pipes/date-display.pipe'
+import { NzIconModule } from 'ng-zorro-antd/icon'
 
 @Component({
   selector: 'app-recruitment-view',
@@ -37,7 +44,11 @@ import { CommonModule } from '@angular/common'
     NzModalModule,
     EditorModule,
     RecruitmentPostDetailsComponent,
-    CommonModule
+    CommonModule,
+    NzCollapseModule,
+    NzTableModule,
+    NzIconModule,
+    DateDisplayPipe,
   ],
 })
 export class RecruitmentViewComponent implements OnInit, OnDestroy {
@@ -56,8 +67,27 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
   // recruitmentFileList for display related to recruitment post
   recruitmentFileList: RecruitmentImage[] = []
 
+  // to init the application table
+  isCollapseOpen = false
+  isCollapseEverOpened = false
+  applicantList: Applicant[] = []
+  isApplicantTableLoading = false
+  applicationStatus = ApplicationStatusLabels
+  expandSet = new Set<string>()
+  onExpandChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id)
+    } else {
+      this.expandSet.delete(id)
+    }
+  }
+  getStatusColor(status: ApplicationStatus): string {
+    return ApplicationStatusColors[status]
+  }
+
   projectId = ''
   recruitmentId = ''
+  triggerPostDetailsReload = 0
   isUpdating = false
   isCreateMode = true
   editorKey = EDITOR_KEY
@@ -69,6 +99,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private antdNoti: AntdNotificationService,
     private recruitmentService: RecruitmentService,
+    private recruitInviteService: RecruitInviteService,
     private modalService: NzModalService,
     private viewMode: ViewModeConfigService
   ) {
@@ -102,7 +133,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
           // Remove this file from the fileList
           this.fileList = this.fileList.filter((f) => f.uid !== file.uid)
           this.recruitmentFileList.push(res)
-          console.log(this.recruitmentFileList)
+          this.triggerPostDetailsReload++
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
@@ -135,7 +166,44 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
 
   onInfoChange() {
     this.isUpdating = true
-    console.log('onInfoChange')
+  }
+
+  onCollapseOpen($event: any) {
+    this.isCollapseOpen = $event
+
+    if (this.isCollapseEverOpened === false) {
+      this.recruitInviteService
+        .getRecruitmentApplications(this.projectId)
+        .pipe(finalize(() => (this.isApplicantTableLoading = false)))
+        .subscribe((applicants) => {
+          this.applicantList = applicants
+        })
+      this.isCollapseEverOpened = true
+    }
+  }
+
+  acceptApplicant(applicant: string) {
+    this.recruitInviteService.acceptApplication(this.projectId, applicant).subscribe({
+      next: (res: any) => {
+        this.antdNoti.openSuccessNotification('', res)
+        this.applicantList = this.applicantList.filter((a) => a.id !== applicant)
+      },
+      error: (err) => {
+        this.antdNoti.openErrorNotification('', err.error)
+      },
+    })
+  }
+
+  rejectApplicant(applicant: string) {
+    this.recruitInviteService.rejectApplication(this.projectId, applicant).subscribe({
+      next: (res: any) => {
+        this.antdNoti.openSuccessNotification('', res)
+        this.applicantList = this.applicantList.filter((a) => a.id !== applicant)
+      },
+      error: (err) => {
+        this.antdNoti.openErrorNotification('', err.error)
+      },
+    })
   }
 
   onSubmit() {
@@ -159,6 +227,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
         this.recruitmentService.updateRecruitmentPost(this.projectId, { ...this.recruitmentForm.value }).subscribe({
           next: (res) => {
             this.antdNoti.openSuccessNotification('', 'Cập nhật bài tuyển dụng thành công')
+            this.triggerPostDetailsReload++
           },
           error: (err) => {
             this.antdNoti.openErrorNotification('', 'Đã có lỗi xảy ra')
@@ -189,7 +258,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
       nzTitle: 'Danh Sách Ứng Tuyển',
       nzContent: ApplicantListDialogComponent,
       nzFooter: null,
-      nzStyle: { top: '20px', width: 'auto', maxWidth: '90vw' },
+      nzStyle: { top: '20px', width: 'auto', maxWidth: '98vw' },
       nzBodyStyle: { padding: '0px' },
       nzData: {
         projectId: this.projectId,
