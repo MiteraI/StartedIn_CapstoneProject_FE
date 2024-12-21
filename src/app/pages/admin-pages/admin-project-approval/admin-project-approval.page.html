@@ -1,0 +1,116 @@
+<app-filter-bar viewName="Quản lý yêu cầu ">
+  <!-- <div desktop class="p-4 min-w-[400px]">
+    <app-user-filter
+      #filterComponent
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-user-filter>
+  </div>
+  <div mobile class="p-4">
+    <app-user-filter
+      #filterComponent
+      [data]="filterData"
+      (filterApplied)="onFilterApplied($event)"
+    ></app-user-filter>
+  </div> -->
+</app-filter-bar>
+
+<div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <!-- Desktop Table View -->
+  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
+    <thead>
+      <tr class="border-b">
+        <th class="p-4 text-left">Tên dự án</th>
+        <th class="p-4 text-left">Nhóm trưởng</th>
+        <th class="p-4 text-left">Ngày gửi</th>
+        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-left w-16"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let approval of pagedApprovals.data" class="border-b hover:bg-purple-50">
+        <td class="p-4">
+          <div class="font-medium">{{ approval.projectName }}</div>
+        </td>
+        <td class="p-4">
+          <div class="font-medium">{{ approval.leaderName }}</div>
+        </td>
+        <td class="p-4">
+          <div class="font-medium">{{ approval.sentDate | date: 'hh:mm aa - dd/MM/yy' }}</div>
+        </td>
+        <td class="p-4">
+          <span
+            [ngClass]="{
+            'bg-yellow-100 text-yellow-600': approval.status === ProjectApprovalStatus.PENDING,
+            'bg-green-100 text-green-600': approval.status === ProjectApprovalStatus.ACCEPTED,
+            'bg-red-100 text-red-600': approval.status === ProjectApprovalStatus.REJECTED
+          }"
+            class="px-2 py-1 text-sm rounded-full"
+          >
+            {{ ProjectApprovalStatusLabel[approval.status] }}
+          </span>
+        </td>
+        <td class="p-4">
+          <button
+            (click)="openRequestAppovalModal(approval) "
+            [ngClass]="{
+              'text-blue-500 hover:text-blue-700': true,
+              'text-green-500 hover:text-green-700': !true
+            }"
+          >
+            <mat-icon [fontIcon]="true ? 'verified' : 'person_add'"></mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Desktop Pagination -->
+  <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
+    <nz-pagination
+      [nzTotal]="pagedApprovals.total"
+      [(nzPageIndex)]="pagedApprovals.page"
+      [(nzPageSize)]="pagedApprovals.size"
+      [nzShowSizeChanger]="true"
+      [nzPageSizeOptions]="[20, 50, 100]"
+      (nzPageIndexChange)="onPageIndexChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+    ></nz-pagination>
+  </div>
+
+  <!-- Mobile View -->
+  <div class="md:hidden space-y-4">
+    <div *ngFor="let approval of pagedApprovals.data" class="bg-white rounded-lg shadow">
+      <div class="p-4">
+        <div class="flex items-start space-x-4">
+          <div class="flex-1">
+            <div class="font-medium">{{ approval.projectName }}</div>
+            <div class="text-sm text-gray-500">{{ approval.leaderName }}</div>
+            <div class="text-sm text-gray-500">{{ approval.sentDate | date: 'hh:mm aa - dd/MM/yy'}}</div>
+            <div class="mt-2 space-x-2">
+              <span
+                [ngClass]="{
+              'bg-yellow-100 text-yellow-600': approval.status === ProjectApprovalStatus.PENDING,
+              'bg-green-100 text-green-600': approval.status === ProjectApprovalStatus.ACCEPTED,
+              'bg-red-100 text-red-600': approval.status === ProjectApprovalStatus.REJECTED
+              }"
+                class="px-2 py-1 text-sm rounded-full"
+              >
+                {{ ProjectApprovalStatusLabel[approval.status] }}
+              </span>
+            </div>
+            <button>
+              <mat-icon [fontIcon]="true ? 'person_off' : 'person_add'"></mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Loading Spinner -->
+    <div *ngIf="isLoading" class="flex justify-center py-4">
+      <nz-spin nzSimple></nz-spin>
+    </div>
+    <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách người dùng!</div>
+  </div>
+</div>
