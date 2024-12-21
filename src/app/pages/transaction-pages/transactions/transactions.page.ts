@@ -64,6 +64,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
 
   transactionTypes = TransactionType;
   typeLabels = TransactionTypeLabels;
+  typeFilter?: TransactionType;
 
   isLoading = true;
   isSummaryLoading = true;
@@ -73,8 +74,6 @@ export class TransactionsPage implements OnInit, OnDestroy {
   currentBudget: number = 0;
   inAmount: number = 0;
   outAmount: number = 0;
-
-  typeFilter?: TransactionType = undefined;
 
   @ViewChild(TransactionFilterComponent) filterComponent!: TransactionFilterComponent;
   private destroy$ = new Subject<void>();
