@@ -88,7 +88,8 @@ export class RequestApprovalModalComponent implements OnInit {
       this.fileList.forEach((file: any) => {
         formData.append('Documents', file)
       })
-      this.projectApprovalService.requestApproval(this.projectId, this.currentUser?.id!, formData).subscribe({
+      formData.append('Reason', this.approvalRequestForm.get('requestReason')?.value)
+      this.projectApprovalService.requestApproval(this.projectId, formData).subscribe({
         next: (response) => {
           console.log(response)
           this.messageService.success('Yêu cầu phê duyệt đã được gửi')
