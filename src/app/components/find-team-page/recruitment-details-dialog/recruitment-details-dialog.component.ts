@@ -32,7 +32,7 @@ export class RecruitmentDetailsDialogComponent implements OnInit {
     return this.post.lastUpdatedTime > this.post.createdTime ? this.post.lastUpdatedTime : this.post.createdTime
   }
 
-    private nzImageService = inject(NzImageService)
+  private nzImageService = inject(NzImageService)
   constructor(private recruitmentService: RecruitmentService, private modalService: NzModalService) {}
 
   openRecruitmentApplyDialog() {
@@ -50,12 +50,12 @@ export class RecruitmentDetailsDialogComponent implements OnInit {
   }
 
   onClickPreview(): void {
-      this.nzImageService.preview(
-        this.post.recruitmentImgs.map((img) => {
-          return { src: img.imageUrl, alt: img.fileName } as NzImage
-        })
-      )
-    }
+    this.nzImageService.preview(
+      this.post.recruitmentImgs.map((img) => {
+        return { src: img.imageUrl, alt: img.fileName } as NzImage
+      })
+    )
+  }
 
   ngOnInit() {
     if (!this.nzModalData.previewMode) {

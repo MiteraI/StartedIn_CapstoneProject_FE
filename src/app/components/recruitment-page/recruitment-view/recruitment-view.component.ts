@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -15,17 +15,35 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RecruitmentDetailsDialogComponent } from '../../find-team-page/recruitment-details-dialog/recruitment-details-dialog.component'
 import { ApplicantListDialogComponent } from '../applicant-list-dialog/applicant-list-dialog.component'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { RecruitmentPostDetailsComponent } from '../../find-team-page/recruitment-post-details/recruitment-post-details.component'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
+import { Subject, takeUntil } from 'rxjs'
+import { CommonModule } from '@angular/common'
 
 @Component({
   selector: 'app-recruitment-view',
   templateUrl: './recruitment-view.component.html',
   styleUrls: ['./recruitment-view.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzUploadModule, MatIconModule, NzButtonModule, ReactiveFormsModule, NzSwitchModule, NzTagModule, NzModalModule, EditorModule],
+  imports: [
+    NzFormModule,
+    NzUploadModule,
+    MatIconModule,
+    NzButtonModule,
+    ReactiveFormsModule,
+    NzSwitchModule,
+    NzTagModule,
+    NzModalModule,
+    EditorModule,
+    RecruitmentPostDetailsComponent,
+    CommonModule
+  ],
 })
-export class RecruitmentViewComponent implements OnInit {
+export class RecruitmentViewComponent implements OnInit, OnDestroy {
   recruitmentForm: FormGroup
   init: EditorComponent['init'] = {
+    branding: false,
     plugins: 'lists link code help wordcount',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
@@ -42,13 +60,17 @@ export class RecruitmentViewComponent implements OnInit {
   recruitmentId = ''
   isUpdating = false
   isCreateMode = true
+  editorKey = EDITOR_KEY
+  isDesktopView = true
+  destroy$ = new Subject<void>()
 
   constructor(
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private antdNoti: AntdNotificationService,
     private recruitmentService: RecruitmentService,
-    private modalService: NzModalService
+    private modalService: NzModalService,
+    private viewMode: ViewModeConfigService
   ) {
     this.recruitmentForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -113,6 +135,7 @@ export class RecruitmentViewComponent implements OnInit {
 
   onInfoChange() {
     this.isUpdating = true
+    console.log('onInfoChange')
   }
 
   onSubmit() {
@@ -176,19 +199,22 @@ export class RecruitmentViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+    this.activatedRoute.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       this.projectId = value.get('id')!
     })
     this.recruitmentService.getProjectRecruitmentPost(this.projectId).subscribe({
       next: (res) => {
         this.isCreateMode = false
         //map res to form
-        this.recruitmentForm.setValue({
-          title: res.title,
-          content: res.content,
-          isOpen: res.isOpen,
-          files: [],
-        })
+        this.recruitmentForm.setValue(
+          {
+            title: res.title,
+            content: res.content,
+            isOpen: res.isOpen,
+            files: [],
+          },
+          { emitEvent: false }
+        )
         this.recruitmentFileList = res.recruitmentImgs
         this.recruitmentId = res.id
       },
@@ -196,5 +222,14 @@ export class RecruitmentViewComponent implements OnInit {
         this.isCreateMode = true
       },
     })
+
+    this.viewMode.isDesktopView$.pipe(takeUntil(this.destroy$)).subscribe((isDesktop) => {
+      this.isDesktopView = isDesktop
+    })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

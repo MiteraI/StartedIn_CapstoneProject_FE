@@ -10,6 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { NZ_MODAL_DATA, NzModalService } from 'ng-zorro-antd/modal'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { ProjectService } from 'src/app/services/project.service'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { ProjectCharterFormModel } from 'src/app/shared/models/project-charter/project-charter-create.model'
 import { ProjectModel } from 'src/app/shared/models/project/project.model'
 
@@ -18,7 +19,7 @@ import { ProjectModel } from 'src/app/shared/models/project/project.model'
   templateUrl: './create-charter-modal.component.html',
   styleUrls: ['./create-charter-modal.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatIconModule, NzDatePickerModule, NzButtonModule, NzInputModule,EditorComponent,EditorModule],
+  imports: [ReactiveFormsModule, CommonModule, MatIconModule, NzDatePickerModule, NzButtonModule, NzInputModule, EditorComponent, EditorModule],
   providers: [DatePipe],
 })
 export class CreateCharterModalComponent implements OnInit {
@@ -26,14 +27,15 @@ export class CreateCharterModalComponent implements OnInit {
   isUpdating = false
   projectCharterForm: FormGroup
   projectId: string = ''
+  editorKey = EDITOR_KEY
   currentProject: ProjectModel | undefined
   init: EditorComponent['init'] = {
-      plugins: 'lists link code help wordcount',
-      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-      setup: () => {
-        this.onInfoChange()
-      },
-    }
+    plugins: 'lists link code help wordcount',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {
+      this.onInfoChange()
+    },
+  }
 
   readonly nzModalData = inject(NZ_MODAL_DATA)
   constructor(

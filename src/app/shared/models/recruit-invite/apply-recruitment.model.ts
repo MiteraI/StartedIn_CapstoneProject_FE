@@ -1,3 +1,3 @@
 export type ApplyRecruitment = {
-    cvFile: any
+    cvFiles: any
 }

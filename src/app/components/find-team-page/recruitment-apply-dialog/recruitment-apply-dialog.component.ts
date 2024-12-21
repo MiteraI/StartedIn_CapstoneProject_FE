@@ -34,8 +34,8 @@ export class RecruitmentApplyDialogComponent implements OnInit {
 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.cvForm.get('files')?.setErrors(null)
-    this.fileList = []
     this.fileList = this.fileList.concat(file)
+
     return false
   }
 
@@ -47,7 +47,7 @@ export class RecruitmentApplyDialogComponent implements OnInit {
   }
 
   uploadCV() {
-    this.recruitInviteService.applyRecruitment(this.nzModalData.projectId, this.nzModalData.recruitmentId, { cvFile: this.fileList[0] }).subscribe({
+    this.recruitInviteService.applyRecruitment(this.nzModalData.projectId, this.nzModalData.recruitmentId, { cvFiles: this.fileList }).subscribe({
       next: (res: any) => {
         this.antdNoti.openSuccessNotification('', res)
         this.modalRef.close()

@@ -25,6 +25,7 @@ export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy {
     }
   }
   @Input() isDesktopView: boolean = true
+  @Input() isPreview: boolean = false
 
   postDetails: RecruitmentPostDetails = {} as RecruitmentPostDetails
 
