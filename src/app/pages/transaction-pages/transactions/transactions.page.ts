@@ -74,6 +74,8 @@ export class TransactionsPage implements OnInit, OnDestroy {
   inAmount: number = 0;
   outAmount: number = 0;
 
+  typeFilter?: TransactionType = undefined;
+
   @ViewChild(TransactionFilterComponent) filterComponent!: TransactionFilterComponent;
   private destroy$ = new Subject<void>();
 
@@ -219,5 +221,14 @@ export class TransactionsPage implements OnInit, OnDestroy {
         this.inAmount = summary.inAmount;
         this.outAmount = summary.outAmount;
       });
+  }
+
+  applyFilters() {
+    this.filter = {
+      ...this.filter,
+      type: this.typeFilter
+    };
+    this.pageIndex = 1;
+    this.filterTransactions();
   }
 }

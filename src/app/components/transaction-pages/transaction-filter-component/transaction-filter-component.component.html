@@ -23,25 +23,6 @@
     </nz-form-control>
   </nz-form-item>
 
-  <!-- Transaction Type -->
-  <nz-form-item *ngIf="!isDisbursementHistory">
-    <nz-form-label [nzSpan]="24">Loại giao dịch</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="type"
-        nzPlaceHolder="Chọn loại giao dịch"
-      >
-        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of transactionTypeOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
-      </nz-select>
-    </nz-form-control>
-  </nz-form-item>
-
   <!-- Date Range -->
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Thời gian</nz-form-label>
