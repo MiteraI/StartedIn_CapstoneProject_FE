@@ -9,6 +9,7 @@ export type ProjectApprovalDetail = {
   approvalDate: string
   documents: Document[]
   id: string
+  rejectReason: string
 }
 
 export type Document = {
