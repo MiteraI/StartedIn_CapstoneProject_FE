@@ -18,9 +18,98 @@
   </div>
 </app-filter-bar>
 
+<div class="border-b border-gray-300">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex">
+      <a
+        *ngIf="typeFilter !== undefined"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+        (click)="typeFilter = undefined; applyFilters()"
+      >
+        <mat-icon fontIcon="list"></mat-icon>
+        <span class="hidden md:inline ml-1">Tất cả</span>
+      </a>
+      <a
+        *ngIf="typeFilter === undefined"
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="list"></mat-icon>
+        <span class="hidden md:inline ml-1">Tất cả</span>
+      </a>
+
+      <a
+        *ngIf="typeFilter !== transactionTypes.DISBURSEMENT"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+        (click)="typeFilter = transactionTypes.DISBURSEMENT; applyFilters()"
+      >
+        <mat-icon fontIcon="account_balance"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.DISBURSEMENT] }}</span>
+      </a>
+      <a
+        *ngIf="typeFilter === transactionTypes.DISBURSEMENT"
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="account_balance"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.DISBURSEMENT] }}</span>
+      </a>
+
+      <a
+        *ngIf="typeFilter !== transactionTypes.ASSET_EXPENSE"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+        (click)="typeFilter = transactionTypes.ASSET_EXPENSE; applyFilters()"
+      >
+        <mat-icon fontIcon="inventory"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_EXPENSE] }}</span>
+      </a>
+      <a
+        *ngIf="typeFilter === transactionTypes.ASSET_EXPENSE"
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="inventory"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_EXPENSE] }}</span>
+      </a>
+
+      <a
+        *ngIf="typeFilter !== transactionTypes.ASSET_LIQUIDATION"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+        (click)="typeFilter = transactionTypes.ASSET_LIQUIDATION; applyFilters()"
+      >
+        <mat-icon fontIcon="insert_page_break"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_LIQUIDATION] }}</span>
+      </a>
+      <a
+        *ngIf="typeFilter === transactionTypes.ASSET_LIQUIDATION"
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="insert_page_break"></mat-icon>
+        <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_LIQUIDATION] }}</span>
+      </a>
+
+      <a
+        *ngIf="typeFilter !== transactionTypes.OTHER"
+        class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+        (click)="typeFilter = transactionTypes.OTHER; applyFilters()"
+      >
+        <mat-icon fontIcon="swap_horiz"></mat-icon>
+        <span class="hidden md:inline ml-1">Khác</span>
+      </a>
+      <a
+        *ngIf="typeFilter === transactionTypes.OTHER"
+        class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
+      >
+        <mat-icon fontIcon="swap_horiz"></mat-icon>
+        <span class="hidden md:inline ml-1">Khác</span>
+      </a>
+    </div>
+  </div>
+</div>
+
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="!isLoading && transactions.length === 0" class="text-center text-gray-500 py-4">
+    Không có giao dịch nào cả!
+  </div>
   <!-- Desktop Table View -->
-  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading && transactions.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Giao dịch</th>

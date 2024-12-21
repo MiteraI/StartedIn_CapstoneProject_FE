@@ -55,7 +55,6 @@ export class TransactionFilterComponent implements OnInit {
     this.filterForm = this.fb.group({
       fromName: [this.data.fromName || ''],
       toName: [this.data.toName || ''],
-      type: [this.data.type || ''],
       dateRange: [this.data.dateRange || []],
       amountFrom: [this.data.amountFrom || null],
       amountTo: [this.data.amountTo || null],
@@ -67,7 +66,6 @@ export class TransactionFilterComponent implements OnInit {
     this.filterForm.reset({
       fromName: '',
       toName: '',
-      type: '',
       dateRange: [],
       amountFrom: null,
       amountTo: null,
@@ -100,7 +98,6 @@ export class TransactionFilterComponent implements OnInit {
       this.filterForm.patchValue({
         fromName: filterData.fromName || '',
         toName: filterData.toName || '',
-        type: filterData.type || '',
         dateRange: dateRange,
         amountFrom: filterData.amountFrom || null,
         amountTo: filterData.amountTo || null,
