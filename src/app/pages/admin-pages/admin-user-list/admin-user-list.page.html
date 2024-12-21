@@ -1,32 +1,16 @@
-<app-filter-bar
-  viewName="Quản lý người dùng"
-  [searchValue]="filter.fullName ?? ''"
-  (searchString)="onSearch($event)"
-  (filterMenuOpened)="onFilterMenuOpened()"
->
+<app-filter-bar viewName="Quản lý người dùng" [searchValue]="filter.fullName ?? ''" (searchString)="onSearch($event)" (filterMenuOpened)="onFilterMenuOpened()">
   <div desktop class="p-4 min-w-[400px]">
-    <app-user-filter
-      #filterComponent
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-user-filter>
+    <app-user-filter #filterComponent [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-user-filter>
   </div>
   <div mobile class="p-4">
-    <app-user-filter
-      #filterComponent
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-user-filter>
+    <app-user-filter #filterComponent [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-user-filter>
   </div>
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
   <div class="flex flex-col justify-end md:flex-row mb-4">
     <div class="flex flex-col md:flex-row gap-3">
-      <button
-        (click)="openImportModal()"
-        class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-      >
+      <button (click)="openImportModal()" class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
         <mat-icon fontIcon="file_upload" class="mr-2"></mat-icon>
         Import người dùng
       </button>
@@ -46,12 +30,7 @@
     <tbody>
       <tr *ngFor="let user of users" class="border-b hover:bg-purple-50" [routerLink]="['/users', user.id]">
         <td class="p-4">
-          <nz-avatar
-            [nzSrc]="user.profilePicture"
-            [nzText]="user.fullName | initialsOnly"
-            [nzSize]="40"
-            class="bg-blue-500"
-          ></nz-avatar>
+          <nz-avatar [nzSrc]="user.profilePicture" [nzText]="user.fullName | initialsOnly" [nzSize]="40" class="bg-blue-500"></nz-avatar>
         </td>
         <td class="p-4">
           <div class="font-medium">{{ user.fullName }}</div>
@@ -60,12 +39,7 @@
         </td>
         <td class="p-4">
           <div class="space-x-2">
-            <span
-              *ngFor="let role of user.authorities"
-              class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
-            >
-              {{ role }}
-            </span>
+            <span *ngFor="let role of user.authorities" class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"> {{ role }} </span>
           </div>
         </td>
         <td class="p-4">
@@ -112,23 +86,13 @@
     <div *ngFor="let user of users" class="bg-white rounded-lg shadow" [routerLink]="['/users', user.id]">
       <div class="p-4">
         <div class="flex items-start space-x-4">
-          <nz-avatar
-            [nzSrc]="user.profilePicture"
-            [nzText]="user.fullName | initialsOnly"
-            [nzSize]="40"
-            class="bg-blue-500"
-          ></nz-avatar>
+          <nz-avatar [nzSrc]="user.profilePicture" [nzText]="user.fullName | initialsOnly" [nzSize]="40" class="bg-blue-500"></nz-avatar>
           <div class="flex-1">
             <div class="font-medium">{{ user.fullName }}</div>
             <div class="text-sm text-gray-500">{{ user.email }}</div>
             <div class="text-sm text-gray-500">{{ user.phoneNumber }}</div>
             <div class="mt-2 space-x-2">
-              <span
-                *ngFor="let role of user.authorities"
-                class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"
-              >
-                {{ role }}
-              </span>
+              <span *ngFor="let role of user.authorities" class="px-2 py-1 text-sm rounded-full bg-blue-100 text-blue-800"> {{ role }} </span>
             </div>
             <div
               class="mt-2 text-sm font-medium"
@@ -158,7 +122,5 @@
   <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
-    Bạn đã xem hết danh sách người dùng!
-  </div>
+  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách người dùng!</div>
 </div>

@@ -1,36 +1,26 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { NzSpinModule } from 'ng-zorro-antd/spin';
-import { NzTagModule } from 'ng-zorro-antd/tag';
-import { ProjectApprovalService } from 'src/app/services/project-approval.service';
-import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum';
-import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model';
-
+import { CommonModule } from '@angular/common'
+import { Component, inject, OnInit } from '@angular/core'
+import { FormsModule } from '@angular/forms'
+import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzInputModule } from 'ng-zorro-antd/input'
+import { NzMessageService } from 'ng-zorro-antd/message'
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
+import { NzPopoverModule } from 'ng-zorro-antd/popover'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { ProjectApprovalService } from 'src/app/services/project-approval.service'
+import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum'
+import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model'
 
 @Component({
-  selector: 'app-request-register-detail',
-  templateUrl: './request-register-detail.component.html',
-  styleUrls: ['./request-register-detail.component.scss'],
+  selector: 'app-admin-approval-modal',
+  templateUrl: './admin-approval-modal.component.html',
+  styleUrls: ['./admin-approval-modal.component.scss'],
   standalone: true,
-  imports:[
-    CommonModule, 
-    NzTagModule, 
-    NzPopoverModule, 
-    FormsModule, 
-    NzButtonModule, 
-    NzInputModule,
-    MatIconModule],
+  imports: [CommonModule, NzTagModule, NzPopoverModule, FormsModule, NzButtonModule, NzInputModule],
 })
-export class RequestRegisterDetailComponent implements OnInit {
-readonly nzModalData = inject(NZ_MODAL_DATA)
+export class AdminApprovalModalComponent implements OnInit {
+  //get data from nzdata
+  readonly nzModalData = inject(NZ_MODAL_DATA)
 
   ProjectApprovalStatus = ProjectApprovalStatus
   ProjectApprovalStatusLabel = ProjectApprovalStatusLabel
@@ -41,10 +31,7 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
 
   isAccepting = false
   approvalData: ProjectApprovalDetail
-  constructor(
-    private approvalService: ProjectApprovalService, 
-    private messageService: NzMessageService, 
-    private nzModalRef: NzModalRef) {
+  constructor(private approvalService: ProjectApprovalService, private messageService: NzMessageService, private nzModalRef: NzModalRef) {
     this.approvalData = this.nzModalData.approval
   }
 
@@ -56,7 +43,7 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
   getStatusColor(status: ProjectApprovalStatus): string {
     switch (status) {
       case ProjectApprovalStatus.PENDING:
-        return 'blue'
+        return 'yellow'
       case ProjectApprovalStatus.ACCEPTED:
         return 'green'
       case ProjectApprovalStatus.REJECTED:
@@ -109,5 +96,4 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
     })
     this.isModalVisible = false
   }
-  
 }

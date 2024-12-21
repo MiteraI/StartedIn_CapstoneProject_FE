@@ -30,14 +30,21 @@
             'bg-green-50 hover:bg-green-100': request.status === approvalStatuses.ACCEPTED,
             'bg-red-50 hover:bg-red-100': request.status === approvalStatuses.REJECTED,
           }"
+          (click)="showRequestDetail(request)"
         >
           <div class="ml-2 flex-grow">
-            <div class="font-medium">Yêu cầu số: {{ request.id }}</div>
-            <div class="text-sm text-gray-500">
-                Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
+            <div class="font-medium mb-4">Yêu cầu số: {{ request.id }}</div>
+            <div class="text-sm text-gray-500 font-semibold">
+                Ngày tạo: {{ request.sentDate| date:'dd/MM/yyyy' }}
             </div>
             <div *ngIf="request.status !== approvalStatuses.PENDING" class="text-sm text-gray-500">
-                Ngày duyệt: {{ request.lastUpdatedTime | date:'dd/MM/yyyy' }}
+                Ngày duyệt: {{ request.approvalDate| date:'dd/MM/yyyy' }}
+            </div>
+            <div class="text-sm text-gray-500 font-semibold">
+              Người gửi: {{ request.leaderName }}
+            </div>
+            <div class="text-sm text-gray-500 font-semibold">
+              Dự án: {{ request.projectName }}
             </div>
             <div class="mt-2">
               <span [ngClass]="{
