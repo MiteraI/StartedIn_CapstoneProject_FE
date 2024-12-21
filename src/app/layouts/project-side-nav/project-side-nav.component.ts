@@ -108,5 +108,6 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   }[] = [
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
+    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng ký'}
   ]
 }
