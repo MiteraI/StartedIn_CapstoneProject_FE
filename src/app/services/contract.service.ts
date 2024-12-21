@@ -184,4 +184,9 @@ export class ContractService {
       { responseType: 'text' as 'json' }
     )
   }
+
+  cancelSign(projectId: string, id: string): Observable<any> {
+    const url = `/api/projects/${projectId}/contracts/${id}/cancel`;
+    return this.http.put(this.applicationConfigService.getEndpointFor(url), null);
+  }
 }

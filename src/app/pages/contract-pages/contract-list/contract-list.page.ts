@@ -371,6 +371,30 @@ export class ContractListPage implements OnInit, OnDestroy {
       });
   }
 
+  // cancel stuff
+  cancelSign(contract: ContractListItemModel) {
+    this.modalService.confirm({
+      nzTitle: 'Từ chối ký hợp đồng',
+      nzContent: `Từ chối ký ${contract.contractName}?`,
+      nzOkText: 'Từ chối',
+      nzCancelText: 'Hủy',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.contractService.cancelSign(this.projectId, contract.id)
+          .pipe(
+            catchError(error => {
+              this.notification.error("Lỗi", "Từ chối ký hợp đồng thất bại!", { nzDuration: 2000 });
+              return throwError(() => new Error(error.error));
+            })
+          )
+          .subscribe(() => {
+            this.notification.success("Thành công", "Từ chối ký hợp đồng thành công!", { nzDuration: 2000 });
+            contract = { ...contract, contractStatus: ContractStatus.DECLINED };
+          });
+      }
+    });
+  }
+
   // infinite scroll stuff
   get isEndOfList(): boolean {
     return this.pageIndex * this.pageSize >= this.totalRecords
