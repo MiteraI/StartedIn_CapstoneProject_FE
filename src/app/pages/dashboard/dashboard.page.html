@@ -5,17 +5,6 @@
   </div>
 
   <div *ngIf="dashboard" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <!-- Navigation to create project approval -->
-    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
-      <div class="flex justify-between items-center">
-        <div>
-          <div class="font-semibold text-lg">Yêu cầu duyệt dự án</div>
-          <div class="text-gray-500">Bạn có thể gửi yêu cầu để admin duyệt dự án lên chính thức</div>
-        </div>
-        <div><button (click)="openRequestAppovalModal()" nz-button nzType="primary">Gửi yêu cầu</button></div>
-      </div>
-    </div>
-
     <!-- Budget Section -->
     <div class="bg-white rounded-lg shadow p-6">
       <div class="text-xl md:text-2xl font-semibold mb-16">Tổng ngân sách hiện tại</div>

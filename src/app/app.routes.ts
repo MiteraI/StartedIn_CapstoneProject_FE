@@ -220,6 +220,10 @@ export const routes: Routes = [
         path: 'members',
         loadComponent: () => import('./pages/project-pages/members/members.page').then((m) => m.MembersPage),
       },
+      {
+        path: 'project-approval-list',
+        loadComponent: () => import('./pages/project-approval-pages/project-approval-list/project-approval-list.page').then((m) => m.ProjectApprovalPage),
+      },
     ],
   },
   {

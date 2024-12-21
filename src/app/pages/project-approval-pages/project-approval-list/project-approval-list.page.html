@@ -1,0 +1,54 @@
+<app-view-title-bar viewName="Đăng ký gọi vốn"></app-view-title-bar>
+<div class="max-w-7xl mx-auto p-4">
+    <div *ngIf="isLoading" class="flex justify-center p-4">
+        <nz-spin nzSimple></nz-spin>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="font-semibold text-lg">Yêu cầu duyệt dự án</div>
+            <div class="text-gray-500">Bạn có thể gửi yêu cầu để admin duyệt dự án lên chính thức</div>
+          </div>
+          <div><button (click)="openRequestAppovalModal()" nz-button nzType="primary">Gửi yêu cầu</button></div>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading && approvals.length === 0" class="text-center text-gray-500">
+        Không có yêu cầu kết thúc hợp đồng nào
+      </div>
+      
+      <div
+        *ngIf="!isLoading && approvals.length > 0"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4"
+      >
+        <div
+          *ngFor="let request of approvals"
+          class="rounded-lg shadow p-4 flex items-center cursor-pointer"
+          [ngClass]="{
+            'bg-blue-50 hover:bg-blue-100': request.status === approvalStatuses.PENDING,
+            'bg-green-50 hover:bg-green-100': request.status === approvalStatuses.ACCEPTED,
+            'bg-red-50 hover:bg-red-100': request.status === approvalStatuses.REJECTED,
+          }"
+        >
+          <div class="ml-2 flex-grow">
+            <div class="font-medium">Yêu cầu số: {{ request.id }}</div>
+            <div class="text-sm text-gray-500">
+                Ngày tạo: {{ request.createdTime | date:'dd/MM/yyyy' }}
+            </div>
+            <div *ngIf="request.status !== approvalStatuses.PENDING" class="text-sm text-gray-500">
+                Ngày duyệt: {{ request.lastUpdatedTime | date:'dd/MM/yyyy' }}
+            </div>
+            <div class="mt-2">
+              <span [ngClass]="{
+                'text-blue-500': request.status === approvalStatuses.PENDING,
+                'text-green-500': request.status === approvalStatuses.ACCEPTED,
+                'text-red-500': request.status === approvalStatuses.REJECTED
+              }">
+                ● {{getApprovalStatusLabel(request.status)}}
+              </span>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
