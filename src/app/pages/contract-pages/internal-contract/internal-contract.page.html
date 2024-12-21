@@ -173,9 +173,9 @@
           Quay lại
         </button>
         <div class="flex-grow"></div>
-        <!-- <button nz-button nzType="link" [disabled]="!contractForm.valid" (click)="showPreview()">
+        <button nz-button nzType="link" (click)="showPreview()" [nzLoading]="isLoading">
           Bản xem trước
-        </button> -->
+        </button>
         <button nz-button nzType="default" (click)="save()" [nzLoading]="isLoading">
           Lưu
         </button>

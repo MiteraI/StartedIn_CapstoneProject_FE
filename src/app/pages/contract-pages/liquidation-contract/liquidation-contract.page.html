@@ -89,7 +89,7 @@
         </button>
         <div class="flex-grow"></div>
         <button nz-button nzType="link" (click)="download()" class="mr-2" [nzLoading]="isLoading">
-          Tải xuống
+          {{ contract.contractStatus === contractStatus.DRAFT ? 'Xem trước' : 'Tải xuống' }}
         </button>
         <button *ngIf="contract.contractStatus === 1" nz-button nzType="primary" (click)="send()" class="mr-2" [nzLoading]="isLoading">
           Gửi
