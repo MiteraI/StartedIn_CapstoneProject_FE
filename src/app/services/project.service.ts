@@ -6,7 +6,6 @@ import { ContractPartyModel } from '../shared/models/contract/contract-party.mod
 import { StartupModel } from '../shared/models/project/startup.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { ProjectModel } from '../shared/models/project/project.model'
-import { UserProjectsModel } from '../shared/models/project/user-projects.model'
 import { TeamMemberModel } from '../shared/models/user/team-member.model'
 import { ProjectOveriewModel } from '../shared/models/project/project-overview.model'
 import { PayosInfoModel } from '../shared/models/project/payos-info.model'
@@ -91,8 +90,8 @@ export class ProjectService {
     );
   }
 
-  getUserProjects(): Observable<UserProjectsModel> {
-    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'))
+  getUserProjects(): Observable<ProjectModel[]> {
+    return this.http.get<ProjectModel[]>(this.applicationConfigService.getEndpointFor('/api/projects'))
   }
 
   getMembers(projectId: string): Observable<TeamMemberModel[]> {

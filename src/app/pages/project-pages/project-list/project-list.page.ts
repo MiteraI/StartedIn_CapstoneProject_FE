@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { UserProjectCardComponent } from 'src/app/components/project-pages/project-list/project-card/project-card.component'
 import { CommonModule } from '@angular/common'
-import { UserProjectsModel } from 'src/app/shared/models/project/user-projects.model'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { ProjectCreateModalComponent } from 'src/app/components/project-pages/project-create-modal/project-create-modal.component'
@@ -11,6 +10,10 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { ProjectService } from 'src/app/services/project.service'
 import { Subject, switchMap, takeUntil } from 'rxjs'
 import { Authority } from 'src/app/shared/constants/authority.constants'
+import { ProjectModel } from 'src/app/shared/models/project/project.model'
+import { UserStatusInProject, UserStatusInProjectLabels } from 'src/app/shared/enums/user-in-project-status.enum'
+import { ProjectStatus } from 'src/app/shared/enums/project-status.enum'
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification'
 
 @Component({
   selector: 'app-project-list',
@@ -23,11 +26,12 @@ import { Authority } from 'src/app/shared/constants/authority.constants'
     UserProjectCardComponent,
     NzButtonModule,
     NzModalModule,
-    NzSpinModule
+    NzSpinModule,
+    NzNotificationModule
   ],
 })
 export class ProjectListPage implements OnInit, OnDestroy {
-  userProjects: UserProjectsModel | undefined
+  userProjects: ProjectModel[] | undefined
   isInvestor = true
   isMentor = true
   private destroy$ = new Subject<void>()
@@ -37,8 +41,12 @@ export class ProjectListPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private accountService: AccountService,
     private router: Router,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private notification: NzNotificationService
   ) {}
+
+  ProjectStatus = ProjectStatus
+  UserStatusInProject = UserStatusInProject
 
   ngOnInit() {
     this.userProjects = this.route.snapshot.data['userProjects']
@@ -49,6 +57,18 @@ export class ProjectListPage implements OnInit, OnDestroy {
     this.projectService.refreshProject$.pipe(switchMap(() => this.projectService.getUserProjects())).subscribe((userProjects) => {
       this.userProjects = userProjects
     })
+  }
+
+  onProjectClick(project: ProjectModel) {
+    if (project.projectStatus === ProjectStatus.CLOSED || project.userStatusInProject === UserStatusInProject.LEFT) {
+      this.showProjectClosedOrLeftNotification();
+    } else {
+      this.navigateToProject(project.id);
+    }
+  }
+
+  showProjectClosedOrLeftNotification() {
+    this.notification.warning('Thông báo', 'Bạn đã rời dự án này');
   }
 
   openCreateProjectModal() {
@@ -68,4 +88,6 @@ export class ProjectListPage implements OnInit, OnDestroy {
     this.destroy$.next()
     this.destroy$.complete()
   }
+
+  
 }

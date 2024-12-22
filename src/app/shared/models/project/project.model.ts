@@ -1,4 +1,5 @@
 import { ProjectStatus } from '../../enums/project-status.enum'
+import { UserStatusInProject } from '../../enums/user-in-project-status.enum'
 import { ProjectCharter } from '../project-charter/project-charter.model'
 
 export type ProjectModel = {
@@ -17,4 +18,5 @@ export type ProjectModel = {
   isSignedInternalContract?: string
   maxMember: number
   currentMember: number
+  userStatusInProject: UserStatusInProject
 }
