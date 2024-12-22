@@ -27,8 +27,6 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
-import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
 
 
 @Component({
@@ -50,30 +48,18 @@ import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
     VndCurrencyPipe,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
-    MatIconModule,
-    EditorModule
+    MatIconModule
   ]
 })
 export class InvestmentContractPage implements OnInit {
   isReadOnly = false;
   isFromDeal = false;
-  isUpdating = false;
 
   project!: ProjectModel;
   contract: InvestmentContractDetailModel | null = null;
   contractId: string | null = null;
   deal: ProjectDealItem | null = null;
   investorId!: string;
-
-  editorKey = EDITOR_KEY
-  init: EditorComponent['init'] = {
-    branding: false,
-    plugins: 'lists link code help wordcount',
-    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-    setup: () => {
-      this.onInfoChange()
-    },
-  }
 
   contractForm!: FormGroup;
   percentFormatter = (value: number) => `${value}%`;
@@ -155,10 +141,6 @@ export class InvestmentContractPage implements OnInit {
         })
       }
     });
-  }
-
-  onInfoChange() {
-    this.isUpdating = true
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
