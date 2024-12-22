@@ -1,0 +1,74 @@
+<div class="overflow-hidden bg-white rounded-lg p-6">
+  <!-- Project Information Section -->
+  <div class="space-y-6">
+    <div>
+      <div class="text-3xl font-semibold text-purple-600 flex justify-center">Thông tin đăng ký</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4 pt-10">
+        <div>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="business" class="text-gray-600 mr-2"></mat-icon>
+            Tên dự án:
+          </p>
+          <p class="text-xl text-gray-800">{{ approvalData.projectName || 'Không có dữ liệu' }}</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="person" class="text-gray-600 mr-2"></mat-icon>
+            Người gửi:
+          </p>
+          <p class="text-xl text-gray-800">{{ approvalData.leaderName || 'Không có dữ liệu' }}</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="date_range" class="text-gray-600 mr-2"></mat-icon>
+            Ngày gửi:
+          </p>
+          <p class="text-xl text-gray-800">{{ approvalData.sentDate | date: 'dd/MM/yyyy hh:mm aa' }}</p>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="assignment_turned_in" class="text-gray-600 mr-2"></mat-icon>
+            Ngày duyệt:
+          </p>
+          <div *ngIf="approvalData.status !== ProjectApprovalStatus.PENDING">
+            <p class="text-xl text-gray-800">{{ approvalData.approvalDate | date: 'dd/MM/yyyy hh:mm aa' }}</p>
+          </div>
+          <div *ngIf="approvalData.status === ProjectApprovalStatus.PENDING">
+            <p class="text-xl text-gray-800">Chưa phê duyệt</p>
+          </div>
+
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-600">Trạng thái:</p>
+          <nz-tag [nzColor]="getStatusColor(approvalData.status)" class="text-lg font-semibold">
+            {{ ProjectApprovalStatusLabel[approvalData.status] }}
+          </nz-tag>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-600">Lý do:</p>
+          <p class="text-xl text-gray-800 mt-2">{{ approvalData.reason || 'Không có lý do' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rejected Reason Section -->
+    <div *ngIf="approvalData.rejectReason || approvalData.status === ProjectApprovalStatus.REJECTED">
+      <p class="text-lg font-semibold text-gray-600">Lý do từ chối từ quản trị viên:</p>
+      <p class="text-gray-800 mt-2">{{ approvalData.rejectReason || 'Không có lý do' }}</p>
+    </div>
+
+    <!-- Documents Section -->
+    <div>
+      <div class="text-xl font-semibold text-gray-900">Tài liệu đính kèm</div>
+      <ul class="mt-4 space-y-4">
+        <li *ngFor="let doc of approvalData.documents" class="flex items-center justify-between border rounded-lg p-4 hover:bg-gray-50 transition duration-200">
+          <div>
+            <p class="font-medium text-gray-800">{{ doc.documentName }}</p>
+            <p class="text-gray-600 text-sm mt-1">{{ doc.description || 'Không có mô tả' }}</p>
+          </div>
+          <a [href]="doc.attachmentLink" target="_blank" class="text-blue-500 hover:underline text-sm">Tải xuống</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

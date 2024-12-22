@@ -291,6 +291,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin-pages/admin-user-list/admin-user-list.page').then((m) => m.AdminUserListPage),
   },
   {
+    path: 'admin/project-approval',
+    canActivate: [AdminGuard],
+    loadComponent: () => import('./pages/admin-pages/admin-project-approval/admin-project-approval.page').then((m) => m.AdminProjectApprovalPage),
+  },
+  {
     path: 'profile',
     canActivate: [AuthenticatedGuard],
     resolve: { profile: ProfileDataResolver },
