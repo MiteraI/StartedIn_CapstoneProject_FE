@@ -35,7 +35,6 @@ export class ProjectCreateModalComponent implements OnInit {
       projectName: ['', [Validators.required]],
       description: ['', [Validators.required]],
       logoFile: [null, [Validators.required]],
-      minMember: [0, [Validators.required, Validators.min(1)]],
       maxMember: [0, [Validators.required, Validators.min(1)]],
       startDate: [null, [Validators.required]],
       endDate: [null],
@@ -91,7 +90,6 @@ export class ProjectCreateModalComponent implements OnInit {
       if (formattedEndDate) {
         formData.append('EndDate', formattedEndDate)
       }
-      formData.append('MinMember', this.projectForm.get('minMember')?.value)
       formData.append('MaxMember', this.projectForm.get('maxMember')?.value)
       formData.append('CompanyIdNumer', this.projectForm.get('companyIdNumer')?.value)
 

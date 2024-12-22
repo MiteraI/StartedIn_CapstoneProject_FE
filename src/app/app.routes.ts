@@ -5,7 +5,6 @@ import { ProjectDataResolver } from './shared/resolvers/project-data.resolver'
 import { ProjectDealDataResolver } from './shared/resolvers/project-deal-data.resolver'
 import { InvestmentContractDataResolver } from './shared/resolvers/investment-contract-data.resolver'
 import { InternalContractDataResolver } from './shared/resolvers/internal-contract-data.resolver'
-import { UserProjectDataResolver } from './shared/resolvers/user-projects-data.resolver'
 import { InvestorDealDataResolver } from './shared/resolvers/investor-deal-data.resolver'
 import { InvestorGuard } from './shared/guards/investor.guard'
 import { UserGuard } from './shared/guards/user.guard'
@@ -24,7 +23,6 @@ export const routes: Routes = [
   {
     path: 'projects',
     canActivate: [AuthenticatedGuard],
-    resolve: { userProjects: UserProjectDataResolver },
     loadComponent: () => import('./pages/project-pages/project-list/project-list.page').then((m) => m.ProjectListPage),
   },
   {
