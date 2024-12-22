@@ -15,7 +15,6 @@ export type ProjectModel = {
   endDate?: string
   projectCharterResponseDto?: ProjectCharter
   isSignedInternalContract?: string
-  minMember: number
   maxMember: number
   currentMember: number
 }
