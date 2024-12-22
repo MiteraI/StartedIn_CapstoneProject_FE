@@ -207,6 +207,7 @@ export class InternalContractPage implements OnInit, OnDestroy {
     if (!this.contractId) {
       // Create contract
       o = this.contractService.createInternalContract(this.project.id, this.contractModel);
+      console.log(this.contractModel.contract.contractPolicy)
     } else {
       // Update contract
       o = this.contractService.updateInternalContract(this.contractId, this.project.id, this.contractModel);

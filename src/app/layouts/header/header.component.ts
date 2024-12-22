@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input({ required: true }) isDesktopView: boolean = false
   @Input({ required: true }) inProjectDetails: boolean = false
   isInvestor = false
+  isAdmin = false
   private destroy$ = new Subject<void>()
 
   constructor(private accountService: AccountService) {}
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.isInvestor = account?.authorities.includes(Authority.INVESTOR) ?? false
+      this.isAdmin = account?.authorities.includes(Authority.ADMIN) ?? false
     })
   }
 
