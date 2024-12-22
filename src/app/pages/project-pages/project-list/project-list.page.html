@@ -1,27 +1,31 @@
-<div class="flex flex-col max-w-6xl mx-auto p-6 md:py-12">
+<div class="flex flex-col max-w-6xl mx-auto p-6 md:py-12 min-h-screen">
+  <!-- My Projects -->
   @if ((userProjects?.listOwnProject?.length ?? 0) > 0 && !isInvestor) {
-  <div class="text-2xl font-medium mb-8">Dự án của tôi</div>
-  <div class="mb-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-      <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listOwnProject" [project]="project" />
+    <div class="text-2xl font-medium mb-8">Dự án của tôi</div>
+    <div class="mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
+        <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listOwnProject" [project]="project" />
+      </div>
     </div>
-  </div>
   }
-  <!-- @if (((userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) == 0 )&& !isInvestor) {
-  <div class="text-gray-500 text-xl">
-    <a (click)="openCreateProjectModal()" nz-button nzType="link">Thêm dự án mới!</a>
-  </div>
-  } -->
 
-  <!-- Dự án đang tham gia -->
+  <!-- Participating Projects -->
   @if ((userProjects?.listParticipatedProject?.length ?? 0) > 0) {
-  <div class="text-2xl font-medium mb-8">Dự án đang tham gia</div>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-    <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
-  </div>
+    <div class="text-2xl font-medium mb-8">Dự án đang tham gia</div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
+      <app-project-card class="cursor-pointer" (click)="navigateToProject(project.id)" *ngFor="let project of userProjects?.listParticipatedProject" [project]="project" />
+    </div>
   }
-  <div *ngIf="(userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) === 0" class="text-gray-500 text-xl">
-    Bạn không có dự án nào.
+
+  <!-- No Projects -->
+  <div 
+  *ngIf="(userProjects?.listOwnProject?.length ?? 0) === 0 && (userProjects?.listParticipatedProject?.length ?? 0) === 0"
+  class="flex flex-col justify-center items-center text-gray-500 text-3xl min-h-screen"
+>
+  Bạn chưa tham gia dự án nào.
+  <div *ngIf="!isInvestor && !isMentor" class="text-xl mt-2">
     <a class="ml-2" (click)="openCreateProjectModal()" nz-button nzType="link">Thêm dự án mới!</a>
   </div>
+</div>
+
 </div>
