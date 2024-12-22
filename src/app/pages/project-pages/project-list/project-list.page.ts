@@ -29,6 +29,7 @@ import { Authority } from 'src/app/shared/constants/authority.constants'
 export class ProjectListPage implements OnInit, OnDestroy {
   userProjects: UserProjectsModel | undefined
   isInvestor = true
+  isMentor = true
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -43,6 +44,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
     this.userProjects = this.route.snapshot.data['userProjects']
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
       this.isInvestor = account?.authorities.includes(Authority.INVESTOR) ?? false
+      this.isMentor = account?.authorities.includes(Authority.MENTOR) ?? false
     })
     this.projectService.refreshProject$.pipe(switchMap(() => this.projectService.getUserProjects())).subscribe((userProjects) => {
       this.userProjects = userProjects
