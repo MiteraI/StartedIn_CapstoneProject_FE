@@ -13,6 +13,8 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { ProjectApprovalService } from 'src/app/services/project-approval.service';
 import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum';
 import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model';
+import { VndCurrencyPipe } from "../../../shared/pipes/vnd-currency.pipe";
+import { format } from 'date-fns';
 
 
 @Component({
@@ -20,14 +22,16 @@ import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/pr
   templateUrl: './request-register-detail.component.html',
   styleUrls: ['./request-register-detail.component.scss'],
   standalone: true,
-  imports:[
-    CommonModule, 
-    NzTagModule, 
-    NzPopoverModule, 
-    FormsModule, 
-    NzButtonModule, 
+  imports: [
+    CommonModule,
+    NzTagModule,
+    NzPopoverModule,
+    FormsModule,
+    NzButtonModule,
     NzInputModule,
-    MatIconModule],
+    MatIconModule,
+    VndCurrencyPipe,
+],
 })
 export class RequestRegisterDetailComponent implements OnInit {
 readonly nzModalData = inject(NZ_MODAL_DATA)
@@ -64,6 +68,10 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
       default:
         return 'gray'
     }
+  }
+  
+  formatDate(dateStr: string): string {
+    return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
   }
 
   onCancel() {
