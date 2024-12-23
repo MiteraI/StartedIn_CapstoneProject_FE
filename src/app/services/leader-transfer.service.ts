@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { TransferMeetingModel } from '../shared/models/leader-transfer/transfer-meeting.model'
-import { LeaderTransfer } from '../shared/models/leader-transfer/leader-transfer.model'
+import { LeaderTransferModel } from '../shared/models/leader-transfer/leader-transfer.model'
+import { Pagination } from '../shared/models/pagination.model'
+import { LeaderTransferHistoryModel } from '../shared/models/leader-transfer/leader-transfer-history.model'
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,7 @@ export class LeaderTransferService {
 
   getLatest(projectId: string) {
     const url = `/api/projects/${projectId}/leader-transfer`
-    return this.http.get<LeaderTransfer>(this.applicationConfigService.getEndpointFor(url))
+    return this.http.get<LeaderTransferModel>(this.applicationConfigService.getEndpointFor(url))
   }
 
   accept(projectId: string, id: string, newLeaderId: string) {
@@ -40,5 +42,15 @@ export class LeaderTransferService {
       null,
       { responseType: 'text' as 'json' }
     )
+  }
+
+  getHistory(projectId: string) {
+    const url = `/api/projects/${projectId}/leader-history`
+    return this.http.get<Pagination<LeaderTransferHistoryModel>>(this.applicationConfigService.getEndpointFor(url))
+  }
+
+  getDetail(id: string, projectId: string) {
+    const url = `/api/projects/${projectId}/leader-transfer/${id}`
+    return this.http.get<LeaderTransferHistoryModel>(this.applicationConfigService.getEndpointFor(url))
   }
 }

@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { LeaderTransferService } from 'src/app/services/leader-transfer.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { LeaderTransfer } from 'src/app/shared/models/leader-transfer/leader-transfer.model';
+import { LeaderTransferModel } from 'src/app/shared/models/leader-transfer/leader-transfer.model';
 import { catchError, throwError } from 'rxjs';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
@@ -61,7 +61,7 @@ export class MembersPage implements OnInit {
   teamRoles = TeamRole;
   teamRoleLabels = TeamRoleLabels;
 
-  leaderTransfer?: LeaderTransfer;
+  leaderTransfer?: LeaderTransferModel;
   isLeader: boolean = false;
   meetingStatus = MeetingStatus;
 
