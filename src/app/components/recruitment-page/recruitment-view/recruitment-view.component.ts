@@ -55,7 +55,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
   recruitmentForm: FormGroup
   init: EditorComponent['init'] = {
     branding: false,
-    plugins: 'lists link code help wordcount',
+    plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
       this.onInfoChange()
