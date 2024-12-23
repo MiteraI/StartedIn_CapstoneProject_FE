@@ -67,7 +67,7 @@ export class PayosSetupPage implements OnInit {
     this.projectService.getPayosInfo(this.projectId)
       .pipe(
         catchError(error => {
-          if (error.status !== 404) {
+          if (error.status !== 404 && error.status !== 401) {
             this.notification.error('Lỗi', 'Không thể tải thông tin PayOS', { nzDuration: 2000 });
           }
           return throwError(() => error);

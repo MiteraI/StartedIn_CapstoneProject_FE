@@ -96,7 +96,7 @@ export class MembersPage implements OnInit {
       .getLatest(this.projectId)
       .pipe(
         catchError(error => {
-          if (error.status !== 404) {
+          if (error.status !== 404 && error.status !== 401) {
             this.notification.error('Lỗi', 'Không thể tải thông tin nhượng quyền nhóm trưởng!', { nzDuration: 2000 });
           }
           this.isTransferLoading = false;
