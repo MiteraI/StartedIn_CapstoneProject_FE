@@ -9,7 +9,7 @@
           </div>
           <div class="flex-1">
             <div class="text-2xl font-bold text-purple-800">Đổi nhóm trưởng</div>
-            <div class="mt-1 text-gray-500">
+            <div class="mt-1 text-black">
               <span
                 class="font-medium hover:text-purple-500 cursor-pointer transition-colors"
                 [routerLink]="['/users', transfer.formerLeaderId]"
@@ -20,7 +20,7 @@
             <div class="mt-1 text-gray-500">
               chuyển cho
               <span
-                class="font-medium hover:text-purple-500 cursor-pointer transition-colors"
+                class="font-medium hover:text-purple-500 cursor-pointer transition-colors text-black"
                 [routerLink]="['/users', transfer.newLeaderId]"
               >
                 {{ transfer.newLeaderName }}
@@ -87,7 +87,7 @@
         <!-- Appointment Details -->
         <div class="bg-rose-50 p-4 rounded-lg cursor-pointer" [routerLink]="['/projects', projectId, 'meeting']">
           <div class="text-sm font-medium text-gray-500 mb-2">Thông tin cuộc họp</div>
-          <div class="font-medium text-lg mb-2 hover:text-purple-500 transition-colors">
+          <div class="font-medium text-lg mb-1 hover:text-purple-500 transition-colors">
             {{ transfer.appointmentName }}
           </div>
           <div class="text-gray-500">
