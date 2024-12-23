@@ -22,15 +22,15 @@
   <tbody>
     @for (data of basicTable.data; track data.id) {
     <tr>
-      <td>{{ data.title }}</td>
+      <td class="font-semibold text-base">{{ data.title }}</td>
       <td>
-        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false">
+        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-sm font-medium text-center">
           {{ labels[data.status] }}
         </nz-tag>
       </td>
-      <td>{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
-      <td>{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
-      <td>{{ data.createdBy }}</td>
+      <td class="text-base">{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td class="text-base">{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td class="text-base">{{ data.createdBy }}</td>
       <td>
         <button nz-button nzType="text" (click)="openUpdateTaskModal(data.id)"><i class="text-blue-500" nz-icon nzType="info-circle" nzTheme="outline"></i></button>
         <nz-divider nzType="vertical"></nz-divider>

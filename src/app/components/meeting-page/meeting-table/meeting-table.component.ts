@@ -15,6 +15,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
 import { catchError, throwError } from 'rxjs'
+import { format } from 'date-fns'
 
 @Component({
   selector: 'app-meeting-table',
@@ -57,6 +58,10 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       this.getTableData()
     })
 
+  }
+
+  formatDate(dateStr: string): string {
+    return format(new Date(dateStr), 'dd/MM/yyyy - HH:mm');
   }
 
   private getTableData() {
