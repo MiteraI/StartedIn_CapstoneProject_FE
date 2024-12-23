@@ -104,35 +104,22 @@ export class InvestmentCallPagePage implements OnInit {
       })
     })
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => this.loadMore())
-    // fetch the data again when create new item
-    // this.investmentCallService.refreshInvestmentCall$
-    //   .pipe(
-    //     switchMap(() => {
-    //       this.isFetchAllCallLoading = true
-    //       return this.investmentCallService.getInvestmentCallList(this.projectId).pipe(finalize(() => (this.isFetchAllCallLoading = false)))
-    //     })
-    //   )
-    //   .subscribe((investmentCall) => {
-    //     this.listInvestmentCall = investmentCall
-    //   })
-
-    // this.fetchInvestmentCalls()
+    this.investmentCallService.refreshInvestmentCall$.subscribe((shouldRefresh) => {
+      if (shouldRefresh) {
+        this.filterInvestmentCalls(); // Replace with your data-fetching logic
+      }
+    })
     this.fetchCurrentProject()
   }
-
-  // private fetchInvestmentCalls() {
-  //   this.isFetchAllCallLoading = true
-  //   this.investmentCallService.getInvestmentCallList(this.projectId).subscribe((data) => {
-  //     console.log(data)
-  //     this.listInvestmentCall = data
-  //     this.isFetchAllCallLoading = false
-  //   })
-  // }
 
   private fetchCurrentProject() {
     this.projectService.getProjectOverview(this.projectId).subscribe((data) => {
       this.currentProject = data
     })
+  }
+
+  onRefreshNeeded() {
+    this.filterInvestmentCalls();
   }
 
   filterInvestmentCalls(append: boolean = false) {

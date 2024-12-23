@@ -24,6 +24,7 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { TerminateContractModalComponent } from '../terminate-contract-modal/terminate-contract-modal.component';
 import { LiquidationModalComponent } from '../liquidation-modal/liquidation-modal.component';
 import { TerminateMeetingModalComponent } from '../terminate-meeting-modal/terminate-meeting-modal.component';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'app-contract-table',
@@ -41,7 +42,8 @@ import { TerminateMeetingModalComponent } from '../terminate-meeting-modal/termi
     NzAvatarModule,
     InitialsOnlyPipe,
     NzPopconfirmModule,
-    VndCurrencyPipe
+    VndCurrencyPipe,
+    NzTagModule
   ],
 })
 
@@ -220,5 +222,27 @@ export class ContractTableComponent  implements OnInit {
       contract.contractType === ContractType.LIQUIDATIONNOTE ? 'liquidation-contract' : '',
       contract.id
     ])
+  }
+
+  getStatusOfDisbursement(status: DisbursementStatus) : string
+  {
+    switch(status)
+    {
+        case DisbursementStatus.PENDING:
+          return 'grey'; // Color for pending status
+        case DisbursementStatus.ACCEPTED:
+          return 'blue'; // Color for accepted status
+        case DisbursementStatus.REJECTED:
+          return 'red'; // Color for rejected status
+        case DisbursementStatus.FINISHED:
+          return 'green'; // Color for completed status
+        case DisbursementStatus.OVERDUE:
+          return 'orange'; // Color for in-progress status
+        case DisbursementStatus.CANCELLED:
+          return 'brown'
+        default:
+          return 'black'; // Default color for unknown status
+    }
+
   }
 }
