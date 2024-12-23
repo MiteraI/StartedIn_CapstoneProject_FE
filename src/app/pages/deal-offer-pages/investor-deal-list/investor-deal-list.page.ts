@@ -114,6 +114,7 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
         this.searchResult = result;
         this.dealOffers = result.data;
         this.totalRecords = result.total;
+        this.isLoading = false;
       });
   }
 

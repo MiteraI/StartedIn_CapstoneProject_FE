@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { MatIcon, MatIconModule } from '@angular/material/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzMessageService } from 'ng-zorro-antd/message'
@@ -16,7 +17,7 @@ import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/pr
   templateUrl: './admin-approval-modal.component.html',
   styleUrls: ['./admin-approval-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTagModule, NzPopoverModule, FormsModule, NzButtonModule, NzInputModule],
+  imports: [CommonModule, NzTagModule, NzPopoverModule, FormsModule, NzButtonModule, NzInputModule, MatIconModule],
 })
 export class AdminApprovalModalComponent implements OnInit {
   //get data from nzdata

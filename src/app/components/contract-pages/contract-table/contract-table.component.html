@@ -125,9 +125,15 @@
           <tr>
             <td [colSpan]="5">
               <div class="flex justify-around text-lg my-2 space-x-4">
-                <div>Tổng giá trị: <strong>{{ data.totalDisbursementAmount | vndCurrency }}</strong></div>
-                <div>Đã giải ngân: <strong>{{ data.disbursedAmount | vndCurrency }}</strong></div>
-                <div>Chưa giải ngân: <strong>{{ data.pendingAmount | vndCurrency }}</strong></div>
+                <div [ngClass]="'text-blue-500'">Tổng giá trị: <strong>{{ data.totalDisbursementAmount | vndCurrency }}</strong></div>
+
+                <div [ngClass]="'text-green-500'">
+                  Đã giải ngân: <strong>{{ data.disbursedAmount | vndCurrency }}</strong>
+                </div>
+
+                <div [ngClass]="'text-red-500'">
+                  Chưa giải ngân: <strong>{{ data.pendingAmount | vndCurrency }}</strong>
+                </div>
               </div>
             </td>
           </tr>
@@ -142,11 +148,19 @@
         <tbody>
           @for (data of innerTable.data; track data) {
           <tr>
-            <td>{{ data.title }}</td>
-            <td>{{ formatDateOnly(data.startDate) }}</td>
-            <td>{{ formatDateOnly(data.endDate) }}</td>
-            <td>{{ data.amount | vndCurrency }}</td>
-            <td>{{ getDisbursementStatusLabel(data.disbursementStatus) }}</td>
+            <td class="font-semibold text-center">{{ data.title }}</td>
+            <td class="text-center">{{ formatDateOnly(data.startDate) }}</td>
+            <td class="text-center">{{ formatDateOnly(data.endDate) }}</td>
+            <td class="text-center">{{ data.amount | vndCurrency }}</td>
+            <td class="text-center">
+              <nz-tag
+              [nzColor]="getStatusOfDisbursement(data.disbursementStatus)"
+              class="text-sm"
+              >
+                {{ getDisbursementStatusLabel(data.disbursementStatus) }}
+              </nz-tag>
+            </td>
+            
           </tr>
           }
         </tbody>

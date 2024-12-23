@@ -6,7 +6,6 @@ import { ContractPartyModel } from '../shared/models/contract/contract-party.mod
 import { StartupModel } from '../shared/models/project/startup.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { ProjectModel } from '../shared/models/project/project.model'
-import { UserProjectsModel } from '../shared/models/project/user-projects.model'
 import { TeamMemberModel } from '../shared/models/user/team-member.model'
 import { ProjectOveriewModel } from '../shared/models/project/project-overview.model'
 import { PayosInfoModel } from '../shared/models/project/payos-info.model'
@@ -26,13 +25,13 @@ export class ProjectService {
   private parseNumericFields<T extends StartupModel>(startup: T): T {
     return {
       ...startup,
-      investmentCall: {
+      investmentCall: startup.investmentCall ? {
         ...startup.investmentCall,
         targetCall: typeof startup.investmentCall.targetCall === 'string' ? parseInt(startup.investmentCall.targetCall) : startup.investmentCall.targetCall,
         amountRaised: typeof startup.investmentCall.amountRaised === 'string' ? parseInt(startup.investmentCall.amountRaised) : startup.investmentCall.amountRaised,
         remainAvailableEquityShare: typeof startup.investmentCall.remainAvailableEquityShare === 'string' ? parseFloat(startup.investmentCall.remainAvailableEquityShare) : startup.investmentCall.remainAvailableEquityShare,
         equityShareCall: typeof startup.investmentCall.equityShareCall === 'string' ? parseFloat(startup.investmentCall.equityShareCall) : startup.investmentCall.equityShareCall,
-      }
+      } : null
     };
   }
 
@@ -91,8 +90,8 @@ export class ProjectService {
     );
   }
 
-  getUserProjects(): Observable<UserProjectsModel> {
-    return this.http.get<UserProjectsModel>(this.applicationConfigService.getEndpointFor('/api/projects'))
+  getUserProjects(): Observable<ProjectModel[]> {
+    return this.http.get<ProjectModel[]>(this.applicationConfigService.getEndpointFor('/api/projects'))
   }
 
   getMembers(projectId: string): Observable<TeamMemberModel[]> {

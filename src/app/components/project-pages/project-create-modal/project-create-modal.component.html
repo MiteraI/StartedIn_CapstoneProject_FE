@@ -17,7 +17,7 @@
 
   <!-- Logo -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Logo</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="logoFile">Logo</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <input type="file" (change)="onFileSelected($event)" required />
       @if (previewUrl) {<img [src]="previewUrl" alt="Logo Preview" class="size-24" />} @else {
@@ -29,13 +29,6 @@
   <!-- Min/Max member -->
 
   <nz-form-item class="">
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember"
-      >Thành viên <br />
-      tối thiểu</nz-form-label
-    >
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập số thành viên tối thiểu">
-      <nz-input-number formControlName="minMember" [nzMin]="1" [nzPrecision]="0" id="minMember"></nz-input-number>
-    </nz-form-control>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="maxMember"
       >Thành viên <br />
       tối đa</nz-form-label
@@ -47,7 +40,7 @@
 
   <!-- Start Date -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="minMember">Ngày bắt đầu</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu và kết thúc">
       <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate"></nz-date-picker>
     </nz-form-control>
@@ -55,7 +48,7 @@
 
   <!-- End Date -->
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="minMember">Ngày Kết thúc</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">Ngày Kết thúc</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate"></nz-date-picker>
     </nz-form-control>
@@ -87,7 +80,7 @@
 
   <nz-form-item nz-row class="submit-area">
     <nz-form-control [nzSpan]="14" [nzOffset]="6">
-      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid">Submit</button>
+      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid">Tạo dự án</button>
     </nz-form-control>
   </nz-form-item>
 </form>

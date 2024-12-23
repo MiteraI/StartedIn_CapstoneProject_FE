@@ -11,7 +11,7 @@
       <!-- Progress Bar -->
       <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 p-2">
         <nz-progress
-          *ngIf="project.investmentCall.status !== investmentCallStatus.CLOSED"
+          *ngIf="project.investmentCall && project.investmentCall.status !== investmentCallStatus.CLOSED"
           [nzPercent]="progressPercentage"
           [nzShowInfo]="false"
           [nzStrokeColor]="'#10B981'"
@@ -41,7 +41,7 @@
 
       <!-- Investment Call Status -->
       <div class="mt-2 text-sm">
-        <ng-container *ngIf="project.investmentCall.status !== investmentCallStatus.CLOSED; else noCall">
+        <ng-container *ngIf="project.investmentCall && project.investmentCall.status !== investmentCallStatus.CLOSED; else noCall">
           <div class="flex justify-between items-center">
             <span class="text-green-600 font-medium">
               Đã gọi thành công {{ progressPercentage | number:'1.00-0' }}%
@@ -70,7 +70,7 @@
       </p>
 
       <!-- Investment Details -->
-      <ng-container *ngIf="project.investmentCall.status !== investmentCallStatus.CLOSED">
+      <ng-container *ngIf="project.investmentCall && project.investmentCall.status !== investmentCallStatus.CLOSED">
         <div class="flex gap-2 mt-2">
           <span *ngIf="project.investmentCall.totalInvestor" class="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
             {{ project.investmentCall.totalInvestor }} nhà đầu tư đã tham gia

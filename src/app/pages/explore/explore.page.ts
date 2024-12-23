@@ -83,7 +83,9 @@ export class InvestorExploreProjectsPage implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error("Error", "Failed to fetch startup list!", { nzDuration: 2000 });
+          console.log(error);
+
+          this.notification.error("Lỗi", "Lấy danh sách startup thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

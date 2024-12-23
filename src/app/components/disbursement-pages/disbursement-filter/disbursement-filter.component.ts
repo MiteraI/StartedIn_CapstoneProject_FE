@@ -113,7 +113,7 @@ export class DisbursementFilterComponent implements OnInit {
         })
       )
       .subscribe(result => {
-        this.projects = result.listParticipatedProject;
+        this.projects = result;
         this.filteredProjects = [...this.projects];
       });
   }
