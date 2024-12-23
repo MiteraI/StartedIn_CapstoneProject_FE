@@ -23,7 +23,7 @@
             <mat-icon fontIcon="date_range" class="text-gray-600 mr-2"></mat-icon>
             Ngày gửi:
           </p>
-          <p class="text-xl text-gray-800">{{ approvalData.sentDate | date: 'dd/MM/yyyy hh:mm aa' }}</p>
+          <p class="text-xl text-gray-800">{{ formatDate(approvalData.sentDate) }}</p>
         </div>
         <div>
           <p class="text-lg font-semibold text-gray-600">
@@ -31,7 +31,7 @@
             Ngày duyệt:
           </p>
           <div *ngIf="approvalData.status !== ProjectApprovalStatus.PENDING">
-            <p class="text-xl text-gray-800">{{ approvalData.approvalDate | date: 'dd/MM/yyyy hh:mm aa' }}</p>
+            <p class="text-xl text-gray-800">{{ formatDate(approvalData.approvalDate) }}</p>
           </div>
           <div *ngIf="approvalData.status === ProjectApprovalStatus.PENDING">
             <p class="text-xl text-gray-800">Chưa phê duyệt</p>
@@ -45,15 +45,26 @@
           </nz-tag>
         </div>
         <div>
-          <p class="text-lg font-semibold text-gray-600">Lý do:</p>
-          <p class="text-xl text-gray-800 mt-2">{{ approvalData.reason || 'Không có lý do' }}</p>
+          <div>
+            <p class="text-lg font-semibold text-gray-600">Số % cổ phần cần gọi</p>
+            <p class="text-xl text-gray-800 mt-2">{{ approvalData.equityShareCall / 100 | percent}}</p>
+          </div>
+          <div>
+            <p class="text-lg font-semibold text-gray-600">Số vốn cần gọi</p>
+            <p class="text-xl text-gray-800 mt-2">{{ approvalData.targetCall | vndCurrency }}</p>
+          </div>
         </div>
+      </div>
+      
+      <div>
+        <p class="text-lg font-semibold text-gray-600">Lý do:</p>
+        <p class="text-xl text-gray-800 mt-2">{{ approvalData.reason || 'Không có lý do' }}</p>
       </div>
     </div>
 
     <!-- Rejected Reason Section -->
     <div *ngIf="approvalData.rejectReason || approvalData.status === ProjectApprovalStatus.REJECTED">
-      <p class="text-lg font-semibold text-gray-600">Lý do từ chối từ quản trị viên:</p>
+      <p class="text-lg font-semibold text-red-600">Lý do từ chối từ quản trị viên:</p>
       <p class="text-gray-800 mt-2">{{ approvalData.rejectReason || 'Không có lý do' }}</p>
     </div>
 
@@ -64,13 +75,13 @@
         <li *ngFor="let doc of approvalData.documents" class="flex items-center justify-between border rounded-lg p-4 hover:bg-gray-50 transition duration-200">
           <div>
             <p class="font-medium text-gray-800">{{ doc.documentName }}</p>
-            <p class="text-gray-600 text-sm mt-1">{{ doc.description || 'Không có mô tả' }}</p>
           </div>
           <a [href]="doc.attachmentLink" target="_blank" class="text-blue-500 hover:underline text-sm">Tải xuống</a>
         </li>
       </ul>
     </div>
   </div>
+  
   @if( approvalData.status === ProjectApprovalStatus.PENDING){
     <div class="mt-6 flex justify-end space-x-4">
       <button
@@ -87,7 +98,7 @@
       </button>
       <button nz-button nzType="primary" [nzLoading]="isAccepting" (click)="acceptProjectApproval()" [disabled]="isAccepting">Đồng ý</button>
     </div>
-    }
+  }
   <!-- Popover Content Template -->
     <ng-template #cancelTemplate>
       <div class="flex flex-col gap-2">
