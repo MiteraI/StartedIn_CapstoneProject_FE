@@ -18,6 +18,8 @@ import { TaskStatus } from 'src/app/shared/enums/task-status.enum'
 import { TaskFilterComponent } from '../task-filter/task-filter.component'
 import { WebsocketService } from 'src/app/services/websocket.service'
 import { createData, deleteData, updateData } from 'src/app/core/util/websocket.utils'
+import { HistorySidebarComponent } from 'src/app/layouts/history-sidebar/history-sidebar.component'
+import { TaskHistoryListComponent } from '../task-history-list/task-history-list.component'
 
 interface TaskFilterOptions {
   title?: string
@@ -30,7 +32,17 @@ interface TaskFilterOptions {
 @Component({
   selector: 'app-task-view',
   templateUrl: './task-view.component.html',
-  imports: [FilterBarComponent, TaskTableComponent, TaskListComponent, NzButtonModule, MatIconModule, NzModalModule, TaskFilterComponent],
+  imports: [
+    FilterBarComponent,
+    TaskTableComponent,
+    TaskListComponent,
+    NzButtonModule,
+    MatIconModule,
+    NzModalModule,
+    TaskFilterComponent,
+    HistorySidebarComponent,
+    TaskHistoryListComponent,
+  ],
   styleUrls: ['./task-view.component.scss'],
   standalone: true,
 })
@@ -47,6 +59,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   isFetchAllTaskLoading: boolean = false
   milestoneIdParam = ''
   private searchSubject = new Subject<string>()
+  isHistoryCollasped: boolean = true // not collapsing => see history
 
   constructor(
     private viewMode: ViewModeConfigService,

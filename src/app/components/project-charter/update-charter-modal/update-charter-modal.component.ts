@@ -21,7 +21,7 @@ import { ProjectCharter } from 'src/app/shared/models/project-charter/project-ch
 })
 export class UpdateCharterModalComponent implements OnInit {
   init: EditorComponent['init'] = {
-    plugins: 'lists link code help wordcount',
+    plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
       this.onInfoChange()
