@@ -71,4 +71,33 @@
       </ul>
     </div>
   </div>
+  @if( approvalData.status === ProjectApprovalStatus.PENDING){
+    <div class="mt-6 flex justify-end space-x-4">
+      <button
+        nz-button
+        nzDanger
+        nzType="primary"
+        nz-popover
+        nzPopoverTitle="Lý do từ chối"
+        [(nzPopoverVisible)]="isModalVisible"
+        nzPopoverTrigger="click"
+        [nzPopoverContent]="cancelTemplate"
+      >
+        Từ chối
+      </button>
+      <button nz-button nzType="primary" [nzLoading]="isAccepting" (click)="acceptProjectApproval()" [disabled]="isAccepting">Đồng ý</button>
+    </div>
+    }
+  <!-- Popover Content Template -->
+    <ng-template #cancelTemplate>
+      <div class="flex flex-col gap-2">
+        <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
+        <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
+        <div class="flex justify-end gap-2 mt-2">
+          <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
+          <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
+        </div>
+      </div>
+    </ng-template>
 </div>
+  
