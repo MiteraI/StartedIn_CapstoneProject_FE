@@ -30,7 +30,7 @@ export class CreateCharterModalComponent implements OnInit {
   editorKey = EDITOR_KEY
   currentProject: ProjectModel | undefined
   init: EditorComponent['init'] = {
-    plugins: 'lists link code help wordcount',
+    plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
       this.onInfoChange()
