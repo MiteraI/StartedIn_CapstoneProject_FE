@@ -25,13 +25,13 @@ export class ProjectService {
   private parseNumericFields<T extends StartupModel>(startup: T): T {
     return {
       ...startup,
-      investmentCall: {
+      investmentCall: startup.investmentCall ? {
         ...startup.investmentCall,
         targetCall: typeof startup.investmentCall.targetCall === 'string' ? parseInt(startup.investmentCall.targetCall) : startup.investmentCall.targetCall,
         amountRaised: typeof startup.investmentCall.amountRaised === 'string' ? parseInt(startup.investmentCall.amountRaised) : startup.investmentCall.amountRaised,
         remainAvailableEquityShare: typeof startup.investmentCall.remainAvailableEquityShare === 'string' ? parseFloat(startup.investmentCall.remainAvailableEquityShare) : startup.investmentCall.remainAvailableEquityShare,
         equityShareCall: typeof startup.investmentCall.equityShareCall === 'string' ? parseFloat(startup.investmentCall.equityShareCall) : startup.investmentCall.equityShareCall,
-      }
+      } : null
     };
   }
 

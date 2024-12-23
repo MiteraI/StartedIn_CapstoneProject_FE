@@ -8,6 +8,6 @@ export type StartupModel = {
   leaderId: string;
   leaderFullName: string;
   leaderProfilePicture: string;
-  investmentCall: InvestmentCallResponseDto;
+  investmentCall: InvestmentCallResponseDto | null;
 }
 

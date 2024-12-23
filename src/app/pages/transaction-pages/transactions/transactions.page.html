@@ -233,7 +233,8 @@
   <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+
+  <div *ngIf="!isDesktopView && isEndOfList && transactions.length > 0" class="text-center text-gray-500 py-4">
     Bạn đã xem hết các giao dịch!
   </div>
 </div>

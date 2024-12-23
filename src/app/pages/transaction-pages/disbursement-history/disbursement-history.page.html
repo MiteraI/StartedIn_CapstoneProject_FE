@@ -48,6 +48,10 @@
 </div>
 
 <div class="p-4 max-w-7xl mx-auto">
+  <div *ngIf="transactions.length === 0" class="text-center text-gray-500 py-4">
+    Không có giao dịch giải ngân nào!
+  </div>
+
   <!-- Grid Layout for Both Desktop and Mobile -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <div
@@ -126,7 +130,7 @@
   </div>
 
   <!-- End of List Message -->
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+  <div *ngIf="!isDesktopView && isEndOfList && transactions.length > 0" class="text-center text-gray-500 py-4">
     Bạn đã xem hết các giao dịch!
   </div>
 </div>
