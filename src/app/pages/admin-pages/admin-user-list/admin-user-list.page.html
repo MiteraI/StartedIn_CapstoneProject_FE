@@ -8,6 +8,10 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="users.length === 0" class="text-center text-gray-500 py-4">
+    Không có người dùng nào!
+  </div>
+
   <div class="flex flex-col justify-end md:flex-row mb-4">
     <div class="flex flex-col md:flex-row gap-3">
       <button (click)="openImportModal()" class="flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">
@@ -17,7 +21,7 @@
     </div>
   </div>
   <!-- Desktop Table View -->
-  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading && users.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left w-16"></th>
@@ -122,5 +126,8 @@
   <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách người dùng!</div>
+
+  <div *ngIf="!isDesktopView && isEndOfList && users.length > 0" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết danh sách người dùng!
+  </div>
 </div>

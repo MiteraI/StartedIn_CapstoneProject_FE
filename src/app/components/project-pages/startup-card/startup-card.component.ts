@@ -30,7 +30,7 @@ export class StartupCardComponent {
   }
 
   get daysLeft(): number {
-    if (!this.project.investmentCall.endDate) return 0;
+    if (!this.project.investmentCall?.endDate) return 0;
     return differenceInDays(new Date(this.project.investmentCall.endDate), new Date()) + 1;
   }
 

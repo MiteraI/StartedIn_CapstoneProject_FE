@@ -14,6 +14,10 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="assets.length === 0" class="text-center text-gray-500 py-4">
+    Không có tài sản nào!
+  </div>
+
   <!-- Desktop Selection Actions -->
   <div class="flex flex-col justify-end md:flex-row mb-4">
     <div *ngIf="isLeader" class="flex flex-col md:flex-row gap-3">
@@ -25,7 +29,7 @@
   </div>
 
   <!-- Desktop Table View -->
-  <table *ngIf="!isLoading" class="w-full hidden md:table border">
+  <table *ngIf="!isLoading && assets.length > 0" class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-center">Tên tài sản</th>
@@ -175,7 +179,8 @@
   <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
+
+  <div *ngIf="!isDesktopView && isEndOfList && assets.length > 0" class="text-center text-gray-500 py-4">
     Bạn đã xem hết các tài sản!
   </div>
 </div>

@@ -34,8 +34,12 @@
 </div>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="disbursements.length === 0" class="text-center text-gray-500 py-4">
+    Không có đợt giải ngân nào!
+  </div>
+
   <!-- Desktop Table View -->
-  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading && disbursements.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Tiêu đề</th>
@@ -170,7 +174,8 @@
   <div *ngIf="isLoading" class="flex justify-center py-4">
     <nz-spin nzSimple></nz-spin>
   </div>
-  <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">
-    Bạn đã xem hết các giải ngân!
+
+  <div *ngIf="!isDesktopView && isEndOfList && disbursements.length > 0" class="text-center text-gray-500 py-4">
+    Bạn đã xem hết các đợt giải ngân!
   </div>
 </div>

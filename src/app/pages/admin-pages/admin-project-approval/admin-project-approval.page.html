@@ -16,8 +16,12 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
+  <div *ngIf="pagedApprovals.data.length === 0" class="text-center text-gray-500 py-4">
+    Không có yêu cầu xác thực nào!
+  </div>
+
   <!-- Desktop Table View -->
-  <table *ngIf="!isLoading" class="w-full hidden md:table border bg-white">
+  <table *ngIf="!isLoading && pagedApprovals.data.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
         <th class="p-4 text-left">Tên dự án</th>
@@ -111,6 +115,9 @@
     <div *ngIf="isLoading" class="flex justify-center py-4">
       <nz-spin nzSimple></nz-spin>
     </div>
-    <div *ngIf="!isDesktopView && isEndOfList" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách người dùng!</div>
+
+    <div *ngIf="!isDesktopView && isEndOfList && pagedApprovals.data.length > 0" class="text-center text-gray-500 py-4">
+      Bạn đã xem hết danh sách yêu cầu!
+    </div>
   </div>
 </div>
