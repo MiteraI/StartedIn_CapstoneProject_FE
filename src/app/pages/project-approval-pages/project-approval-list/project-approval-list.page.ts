@@ -75,6 +75,7 @@ export class ProjectApprovalPage implements OnInit {
     })
     this.getApproval()
     this.fetchCurrentProject()
+    console.log(this.currentProject)
   }
 
   getApproval() {
@@ -112,7 +113,8 @@ export class ProjectApprovalPage implements OnInit {
       nzContent: RequestApprovalModalComponent,
       nzData: { 
         projectId: this.projectId,
-        currentProject: this.currentProject, },
+        currentProject: this.currentProject
+      },
       nzFooter: null,
       nzWidth: '800px',
     })

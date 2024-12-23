@@ -1,7 +1,8 @@
-import { CommonModule, PercentPipe } from '@angular/common'
+import { CommonModule, DatePipe, PercentPipe } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzInputModule } from 'ng-zorro-antd/input'
@@ -31,8 +32,9 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
     NzSkeletonModule, 
     VndCurrencyPipe,
     NzFormModule,
-    NzInputNumberModule],
-  providers: [PercentPipe],
+    NzInputNumberModule,
+    NzDatePickerModule],
+  providers: [PercentPipe,DatePipe],
 })
 export class RequestApprovalModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
@@ -52,7 +54,8 @@ export class RequestApprovalModalComponent implements OnInit {
     private projectApprovalService: ProjectApprovalService,
     private projectCharterService: ProjectCharterService,
     private messageService: NzMessageService,
-    private nzModalRef: NzModalRef
+    private nzModalRef: NzModalRef,
+    private datePipe: DatePipe
   ) {
     this.projectId = this.nzModalData.projectId
   }
@@ -66,6 +69,7 @@ export class RequestApprovalModalComponent implements OnInit {
       requestReason: ['', [Validators.required, Validators.maxLength(500)]],
       valuePerPercentage: [1000, [Validators.required]],
       equityShareCall: [1, [Validators.required]],
+      endDate: [null, [Validators.required]]
     })
     this.remainingEquityShare = this.nzModalData.currentProject.remainingPercentOfShares
   }
@@ -105,10 +109,19 @@ export class RequestApprovalModalComponent implements OnInit {
     })
   }
 
+  disabledEndDate = (current: Date): boolean => {
+    const today = new Date(); // Lấy ngày hiện tại
+    today.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây về 0 để so sánh chính xác
+    return current < today; // Vô hiệu hóa ngày hôm nay và tất cả các ngày trước
+  }
+
   submitRequest(): void {
     if (this.approvalRequestForm.valid) {
       this.uploading = true
-
+      let endDate = this.approvalRequestForm.value.endDate
+      if (endDate) {
+        endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd')
+      }
       const formData = new FormData()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       this.fileList.forEach((file: any) => {
@@ -117,6 +130,8 @@ export class RequestApprovalModalComponent implements OnInit {
       formData.append('Reason', this.approvalRequestForm.get('requestReason')?.value)
       formData.append('ValuePerPercentage', this.approvalRequestForm.get('valuePerPercentage')?.value);
       formData.append('EquityShareCall', this.approvalRequestForm.get('equityShareCall')?.value);
+      formData.append('EndDate', endDate || null);
+      
       this.projectApprovalService.requestApproval(this.projectId, formData).subscribe({
         next: (response) => {
           console.log(response)

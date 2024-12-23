@@ -48,11 +48,23 @@
             </nz-form-item>
           </div>
         </div>
+        <div class="mb-4 flex">
+          <nz-form-item class="w-1/2">
+            <nz-form-label [nzRequired]="false">Ngày kết thúc</nz-form-label>
+              <nz-date-picker
+                formControlName="endDate"
+                [nzDisabledDate]="disabledEndDate"
+                [nzFormat]="'dd/MM/yyyy'"
+                class="w-full"
+                placeholder="Chọn ngày kết thúc"
+              ></nz-date-picker>
+          </nz-form-item>
 
-        <div class="text-right mb-6">
-          <div class="text-gray-600 text-sm">Tổng số vốn cần gọi</div>
-          <div class="text-xl font-bold text-red-500">
-            {{ getTotalAmount() | vndCurrency }}
+          <div class="text-right mb-6 w-1/2">
+            <div class="text-gray-600 text-sm">Tổng số vốn cần gọi</div>
+            <div class="text-xl font-bold text-red-500">
+              {{ getTotalAmount() | vndCurrency }}
+            </div>
           </div>
         </div>
 
