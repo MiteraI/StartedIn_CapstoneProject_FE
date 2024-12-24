@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core'
-import { NZ_MODAL_DATA } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions'
@@ -9,6 +9,8 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
+import { ContractType } from 'src/app/shared/enums/contract-type.enum'
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-meeting-detail-modal',
   templateUrl: './meeting-detail-modal.component.html',
@@ -17,6 +19,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button'
   imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule, NzButtonModule],
 })
 export class MeetingDetailModalComponent implements OnInit {
+  ContractType = ContractType
   readonly nzModalData = inject(NZ_MODAL_DATA)
   MeetingStatus = MeetingStatus
 
@@ -25,7 +28,7 @@ export class MeetingDetailModalComponent implements OnInit {
   meetingDetail: MeetingDetailModel = {} as MeetingDetailModel
   loading = false
 
-  constructor(private meetingService: MeetingService, private nzMessage: NzMessageService) {
+  constructor(private meetingService: MeetingService, private nzMessage: NzMessageService, private router: Router, private nzModalRef: NzModalRef) {
     this.meetingId = this.nzModalData.meetingId
     this.projectId = this.nzModalData.projectId
   }
@@ -110,5 +113,23 @@ export class MeetingDetailModalComponent implements OnInit {
         this.nzMessage.error(error)
       },
     })
+  }
+
+  navigateToContract(contractType: ContractType, contractId: string) {
+    console.log(contractType)
+    this.router.navigate([
+      '/projects',
+      this.projectId,
+      contractType === ContractType.INVESTMENT
+        ? 'investment-contract'
+        : contractType === ContractType.INTERNAL
+        ? 'internal-contract'
+        : contractType === ContractType.LIQUIDATIONNOTE
+        ? 'liquidation-contract'
+        : '',
+      contractId,
+    ])
+
+    this.nzModalRef.close()
   }
 }
