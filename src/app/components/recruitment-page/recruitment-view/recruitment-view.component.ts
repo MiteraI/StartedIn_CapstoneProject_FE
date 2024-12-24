@@ -27,6 +27,7 @@ import { NzTableModule } from 'ng-zorro-antd/table'
 import { ApplicationStatus, ApplicationStatusColors, ApplicationStatusLabels } from 'src/app/shared/enums/application-status.enum'
 import { DateDisplayPipe } from 'src/app/shared/pipes/date-display.pipe'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
 
 @Component({
   selector: 'app-recruitment-view',
@@ -49,6 +50,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
     NzTableModule,
     NzIconModule,
     DateDisplayPipe,
+    NzTabsModule
   ],
 })
 export class RecruitmentViewComponent implements OnInit, OnDestroy {
