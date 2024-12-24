@@ -1,0 +1,90 @@
+<app-history-sidebar
+  [isCollapsed]="isCollapsed"
+  (isCollapsedEmit)="onCollapsedChange($event)"
+  [style.height]="height + 'px'"
+  class="block"
+>
+  <ng-template #mainContent>
+    <ng-content></ng-content>
+  </ng-template>
+
+  <ng-template #drawerContent>
+    <div class="flex flex-col flex-1">
+      <div class="flex-1 overflow-y-auto px-4">
+        <div *ngIf="historyEntries.length === 0" class="text-center text-gray-500 mt-4">
+          Chưa có lịch sử chuyển giao quyền nhóm trưởng
+        </div>
+
+        <div
+          *ngFor="let entry of historyEntries"
+          class="my-4 p-4 bg-rose-50 rounded-lg"
+        >
+          <div class="flex items-center justify-center space-x-3 mb-2">
+            <!-- Former Leader -->
+            <div class="flex items-center">
+              <nz-avatar
+                [nzSize]="32"
+                [nzSrc]="entry.formerLeaderProfilePicture"
+                [nzText]="entry.formerLeaderName | initialsOnly"
+                [routerLink]="['/users', entry.formerLeaderId]"
+                class="cursor-pointer bg-orange-600"
+              ></nz-avatar>
+            </div>
+            <mat-icon fontIcon="arrow_forward"></mat-icon>
+            <!-- New Leader -->
+            <div class="flex items-center">
+              <nz-avatar
+                [nzSize]="32"
+                [nzSrc]="entry.newLeaderProfilePicture"
+                [nzText]="entry.newLeaderName | initialsOnly"
+                [routerLink]="['/users', entry.newLeaderId]"
+                class="cursor-pointer bg-orange-600"
+              ></nz-avatar>
+            </div>
+          </div>
+
+          <div class="text-sm">
+            <a [routerLink]="['/users', entry.formerLeaderId]" class="font-medium hover:text-blue-500">
+              {{ entry.formerLeaderName }}
+            </a>
+            đã chuyển giao quyền nhóm trưởng cho
+            <a [routerLink]="['/users', entry.newLeaderId]" class="font-medium hover:text-blue-500">
+              {{ entry.newLeaderName }}
+            </a>
+          </div>
+
+          <div class="text-xs text-gray-500 my-2">
+            Thời gian: {{ entry.transferDate | date:'dd/MM/yyyy' }}
+          </div>
+
+          <button
+            nz-button
+            nzType="primary"
+            class="w-full"
+            [routerLink]="['/projects', projectId, 'leader-transfer', entry.id]"
+          >
+            Chi tiết
+          </button>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-between px-4 py-2 border-t">
+        <button
+          nz-button
+          [disabled]="page === 1"
+          (click)="prevPage()"
+        >
+          <mat-icon fontIcon="chevron_left"></mat-icon>
+        </button>
+        <button
+          nz-button
+          [disabled]="(page * size) >= totalRecords"
+          (click)="nextPage()"
+        >
+          <mat-icon fontIcon="chevron_right"></mat-icon>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</app-history-sidebar>

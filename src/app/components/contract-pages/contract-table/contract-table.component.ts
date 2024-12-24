@@ -159,7 +159,8 @@ export class ContractTableComponent  implements OnInit {
         nzData: { projectId: this.projectId, contractId: contract.id },
         nzFooter: null,
         nzStyle: { top: '40px' },
-        nzAfterClose: this.refreshNeeded
+      }).afterClose.subscribe(result => {
+        if (result) this.refreshNeeded.emit();
       });
     } else {
       this.modalService.create({
@@ -167,7 +168,8 @@ export class ContractTableComponent  implements OnInit {
         nzContent: TerminateContractModalComponent,
         nzData: { projectId: this.projectId, contractId: contract.id },
         nzFooter: null,
-        nzAfterClose: this.refreshNeeded
+      }).afterClose.subscribe(result => {
+        if (result) this.refreshNeeded.emit();
       });
     }
   }
@@ -186,7 +188,8 @@ export class ContractTableComponent  implements OnInit {
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzAfterClose: this.refreshNeeded
+    }).afterClose.subscribe(result => {
+      if (result) this.refreshNeeded.emit();
     });
   }
 
