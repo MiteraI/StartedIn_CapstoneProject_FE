@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { LeaderTransferService } from 'src/app/services/leader-transfer.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { LeaderTransfer } from 'src/app/shared/models/leader-transfer/leader-transfer.model';
+import { LeaderTransferModel } from 'src/app/shared/models/leader-transfer/leader-transfer.model';
 import { catchError, throwError } from 'rxjs';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
@@ -25,6 +25,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TransferLeaderModalComponent } from 'src/app/components/project-pages/transfer-leader-modal/transfer-leader-modal.component';
 import { TransferMeetingModalComponent } from 'src/app/components/project-pages/transfer-meeting-modal/transfer-meeting-modal.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { LeaderHistorySidebarComponent } from 'src/app/components/project-pages/leader-history-sidebar/leader-history-sidebar.component';
 
 @Component({
   selector: 'app-members',
@@ -43,7 +44,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzSpinModule,
     InitialsOnlyPipe,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    LeaderHistorySidebarComponent
   ]
 })
 export class MembersPage implements OnInit {
@@ -61,7 +63,7 @@ export class MembersPage implements OnInit {
   teamRoles = TeamRole;
   teamRoleLabels = TeamRoleLabels;
 
-  leaderTransfer?: LeaderTransfer;
+  leaderTransfer?: LeaderTransferModel;
   isLeader: boolean = false;
   meetingStatus = MeetingStatus;
 

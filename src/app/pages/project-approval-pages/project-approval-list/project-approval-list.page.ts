@@ -14,9 +14,11 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component'
 import { ProjectApprovalService } from 'src/app/services/project-approval.service'
+import { ProjectService } from 'src/app/services/project.service'
 import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model'
+import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model'
 
 @Component({
   selector: 'app-project-approval-list',
@@ -37,6 +39,8 @@ export class ProjectApprovalPage implements OnInit {
 
   isLeader = false
 
+  currentProject: ProjectOveriewModel | undefined
+  
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -45,6 +49,7 @@ export class ProjectApprovalPage implements OnInit {
     private notification: NzNotificationService,
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
+    private projectService: ProjectService,
     private roleService: RoleInTeamService,
     private projectApprovalService: ProjectApprovalService
   ) {}
@@ -61,6 +66,9 @@ export class ProjectApprovalPage implements OnInit {
     this.roleService.role$.subscribe((role) => {
       this.isLeader = role === TeamRole.LEADER
     })
+    
+    this.fetchCurrentProject()
+    console.log(this.currentProject)
     this.projectApprovalService.refreshApproval$.subscribe(() => {
       this.getApproval()
     })
@@ -79,6 +87,12 @@ export class ProjectApprovalPage implements OnInit {
     })
   }
 
+  private fetchCurrentProject() {
+    this.projectService.getProjectOverview(this.projectId).subscribe((data) => {
+      this.currentProject = data
+    })
+  }
+
   showRequestDetail(approval: ProjectApprovalDetail) {
     this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',
@@ -93,7 +107,10 @@ export class ProjectApprovalPage implements OnInit {
     this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',
       nzContent: RequestApprovalModalComponent,
-      nzData: { projectId: this.projectId },
+      nzData: { 
+        projectId: this.projectId,
+        currentProject: this.currentProject
+      },
       nzFooter: null,
       nzWidth: '800px',
     })

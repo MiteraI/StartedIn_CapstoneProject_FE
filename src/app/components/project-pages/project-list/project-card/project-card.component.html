@@ -36,7 +36,7 @@
           <div class="text-sm text-gray-600 font-semibold">Trưởng nhóm:</div>
           <div class="text-sm text-gray-600"> {{ project.leaderFullName }}</div>
 
-          <div class="text-sm text-gray-600">
+          <div class="text-sm text-gray-600 font-semibold">
             Trạng thái: 
             <span [ngStyle]="{ color: getProjectStatusColor(project.projectStatus) }">
               {{ getProjectStatusLabel(project.projectStatus) }}

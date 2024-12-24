@@ -18,6 +18,7 @@ import { UserDataResolver } from './shared/resolvers/user-data.resolver'
 import { ProfileDataResolver } from './shared/resolvers/profile-data.resolver'
 import { MentorGuard } from './shared/guards/mentor.guard'
 import { LiquidationContractDataResolver } from './shared/resolvers/liquidation-contract-data.resolver'
+import { LeaderTransferHistoryDataResolver } from './shared/resolvers/leader-transfer-history-data.resolver'
 
 export const routes: Routes = [
   {
@@ -221,6 +222,11 @@ export const routes: Routes = [
       {
         path: 'project-approval-list',
         loadComponent: () => import('./pages/project-approval-pages/project-approval-list/project-approval-list.page').then((m) => m.ProjectApprovalPage),
+      },
+      {
+        path: 'leader-transfer/:transferId',
+        resolve: { transfer: LeaderTransferHistoryDataResolver },
+        loadComponent: () => import('./pages/project-pages/leader-transfer-detail/leader-transfer-detail.page').then( m => m.LeaderTransferDetailPage)
       },
     ],
   },

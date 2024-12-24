@@ -74,7 +74,7 @@ export class TerminateMeetingModalComponent implements OnInit {
         .subscribe({
           next: () => {
             this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
-            this.nzModalRef.close();
+            this.nzModalRef.close(true);
           },
           error: (error) => {
             this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
@@ -86,7 +86,7 @@ export class TerminateMeetingModalComponent implements OnInit {
         .subscribe({
           next: () => {
             this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
-            this.nzModalRef.close();
+            this.nzModalRef.close(true);
           },
           error: (error) => {
             this.notification.error('Lỗi', error.error, { nzDuration: 2000 });

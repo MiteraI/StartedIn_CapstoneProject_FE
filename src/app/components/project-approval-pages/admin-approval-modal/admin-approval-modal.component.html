@@ -1,63 +1,95 @@
-<div>
+<div class="overflow-hidden bg-white rounded-lg p-6">
+  <!-- Project Information Section -->
   <div class="space-y-6">
-    <!-- Project Information -->
     <div>
-      <h3 class="text-lg font-medium text-gray-900">Thông tin dự án</h3>
-      <div class="grid grid-cols-2 gap-4 mt-2">
+      <div class="text-3xl font-semibold text-purple-600 flex justify-center">Thông tin đăng ký</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4 pt-10">
         <div>
-          <p class="font-medium text-gray-600">Tên dự án</p>
-          <p class="text-gray-800">{{ approvalData.projectName }}</p>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="business" class="text-gray-600 mr-2"></mat-icon>
+            Tên dự án:
+          </p>
+          <p class="text-xl text-gray-800">{{ approvalData.projectName || 'Không có dữ liệu' }}</p>
         </div>
         <div>
-          <p class="font-medium text-gray-600">Nhóm trưởng</p>
-          <p class="text-gray-800">{{ approvalData.leaderName }}</p>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="person" class="text-gray-600 mr-2"></mat-icon>
+            Người gửi:
+          </p>
+          <p class="text-xl text-gray-800">{{ approvalData.leaderName || 'Không có dữ liệu' }}</p>
         </div>
         <div>
-          <p class="font-medium text-gray-600">Ngày gửi</p>
-          <p class="text-gray-800">{{ approvalData.sentDate | date : 'dd/MM/yyyy hh:mm aa' }}</p>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="date_range" class="text-gray-600 mr-2"></mat-icon>
+            Ngày gửi:
+          </p>
+          <p class="text-xl text-gray-800">{{ formatDate(approvalData.sentDate) }}</p>
         </div>
         <div>
-          <p class="font-medium text-gray-600">Ngày duyệt</p>
-          <p class="text-gray-800">{{ approvalData.approvalDate | date : 'dd/MM/yyyy hh:mm aa' }}</p>
+          <p class="text-lg font-semibold text-gray-600">
+            <mat-icon fontIcon="assignment_turned_in" class="text-gray-600 mr-2"></mat-icon>
+            Ngày duyệt:
+          </p>
+          <div *ngIf="approvalData.status !== ProjectApprovalStatus.PENDING">
+            <p class="text-xl text-gray-800">{{ formatDate(approvalData.approvalDate) }}</p>
+          </div>
+          <div *ngIf="approvalData.status === ProjectApprovalStatus.PENDING">
+            <p class="text-xl text-gray-800">Chưa phê duyệt</p>
+          </div>
+
         </div>
         <div>
-          <p class="font-medium text-gray-600">Trạng thái</p>
-          <nz-tag [nzColor]="getStatusColor(approvalData.status)" class="font-medium">
+          <p class="text-lg font-semibold text-gray-600">Trạng thái:</p>
+          <nz-tag [nzColor]="getStatusColor(approvalData.status)" class="text-lg font-semibold">
             {{ ProjectApprovalStatusLabel[approvalData.status] }}
           </nz-tag>
         </div>
+        <div>
+          <div>
+            <p class="text-lg font-semibold text-gray-600">Số % cổ phần cần gọi</p>
+            <p class="text-xl text-gray-800 mt-2">{{ approvalData.equityShareCall / 100 | percent}}</p>
+          </div>
+          <div>
+            <p class="text-lg font-semibold text-gray-600">Số vốn cần gọi</p>
+            <p class="text-xl text-gray-800 mt-2">{{ approvalData.targetCall | vndCurrency }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <p class="text-lg font-semibold text-gray-600">Lý do:</p>
+        <p class="text-xl text-gray-800 mt-2">{{ approvalData.reason || 'Không có lý do' }}</p>
       </div>
     </div>
 
-    <!-- Reason -->
-    <div *ngIf="approvalData.reason">
-      <h3 class="text-lg font-medium text-gray-900">Lý do</h3>
-      <p class="text-gray-800 mt-2">{{ approvalData.reason }}</p>
+    <!-- Rejected Reason Section -->
+    <div *ngIf="approvalData.rejectReason || approvalData.status === ProjectApprovalStatus.REJECTED">
+      <p class="text-lg font-semibold text-red-600">Lý do từ chối từ quản trị viên:</p>
+      <p class="text-gray-800 mt-2">{{ approvalData.rejectReason || 'Không có lý do' }}</p>
     </div>
 
-    <!-- Documents -->
+    <!-- Documents Section -->
     <div>
-      <h3 class="text-lg font-medium text-gray-900">Tài liệu đính kèm</h3>
-      <ul class="mt-2 space-y-2">
-        <li *ngFor="let doc of approvalData.documents" class="flex items-center justify-between border rounded-lg p-3">
+      <div class="text-xl font-semibold text-gray-900">Tài liệu đính kèm</div>
+      <ul class="mt-4 space-y-4">
+        <li *ngFor="let doc of approvalData.documents" class="flex items-center justify-between border rounded-lg p-4 hover:bg-gray-50 transition duration-200">
           <div>
             <p class="font-medium text-gray-800">{{ doc.documentName }}</p>
-            <p class="text-gray-600 text-sm">{{ doc.description || 'Không có mô tả' }}</p>
           </div>
-          <a [href]="doc.attachmentLink" target="_blank" class="text-blue-500 hover:underline text-sm"> Tải xuống </a>
+          <a [href]="doc.attachmentLink" target="_blank" class="text-blue-500 hover:underline text-sm">Tải xuống</a>
         </li>
       </ul>
     </div>
-
-    <!-- Accept and Cancel Buttons -->
-    @if( approvalData.status === ProjectApprovalStatus.PENDING){
+  </div>
+  
+  @if( approvalData.status === ProjectApprovalStatus.PENDING){
     <div class="mt-6 flex justify-end space-x-4">
       <button
         nz-button
         nzDanger
         nzType="primary"
         nz-popover
-        nzPopoverTitle="Ghi giờ làm"
+        nzPopoverTitle="Lý do từ chối"
         [(nzPopoverVisible)]="isModalVisible"
         nzPopoverTrigger="click"
         [nzPopoverContent]="cancelTemplate"
@@ -66,18 +98,17 @@
       </button>
       <button nz-button nzType="primary" [nzLoading]="isAccepting" (click)="acceptProjectApproval()" [disabled]="isAccepting">Đồng ý</button>
     </div>
-    }
-  </div>
+  }
+  <!-- Popover Content Template -->
+    <ng-template #cancelTemplate>
+      <div class="flex flex-col gap-2">
+        <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
+        <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
+        <div class="flex justify-end gap-2 mt-2">
+          <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
+          <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
+        </div>
+      </div>
+    </ng-template>
 </div>
-
-<!-- Popover Content Template -->
-<ng-template #cancelTemplate>
-  <div class="flex flex-col gap-2">
-    <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
-    <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
-    <div class="flex justify-end gap-2 mt-2">
-      <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
-      <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
-    </div>
-  </div>
-</ng-template>
+  

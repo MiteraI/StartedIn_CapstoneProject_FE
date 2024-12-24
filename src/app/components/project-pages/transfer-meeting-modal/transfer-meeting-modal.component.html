@@ -21,7 +21,7 @@
         <nz-date-picker
           formControlName="appointmentTime"
           [nzDisabledDate]="disabledDate"
-          nzShowTime
+          [nzShowTime]="{ nzFormat: 'HH:mm' }"
           nzPlaceHolder="Chọn ngày và giờ"
           class="w-full"
         ></nz-date-picker>

@@ -32,7 +32,13 @@
       <nz-form-label nzRequired>Bắt Đầu Họp</nz-form-label>
       <nz-form-control nzErrorTip="Vui lòng chọn ngày">
         <nz-input-group nzPrefixIcon="calendar">
-          <nz-date-picker formControlName="appointmentTime" [nzDisabledDate]="disabledDate" nzShowTime placeholder="Chọn ngày và giờ" class="rounded-lg w-full"></nz-date-picker>
+          <nz-date-picker
+            formControlName="appointmentTime"
+            [nzDisabledDate]="disabledDate"
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            placeholder="Chọn ngày và giờ"
+            class="rounded-lg w-full"
+          ></nz-date-picker>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>

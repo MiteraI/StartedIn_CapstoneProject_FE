@@ -11,32 +11,45 @@
 
         <!-- Contract Details -->
         <div class="px-2 md:px-6">
-          <div class="flex flex-col md:flex-row gap-4 mb-4">
-            <!-- Contract ID Number -->
-            <div class="flex-1">
-              <div class="flex items-center">
-                <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
-                <span class="font-semibold text-gray-700">Mã số</span>
-              </div>
-              <div class="text-gray-800 ml-8">
-                {{ contract.contractIdNumber || 'Không có dữ liệu' }}
-              </div>
-            </div>
+          <!-- Contract Name -->
+          <div class="text-xl font-medium py-2">
+            Biên bản thanh lý cho hợp đồng
+            <a
+              class="inline-block font-black hover:text-purple-500"
+              (click)="navigateToParentContract(contract)"
+            >
+              {{ getParentContractNumber() }}
+            </a>
+          </div>
 
-            <!-- Contract Name -->
-            <div class="flex-1">
-              <div class="flex items-center">
-                <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
-                <span class="font-semibold text-gray-700">Tên biên bản</span>
-              </div>
-              <div class="text-gray-800 ml-8">
-                {{ contract.contractName || 'Không có dữ liệu' }}
-              </div>
+          <!-- Contract ID Number -->
+          <div class="mt-2">
+            <div class="flex items-center">
+              <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
+              <span class="font-semibold text-gray-700">Mã số</span>
+            </div>
+            <div class="text-gray-800 ml-8">
+              {{ contract.contractIdNumber || 'Không có dữ liệu' }}
+            </div>
+          </div>
+
+          <!-- Parent Contract ID Number -->
+          <div class="mt-2">
+            <div class="flex items-center">
+              <mat-icon fontIcon="insert_page_break" class="text-gray-600 mr-2"></mat-icon>
+              <span class="font-semibold text-gray-700">Hợp đồng gốc</span>
+            </div>
+            <div
+              class="text-gray-800 ml-8 flex items-center hover:text-blue-500 transition-colors cursor-pointer"
+              (click)="navigateToParentContract(contract)"
+            >
+              Hợp đồng số {{ getParentContractNumber() }}
+              <mat-icon fontIcon="info" class="ml-1 scale-75 text-blue-500"></mat-icon>
             </div>
           </div>
 
           <!-- Contract Policy -->
-          <div>
+          <div class="mt-2">
             <div class="flex items-center">
               <mat-icon fontIcon="policy" class="text-gray-600 mr-2"></mat-icon>
               <span class="font-semibold text-gray-700">Điều khoản</span>
@@ -54,9 +67,9 @@
 
         <!-- Danh sách các bên -->
         <div *ngFor="let party of contract.parties; let i = index" class="mb-4 p-2">
-          <div class="flex flex-wrap items-center bg-white p-4 rounded-lg shadow-md">
+          <div class="flex flex-wrap items-center bg-white p-4 rounded-lg shadow-md space-y-2">
             <!-- Avatar -->
-            <div class="w-16 h-16 flex-shrink-0">
+            <div class="w-16 h-16 mr-4">
               <nz-avatar
                 [nzSize]="64"
                 [nzText]="party.fullName | initialsOnly"
@@ -66,7 +79,7 @@
             </div>
 
             <!-- Member Info -->
-            <div class="ml-4">
+            <div>
               <div class="text-lg font-semibold text-gray-800">
                 {{ party.fullName || 'Không rõ' }}
               </div>

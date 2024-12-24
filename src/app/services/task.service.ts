@@ -12,6 +12,7 @@ import { UpdateTaskParent } from '../shared/models/task/update-task-parent.model
 import { TaskStatus } from '../shared/enums/task-status.enum'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { UpdateTaskMilestone } from '../shared/models/task/update-task-milestone.model'
+import { TaskHistory } from '../shared/models/task-history/task-history.model'
 
 @Injectable({
   providedIn: 'root',
@@ -78,5 +79,15 @@ export class TaskService {
 
   logTime(projectId: string, taskId: string, time: number) {
     return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/log-time`), time)
+  }
+
+  getTaskHistory(projectId: string, page: number, size: number) {
+    const query = `page=${page}&size=${size}`
+    return this.http.get<Pagination<TaskHistory>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/history?${query}`))
+  }
+
+  getHistoryForATask(projectId: string, taskId: string, page: number, size: number) {
+    const query = `page=${page}&size=${size}`
+    return this.http.get<Pagination<TaskHistory>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks/${taskId}/history?${query}`))
   }
 }

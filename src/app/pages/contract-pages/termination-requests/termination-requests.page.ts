@@ -121,7 +121,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
   }
 
   showRequestDetail(request: TerminationRequestModel) {
-    const modalRef = this.modalService.create({
+    this.modalService.create({
       nzTitle: 'Chi tiết yêu cầu kết thúc hợp đồng',
       nzContent: TerminationRequestDetailModalComponent,
       nzFooter: null,
@@ -131,13 +131,11 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         request: request
       },
       nzStyle: { width: '700px' },
-      nzAfterClose: new EventEmitter<void>()
     });
-    modalRef.afterClose.subscribe(() => this.isLeader ? this.loadReceivedRequests() : this.loadSentRequests())
   }
 
   acceptRequest(request: TerminationRequestModel) {
-    const modalRef = this.modalService.create({
+    this.modalService.create({
       nzTitle: `Chấp nhận yêu cầu kết thúc hợp đồng của ${request.fromName}`,
       nzContent: TerminateMeetingModalComponent,
       nzClosable: false,
@@ -148,9 +146,9 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         request: request
       },
       nzStyle: { top: '40px' },
-      nzAfterClose: new EventEmitter<void>()
+    }).afterClose.subscribe(result => {
+      if (result) this.loadReceivedRequests();
     });
-    modalRef.afterClose.subscribe(() => this.loadReceivedRequests());
   }
 
   rejectRequest(request: TerminationRequestModel) {

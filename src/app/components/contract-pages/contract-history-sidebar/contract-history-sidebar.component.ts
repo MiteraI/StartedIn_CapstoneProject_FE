@@ -7,10 +7,11 @@ import { RouterModule } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { catchError, throwError } from 'rxjs';
+import { catchError, filter, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Subject, takeUntil } from 'rxjs';
+import { LargeViewportConfigService } from 'src/app/core/config/large-viewport-config.service';
 
 @Component({
   selector: 'app-contract-history-sidebar',
@@ -31,24 +32,27 @@ export class ContractHistorySidebarComponent implements OnInit, AfterViewInit, O
   @Input({ required: true }) contractId!: string;
 
   historyEntries: ContractHistoryModel[] = [];
-  isDesktopView: boolean = false;
+  isLargeViewport: boolean = false;
   isCollapsed: boolean = true;
   height: number = 0;
   private destroy$ = new Subject<void>();
 
   constructor(
     private contractService: ContractService,
-    private viewModeConfigService: ViewModeConfigService,
+    private largeViewportConfigService: LargeViewportConfigService,
     private notification: NzNotificationService
   ) {}
 
   ngOnInit() {
     this.loadHistory();
-    this.viewModeConfigService.isDesktopView$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(isDesktop => {
-        this.isDesktopView = isDesktop;
-        this.isCollapsed = !isDesktop;
+    this.largeViewportConfigService.isLargeViewport$
+      .pipe(
+        filter(val => val !== this.isLargeViewport),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(val => {
+        this.isLargeViewport = val;
+        this.isCollapsed = !val;
       });
     afterNextRender(() => this.calculateDistance());
   }

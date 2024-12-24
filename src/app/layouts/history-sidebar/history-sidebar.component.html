@@ -1,0 +1,30 @@
+<mat-drawer-container style="height: 100%; width: 100%">
+  <mat-drawer [opened]="!isCollapsed" [mode]="isLargeViewport ? 'side' : 'over'" position="end" [style.width]="'250px'" style="background-color: white; border-radius: 0px">
+    <div class="flex flex-col h-full">
+      <div class="flex items-center justify-between px-6 my-2">
+        <span class="font-bold md:text-lg">{{ historyName }}</span>
+        <button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-200 transition-colors" (click)="toggleSidebar()">
+          <mat-icon fontIcon="close"></mat-icon>
+        </button>
+      </div>
+      <hr class="mx-6" />
+      <ng-container *ngTemplateOutlet="drawerContent"></ng-container>
+    </div>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div class="flex h-full">
+      <div class="w-full overflow-y-scroll">
+        <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+      </div>
+      <button
+        *ngIf="isCollapsed"
+        (click)="toggleSidebar()"
+        class="absolute top-2 right-4 px-4 py-2 flex items-center rounded-full bg-slate-100 hover:bg-slate-200"
+        [ngClass]="{ 'opacity-50 bg-white': !isLargeViewport }"
+      >
+        <mat-icon fontIcon="history"></mat-icon>
+      </button>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

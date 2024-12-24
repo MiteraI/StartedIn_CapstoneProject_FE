@@ -20,6 +20,54 @@
           <div *ngIf="approvalRequestForm.get('requestReason')?.invalid && approvalRequestForm.get('requestReason')?.touched" class="text-red-500 text-sm">Lý do là bắt buộc.</div>
         </div>
 
+        <div class="mb-4 flex">
+          <!-- Value Per Percentage Input -->
+          <div class="w-1/2">
+            <nz-form-item>
+              <nz-form-label [nzRequired]="true">Số tiền/% cổ phần</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
+                <nz-input-number class="w-40" formControlName="valuePerPercentage" [nzMin]="1000" [nzStep]="1000" [nzFormatter]="vndFormatter" [nzParser]="vndParser" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        
+          <!-- Equity Share Call Input -->
+          <div class="w-1/2">
+            <nz-form-item>
+              <nz-form-label [nzRequired]="true">Cổ phần (Còn lại: {{ remainingEquityShare / 100 | percent }})</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
+                <nz-input-number
+                  formControlName="equityShareCall"
+                  [nzMin]="1"
+                  [nzMax]="remainingEquityShare"
+                  [nzPrecision]="2"
+                  [nzFormatter]="formatterPercent"
+                  [nzParser]="parserPercent"
+                />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <div class="mb-4 flex">
+          <nz-form-item class="w-1/2">
+            <nz-form-label [nzRequired]="false">Ngày kết thúc</nz-form-label>
+              <nz-date-picker
+                formControlName="endDate"
+                [nzDisabledDate]="disabledEndDate"
+                [nzFormat]="'dd/MM/yyyy'"
+                class="w-full"
+                placeholder="Chọn ngày kết thúc"
+              ></nz-date-picker>
+          </nz-form-item>
+
+          <div class="text-right mb-6 w-1/2">
+            <div class="text-gray-600 text-sm">Tổng số vốn cần gọi</div>
+            <div class="text-xl font-bold text-red-500">
+              {{ getTotalAmount() | vndCurrency }}
+            </div>
+          </div>
+        </div>
+
         <!-- File Upload -->
         <div class="mb-4">
           <label for="files" class="block text-gray-700 font-medium mb-2">Tải lên tệp đính kèm:</label>

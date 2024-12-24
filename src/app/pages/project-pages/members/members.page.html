@@ -1,230 +1,232 @@
-<div class="max-w-7xl mx-auto p-4">
-  <div class="font-bold text-3xl text-black mb-6 flex justify-center">Danh sách thành viên</div>
+<app-leader-history-sidebar [projectId]="projectId">
+  <div class="max-w-7xl mx-auto p-4">
+    <div class="font-bold text-3xl text-black mb-6 flex justify-center">Danh sách thành viên</div>
 
-  <!-- Leader Transfer Banner -->
-  <div *ngIf="isLeader" class="mb-6">
+    <!-- Leader Transfer Banner -->
+    <div *ngIf="isLeader" class="mb-6">
+      <!-- Loading Spinner -->
+      <div *ngIf="isTransferLoading" class="flex justify-center">
+        <nz-spin nzSimple></nz-spin>
+      </div>
+
+      <!-- No active transfer request -->
+      <div
+        *ngIf="!isTransferLoading && (!leaderTransfer || leaderTransfer.isAgreed !== null)"
+        class="bg-white rounded-lg shadow-sm p-4"
+      >
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div class="mb-4 md:mb-0">
+            <div class="text-lg font-medium">Chuyển giao quyền nhóm trưởng</div>
+            <div class="text-gray-500 md:mr-2">Bạn có thể chuyển giao quyền nhóm trưởng cho thành viên khác</div>
+          </div>
+          <button nz-button nzType="primary" (click)="openTransferMeetingModal()">
+            Tạo cuộc họp chuyển giao
+          </button>
+        </div>
+      </div>
+
+      <!-- Pending transfer request -->
+      <div
+        *ngIf="!isTransferLoading && leaderTransfer && leaderTransfer.isAgreed === null"
+        class="bg-white rounded-lg shadow-sm p-4"
+      >
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <div class="flex-1">
+            <div class="text-lg font-medium">Chuyển giao quyền nhóm trưởng</div>
+            <div class="text-gray-500 text-sm md:text-base">
+              Cuộc họp: {{ leaderTransfer.appointmentTitle }}
+            </div>
+            <div class="text-gray-500 text-sm md:text-base">
+              Thời gian: {{ leaderTransfer.appointmentTime | date:'dd/MM/yyyy HH:mm' }}
+            </div>
+
+            <!-- Show different content based on meeting status -->
+            <ng-container [ngSwitch]="leaderTransfer.meetingStatus">
+              <!-- Meeting not completed -->
+              <div
+                *ngSwitchCase="meetingStatus.PROPOSED || meetingStatus.ONGOING"
+                class="mt-2"
+              >
+                <a
+                  [routerLink]="['/projects', projectId, 'meeting']"
+                  class="text-blue-600 hover:text-blue-800 font-bold"
+                >
+                  Xem chi tiết cuộc họp →
+                </a>
+              </div>
+
+              <!-- Meeting completed -->
+              <div *ngSwitchCase="meetingStatus.FINISHED" class="mt-2 text-green-600 font-bold mb-4 md:mb-0">
+                Cuộc họp đã kết thúc
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- Show action buttons if meeting is completed -->
+          <div
+            *ngIf="leaderTransfer.meetingStatus === meetingStatus.FINISHED"
+            class="flex gap-2"
+          >
+            <button nz-button nzType="primary" (click)="openTransferLeaderModal()">
+              Chuyển giao
+            </button>
+            <button nz-button nzDanger (click)="cancelTransfer()">
+              Hủy bỏ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="mb-6 flex flex-wrap items-center gap-4">
+      <div class="w-full md:flex-1">
+        <input
+          nz-input
+          placeholder="Tìm kiếm theo tên hoặc email"
+          [(ngModel)]="searchText"
+          (ngModelChange)="applyFilters()"
+        />
+      </div>
+      <nz-select
+        [(ngModel)]="sortBy"
+        (ngModelChange)="applyFilters()"
+        class="flex-grow md:flex-grow-0 md:w-48"
+      >
+        <nz-option nzValue="name" nzLabel="Sắp xếp theo tên"></nz-option>
+        <nz-option nzValue="email" nzLabel="Sắp xếp theo email"></nz-option>
+        <nz-option nzValue="role" nzLabel="Sắp xếp theo vai trò"></nz-option>
+        <nz-option nzValue="equity" nzLabel="Sắp xếp theo cổ phần"></nz-option>
+      </nz-select>
+      <button
+        nz-button
+        class="px-1"
+        (click)="ascending = !ascending; applyFilters()"
+      >
+        <mat-icon *ngIf="!ascending" fontIcon="arrow_drop_up"></mat-icon>
+        <mat-icon *ngIf="ascending" fontIcon="arrow_drop_down"></mat-icon>
+      </button>
+    </div>
+
+    <div class="border-b border-gray-300 mb-4">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex">
+          <a
+            *ngIf="roleFilter !== 'all'"
+            class="flex items-center p-2 xl:px-4 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+            (click)="roleFilter = 'all'; applyFilters()"
+          >
+            <mat-icon fontIcon="group"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">Tất cả</span>
+          </a>
+          <a
+            *ngIf="roleFilter === 'all'"
+            class="flex items-center p-2 xl:px-4 border-b-2 border-green-500 font-medium text-green-600"
+          >
+            <mat-icon fontIcon="group"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">Tất cả</span>
+          </a>
+          <a
+            *ngIf="roleFilter !== 'member'"
+            class="flex items-center p-2 xl:px-4 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+            (click)="roleFilter = 'member'; applyFilters()"
+          >
+            <mat-icon fontIcon="person"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
+          </a>
+          <a
+            *ngIf="roleFilter === 'member'"
+            class="flex items-center p-2 xl:px-4 border-b-2 border-green-500 font-medium text-green-600"
+          >
+            <mat-icon fontIcon="person"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
+          </a>
+          <a
+            *ngIf="roleFilter !== 'mentor'"
+            class="flex items-center p-2 xl:px-4 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+            (click)="roleFilter= 'mentor'; applyFilters()"
+          >
+            <mat-icon fontIcon="school"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
+          </a>
+          <a
+            *ngIf="roleFilter === 'mentor'"
+            class="flex items-center p-2 xl:px-4 border-b-2 border-green-500 font-medium text-green-600"
+          >
+            <mat-icon fontIcon="school"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
+          </a>
+          <a
+            *ngIf="roleFilter !== 'investor'"
+            class="flex items-center p-2 xl:px-4 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
+            (click)="roleFilter = 'investor'; applyFilters()"
+          >
+            <mat-icon fontIcon="work"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
+          </a>
+          <a
+            *ngIf="roleFilter === 'investor'"
+            class="flex items-center p-2 xl:px-4 border-b-2 border-green-500 font-medium text-green-600"
+          >
+            <mat-icon fontIcon="work"></mat-icon>
+            <span class="hidden md:inline ml-1 text-sm">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
     <!-- Loading Spinner -->
-    <div *ngIf="isTransferLoading" class="flex justify-center">
+    <div *ngIf="isMembersLoading" class="flex justify-center">
       <nz-spin nzSimple></nz-spin>
     </div>
 
-    <!-- No active transfer request -->
-    <div
-      *ngIf="!isTransferLoading && (!leaderTransfer || leaderTransfer.isAgreed !== null)"
-      class="bg-white rounded-lg shadow-sm p-4"
-    >
-      <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-        <div class="mb-4 md:mb-0">
-          <div class="text-lg font-medium">Chuyển giao quyền nhóm trưởng</div>
-          <div class="text-gray-500 md:mr-2">Bạn có thể chuyển giao quyền nhóm trưởng cho thành viên khác</div>
-        </div>
-        <button nz-button nzType="primary" (click)="openTransferMeetingModal()">
-          Tạo cuộc họp chuyển giao
-        </button>
-      </div>
-    </div>
-
-    <!-- Pending transfer request -->
-    <div
-      *ngIf="!isTransferLoading && leaderTransfer && leaderTransfer.isAgreed === null"
-      class="bg-white rounded-lg shadow-sm p-4"
-    >
-      <div class="flex flex-col md:flex-row md:justify-between md:items-center">
-        <div class="flex-1">
-          <div class="text-lg font-medium">Chuyển giao quyền nhóm trưởng</div>
-          <div class="text-gray-500 text-sm md:text-base">
-            Cuộc họp: {{ leaderTransfer.appointmentTitle }}
+    <!-- Member List -->
+    <div class="space-y-4">
+      <div
+        *ngFor="let member of filteredList"
+        class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap items-center justify-between hover:shadow-md transition-shadow cursor-pointer"
+        [routerLink]="['/users', member.id]"
+      >
+        <!-- Left side: Member info -->
+        <div class="flex items-center space-x-4 w-full sm:w-fit">
+          <div class="min-w-16">
+          <nz-avatar
+            [nzSize]="64"
+            [nzSrc]="member.profilePicture"
+            [nzText]="member.fullName | initialsOnly"
+            class="bg-blue-500"
+          ></nz-avatar>
           </div>
-          <div class="text-gray-500 text-sm md:text-base">
-            Thời gian: {{ leaderTransfer.appointmentTime | date:'dd/MM/yyyy HH:mm' }}
-          </div>
-
-          <!-- Show different content based on meeting status -->
-          <ng-container [ngSwitch]="leaderTransfer.meetingStatus">
-            <!-- Meeting not completed -->
-            <div
-              *ngSwitchCase="meetingStatus.PROPOSED || meetingStatus.ONGOING"
-              class="mt-2"
-            >
-              <a
-                [routerLink]="['/projects', projectId, 'meeting']"
-                class="text-blue-600 hover:text-blue-800 font-bold"
+          <div class="w-[calc(100%-5rem)]">
+            <div class="font-medium text-lg truncate">{{ member.fullName }}</div>
+            <div class="text-gray-500 truncate">{{ member.email }}</div>
+            <div class="text-sm mt-1">
+              <span
+                class="px-2 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-blue-100 text-blue-600': member.roleInTeam === teamRoles.LEADER,
+                  'bg-cyan-100 text-cyan-600': member.roleInTeam === teamRoles.MEMBER,
+                  'bg-green-100 text-green-600': member.roleInTeam === teamRoles.INVESTOR,
+                  'bg-orange-100 text-orange-600': member.roleInTeam === teamRoles.MENTOR
+                }"
               >
-                Xem chi tiết cuộc họp →
-              </a>
+                {{ teamRoleLabels[member.roleInTeam] }}
+              </span>
             </div>
-
-            <!-- Meeting completed -->
-            <div *ngSwitchCase="meetingStatus.FINISHED" class="mt-2 text-green-600 font-bold mb-4 md:mb-0">
-              Cuộc họp đã kết thúc
-            </div>
-          </ng-container>
-        </div>
-
-        <!-- Show action buttons if meeting is completed -->
-        <div
-          *ngIf="leaderTransfer.meetingStatus === meetingStatus.FINISHED"
-          class="flex gap-2"
-        >
-          <button nz-button nzType="primary" (click)="openTransferLeaderModal()">
-            Chuyển giao
-          </button>
-          <button nz-button nzDanger (click)="cancelTransfer()">
-            Hủy bỏ
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Filter Controls -->
-  <div class="mb-6 flex flex-wrap items-center gap-4">
-    <div class="w-full md:flex-1">
-      <input
-        nz-input
-        placeholder="Tìm kiếm theo tên hoặc email"
-        [(ngModel)]="searchText"
-        (ngModelChange)="applyFilters()"
-      />
-    </div>
-    <nz-select
-      [(ngModel)]="sortBy"
-      (ngModelChange)="applyFilters()"
-      class="flex-grow md:flex-grow-0 md:w-48"
-    >
-      <nz-option nzValue="name" nzLabel="Sắp xếp theo tên"></nz-option>
-      <nz-option nzValue="email" nzLabel="Sắp xếp theo email"></nz-option>
-      <nz-option nzValue="role" nzLabel="Sắp xếp theo vai trò"></nz-option>
-      <nz-option nzValue="equity" nzLabel="Sắp xếp theo cổ phần"></nz-option>
-    </nz-select>
-    <button
-      nz-button
-      class="px-1"
-      (click)="ascending = !ascending; applyFilters()"
-    >
-      <mat-icon *ngIf="!ascending" fontIcon="arrow_drop_up"></mat-icon>
-      <mat-icon *ngIf="ascending" fontIcon="arrow_drop_down"></mat-icon>
-    </button>
-  </div>
-
-  <div class="border-b border-gray-300">
-    <div class="max-w-7xl mx-auto px-4">
-      <div class="flex">
-        <a
-          *ngIf="roleFilter !== 'all'"
-          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-          (click)="roleFilter = 'all'; applyFilters()"
-        >
-          <mat-icon fontIcon="group"></mat-icon>
-          <span class="hidden md:inline ml-1">Tất cả</span>
-        </a>
-        <a
-          *ngIf="roleFilter === 'all'"
-          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
-        >
-          <mat-icon fontIcon="group"></mat-icon>
-          <span class="hidden md:inline ml-1">Tất cả</span>
-        </a>
-        <a
-          *ngIf="roleFilter !== 'member'"
-          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-          (click)="roleFilter = 'member'; applyFilters()"
-        >
-          <mat-icon fontIcon="person"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
-        </a>
-        <a
-          *ngIf="roleFilter === 'member'"
-          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
-        >
-          <mat-icon fontIcon="person"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MEMBER] }}</span>
-        </a>
-        <a
-          *ngIf="roleFilter !== 'mentor'"
-          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-          (click)="roleFilter= 'mentor'; applyFilters()"
-        >
-          <mat-icon fontIcon="school"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
-        </a>
-        <a
-          *ngIf="roleFilter === 'mentor'"
-          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
-        >
-          <mat-icon fontIcon="school"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.MENTOR] }}</span>
-        </a>
-        <a
-          *ngIf="roleFilter !== 'investor'"
-          class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-          (click)="roleFilter = 'investor'; applyFilters()"
-        >
-          <mat-icon fontIcon="work"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
-        </a>
-        <a
-          *ngIf="roleFilter === 'investor'"
-          class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
-        >
-          <mat-icon fontIcon="work"></mat-icon>
-          <span class="hidden md:inline ml-1">{{ teamRoleLabels[teamRoles.INVESTOR] }}</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Loading Spinner -->
-  <div *ngIf="isMembersLoading" class="flex justify-center">
-    <nz-spin nzSimple></nz-spin>
-  </div>
-
-  <!-- Member List -->
-  <div class="space-y-4">
-    <div
-      *ngFor="let member of filteredList"
-      class="bg-white rounded-lg shadow-sm p-4 flex flex-wrap items-center justify-between hover:shadow-md transition-shadow cursor-pointer"
-      [routerLink]="['/users', member.id]"
-    >
-      <!-- Left side: Member info -->
-      <div class="flex items-center space-x-4 w-full sm:w-fit">
-        <div class="min-w-16">
-        <nz-avatar
-          [nzSize]="64"
-          [nzSrc]="member.profilePicture"
-          [nzText]="member.fullName | initialsOnly"
-          class="bg-blue-500"
-        ></nz-avatar>
-        </div>
-        <div class="w-[calc(100%-5rem)]">
-          <div class="font-medium text-lg truncate">{{ member.fullName }}</div>
-          <div class="text-gray-500 truncate">{{ member.email }}</div>
-          <div class="text-sm mt-1">
-            <span
-              class="px-2 py-1 rounded-full"
-              [ngClass]="{
-                'bg-blue-100 text-blue-600': member.roleInTeam === teamRoles.LEADER,
-                'bg-cyan-100 text-cyan-600': member.roleInTeam === teamRoles.MEMBER,
-                'bg-green-100 text-green-600': member.roleInTeam === teamRoles.INVESTOR,
-                'bg-orange-100 text-orange-600': member.roleInTeam === teamRoles.MENTOR
-              }"
-            >
-              {{ teamRoleLabels[member.roleInTeam] }}
-            </span>
           </div>
         </div>
-      </div>
 
-      <!-- Right side: Equity info -->
-      <div class="min-w-36 mt-6 sm:mt-0">
-        <div class="font-medium">{{ member.equity ? 'Giữ ' + member.equity + '% cổ phần' : 'Không có cổ phần' }}</div>
-        <nz-progress
-          [nzPercent]="member.equity"
-          [nzShowInfo]="false"
-          [nzStrokeColor]="'#4F46E5'"
-          class="w-32"
-        ></nz-progress>
+        <!-- Right side: Equity info -->
+        <div class="min-w-36 mt-6 sm:mt-0">
+          <div class="font-medium">{{ member.equity ? 'Giữ ' + member.equity + '% cổ phần' : 'Không có cổ phần' }}</div>
+          <nz-progress
+            [nzPercent]="member.equity"
+            [nzShowInfo]="false"
+            [nzStrokeColor]="'#4F46E5'"
+            class="w-32"
+          ></nz-progress>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</app-leader-history-sidebar>

@@ -1,28 +1,46 @@
 <div class="flex flex-col max-w-6xl mx-auto p-6 md:py-12 min-h-screen">
 
   <!-- Participating Projects -->
-  @if ((userProjects?.length ?? 0) > 0) {
+  <div *ngIf="participatedProjects && participatedProjects.length > 0" class="mb-12">
     <div class="flex items-center justify-between mb-8">
-      <div class="text-2xl font-medium">Dự án của bạn</div>
-      <button (click)="openCreateProjectModal()" nz-button nzType="primary" nzSize="default" 
-        style="background-color: #760dcc; border-color: #760dcc; color: white;"
-      >Thêm dự án mới
+      <div class="text-2xl font-medium" style ="color: #760dcc">Dự án bạn đang tham gia</div>
+      <button *ngIf="!isInvestor && !isMentor && participatedProjects.length === 0" (click)="openCreateProjectModal()" nz-button nzType="primary" nzSize="default" 
+        style="background-color: #760dcc; border-color: #760dcc; color: white;">
+        Thêm dự án mới
       </button>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
-      <app-project-card class="cursor-pointer" (click)="onProjectClick(project)" *ngFor="let project of userProjects" [project]="project" />
-    </div>
-  }
-
-  <!-- No Projects -->
-  <div 
-    *ngIf="(userProjects?.length ?? 0) === 0 && (userProjects?.length ?? 0) === 0"
-    class="flex flex-col justify-center items-center text-gray-500 text-3xl min-h-screen"
-  >
-    Bạn chưa tham gia dự án nào.
-    <div *ngIf="!isInvestor && !isMentor" class="text-xl mt-2">
-      <button (click)="openCreateProjectModal()" nz-button nzType="link" nzSize="small">Thêm dự án mới!</button>
+      <app-project-card class="cursor-pointer" (click)="onProjectClick(project)" 
+        *ngFor="let project of participatedProjects" [project]="project">
+      </app-project-card>
     </div>
   </div>
+
+  <!-- Left Projects -->
+  <div *ngIf="leftProjects && leftProjects.length > 0" class="mb-12">
+    <div class="flex items-center justify-between mb-8">
+      <div class="text-2xl font-medium mb-8" style ="color: #760dcc">Dự án đã rời</div>
+      <button *ngIf="!isInvestor && !isMentor && participatedProjects.length === 0" (click)="openCreateProjectModal()" nz-button nzType="primary" nzSize="default" 
+        style="background-color: #760dcc; border-color: #760dcc; color: white;">
+        Thêm dự án mới
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
+      <app-project-card class="cursor-pointer" (click)="onProjectClick(project)" 
+        *ngFor="let project of leftProjects" [project]="project">
+      </app-project-card>
+    </div>
+  </div>
+
+  <!-- No Projects Message -->
+  <div *ngIf="participatedProjects?.length === 0 && leftProjects?.length === 0" 
+    class="flex flex-col items-center text-center text-gray-500 text-xl gap-4">
+  <div>Bạn chưa tham gia dự án nào.</div>
+  <button *ngIf="!isInvestor && !isMentor" (click)="openCreateProjectModal()" nz-button nzType="primary" nzSize="default" 
+    style="background-color: #760dcc; border-color: #760dcc; color: white;">
+    Thêm dự án mới
+  </button>
+</div>
 
 </div>
