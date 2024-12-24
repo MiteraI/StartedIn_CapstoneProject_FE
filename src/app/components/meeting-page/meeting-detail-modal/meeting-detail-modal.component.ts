@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core'
-import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions'
@@ -11,6 +11,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { ContractType } from 'src/app/shared/enums/contract-type.enum'
 import { Router } from '@angular/router'
+import { ViewMeetingNotesModalComponent } from '../view-meeting-notes-modal/view-meeting-notes-modal.component'
+import { MeetingNoteService } from 'src/app/services/meeting-note.service'
 @Component({
   selector: 'app-meeting-detail-modal',
   templateUrl: './meeting-detail-modal.component.html',
@@ -28,7 +30,14 @@ export class MeetingDetailModalComponent implements OnInit {
   meetingDetail: MeetingDetailModel = {} as MeetingDetailModel
   loading = false
 
-  constructor(private meetingService: MeetingService, private nzMessage: NzMessageService, private router: Router, private nzModalRef: NzModalRef) {
+  constructor(
+    private modalService: NzModalService,
+    private meetingService: MeetingService,
+    private nzMessage: NzMessageService,
+    private router: Router,
+    private nzModalRef: NzModalRef,
+    private meetingNoteService: MeetingNoteService
+  ) {
     this.meetingId = this.nzModalData.meetingId
     this.projectId = this.nzModalData.projectId
   }
@@ -131,5 +140,30 @@ export class MeetingDetailModalComponent implements OnInit {
     ])
 
     this.nzModalRef.close()
+  }
+
+  getMeetingNotes() {
+    this.meetingNoteService.getMeetingNotes(this.projectId, this.meetingId).subscribe({
+      next: (response) => {
+        this.meetingDetail.meetingNotes = response
+      },
+      error: (error) => {
+        console.error('Error:', error)
+      },
+    })
+  }
+
+  openUploadModal() {
+    const modalRef = this.modalService.create({
+      nzStyle: { top: '20px' },
+      nzBodyStyle: { padding: '16px' },
+      nzContent: ViewMeetingNotesModalComponent,
+      nzData: { meetingId: this.meetingId, projectId: this.projectId },
+      nzFooter: null,
+      nzWidth: '500px',
+    })
+    modalRef.afterClose.subscribe(() => {
+      this.getMeetingNotes()
+    })
   }
 }
