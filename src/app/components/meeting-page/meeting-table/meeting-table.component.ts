@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon'
 import { ViewMeetingNotesModalComponent } from '../view-meeting-notes-modal/view-meeting-notes-modal.component'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
-import { DatePipe } from '@angular/common'
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
@@ -22,7 +21,7 @@ import { format } from 'date-fns'
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule, NzTagModule, NzMessageModule],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, NzToolTipModule, NzTagModule, NzMessageModule],
 })
 export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
@@ -57,11 +56,10 @@ export class MeetingTableComponent implements OnInit, OnChanges {
     this.meetingService.refreshMeeting$.subscribe(() => {
       this.getTableData()
     })
-
   }
 
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'dd/MM/yyyy - HH:mm');
+    return format(new Date(dateStr), 'dd/MM/yyyy - HH:mm')
   }
 
   private getTableData() {

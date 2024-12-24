@@ -23,14 +23,7 @@ import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/pr
   templateUrl: './project-approval-list.page.html',
   styleUrls: ['./project-approval-list.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule, 
-    ViewTitleBarComponent, 
-    MatIconModule, 
-    NzSpinModule, 
-    NzModalModule, 
-    RouterModule, 
-    NzButtonModule],
+  imports: [CommonModule, ViewTitleBarComponent, MatIconModule, NzSpinModule, NzModalModule, RouterModule, NzButtonModule],
 })
 export class ProjectApprovalPage implements OnInit {
   projectId!: string
@@ -68,7 +61,9 @@ export class ProjectApprovalPage implements OnInit {
     this.roleService.role$.subscribe((role) => {
       this.isLeader = role === TeamRole.LEADER
     })
-    this.getApproval()
+    this.projectApprovalService.refreshApproval$.subscribe(() => {
+      this.getApproval()
+    })
   }
 
   getApproval() {
@@ -85,14 +80,14 @@ export class ProjectApprovalPage implements OnInit {
   }
 
   showRequestDetail(approval: ProjectApprovalDetail) {
-      this.modalService.create({
-            nzTitle: 'Yêu cầu phê duyệt',
-            nzContent: RequestRegisterDetailComponent,
-            nzData: { approval },
-            nzFooter: null,
-            nzWidth: '800px',
-          })
-    }
+    this.modalService.create({
+      nzTitle: 'Yêu cầu phê duyệt',
+      nzContent: RequestRegisterDetailComponent,
+      nzData: { approval },
+      nzFooter: null,
+      nzWidth: '800px',
+    })
+  }
 
   openRequestAppovalModal() {
     this.modalService.create({

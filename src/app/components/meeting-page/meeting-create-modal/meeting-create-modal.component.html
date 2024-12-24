@@ -19,7 +19,7 @@
       <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
-          <nz-option nzLabel="Không có" [nzValue]="null"></nz-option>
+          <nz-option nzLabel="Không có" [nzValue]="0"></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
           }
@@ -29,10 +29,27 @@
 
     <!-- Appointment Time -->
     <nz-form-item>
-      <nz-form-label nzRequired>Ngày Họp</nz-form-label>
+      <nz-form-label nzRequired>Bắt Đầu Họp</nz-form-label>
       <nz-form-control nzErrorTip="Vui lòng chọn ngày">
         <nz-input-group nzPrefixIcon="calendar">
           <nz-date-picker formControlName="appointmentTime" [nzDisabledDate]="disabledDate" nzShowTime placeholder="Chọn ngày và giờ" class="rounded-lg w-full"></nz-date-picker>
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Appointment End Time -->
+    <nz-form-item>
+      <nz-form-label nzRequired>Kết Thúc Họp</nz-form-label>
+      <nz-form-control nzErrorTip="Vui lòng chọn ngày">
+        <nz-input-group nzPrefixIcon="calendar">
+          <nz-date-picker
+            formControlName="appointmentEndTime"
+            [nzDisabledDate]="disabledEndDate"
+            [nzDisabledTime]="disabledEndTime"
+            nzShowTime
+            placeholder="Chọn ngày và giờ"
+            class="rounded-lg w-full"
+          ></nz-date-picker>
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>

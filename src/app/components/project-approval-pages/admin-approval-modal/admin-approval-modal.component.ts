@@ -63,11 +63,13 @@ export class AdminApprovalModalComponent implements OnInit {
       next: () => {
         this.messageService.success('Hủy yêu cầu thành công')
         this.closePopover()
+        this.approvalService.refreshApproval$.next(true)
         this.nzModalRef.close()
       },
       error: (error) => {
         console.error('Error:', error)
         this.messageService.error(error.error)
+        this.approvalService.refreshApproval$.next(true)
       },
     })
     // Handle the response and close the modal
@@ -85,12 +87,14 @@ export class AdminApprovalModalComponent implements OnInit {
       next: () => {
         this.isAccepting = false
         this.isModalVisible = false
+        this.approvalService.refreshApproval$.next(true)
         this.messageService.success('Duyệt yêu cầu thành công')
         this.nzModalRef.close()
       },
       error: (error) => {
         console.error('Error:', error)
         this.isAccepting = false
+        this.approvalService.refreshApproval$.next(true)
         this.messageService.error(error.error)
       },
     })
