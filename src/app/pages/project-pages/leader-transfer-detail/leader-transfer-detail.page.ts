@@ -38,7 +38,11 @@ export class LeaderTransferDetailPage implements OnInit {
     });
   }
 
-  formatDate(dateStr: string): string {
+  formatDateOnly(dateStr: string): string {
+    return format(new Date(dateStr), 'dd/MM/yyyy');
+  }
+
+  formatDateTime(dateStr: string): string {
     return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
   }
 
