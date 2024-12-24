@@ -1,7 +1,7 @@
 import { MeetingStatus } from "../../enums/meeting-status.enum";
 import { MeetingNoteDetail } from "../meeting/meeting-note/meeting-note-detail.model";
 
-export type LeaderTransfer = {
+export type LeaderTransferModel = {
   id: string;
   projectId: string;
   formerLeaderId: string;

@@ -304,24 +304,24 @@ export class ContractListPage implements OnInit, OnDestroy {
   // terminate stuff
   openTerminateModal(contract: ContractListItemModel) {
     if (this.isLeader) {
-      const modalRef = this.modalService.create({
+      this.modalService.create({
         nzTitle: 'Kết thúc hợp đồng',
         nzContent: TerminateMeetingModalComponent,
         nzData: { projectId: this.projectId, contractId: contract.id, isFromLeader: true },
         nzFooter: null,
         nzStyle: { top: '40px' },
-        nzAfterClose: new EventEmitter<void>()
+      }).afterClose.subscribe(result => {
+        if (result) this.filterContracts();
       });
-      modalRef.afterClose.subscribe(() => this.filterContracts());
     } else {
-      const modalRef = this.modalService.create({
+      this.modalService.create({
         nzTitle: 'Kết thúc hợp đồng',
         nzContent: TerminateContractModalComponent,
         nzData: {projectId: this.projectId, contractId: contract.id },
         nzFooter: null,
-        nzAfterClose: new EventEmitter<void>()
+      }).afterClose.subscribe(result => {
+        if (result) this.filterContracts();
       });
-      modalRef.afterClose.subscribe(() => this.filterContracts());
     }
   }
 
@@ -340,10 +340,9 @@ export class ContractListPage implements OnInit, OnDestroy {
       nzContent: LiquidationModalComponent,
       nzData: { projectId: this.projectId, contractId: contract.id },
       nzFooter: null,
-      nzAfterClose: new EventEmitter<void>()
+    }).afterClose.subscribe(result => {
+      if (result) this.filterContracts();
     });
-
-    modalRef.afterClose.subscribe(() => this.filterContracts());
   }
 
   // add stuff

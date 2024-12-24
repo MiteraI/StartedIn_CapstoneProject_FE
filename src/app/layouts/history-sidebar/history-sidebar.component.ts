@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { Component, ContentChild, EventEmitter, Input, Output, OnInit, TemplateRef } from '@angular/core'
 import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
+import { LargeViewportConfigService } from 'src/app/core/config/large-viewport-config.service'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 
 @Component({
@@ -12,19 +13,19 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
   imports: [MatSidenavModule, MatIconModule, CommonModule],
 })
 export class HistorySidebarComponent implements OnInit {
-  @Input() historyName: string = 'Lịch Sử'
+  @Input() historyName: string = 'Lịch sử'
   @Input() isCollapsed: boolean = false
   @Output() isCollapsedEmit = new EventEmitter<boolean>()
 
-  isDesktopView: boolean = true
+  isLargeViewport: boolean = true
 
   @ContentChild('mainContent') mainContent!: TemplateRef<any>
   @ContentChild('drawerContent') drawerContent!: TemplateRef<any>
 
-  constructor(private viewMode: ViewModeConfigService) {}
+  constructor(private viewMode: LargeViewportConfigService) {}
 
   ngOnInit() {
-    this.viewMode.isDesktopView$.subscribe((val) => (this.isDesktopView = val))
+    this.viewMode.isLargeViewport$.subscribe((val) => (this.isLargeViewport = val))
   }
 
   toggleSidebar() {
