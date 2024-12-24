@@ -14,19 +14,20 @@ import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contr
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ProjectDealItem } from 'src/app/shared/models/deal-offer/project-deal-item.model';
 import { ContractCreateFromDealModel } from 'src/app/shared/models/contract/contract-create-from-deal.model';
 import { InvestmentContractDetailModel } from 'src/app/shared/models/contract/investment-contract-detail.model';
-import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
+import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 import { MatIconModule } from '@angular/material/icon';
+import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
 
 
 @Component({
@@ -48,7 +49,8 @@ import { MatIconModule } from '@angular/material/icon';
     VndCurrencyPipe,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ]
 })
 export class InvestmentContractPage implements OnInit {
@@ -60,6 +62,11 @@ export class InvestmentContractPage implements OnInit {
   contractId: string | null = null;
   deal: ProjectDealItem | null = null;
   investorId!: string;
+
+  contractStatus = ContractStatus;
+  meetingStatus = MeetingStatus;
+  statusLabels = ContractStatusLabels;
+  meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
   percentFormatter = (value: number) => `${value}%`;
