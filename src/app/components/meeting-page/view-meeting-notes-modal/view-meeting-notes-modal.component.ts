@@ -18,7 +18,7 @@ import { MeetingNoteDetail } from 'src/app/shared/models/meeting/meeting-note/me
 export class ViewMeetingNotesModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
 
-  meetingNotes: MeetingNoteDetail[]
+  // meetingNotes: MeetingNoteDetail[]
   meetingId: string
   projectId: string
 
@@ -27,7 +27,7 @@ export class ViewMeetingNotesModalComponent implements OnInit {
   fileList: NzUploadFile[] = []
 
   constructor(private meetingNoteService: MeetingNoteService, private modalRef: NzModalRef, private messageService: NzMessageService) {
-    this.meetingNotes = this.nzModalData.meetingNotes
+    // this.meetingNotes = this.nzModalData.meetingNotes
     this.meetingId = this.nzModalData.meetingId
     this.projectId = this.nzModalData.projectId
   }
@@ -50,15 +50,15 @@ export class ViewMeetingNotesModalComponent implements OnInit {
       next: (response) => {
         console.log(response)
         // Append the new note to the meetingNotes list
-        response.forEach((element) => {
-          this.meetingNotes = [...this.meetingNotes, element]
-        })
+        // response.forEach((element) => {
+        //   this.meetingNotes = [...this.meetingNotes, element]
+        // })
         // Reset the file list
         this.fileList = []
 
         this.messageService.success('Đăng biên bản họp thành công')
-
         this.uploading = false
+        this.modalRef.close()
       },
       error: (error) => {
         console.error('Error:', error)
@@ -67,19 +67,20 @@ export class ViewMeetingNotesModalComponent implements OnInit {
       },
     })
   }
+
   ngOnInit() {
-    this.loading = true
-    //get meeting notes
-    this.meetingNoteService.getMeetingNotes(this.projectId, this.meetingId).subscribe({
-      next: (response) => {
-        this.meetingNotes = response
-        this.loading = false
-      },
-      error: (error) => {
-        console.error('Error:', error)
-        this.loading = false
-      },
-    })
-    console.log('Meeting notes:', this.meetingNotes)
+    // this.loading = true
+    // //get meeting notes
+    // this.meetingNoteService.getMeetingNotes(this.projectId, this.meetingId).subscribe({
+    //   next: (response) => {
+    //     this.meetingNotes = response
+    //     this.loading = false
+    //   },
+    //   error: (error) => {
+    //     console.error('Error:', error)
+    //     this.loading = false
+    //   },
+    // })
+    // console.log('Meeting notes:', this.meetingNotes)
   }
 }
