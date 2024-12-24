@@ -10,6 +10,9 @@ export type ProjectApprovalDetail = {
   documents: Document[]
   id: string
   rejectReason: string
+  targetCall: number,
+  equityShareCall: number,
+  endDate: Date,
 }
 
 export type Document = {

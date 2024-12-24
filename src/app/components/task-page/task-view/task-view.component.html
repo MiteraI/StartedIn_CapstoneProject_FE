@@ -1,38 +1,49 @@
-<app-filter-bar
-  viewName="Tác Vụ"
-  [searchValue]="filter.title ?? ''"
-  (searchString)="onSearch($event)"
-  (filterMenuOpened)="onFilterMenuOpened()"
->
+<app-filter-bar viewName="Tác Vụ" [searchValue]="filter.title ?? ''" (searchString)="onSearch($event)" (filterMenuOpened)="onFilterMenuOpened()">
   <div desktop class="p-4 min-w-[400px]">
-    <app-task-filter
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-task-filter>
+    <app-task-filter [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-task-filter>
   </div>
   <div mobile class="p-4">
-    <app-task-filter
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-task-filter>
+    <app-task-filter [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-task-filter>
   </div>
 </app-filter-bar>
 
 @if (isDesktopView) {
-<div class="flex flex-col w-full px-3 mt-4">
-  <div class="flex justify-end">
-    <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
-      <mat-icon fontIcon="add_icon"></mat-icon>
-      Thêm Tác Vụ
-    </button>
-  </div>
-  <app-task-table [total]="total" [page]="page" [size]="size" [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading" (pageChanged)="onPaginationChanged($event)"></app-task-table>
-</div>
+<app-history-sidebar [isCollapsed]="isHistoryCollasped" (isCollapsedEmit)="isHistoryCollasped = $event">
+  <ng-template #mainContent>
+    <div class="flex flex-col w-full px-3 mt-4">
+      <div class="flex justify-start">
+        <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+          <mat-icon fontIcon="add_icon"></mat-icon>
+          Thêm Tác Vụ
+        </button>
+      </div>
+      <app-task-table
+        [total]="total"
+        [page]="page"
+        [size]="size"
+        [taskList]="taskList"
+        [projectId]="projectId"
+        [isFetchAllTaskLoading]="isFetchAllTaskLoading"
+        (pageChanged)="onPaginationChanged($event)"
+      ></app-task-table>
+    </div>
+  </ng-template>
+  <ng-template #drawerContent>
+    <app-task-history-list [projectId]="projectId" [isCollasped]="isHistoryCollasped"></app-task-history-list>
+  </ng-template>
+</app-history-sidebar>
 } @else {
-<div class="overflow-y-auto">
-  <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
-    <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
-  </div>
-  <app-task-list [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-task-list>
-</div>
+<app-history-sidebar [isCollapsed]="isHistoryCollasped" (isCollapsedEmit)="isHistoryCollasped = $event">
+  <ng-template #mainContent>
+    <div class="overflow-y-auto">
+      <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+        <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
+      </div>
+      <app-task-list [taskList]="taskList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllTaskLoading"></app-task-list>
+    </div>
+  </ng-template>
+  <ng-template #drawerContent>
+    <app-task-history-list [projectId]="projectId" [isCollasped]="isHistoryCollasped"></app-task-history-list>
+  </ng-template>
+</app-history-sidebar>
 }

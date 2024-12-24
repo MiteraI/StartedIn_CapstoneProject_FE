@@ -205,7 +205,7 @@ export class InvestmentCallPagePage implements OnInit {
       nzContent: CreateInvestmentCallModalComponent,
       nzData: {
         projectId: this.projectId,
-        currentProject: this.currentProject,
+        currentProject: this.currentProject
       },
       nzFooter: null,
     })
