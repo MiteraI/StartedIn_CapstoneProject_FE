@@ -44,8 +44,9 @@ export class LeaderTransferService {
     )
   }
 
-  getHistory(projectId: string) {
-    const url = `/api/projects/${projectId}/leader-history`
+  getHistory(projectId: string, page: number, size: number) {
+    const query = `page=${page}&size=${size}`
+    const url = `/api/projects/${projectId}/leader-history?${query}`
     return this.http.get<Pagination<LeaderTransferHistoryModel>>(this.applicationConfigService.getEndpointFor(url))
   }
 

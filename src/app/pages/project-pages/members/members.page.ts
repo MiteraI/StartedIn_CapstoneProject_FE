@@ -25,6 +25,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { TransferLeaderModalComponent } from 'src/app/components/project-pages/transfer-leader-modal/transfer-leader-modal.component';
 import { TransferMeetingModalComponent } from 'src/app/components/project-pages/transfer-meeting-modal/transfer-meeting-modal.component';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { LeaderHistorySidebarComponent } from 'src/app/components/project-pages/leader-history-sidebar/leader-history-sidebar.component';
 
 @Component({
   selector: 'app-members',
@@ -43,7 +44,8 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
     NzSpinModule,
     InitialsOnlyPipe,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    LeaderHistorySidebarComponent
   ]
 })
 export class MembersPage implements OnInit {

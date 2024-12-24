@@ -1,9 +1,9 @@
 <mat-drawer-container [style.height]="height + 'px'">
-  <mat-drawer [opened]="!isCollapsed" [mode]="isDesktopView ? 'side' : 'over'" position="end" [style.width]="'300px'">
+  <mat-drawer [opened]="!isCollapsed" [mode]="isLargeViewport ? 'side' : 'over'" position="end" [style.width]="'300px'">
     <div class="w-full h-full bg-white flex flex-col">
       <div class="flex justify-between items-center ml-2">
         <div class="m-2 text-xl font-black">Lịch sử</div>
-        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full bg-white hover:bg-slate-200" (click)="toggleSidebar()">
+        <button class="m-2 flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-200 transition-colors" (click)="toggleSidebar()">
           <mat-icon fontIcon="close"></mat-icon>
         </button>
       </div>
@@ -48,7 +48,7 @@
         *ngIf="isCollapsed"
         (click)="toggleSidebar()"
         class="absolute top-2 right-4 px-4 py-2 flex items-center rounded-full hover:bg-slate-200"
-        [ngClass]="{'opacity-50 bg-white' : !isDesktopView}"
+        [ngClass]="{'opacity-50 bg-white' : !isLargeViewport}"
       >
         <mat-icon fontIcon="history"></mat-icon>
         <span class="ml-2 hidden lg:inline">Lịch sử ký kết</span>

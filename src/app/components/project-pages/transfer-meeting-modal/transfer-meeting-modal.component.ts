@@ -70,7 +70,7 @@ export class TransferMeetingModalComponent implements OnInit {
       .subscribe({
         next: () => {
           this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
-          this.nzModalRef.close();
+          this.nzModalRef.close(true);
         },
         error: (error) => {
           this.isLoading = false;
