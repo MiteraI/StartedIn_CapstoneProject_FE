@@ -9,7 +9,7 @@
           Hợp đồng này {{ contract.contractStatus === contractStatus.WAITING_FOR_LIQUIDATION ? 'đang chờ' : 'đã được' }} thanh lý.
           <a
             class="ml-1 font-bold"
-            [routerLink]="['projects', project.id, 'liquidation-contract', contract.liquidationNoteId]"
+            [routerLink]="['/projects', project.id, 'liquidation-contract', contract.liquidationNoteId]"
           >
             Xem biên bản thanh lý
           </a>
