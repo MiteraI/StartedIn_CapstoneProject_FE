@@ -32,7 +32,7 @@
       <td>{{ meeting.title }}</td>
       <td>{{ meeting.milestoneName || 'Không có' }}</td>
       <td>{{ formatDate(meeting.appointmentTime) }}</td>
-      <td>{{ formatDate(meeting.appointmentTime) }}</td>
+      <td>{{ meeting.appointmentEndTime ? formatDate(meeting.appointmentEndTime) : 'Chưa có giờ kết thúc' }}</td>
       <td>
         <nz-tag class="w-full text-center" [nzColor]="getStatusColor(meeting.status)">
           {{ MeetingLabel[meeting.status] }}

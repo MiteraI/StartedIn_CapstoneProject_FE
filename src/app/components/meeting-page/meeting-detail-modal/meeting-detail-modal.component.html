@@ -8,6 +8,13 @@
         {{ meetingDetail.description || 'Không có thông tin' }}
       </nz-descriptions-item>
 
+      @if(meetingDetail.contractId && meetingDetail.contractType) {
+      <nz-descriptions-item nzTitle="Hợp đồng" [nzSpan]="3">
+        <i nz-icon nzType="file" nzTheme="outline" class="mr-2"></i>
+        <a (click)="navigateToContract(meetingDetail.contractType, meetingDetail.contractId)">{{ meetingDetail.contractName ?? 'Hợp đồng vô danh' }}</a>
+      </nz-descriptions-item>
+      }
+
       <nz-descriptions-item nzTitle="Cột mốc" [nzSpan]="2">
         <i nz-icon nzType="flag" nzTheme="outline" class="mr-2"></i>
         {{ meetingDetail.milestoneName || 'Không xác định' }}
@@ -18,9 +25,13 @@
         {{ getMeetingStatusLabel(meetingDetail.status) }}
       </nz-descriptions-item>
 
-      <nz-descriptions-item nzTitle="Thời gian" [nzSpan]="3">
+      <nz-descriptions-item nzTitle="Bắt đầu" [nzSpan]="2">
         <i nz-icon nzType="calendar" nzTheme="outline" class="mr-2"></i>
         {{ meetingDetail.appointmentTime | date : 'dd/MM/yyyy HH:mm' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Kết thúc" [nzSpan]="3">
+        <i nz-icon nzType="calendar" nzTheme="outline" class="mr-2"></i>
+        {{ meetingDetail.appointmentEndTime ? (meetingDetail.appointmentEndTime | date : 'dd/MM/yyyy HH:mm') : 'Chưa có thời gian kết thúc' }}
       </nz-descriptions-item>
 
       <nz-descriptions-item nzTitle="Link cuộc họp" [nzSpan]="3">

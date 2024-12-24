@@ -26,6 +26,7 @@ import { format } from 'date-fns'
 export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
   @Input({ required: true }) filterResult: FilterOptions = {}
+  @Input() meetingId: string = ''
 
   listMeeting: SearchResponseModel<MeetingDetailModel> = {
     data: [],
@@ -56,6 +57,17 @@ export class MeetingTableComponent implements OnInit, OnChanges {
     this.meetingService.refreshMeeting$.subscribe(() => {
       this.getTableData()
     })
+
+    if (this.meetingId != '') {
+      this.meetingService.getMeetingDetails(this.projectId, this.meetingId).subscribe({
+        next: (meetingDetail) => {
+          this.openMeetingDetail(meetingDetail)
+        },
+        error: (error) => {
+          console.error('Error:', error)
+        },
+      })
+    }
   }
 
   formatDate(dateStr: string): string {
