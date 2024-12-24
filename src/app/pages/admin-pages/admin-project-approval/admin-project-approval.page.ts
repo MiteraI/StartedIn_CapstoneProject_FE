@@ -56,7 +56,9 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
       this.loadMore()
     })
 
-    this.getApproval()
+    this.projectApprovalService.refreshApproval$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.getApproval()
+    })
   }
 
   ngOnDestroy() {

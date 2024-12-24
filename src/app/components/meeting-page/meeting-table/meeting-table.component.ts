@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon'
 import { ViewMeetingNotesModalComponent } from '../view-meeting-notes-modal/view-meeting-notes-modal.component'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
-import { DatePipe } from '@angular/common'
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
 import { MeetingDetailModalComponent } from '../meeting-detail-modal/meeting-detail-modal.component'
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
@@ -22,11 +21,12 @@ import { format } from 'date-fns'
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, DatePipe, NzToolTipModule, NzTagModule, NzMessageModule],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, NzToolTipModule, NzTagModule, NzMessageModule],
 })
 export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
   @Input({ required: true }) filterResult: FilterOptions = {}
+  @Input() meetingId: string = ''
 
   listMeeting: SearchResponseModel<MeetingDetailModel> = {
     data: [],
@@ -58,10 +58,20 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       this.getTableData()
     })
 
+    if (this.meetingId != '') {
+      this.meetingService.getMeetingDetails(this.projectId, this.meetingId).subscribe({
+        next: (meetingDetail) => {
+          this.openMeetingDetail(meetingDetail)
+        },
+        error: (error) => {
+          console.error('Error:', error)
+        },
+      })
+    }
   }
 
   formatDate(dateStr: string): string {
-    return format(new Date(dateStr), 'dd/MM/yyyy - HH:mm');
+    return format(new Date(dateStr), 'dd/MM/yyyy - HH:mm')
   }
 
   private getTableData() {
@@ -91,17 +101,6 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       },
       nzFooter: null,
       nzWidth: '700px',
-    })
-  }
-
-  openMeetingNote(meetingDetail: MeetingDetailModel) {
-    const modalRef = this.modalService.create({
-      nzStyle: { top: '20px' },
-      nzBodyStyle: { padding: '16px' },
-      nzContent: ViewMeetingNotesModalComponent,
-      nzData: { meetingNotes: meetingDetail.meetingNotes, meetingId: meetingDetail.id, projectId: this.projectId },
-      nzFooter: null,
-      nzWidth: '70%',
     })
   }
 

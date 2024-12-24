@@ -1,4 +1,5 @@
 import { ContractStatus } from "../../enums/contract-status.enum";
+import { MeetingDetailModel } from "../meeting/meeting-detail.model";
 import { ShareEquityCreateUpdateModel } from "../share-equity/share-equity-create-update.model";
 
 export type InternalContractDetailModel = {
@@ -8,5 +9,7 @@ export type InternalContractDetailModel = {
   contractIdNumber: string;
   contractStatus: ContractStatus;
   projectName?: string;
+  liquidationNoteId?: string;
   shareEquities: ShareEquityCreateUpdateModel[];
+  appointments: MeetingDetailModel[];
 }

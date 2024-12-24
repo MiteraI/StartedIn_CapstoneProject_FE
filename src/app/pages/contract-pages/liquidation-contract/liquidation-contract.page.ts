@@ -23,6 +23,7 @@ import { LiquidationContractDetailModel } from 'src/app/shared/models/contract/l
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
+import { ContractType } from 'src/app/shared/enums/contract-type.enum';
 
 @Component({
   selector: 'app-liquidation-contract',
@@ -79,6 +80,10 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
     });
   }
 
+  getParentContractNumber() {
+    return this.contract?.contractName.split(' ').pop();
+  }
+
   send() {
     this.isLoading = true;
     this.contractService
@@ -110,6 +115,16 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
         this.isLoading = false;
         window.open(response.downLoadUrl, '_blank');
       });
+  }
+
+  navigateToParentContract(contract: LiquidationContractDetailModel) {
+    this.router.navigate([
+      '/projects',
+      this.project.id,
+      contract.parentContractType === ContractType.INVESTMENT ? 'investment-contract' :
+      contract.parentContractType === ContractType.INTERNAL ? 'internal-contract' : '',
+      contract.parentContractId
+    ])
   }
 
   navigateBack() {

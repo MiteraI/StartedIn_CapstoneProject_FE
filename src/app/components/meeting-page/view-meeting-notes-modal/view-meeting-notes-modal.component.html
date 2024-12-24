@@ -1,23 +1,23 @@
 <!-- Upload Section -->
-<nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 6 }">
-  <div class="p-4 bg-gray-50 rounded-lg shadow-md">
-    <h3 class="text-lg font-semibold mb-4">Tải lên biên bản họp</h3>
-    <div class="flex items-center gap-4">
-      <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true" nzListType="text" class="upload-wrapper">
-        <button nz-button nzType="default" class="flex items-center">
-          <span nz-icon nzType="upload" class="mr-2"></span>
-          Chọn biên bản
-        </button>
-      </nz-upload>
-
-      <button nz-button nzType="primary" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0" class="ml-2">
-        {{ uploading ? 'Đang tải lên...' : 'Tải lên' }}
+<!-- <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 6 }"> -->
+<div class="p-4">
+  <h3 class="text-lg font-semibold mb-4">Tải lên biên bản họp</h3>
+  <div class="gap-4">
+    <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true" nzListType="text" class="upload-wrapper">
+      <button nz-button nzType="default" class="flex items-center">
+        <span nz-icon nzType="upload" class="mr-2"></span>
+        Chọn biên bản
       </button>
-    </div>
-  </div>
+    </nz-upload>
 
-  <!-- Meeting Notes Section -->
-  <div class="mt-6 p-4 bg-white rounded-lg shadow-md">
+    <button nz-button nzType="primary" [nzLoading]="uploading" (click)="handleUpload()" [disabled]="fileList.length === 0" class="">
+      {{ uploading ? 'Đang tải lên...' : 'Tải lên' }}
+    </button>
+  </div>
+</div>
+
+<!-- Meeting Notes Section -->
+<!-- <div class="mt-6 p-4 bg-white rounded-lg shadow-md">
     <h3 class="text-lg font-semibold mb-4">Biên bản cuộc họp</h3>
 
     <ul *ngIf="meetingNotes.length > 0; else noMeetingNotes" class="list-none">
@@ -34,11 +34,11 @@
         </div>
       </li>
       }
-    </ul>
+    </ul> -->
 
-    <!-- Fallback for No Meeting Notes -->
-    <ng-template #noMeetingNotes>
+<!-- Fallback for No Meeting Notes -->
+<!-- <ng-template #noMeetingNotes>
       <p class="text-gray-500 text-center">Chưa có biên bản nào được tải lên.</p>
     </ng-template>
-  </div>
-</nz-skeleton>
+  </div> -->
+<!-- </nz-skeleton> -->

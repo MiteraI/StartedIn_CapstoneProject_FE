@@ -11,6 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd/message'
 import { NZ_MODAL_DATA, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
 import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload'
+import { finalize } from 'rxjs'
 import { ProjectApprovalService } from 'src/app/services/project-approval.service'
 import { ProjectCharterService } from 'src/app/services/project-charter.service'
 import { UserService } from 'src/app/services/user.service'
@@ -62,8 +63,6 @@ export class RequestApprovalModalComponent implements OnInit {
 
   ngOnInit() {
     this.getProjectCharter()
-
-    this.getCurrentUser()
 
     this.approvalRequestForm = this.fb.group({
       requestReason: ['', [Validators.required, Validators.maxLength(500)]],
@@ -136,11 +135,13 @@ export class RequestApprovalModalComponent implements OnInit {
         next: (response) => {
           console.log(response)
           this.messageService.success('Yêu cầu phê duyệt đã được gửi')
+          this.projectApprovalService.refreshApproval$.next(true)
           this.uploading = false
           this.nzModalRef.close()
         },
         error: (error) => {
           console.error('Error requesting approval:', error)
+          this.projectApprovalService.refreshApproval$.next(true)
           this.messageService.error(error.error)
           this.uploading = false
         },

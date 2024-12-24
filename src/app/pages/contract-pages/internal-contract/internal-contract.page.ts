@@ -10,11 +10,11 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { ContractService } from 'src/app/services/contract.service';
 import { catchError, Observable, Subject, takeUntil, throwError } from 'rxjs';
-import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
+import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum';
 import { ShareEquityCreateUpdateModel } from 'src/app/shared/models/share-equity/share-equity-create-update.model';
 import { InternalContractCreateUpdateModel } from 'src/app/shared/models/contract/internal-contract-create-update.model';
 import { InternalContractDetailModel } from 'src/app/shared/models/contract/internal-contract-detail.model';
@@ -26,6 +26,8 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 import { ContractHistorySidebarComponent } from 'src/app/components/contract-pages/contract-history-sidebar/contract-history-sidebar.component';
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 import { MatIconModule } from '@angular/material/icon';
+import { MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
+import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum';
 
 @Component({
   selector: 'app-internal-contract',
@@ -45,7 +47,8 @@ import { MatIconModule } from '@angular/material/icon';
     NzInputNumberModule,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
 })
 export class InternalContractPage implements OnInit, OnDestroy {
@@ -58,8 +61,12 @@ export class InternalContractPage implements OnInit, OnDestroy {
   memberList: TeamMemberModel[] = [];
   selectedMemberId: string | null = null;
 
-  roleInTeam = TeamRole
-  roleInTeamLabels = TeamRoleLabels
+  roleInTeam = TeamRole;
+  contractStatus = ContractStatus;
+  meetingStatus = MeetingStatus;
+  roleInTeamLabels = TeamRoleLabels;
+  statusLabels = ContractStatusLabels;
+  meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
   percentFormatter = (value: number) => `${value}%`;
