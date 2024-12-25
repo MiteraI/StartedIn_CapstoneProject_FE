@@ -198,19 +198,19 @@
     @if(registerForm.get('role')?.value === 'User'){
     <!-- studentCode -->
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="studentCode">Student Code</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="studentCode">Mã số sinh viên</nz-form-label>
       <nz-form-control  [nzSm]="14" [nzXs]="24" [nzErrorTip]="'Vui lòng nhập mã sinh viên'">
         <input nz-input formControlName="studentCode" id="studentCode" />
       </nz-form-control>
     </nz-form-item>
   
     <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="academicYear">Academic Year</nz-form-label>
+      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="academicYear">Niên khoá</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24"
         [nzErrorTip]="
           registerForm.get('academicYear')?.hasError('invalidFormat')
-            ? 'Năm học phải theo định dạng YYYY-YYYY'
-            : 'Vui lòng nhập năm học'
+            ? 'Niên khoá phải theo định dạng YYYY-YYYY'
+            : 'Vui lòng nhập niên khoá'
         "
       >
         <input nz-input formControlName="academicYear" id="academicYear" />
