@@ -94,9 +94,7 @@
           <mat-icon fontIcon="policy" class="text-gray-600 mr-2"></mat-icon>
           <span class="font-semibold text-gray-700">Điều khoản</span>
         </div>
-        <div class="w-full md:w-2/3 text-gray-800 ml-8 md:ml-0">
-          {{ contract.contractPolicy || 'Không có điều khoản' }}
-        </div>
+        <div class="pt-4" [innerHTML]="contract.contractPolicy"></div>
       </div>
 
       <div class="mt-6">
@@ -280,10 +278,12 @@
 
       <nz-form-item>
         <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
-        <nz-form-control [nzSpan]="18">
-          <textarea nz-input formControlName="contractPolicy" rows="4" placeholder="Nhập các điều khoản khác"></textarea>
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung điều khoản'">
+          <editor [apiKey]="editorKey" [init]="init" formControlName="contractPolicy"></editor>
         </nz-form-control>
       </nz-form-item>
+
+      
 
       <div class="mt-6">
         <div class="flex items-center justify-between mb-4">

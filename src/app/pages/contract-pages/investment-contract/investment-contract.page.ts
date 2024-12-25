@@ -28,6 +28,8 @@ import { ContractHistorySidebarComponent } from 'src/app/components/contract-pag
 import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
 
 
 @Component({
@@ -50,7 +52,8 @@ import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    EditorModule
   ]
 })
 export class InvestmentContractPage implements OnInit {
@@ -62,13 +65,23 @@ export class InvestmentContractPage implements OnInit {
   contractId: string | null = null;
   deal: ProjectDealItem | null = null;
   investorId!: string;
-
+  isUpdating = false;
+  editorKey = EDITOR_KEY
   contractStatus = ContractStatus;
   meetingStatus = MeetingStatus;
   statusLabels = ContractStatusLabels;
   meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
+
+  init: EditorComponent['init'] = {
+      branding: false,
+      plugins: 'lists link code help wordcount image',
+      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+      setup: () => {
+        this.onInfoChange()
+      },
+  }
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
   vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
@@ -148,6 +161,10 @@ export class InvestmentContractPage implements OnInit {
         })
       }
     });
+  }
+
+  onInfoChange() {
+    this.isUpdating = true
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
