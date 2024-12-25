@@ -8,9 +8,12 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { tap } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
+import { ContractService } from 'src/app/services/contract.service'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 
 @Component({
@@ -24,7 +27,9 @@ export class MeetingCreateModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
   meetingForm: FormGroup
   milestones: Milestone[] = []
-  loading = false
+  contracts: ContractListItemModel[] = []
+  loadingMilestones = false
+  loadingContracts = false
   constructor(
     private fb: FormBuilder,
     private milestoneService: MilestoneService,
@@ -32,10 +37,11 @@ export class MeetingCreateModalComponent implements OnInit {
     private nzModalRef: NzModalRef,
     private modalService: NzModalService,
     private meetingService: MeetingService,
-    private changeDetectorRef: ChangeDetectorRef
+    private contractService: ContractService
   ) {
     this.meetingForm = this.fb.group({
       milestoneId: [0],
+      contractId: [0],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
       appointmentEndTime: [null, [Validators.required]],
@@ -46,15 +52,24 @@ export class MeetingCreateModalComponent implements OnInit {
 
   ngOnInit() {
     if (!this.nzModalData.appendMode) {
-      this.loading = true
-      this.milestoneService.getMilestones(this.nzModalData.projectId, 1, 10).subscribe({
+      this.loadingMilestones = true
+      this.loadingContracts = true
+      this.milestoneService.getMilestones(this.nzModalData.projectId, 1, 20).subscribe({
         next: (milestones) => {
           this.milestones = milestones.data
-          // this.meetingForm.patchValue({ milestoneId: this.milestones[0].id })
           console.log(this.meetingForm.value)
-          this.loading = false
+          this.loadingMilestones = false
         },
       })
+      this.contractService
+        .getContractListForProject(this.nzModalData.projectId, 1, 20)
+        .pipe(tap())
+        .subscribe({
+          next: (contracts) => {
+            this.contracts = contracts.data
+            this.loadingContracts = false
+          },
+        })
     }
   }
 
@@ -84,6 +99,10 @@ export class MeetingCreateModalComponent implements OnInit {
   createMeeting() {
     if (this.meetingForm.get('milestoneId')?.value === 0) {
       this.meetingForm.patchValue({ milestoneId: null })
+    }
+
+    if (this.meetingForm.get('contractId')?.value === 0) {
+      this.meetingForm.patchValue({ contractId: null })
     }
     this.meetingService.createMeeting(this.nzModalData.projectId, this.meetingForm.value).subscribe({
       next: () => {
