@@ -18,6 +18,8 @@ import { MilestoneFilterComponent } from '../milestone-filter/milestone-filter.c
 import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { CommonModule } from '@angular/common'
+import { HistorySidebarComponent } from 'src/app/layouts/history-sidebar/history-sidebar.component'
+import { MilestoneHistoryListComponent } from '../milestone-history-list/milestone-history-list.component'
 
 interface MilestoneFilterOptions {
   title?: string
@@ -29,7 +31,18 @@ interface MilestoneFilterOptions {
   templateUrl: './milestone-view.component.html',
   styleUrls: ['./milestone-view.component.scss'],
   standalone: true,
-  imports: [FilterBarComponent, MilestoneTableComponent, MilestoneListComponent, NzButtonModule, MatIconModule, NzModalModule, MilestoneFilterComponent, CommonModule],
+  imports: [
+    FilterBarComponent,
+    MilestoneTableComponent,
+    MilestoneListComponent,
+    NzButtonModule,
+    MatIconModule,
+    NzModalModule,
+    MilestoneFilterComponent,
+    CommonModule,
+    HistorySidebarComponent,
+    MilestoneHistoryListComponent,
+  ],
 })
 export class MilestoneViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
@@ -43,6 +56,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   total: number = 0 //Total of tasks (filter or not)
   isFetchAllMilestonesLoading: boolean = false
   isLeader: boolean = false
+  isHistoryCollasped: boolean = true // not collapsing => see history
+
   constructor(
     private viewMode: ViewModeConfigService,
     private modalService: NzModalService,

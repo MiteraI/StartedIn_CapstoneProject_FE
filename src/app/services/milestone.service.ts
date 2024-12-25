@@ -8,19 +8,18 @@ import { Pagination } from '../shared/models/pagination.model'
 import { PhaseState } from '../shared/enums/phase-status.enum'
 import { MilestoneDetails } from '../shared/models/milestone/milestone-details.model'
 import { UpdateMilestone } from '../shared/models/milestone/milestone-update.model'
+import { MilestoneHistory } from '../shared/models/milestone/milestone-history.model'
 
 @Injectable({
   providedIn: 'root',
 })
 export class MilestoneService {
   refreshMilestone$ = new BehaviorSubject<boolean>(true)
-  
+
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getMilestones(projectId: string, page: number, size: number, title?: string, phaseId?: string): Observable<Pagination<Milestone>> {
-    const query = (title?.trim() ? `title=${title.trim()}&` : '')
-    + (phaseId ? `phaseId=${phaseId}&` : '')
-    + `page=${page}&size=${size}`
+    const query = (title?.trim() ? `title=${title.trim()}&` : '') + (phaseId ? `phaseId=${phaseId}&` : '') + `page=${page}&size=${size}`
     return this.http.get<Pagination<Milestone>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones?${query}`))
   }
 
@@ -38,5 +37,9 @@ export class MilestoneService {
 
   deleteMilestone(projectId: string, milestoneId: string): Observable<any> {
     return this.http.delete(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones/${milestoneId}`))
+  }
+
+  getMilestoneHistory(projectId: string, page: number, size: number): Observable<Pagination<MilestoneHistory>> {
+    return this.http.get<Pagination<MilestoneHistory>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/milestones/history?page=${page}&size=${size}`))
   }
 }
