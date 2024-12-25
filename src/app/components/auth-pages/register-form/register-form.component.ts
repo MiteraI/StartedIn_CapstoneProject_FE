@@ -35,7 +35,7 @@ export class RegisterFormComponent implements OnInit {
       phoneNumber: ['', Validators.required],
       role: ['User', Validators.required],
       address: ['', Validators.required],
-      idCardNumber: ['', Validators.required],
+      idCardNumber: ['', [Validators.required, this.idCardNumberValidator()]],
       studentCode: [''],
       academicYear: [''],
     },
@@ -83,7 +83,10 @@ export class RegisterFormComponent implements OnInit {
     const academicYearControl = this.registerForm.get('academicYear');
   
     if (role === 'User') {
-      studentCodeControl?.setValidators([Validators.required]);
+      studentCodeControl?.setValidators([
+        Validators.required,
+        this.studentCodeFormatValidator()
+      ]);
       academicYearControl?.setValidators([
         Validators.required,
         this.academicYearFormatValidator(),
@@ -98,6 +101,17 @@ export class RegisterFormComponent implements OnInit {
     academicYearControl?.updateValueAndValidity();
     this.registerForm.get('email')?.updateValueAndValidity();
   }
+
+  getIdCardNumberErrorMessage() {
+    const idCardNumberControl = this.registerForm.get('idCardNumber');
+    if (idCardNumberControl?.hasError('required')) {
+      return 'Vui lòng nhập mã thẻ ID';
+    }
+    if (idCardNumberControl?.hasError('invalidIdCardNumber')) {
+      return 'Mã thẻ ID phải có 12 chữ số';
+    }
+    return ''; // No error
+  }
   
   academicYearFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
@@ -106,6 +120,27 @@ export class RegisterFormComponent implements OnInit {
         return { invalidFormat: true };
       }
       return null;
+    };
+  }
+
+  studentCodeFormatValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const studentCodeRegex = /^(SE|SA|SS|IA)\d{6}$/; // Prefix (SE, SA, SS, IA) + 6 digits
+      if (control.value && !studentCodeRegex.test(control.value)) {
+        return { invalidFormat: true }; // Invalid format error
+      }
+      return null; // Valid format
+    };
+  }
+
+  idCardNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const idCardNumber = control.value;
+      const idCardRegex = /^\d{12}$/;  // Checks if the value is exactly 12 digits
+      if (idCardNumber && !idCardRegex.test(idCardNumber)) {
+        return { invalidIdCardNumber: true };  // Invalid if it doesn't match 12 digits
+      }
+      return null;  // Valid if it matches the format
     };
   }
 
@@ -127,8 +162,15 @@ export class RegisterFormComponent implements OnInit {
           this.message.success(response)
         }),
         catchError((error) => {
-          this.message.error(error.message)
-          return throwError(error)
+          if (error.status === 400 && error.error) {
+            // Handle the specific error case, such as account already exists
+            this.message.error(error.error || 'Đã xảy ra lỗi khi đăng ký');
+          } else {
+            // Handle other errors
+            this.message.error('Đã xảy ra lỗi, vui lòng thử lại!');
+            console.log(error.message)
+          }
+          return throwError(error); // Re-throw the error for further handling if needed
         })
       )
       .subscribe()
