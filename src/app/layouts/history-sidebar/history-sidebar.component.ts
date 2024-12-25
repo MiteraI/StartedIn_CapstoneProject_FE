@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { LargeViewportConfigService } from 'src/app/core/config/large-viewport-config.service'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
+import { ScrollService } from 'src/app/core/util/scroll.service'
 
 @Component({
   selector: 'app-history-sidebar',
@@ -22,10 +23,17 @@ export class HistorySidebarComponent implements OnInit {
   @ContentChild('mainContent') mainContent!: TemplateRef<any>
   @ContentChild('drawerContent') drawerContent!: TemplateRef<any>
 
-  constructor(private viewMode: LargeViewportConfigService) {}
+  constructor(private viewMode: LargeViewportConfigService, private scrollService: ScrollService) {}
 
   ngOnInit() {
     this.viewMode.isLargeViewport$.subscribe((val) => (this.isLargeViewport = val))
+  }
+
+  onScroll(event: any) {
+    const element = event.target
+    if (element.scrollHeight - element.scrollTop <= element.clientHeight + 100) {
+      this.scrollService.emitScroll()
+    }
   }
 
   toggleSidebar() {

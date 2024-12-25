@@ -1,46 +1,42 @@
 <app-filter-bar viewName="Cột mốc" (searchString)="printSearchString($event)">
   <div desktop class="p-4 min-w-[400px]">
-    <app-milestone-filter
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-milestone-filter>
+    <app-milestone-filter [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-milestone-filter>
   </div>
   <div mobile class="p-4">
-    <app-milestone-filter
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-milestone-filter>
+    <app-milestone-filter [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-milestone-filter>
   </div>
 </app-filter-bar>
 @if (isDesktopView) {
-<div class="flex flex-col w-full px-3 mt-4">
-  <div *ngIf="isLeader" class="flex justify-end">
-    <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
-      <mat-icon fontIcon="add_icon"></mat-icon>
-      Thêm Cột Mốc
-    </button>
-  </div>
-  <app-milestone-table
-    [total]="total"
-    [page]="page"
-    [size]="size"
-    [milestoneList]="milestoneList"
-    [projectId]="projectId"
-    [isFetchAllTaskLoading]="isFetchAllMilestonesLoading"
-    [isLeader]="isLeader"
-    (pageChanged)="onPaginationChanged($event)"
-  ></app-milestone-table>
-</div>
+<app-history-sidebar [isCollapsed]="isHistoryCollasped" (isCollapsedEmit)="isHistoryCollasped = $event">
+  <ng-template #mainContent>
+    <div class="flex flex-col w-full px-3 mt-4">
+      <div class="flex justify-start">
+        <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+          <mat-icon fontIcon="add_icon"></mat-icon>
+          Thêm Cột Mốc
+        </button>
+      </div>
+      <app-milestone-table
+        [total]="total"
+        [page]="page"
+        [size]="size"
+        [milestoneList]="milestoneList"
+        [projectId]="projectId"
+        [isFetchAllTaskLoading]="isFetchAllMilestonesLoading"
+        [isLeader]="isLeader"
+        (pageChanged)="onPaginationChanged($event)"
+      ></app-milestone-table>
+    </div>
+  </ng-template>
+  <ng-template #drawerContent>
+    <app-milestone-history-list [projectId]="projectId" [isCollasped]="isHistoryCollasped"></app-milestone-history-list>
+  </ng-template>
+</app-history-sidebar>
 } @else {
 <div class="overflow-y-auto">
   <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
     <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
   </div>
-  <app-milestone-list
-    [milestoneList]="milestoneList"
-    [projectId]="projectId"
-    [isFetchAllTaskLoading]="isFetchAllMilestonesLoading"
-    [isLeader]="isLeader"
-  ></app-milestone-list>
+  <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllMilestonesLoading" [isLeader]="isLeader"></app-milestone-list>
 </div>
 }

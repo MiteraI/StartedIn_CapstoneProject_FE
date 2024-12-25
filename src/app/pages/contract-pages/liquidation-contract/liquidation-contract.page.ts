@@ -24,6 +24,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { ContractStatus } from 'src/app/shared/enums/contract-status.enum';
 import { ContractType } from 'src/app/shared/enums/contract-type.enum';
+import { NzModalModule } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-liquidation-contract',
@@ -38,6 +39,7 @@ import { ContractType } from 'src/app/shared/enums/contract-type.enum';
     NzInputModule,
     NzButtonModule,
     NzListModule,
+    NzModalModule,
     NzIconModule,
     NzSelectModule,
     NzInputNumberModule,

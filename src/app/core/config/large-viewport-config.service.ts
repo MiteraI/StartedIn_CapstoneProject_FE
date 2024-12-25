@@ -9,7 +9,7 @@ import { OnDestroy } from '@angular/core'
 })
 export class LargeViewportConfigService {
   private isLargeViewportSubject$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-  private largeViewportBreakpoint = 1024
+  private largeViewportBreakpoint = 768
 
   constructor(private platform: Platform) {
     if (environment.production) {

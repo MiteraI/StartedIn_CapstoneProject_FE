@@ -27,7 +27,9 @@ export class WebsocketService {
             transport: signalR.HttpTransportType.WebSockets,
             accessTokenFactory: () => stateStorage.getAccessToken(),
           })
-          .withAutomaticReconnect()
+          .withAutomaticReconnect({nextRetryDelayInMilliseconds(retryContext) {
+            return Math.random() < 0.5 ? 1000 : 2000
+          },})
           .build()
 
         this.projectHubConnection

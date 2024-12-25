@@ -27,6 +27,7 @@ import { NzTableModule } from 'ng-zorro-antd/table'
 import { ApplicationStatus, ApplicationStatusColors, ApplicationStatusLabels } from 'src/app/shared/enums/application-status.enum'
 import { DateDisplayPipe } from 'src/app/shared/pipes/date-display.pipe'
 import { NzIconModule } from 'ng-zorro-antd/icon'
+import { NzTabsModule } from 'ng-zorro-antd/tabs'
 
 @Component({
   selector: 'app-recruitment-view',
@@ -45,10 +46,10 @@ import { NzIconModule } from 'ng-zorro-antd/icon'
     EditorModule,
     RecruitmentPostDetailsComponent,
     CommonModule,
-    NzCollapseModule,
     NzTableModule,
     NzIconModule,
     DateDisplayPipe,
+    NzTabsModule
   ],
 })
 export class RecruitmentViewComponent implements OnInit, OnDestroy {
@@ -168,9 +169,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
     this.isUpdating = true
   }
 
-  onCollapseOpen($event: any) {
-    this.isCollapseOpen = $event
-
+  onCollapseOpen() {
     if (this.isCollapseEverOpened === false) {
       this.recruitInviteService
         .getRecruitmentApplications(this.projectId)

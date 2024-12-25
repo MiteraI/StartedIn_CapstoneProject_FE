@@ -9,13 +9,15 @@ import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.serv
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RecruitmentDetailsDialogComponent } from '../recruitment-details-dialog/recruitment-details-dialog.component'
 import { ScrollService } from 'src/app/core/util/scroll.service'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'app-find-team-view',
   templateUrl: './find-team-view.component.html',
   styleUrls: ['./find-team-view.component.scss'],
   standalone: true,
-  imports: [RecruitmentPostCardComponent, RecruitmentPostDetailsComponent, NzSpinModule, NzModalModule],
+  imports: [RecruitmentPostCardComponent, RecruitmentPostDetailsComponent, NzSpinModule, NzModalModule, MatSidenavModule, MatIconModule],
 })
 export class FindTeamViewComponent implements OnInit, OnDestroy {
   page: number = 1
@@ -28,6 +30,7 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
     return this.page * this.size >= this.total
   }
 
+  isCollapsed: boolean = false
   isLoading = true
   isDesktopView = true
   destroy$ = new Subject<void>()
@@ -38,6 +41,10 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
     private modalService: NzModalService,
     private scrollService: ScrollService
   ) {}
+
+  toggleSidebar() {
+    this.isCollapsed = !this.isCollapsed
+  }
 
   loadMore(): void {
     if (this.isLoading || this.isEndOfList) return
@@ -59,7 +66,7 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
         nzFooter: null,
         nzStyle: { top: '20px' },
         nzBodyStyle: { padding: '0px', height: '80vh' },
-        nzData: { 
+        nzData: {
           recruitmentId: this.currentPostId,
           previewMode: false, //outside project
         },
