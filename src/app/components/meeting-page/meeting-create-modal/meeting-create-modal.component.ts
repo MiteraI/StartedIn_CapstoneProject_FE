@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
+import { DisabledTimeFn, NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzInputModule } from 'ng-zorro-antd/input'
@@ -31,12 +31,14 @@ export class MeetingCreateModalComponent implements OnInit {
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef,
     private modalService: NzModalService,
-    private meetingService: MeetingService
+    private meetingService: MeetingService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.meetingForm = this.fb.group({
-      milestoneId: [null],
+      milestoneId: [0],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
+      appointmentEndTime: [null, [Validators.required]],
       description: [''],
       meetingLink: ['', [Validators.required, urlValidator()]],
     })
@@ -80,6 +82,9 @@ export class MeetingCreateModalComponent implements OnInit {
   }
 
   createMeeting() {
+    if (this.meetingForm.get('milestoneId')?.value === 0) {
+      this.meetingForm.patchValue({ milestoneId: null })
+    }
     this.meetingService.createMeeting(this.nzModalData.projectId, this.meetingForm.value).subscribe({
       next: () => {
         this.antdNoti.openSuccessNotification('Thành công', 'Tạo cuộc họp thành công')
@@ -101,6 +106,48 @@ export class MeetingCreateModalComponent implements OnInit {
   disabledDate = (current: Date): boolean => {
     // Disable dates before today
     return current && current < new Date(new Date().setHours(0, 0, 0, 0))
+  }
+
+  range(start: number, end: number): number[] {
+    const result: number[] = []
+    for (let i = start; i < end; i++) {
+      result.push(i)
+    }
+    return result
+  }
+
+  disabledEndDate = (current: Date): boolean => {
+    const startTime = this.meetingForm.get('appointmentTime')?.value
+    if (!startTime) return true // Disable all dates until a start time is selected
+
+    const startDateTime = new Date(startTime)
+    const currentDateTime = new Date(current)
+
+    // Only allow the same date as start date
+    return currentDateTime.toDateString() !== startDateTime.toDateString()
+  }
+
+  disabledEndTime: DisabledTimeFn = () => {
+    const startTime = this.meetingForm.get('appointmentTime')?.value
+    if (!startTime) return { nzDisabledHours: () => [], nzDisabledMinutes: () => [], nzDisabledSeconds: () => [] }
+
+    const startDateTime = new Date(startTime)
+
+    return {
+      nzDisabledHours: () => this.range(0, startDateTime.getHours()),
+      nzDisabledMinutes: () => {
+        if (new Date().getHours() === startDateTime.getHours()) {
+          return this.range(0, startDateTime.getMinutes())
+        }
+        return []
+      },
+      nzDisabledSeconds: () => {
+        if (new Date().getHours() === startDateTime.getHours() && new Date().getMinutes() === startDateTime.getMinutes()) {
+          return this.range(0, startDateTime.getSeconds())
+        }
+        return []
+      },
+    }
   }
 
   closeModal() {

@@ -33,7 +33,7 @@
             Ngày chuyển giao
           </div>
           <div class="mt-2">
-            {{ formatDate(transfer.transferDate) }}
+            {{ formatDateOnly(transfer.transferDate) }}
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@
             {{ transfer.appointmentName }}
           </div>
           <div class="text-gray-500">
-            Thời gian: {{ formatDate(transfer.appointmentTime) }}
+            Thời gian: {{ formatDateTime(transfer.appointmentTime) }}
           </div>
         </div>
 

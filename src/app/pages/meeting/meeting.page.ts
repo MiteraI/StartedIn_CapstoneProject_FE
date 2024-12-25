@@ -41,6 +41,7 @@ export class MeetingPage implements OnInit {
     total: 0,
   }
   meetings: MeetingDetailModel[] = []
+  meetingId: string = ''
 
   filter: FilterOptions = {}
   pageIndex: number = 1
@@ -51,15 +52,18 @@ export class MeetingPage implements OnInit {
   isLeader = false
   isFetchAllMeetingLoading: boolean = false
 
-  constructor(private activatedRoute: ActivatedRoute, private viewMode: ViewModeConfigService) {
-    this.activatedRoute.parent?.paramMap.subscribe((value) => {
-      this.projectId = value.get('id')!
-      console.log(this.projectId)
-    })
-  }
   projectId = ''
   isTable = true
   isDesktopView = true
+
+  constructor(private activatedRoute: ActivatedRoute, private viewMode: ViewModeConfigService) {
+    this.activatedRoute.parent?.paramMap.subscribe((value) => {
+      this.projectId = value.get('id')!
+    })
+    //get meeting id
+    this.meetingId = this.activatedRoute.snapshot.paramMap.get('meetingId') ?? ''
+    console.log(this.meetingId)
+  }
 
   ngOnInit(): void {
     this.viewMode.isDesktopView$.subscribe((isDesktop) => {
