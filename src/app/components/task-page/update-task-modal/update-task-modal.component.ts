@@ -33,6 +33,8 @@ import { TaskAttachmentService } from 'src/app/services/task-attachment.service'
 import { NzPopoverModule } from 'ng-zorro-antd/popover'
 import { UserService } from 'src/app/services/user.service'
 import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 
 interface IModalData {
   taskId: string
@@ -61,6 +63,7 @@ interface IModalData {
     NzUploadModule,
     MatIconModule,
     NzPopoverModule,
+    EditorModule,
   ],
   providers: [DatePipe],
 })
@@ -127,6 +130,15 @@ export class UpdateTaskModalComponent implements OnInit {
 
   //current user
   currentUser: FullProfile | undefined
+
+  editorKey = EDITOR_KEY
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {
+      this.handleInfoChanged()
+    },
+  }
 
   constructor(
     private fb: FormBuilder,

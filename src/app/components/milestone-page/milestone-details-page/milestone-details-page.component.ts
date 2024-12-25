@@ -24,6 +24,8 @@ import { Task } from 'src/app/shared/models/task/task.model'
 import { CreateTaskModalComponent } from '../../task-page/create-task-modal/create-task-modal.component'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { TaskService } from 'src/app/services/task.service'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 
 @Component({
   selector: 'app-milestone-details-page',
@@ -43,7 +45,8 @@ import { TaskService } from 'src/app/services/task.service'
     NzPopconfirmModule,
     MatIconModule,
     NzModalModule,
-    RouterModule
+    RouterModule,
+    EditorModule
   ],
 })
 export class MilestoneDetailsPageComponent implements OnInit {
@@ -65,6 +68,15 @@ export class MilestoneDetailsPageComponent implements OnInit {
   isInfoChanged: boolean = false
 
   isFetchMilestoneDetailLoading = false
+
+  editorKey = EDITOR_KEY
+    init: EditorComponent['init'] = {
+      plugins: 'lists link code help wordcount image',
+      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+      setup: () => {
+        this.handleInfoChanged()
+      },
+    }
 
   constructor(
     private fb: FormBuilder,

@@ -39,7 +39,7 @@
       <nz-form-item>
         <nz-form-label>Nội dụng</nz-form-label>
         <nz-form-control>
-          <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc" (ngModelChange)="handleInfoChanged()"></textarea>
+          <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
         </nz-form-control>
       </nz-form-item>
 

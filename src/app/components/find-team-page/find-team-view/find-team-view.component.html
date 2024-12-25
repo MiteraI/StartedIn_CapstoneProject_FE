@@ -1,26 +1,38 @@
 @if (isDesktopView) {
-<div class="flex h-full w-full border-padding">
-  <div class="flex flex-col w-2/5 bg-white border-x">
-    @if (isLoading) {
-    <div class="flex justify-center items-center h-full w-full">
-      <nz-spin nzSimple></nz-spin>
-    </div>
-    } @else {
-    <div class="p-2 bg-white border-y">
-      <span>Hiện tại hệ thống có {{ total }} bài post</span>
-    </div>
-    <div class="overflow-y-auto h-full" (scroll)="onScroll($event)">
-      @for (post of recruitmentPostList; track post.id) {
-      <app-recruitment-post-card [currrrentPostId]="currentPostId" [recruitmentPost]="post" (onPostSelected)="onPostSelected($event)"></app-recruitment-post-card>
-      } @if (isEndOfList) {
-      <p class="py-12 text-sm text-center">Bạn đã xem hết danh sách</p>
+<div class="h-full w-full border-padding">
+  <mat-drawer-container style="height: 100%">
+    <mat-drawer [opened]="!isCollapsed" position="start" mode="side" [style.width]="'350px'" style="background-color: white; border-radius: 0px">
+      @if (isLoading) {
+      <div class="flex justify-center items-center h-full w-full">
+        <nz-spin nzSimple></nz-spin>
+      </div>
+      } @else {
+      <div class="flex p-2 bg-white border-y justify-between items-center">
+        <span>Hiện tại hệ thống có {{ total }} bài post</span>
+        <button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-200 transition-colors" (click)="toggleSidebar()">
+          <mat-icon fontIcon="chevron_left"></mat-icon>
+        </button>
+      </div>
+      <div class="overflow-y-auto h-full" (scroll)="onScroll($event)">
+        @for (post of recruitmentPostList; track post.id) {
+        <app-recruitment-post-card [currrrentPostId]="currentPostId" [recruitmentPost]="post" (onPostSelected)="onPostSelected($event)"></app-recruitment-post-card>
+        } @if (isEndOfList) {
+        <p class="py-12 text-sm text-center">Bạn đã xem hết danh sách</p>
+        }
+      </div>
       }
-    </div>
-    }
-  </div>
-  <div class="flex flex-col h-full w-3/5 border-x bg-white">
-    <app-recruitment-post-details [currentPostId]="currentPostId"></app-recruitment-post-details>
-  </div>
+    </mat-drawer>
+    <mat-drawer-content style="background-color: white; display: flex; height: 100%;">
+      @if (isCollapsed) {
+      <div class="h-full w-[50px]">
+        <button (click)="toggleSidebar()" class="p-2 mx-1 my-2 flex items-center rounded-full bg-slate-100 hover:bg-slate-200">
+          <mat-icon fontIcon="chevron_right"></mat-icon>
+        </button>
+      </div>
+      }
+      <app-recruitment-post-details [currentPostId]="currentPostId"></app-recruitment-post-details>
+    </mat-drawer-content>
+  </mat-drawer-container>
 </div>
 } @else {
 <div class="overflow-y-auto h-full" (scroll)="onScroll($event)">

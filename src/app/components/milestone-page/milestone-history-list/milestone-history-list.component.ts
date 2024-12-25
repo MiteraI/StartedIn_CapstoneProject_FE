@@ -3,17 +3,17 @@ import { Component, Input, OnInit } from '@angular/core'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { finalize, Subject, takeUntil } from 'rxjs'
 import { ScrollService } from 'src/app/core/util/scroll.service'
-import { TaskService } from 'src/app/services/task.service'
-import { TaskHistory } from 'src/app/shared/models/task-history/task-history.model'
+import { MilestoneService } from 'src/app/services/milestone.service'
+import { MilestoneHistory } from 'src/app/shared/models/milestone/milestone-history.model'
 
 @Component({
-  selector: 'app-task-history-list',
-  templateUrl: './task-history-list.component.html',
-  styleUrls: ['./task-history-list.component.scss'],
+  selector: 'app-milestone-history-list',
+  templateUrl: './milestone-history-list.component.html',
+  styleUrls: ['./milestone-history-list.component.scss'],
   standalone: true,
   imports: [NzSpinModule, CommonModule],
 })
-export class TaskHistoryListComponent implements OnInit {
+export class MilestoneHistoryListComponent implements OnInit {
   @Input() set isCollasped(isCollapsed: boolean) {
     if (!isCollapsed) {
       //not collasped = seeing
@@ -26,7 +26,7 @@ export class TaskHistoryListComponent implements OnInit {
   @Input({ required: true }) projectId: string = ''
 
   isHistoryFetched: boolean = false
-  taskHistories: TaskHistory[] = []
+  taskHistories: MilestoneHistory[] = []
 
   page = 1
   size = 10
@@ -38,18 +38,18 @@ export class TaskHistoryListComponent implements OnInit {
     return this.page * this.size >= this.total
   }
 
-  constructor(private taskService: TaskService, private scrollService: ScrollService) {}
+  constructor(private milestoneService: MilestoneService, private scrollService: ScrollService) {}
 
   ngOnInit() {
-    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {      
+    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
   }
 
   fetchTaskHistory() {
     this.isLoading = true
-    this.taskService
-      .getTaskHistory(this.projectId, this.page, this.size)
+    this.milestoneService
+      .getMilestoneHistory(this.projectId, this.page, this.size)
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe((val) => {
         this.taskHistories = [...this.taskHistories, ...val.data]
