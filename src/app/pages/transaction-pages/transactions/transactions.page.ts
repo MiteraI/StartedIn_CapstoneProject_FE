@@ -25,7 +25,6 @@ import { TransactionFilterComponent } from 'src/app/components/transaction-pages
 interface FilterOptions {
   fromName?: string;
   toName?: string;
-  type?: TransactionType;
   dateFrom?: Date;
   dateTo?: Date;
   amountFrom?: number;
@@ -126,7 +125,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
         this.pageSize,
         this.filter.fromName,
         this.filter.toName,
-        this.filter.type,
+        this.typeFilter,
         this.filter.isInFlow,
         this.filter.dateFrom,
         this.filter.dateTo,
@@ -222,11 +221,7 @@ export class TransactionsPage implements OnInit, OnDestroy {
       });
   }
 
-  applyFilters() {
-    this.filter = {
-      ...this.filter,
-      type: this.typeFilter
-    };
+  applyTypeFilters() {
     this.pageIndex = 1;
     this.filterTransactions();
   }

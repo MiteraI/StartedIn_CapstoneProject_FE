@@ -24,7 +24,7 @@
       <a
         *ngIf="typeFilter !== undefined"
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-        (click)="typeFilter = undefined; applyFilters()"
+        (click)="typeFilter = undefined; applyTypeFilters()"
       >
         <mat-icon fontIcon="list"></mat-icon>
         <span class="hidden md:inline ml-1">Tất cả</span>
@@ -40,7 +40,7 @@
       <a
         *ngIf="typeFilter !== transactionTypes.DISBURSEMENT"
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-        (click)="typeFilter = transactionTypes.DISBURSEMENT; applyFilters()"
+        (click)="typeFilter = transactionTypes.DISBURSEMENT; applyTypeFilters()"
       >
         <mat-icon fontIcon="account_balance"></mat-icon>
         <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.DISBURSEMENT] }}</span>
@@ -56,7 +56,7 @@
       <a
         *ngIf="typeFilter !== transactionTypes.ASSET_EXPENSE"
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-        (click)="typeFilter = transactionTypes.ASSET_EXPENSE; applyFilters()"
+        (click)="typeFilter = transactionTypes.ASSET_EXPENSE; applyTypeFilters()"
       >
         <mat-icon fontIcon="inventory"></mat-icon>
         <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_EXPENSE] }}</span>
@@ -72,7 +72,7 @@
       <a
         *ngIf="typeFilter !== transactionTypes.ASSET_LIQUIDATION"
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-        (click)="typeFilter = transactionTypes.ASSET_LIQUIDATION; applyFilters()"
+        (click)="typeFilter = transactionTypes.ASSET_LIQUIDATION; applyTypeFilters()"
       >
         <mat-icon fontIcon="insert_page_break"></mat-icon>
         <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_LIQUIDATION] }}</span>
@@ -88,7 +88,7 @@
       <a
         *ngIf="typeFilter !== transactionTypes.OTHER"
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
-        (click)="typeFilter = transactionTypes.OTHER; applyFilters()"
+        (click)="typeFilter = transactionTypes.OTHER; applyTypeFilters()"
       >
         <mat-icon fontIcon="swap_horiz"></mat-icon>
         <span class="hidden md:inline ml-1">Khác</span>
