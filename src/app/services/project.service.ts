@@ -134,4 +134,12 @@ export class ProjectService {
   checkUserLeaveable(projectId: string): Observable<CheckUserLeaveableModel> {
     return this.http.get<CheckUserLeaveableModel>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/check-leaveable`))
   }
+
+  setAppointmentUrl(projectId: string, appointmentUrl: string): Observable<any> {
+    return this.http.post(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/add-appointment-url`),
+      { appointmentUrl },
+      { responseType: 'text' as 'json' }
+    );
+  }
 }
