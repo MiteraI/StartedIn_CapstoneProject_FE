@@ -2,11 +2,7 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Thời gian</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-range-picker
-        class="w-full"
-        formControlName="dateRange"
-        nzFormat="yyyy-MM-dd"
-      ></nz-range-picker>
+      <nz-range-picker class="w-full" formControlName="dateRange" nzFormat="yyyy-MM-dd"></nz-range-picker>
     </nz-form-control>
   </nz-form-item>
 
@@ -14,49 +10,17 @@
     <nz-form-label [nzSpan]="24">Tiêu đề</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <nz-input-group>
-        <input
-          nz-input
-          formControlName="title"
-          placeholder="Nhập tên tiêu đề"
-        />
+        <input nz-input formControlName="title" placeholder="Nhập tên tiêu đề" />
       </nz-input-group>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
-    <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="meetingStatus"
-        nzPlaceHolder="Chọn trạng thái"
-      >
-        <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of meetingStatusOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
-      </nz-select>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Cột mốc</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="milestoneId"
-        nzPlaceHolder="Chọn cột mốc"
-        nzAllowClear
-        (nzScrollToBottom)="onMilestoneScroll()"
-      >
+      <nz-select class="w-full" formControlName="milestoneId" nzPlaceHolder="Chọn cột mốc" nzAllowClear (nzScrollToBottom)="onMilestoneScroll()">
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let milestone of milestones"
-          [nzValue]="milestone.id"
-          [nzLabel]="milestone.title"
-        ></nz-option>
+        <nz-option *ngFor="let milestone of milestones" [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
         <nz-option *ngIf="isMilestoneLoading" nzDisabled nzCustomContent>
           <span class="text-center w-full block">Loading...</span>
         </nz-option>
@@ -68,22 +32,8 @@
     <nz-form-label [nzSpan]="24">Sắp xếp giảm dần</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <div>
-        <button
-          nz-button
-          nzType="primary"
-          [nzSize]="'large'"
-          [ngClass]="{ 'active-btn': filterForm.get('isDescending')?.value }"
-          (click)="toggleDescending(true)"
-        >
-          Giảm dần
-        </button>
-        <button
-          nz-button
-          nzType="default"
-          [nzSize]="'large'"
-          [ngClass]="{ 'active-btn': !filterForm.get('isDescending')?.value }"
-          (click)="toggleDescending(false)"
-        >
+        <button nz-button nzType="primary" [nzSize]="'large'" [ngClass]="{ 'active-btn': filterForm.get('isDescending')?.value }" (click)="toggleDescending(true)">Giảm dần</button>
+        <button nz-button nzType="default" [nzSize]="'large'" [ngClass]="{ 'active-btn': !filterForm.get('isDescending')?.value }" (click)="toggleDescending(false)">
           Tăng dần
         </button>
       </div>
@@ -92,14 +42,6 @@
 </form>
 
 <div class="ant-modal-footer">
-  <button nz-button (click)="resetFilters()">
-    Đặt lại bộ lọc
-  </button>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="applyFilters()"
-  >
-    Lọc
-  </button>
+  <button nz-button (click)="resetFilters()">Đặt lại bộ lọc</button>
+  <button nz-button nzType="primary" (click)="applyFilters()">Lọc</button>
 </div>

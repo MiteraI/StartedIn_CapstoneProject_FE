@@ -13,6 +13,36 @@
 
   <hr class="mb-6" />
 
+  <!-- Default Meeting Url Section -->
+  <div class="mb-6">
+    <div class="text-lg font-bold">Link cuộc họp mặc định</div>
+    <div class="text-gray-500 mb-4">Khi bạn tạo một cuộc họp mới, đây sẽ là link cuộc họp được điền vào mặc định. Bạn vẫn có thể thay đổi link này tùy theo cuộc họp</div>
+    <div class="flex flex-col md:flex-row gap-4">
+      <nz-input-group [nzPrefix]="prefixTemplate" class="flex-grow">
+        <input
+          nz-input
+          [(ngModel)]="defaultMeetingUrl"
+          placeholder="Nhập link cuộc họp mặc định"
+          [disabled]="isSubmitting"
+        />
+        <ng-template #prefixTemplate>
+          <mat-icon class="text-gray-500">video_camera_front</mat-icon>
+        </ng-template>
+      </nz-input-group>
+      <button
+        nz-button
+        nzType="primary"
+        (click)="setDefaultMeetingUrl()"
+        [nzLoading]="isSubmitting"
+        [disabled]="!defaultMeetingUrl"
+      >
+        Lưu
+      </button>
+    </div>
+  </div>
+
+  <hr class="mb-6" />
+
   <!-- Close Project Section -->
   <div class="flex flex-wrap py-2 px-4 border border-blue-400 rounded mb-2">
     <div>
