@@ -212,6 +212,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/meeting/meeting.page').then((m) => m.MeetingPage),
       },
       {
+        path: 'meeting/:meetingId',
+        loadComponent: () => import('./pages/meeting/meeting.page').then((m) => m.MeetingPage),
+      },
+      {
         path: 'termination-requests',
         loadComponent: () => import('./pages/contract-pages/termination-requests/termination-requests.page').then((m) => m.TerminationRequestsPage),
       },
@@ -226,7 +230,7 @@ export const routes: Routes = [
       {
         path: 'leader-transfer/:transferId',
         resolve: { transfer: LeaderTransferHistoryDataResolver },
-        loadComponent: () => import('./pages/project-pages/leader-transfer-detail/leader-transfer-detail.page').then( m => m.LeaderTransferDetailPage)
+        loadComponent: () => import('./pages/project-pages/leader-transfer-detail/leader-transfer-detail.page').then((m) => m.LeaderTransferDetailPage),
       },
     ],
   },

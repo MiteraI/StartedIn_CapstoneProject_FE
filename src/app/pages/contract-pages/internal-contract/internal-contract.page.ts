@@ -28,6 +28,8 @@ import { PercentFormatterPipe } from 'src/app/shared/pipes/percentage.pipe';
 import { MatIconModule } from '@angular/material/icon';
 import { MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
 import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum';
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
 
 @Component({
   selector: 'app-internal-contract',
@@ -48,7 +50,8 @@ import { MeetingLabel } from 'src/app/shared/enums/meeting-status.enum';
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    EditorModule
   ],
 })
 export class InternalContractPage implements OnInit, OnDestroy {
@@ -67,8 +70,18 @@ export class InternalContractPage implements OnInit, OnDestroy {
   roleInTeamLabels = TeamRoleLabels;
   statusLabels = ContractStatusLabels;
   meetingLabels = MeetingLabel;
-
+  isUpdating = false;
   contractForm!: FormGroup;
+  editorKey = EDITOR_KEY
+
+  init: EditorComponent['init'] = {
+        branding: false,
+        plugins: 'lists link code help wordcount image',
+        toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+        setup: () => {
+          this.onInfoChange()
+        },
+    }
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
 
@@ -146,6 +159,10 @@ export class InternalContractPage implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  onInfoChange() {
+    this.isUpdating = true
   }
 
   get sharesFormArray() {

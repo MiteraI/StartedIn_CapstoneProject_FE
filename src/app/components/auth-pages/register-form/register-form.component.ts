@@ -67,12 +67,36 @@ export class RegisterFormComponent implements OnInit {
     
       return { label, value };
     })
-
-    this.registerForm.get('role')?.valueChanges.subscribe(() => {
+    this.registerForm.get('role')?.valueChanges.subscribe((role) => {
+      const studentCodeControl = this.registerForm.get('studentCode');
+      const academicYearControl = this.registerForm.get('academicYear');
+  
+      if (role === 'User') {
+        studentCodeControl?.setValidators([Validators.required]);
+        academicYearControl?.setValidators([
+          Validators.required,
+          this.academicYearFormatValidator(),
+        ]);
+      } else {
+        studentCodeControl?.clearValidators();
+        academicYearControl?.clearValidators();
+      }
+  
+      // Update validation status
+      studentCodeControl?.updateValueAndValidity();
+      academicYearControl?.updateValueAndValidity();
       this.registerForm.get('email')?.updateValueAndValidity()
-      this.registerForm.get('studentCode')?.setValue('')
-      this.registerForm.get('academicYear')?.setValue('')
-    })
+    });
+  }
+  
+  academicYearFormatValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const academicYearRegex = /^\d{4}-\d{4}$/; // Format: YYYY-YYYY
+      if (control.value && !academicYearRegex.test(control.value)) {
+        return { invalidFormat: true };
+      }
+      return null;
+    };
   }
 
   onSubmit() {

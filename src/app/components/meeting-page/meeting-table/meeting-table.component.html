@@ -21,7 +21,6 @@
       <th nzWidth="200px">Thời Gian Bắt Đầu</th>
       <th nzWidth="200px">Thời Gian Kết Thúc</th>
       <th nzWidth="120px">Trạng Thái</th>
-      <th nzWidth="80px" nzAlign="right">Biên Bản</th>
       <th nzWidth="20px"></th>
     </tr>
   </thead>
@@ -32,20 +31,11 @@
       <td>{{ meeting.title }}</td>
       <td>{{ meeting.milestoneName || 'Không có' }}</td>
       <td>{{ formatDate(meeting.appointmentTime) }}</td>
-      <td>{{ formatDate(meeting.appointmentTime) }}</td>
+      <td>{{ meeting.appointmentEndTime ? formatDate(meeting.appointmentEndTime) : 'Chưa có giờ kết thúc' }}</td>
       <td>
         <nz-tag class="w-full text-center" [nzColor]="getStatusColor(meeting.status)">
           {{ MeetingLabel[meeting.status] }}
         </nz-tag>
-      </td>
-      <td nzAlign="center">
-        @if (meeting.status === 3) {
-        <button (click)="openMeetingNote(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> description </mat-icon></button>
-        } @else {
-        <button [nz-tooltip]="'Khả dụng khi buổi họp kết thúc'" disabled>
-          <mat-icon class="text-gray-300 cursor-not-allowed"> description </mat-icon>
-        </button>
-        }
       </td>
       <td class="flex gap-2">
         <button (click)="openMeetingDetail(meeting)"><mat-icon class="text-blue-500 cursor-pointer"> info </mat-icon></button>

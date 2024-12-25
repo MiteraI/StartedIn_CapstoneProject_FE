@@ -14,7 +14,7 @@
     <nz-switch [(ngModel)]="isTable"></nz-switch>
   </p>
   @if(isTable){
-  <app-meeting-table [projectId]="projectId" [filterResult]="filter"></app-meeting-table>
+  <app-meeting-table [meetingId]="meetingId" [projectId]="projectId" [filterResult]="filter"></app-meeting-table>
 
   } @else {
 
@@ -24,7 +24,7 @@
 
 } @else {
 <div class="px-10">
-  <app-meeting-table [projectId]="projectId" [filterResult]="filter"></app-meeting-table>
+  <app-meeting-table [meetingId]="meetingId" [projectId]="projectId" [filterResult]="filter"></app-meeting-table>
 </div>
 
 }
