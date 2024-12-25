@@ -13,7 +13,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select'
 import { catchError, throwError } from 'rxjs'
 import { MenuStateService } from 'src/app/core/util/menu-state.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
-import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum'
+import { MeetingFilterOptions } from 'src/app/shared/filter-options/meeting-filter-options.model'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 
 @Component({
@@ -38,15 +38,9 @@ import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 export class MeetingFilterComponent implements OnInit {
   @Input({ required: true }) projectId!: string
   @Input({ required: true }) data: any
-  @Output() filterApplied = new EventEmitter<any>()
+  @Output() filterApplied = new EventEmitter<MeetingFilterOptions>()
 
   filterForm!: FormGroup
-  meetingStatusOptions = Object.values(MeetingStatus)
-    .filter((value) => typeof value === 'number')
-    .map((value) => ({
-      value: value as MeetingStatus,
-      label: MeetingLabel[value as MeetingStatus],
-    }))
 
   milestones: Milestone[] = []
   milestonePage = 1
@@ -62,7 +56,6 @@ export class MeetingFilterComponent implements OnInit {
       milestoneId: [this.data.milestoneId || null],
       title: [this.data.tile || ''],
       dateRange: [this.data.dateRange || []],
-      meetingStatus: [this.data.meetingStatus || ''],
       isDescending: [this.data.isDescending || null],
     })
   }
@@ -95,11 +88,10 @@ export class MeetingFilterComponent implements OnInit {
   nzFilterOption = () => true
   resetFilters() {
     this.filterForm.reset({
-      milestoneId: null,
+      milestoneId: '',
       title: '',
       dateRange: [],
-      meetingStatus: '',
-      isDescending: null,
+      isDescending: '',
     })
     this.filterApplied.emit({
       ...this.filterForm.value,
@@ -126,7 +118,6 @@ export class MeetingFilterComponent implements OnInit {
         dateRange: dateRange || [],
         milestoneId: filterData.milestoneId || null,
         title: filterData.title || '',
-        meetingStatus: filterData.meetingStatus || '',
         isDescending: filterData.isDescending || null,
       })
     }
