@@ -190,7 +190,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Căn Cước Công Dân</nz-form-label>
       <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập mật khẩu">
-        <input nz-input formControlName="idCardNumber" placeholder="0793000111" />
+        <input nz-input formControlName="idCardNumber" maxlength="40" placeholder="0793000111" />
       </nz-form-control>
     </nz-form-item>
 
@@ -200,7 +200,7 @@
     <nz-form-item>
       <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="studentCode">Mã số sinh viên</nz-form-label>
       <nz-form-control  [nzSm]="14" [nzXs]="24" [nzErrorTip]="'Vui lòng nhập mã sinh viên'">
-        <input nz-input formControlName="studentCode" id="studentCode" />
+        <input nz-input formControlName="studentCode" id="studentCode" placeholder="SE171212" />
       </nz-form-control>
     </nz-form-item>
   
@@ -213,7 +213,7 @@
             : 'Vui lòng nhập niên khoá'
         "
       >
-        <input nz-input formControlName="academicYear" id="academicYear" />
+        <input nz-input formControlName="academicYear" id="academicYear" placeholder="2020-2024" />
       </nz-form-control>
     </nz-form-item>
 

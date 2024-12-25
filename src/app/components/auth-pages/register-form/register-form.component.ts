@@ -64,29 +64,39 @@ export class RegisterFormComponent implements OnInit {
         default:
           label = value; // Fallback to the original value if no match
       }
-    
+  
       return { label, value };
-    })
-    this.registerForm.get('role')?.valueChanges.subscribe((role) => {
-      const studentCodeControl = this.registerForm.get('studentCode');
-      const academicYearControl = this.registerForm.get('academicYear');
-  
-      if (role === 'User') {
-        studentCodeControl?.setValidators([Validators.required]);
-        academicYearControl?.setValidators([
-          Validators.required,
-          this.academicYearFormatValidator(),
-        ]);
-      } else {
-        studentCodeControl?.clearValidators();
-        academicYearControl?.clearValidators();
-      }
-  
-      // Update validation status
-      studentCodeControl?.updateValueAndValidity();
-      academicYearControl?.updateValueAndValidity();
-      this.registerForm.get('email')?.updateValueAndValidity()
     });
+  
+    // Check if 'role' is already set to 'User'
+    const initialRole = this.registerForm.get('role')?.value;
+    this.updateRoleValidators(initialRole);
+  
+    // Listen to role changes to update validators dynamically
+    this.registerForm.get('role')?.valueChanges.subscribe((role) => {
+      this.updateRoleValidators(role);
+    });
+  }
+  
+  updateRoleValidators(role: string | null) {
+    const studentCodeControl = this.registerForm.get('studentCode');
+    const academicYearControl = this.registerForm.get('academicYear');
+  
+    if (role === 'User') {
+      studentCodeControl?.setValidators([Validators.required]);
+      academicYearControl?.setValidators([
+        Validators.required,
+        this.academicYearFormatValidator(),
+      ]);
+    } else {
+      studentCodeControl?.clearValidators();
+      academicYearControl?.clearValidators();
+    }
+  
+    // Update validation status
+    studentCodeControl?.updateValueAndValidity();
+    academicYearControl?.updateValueAndValidity();
+    this.registerForm.get('email')?.updateValueAndValidity();
   }
   
   academicYearFormatValidator(): ValidatorFn {
