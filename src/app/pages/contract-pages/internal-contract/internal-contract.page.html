@@ -53,7 +53,6 @@
               <span class="font-semibold text-gray-700">Điều khoản</span>
             </div>
             <div class="pt-4" [innerHTML]="contract.contractPolicy"></div>
-            
           </div>
         </div>
       </div>
@@ -165,14 +164,58 @@
         </ng-container>
       </div>
 
-      <!-- Hành động -->
-      <div class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="download()" [nzLoading]="isLoading">
-          Tải xuống
-        </button>
-        <button nz-button nzType="primary" (click)="navigateBack()">
+      <div class="mt-6 flex items-center justify-between">
+        <button nz-button nzType="link" (click)="navigateBack()">
           Quay lại
         </button>
+        <div class="flex items-center gap-2">
+          <!-- Download button -->
+          <button
+            (click)="download()"
+            class="text-green-500 hover:text-green-700"
+            nz-button
+            nzType="link"
+            [nzLoading]="isLoading"
+          >
+            <mat-icon fontIcon="download"></mat-icon>
+          </button>
+
+          <!-- Cancel Sign button -->
+          <button
+            *ngIf="contract.contractStatus === contractStatus.SENT"
+            (click)="cancelSign()"
+            class="text-red-500 hover:text-red-700"
+            nz-button
+            nzType="link"
+            [nzLoading]="isLoading"
+          >
+            <mat-icon fontIcon="close"></mat-icon>
+          </button>
+
+          <!-- Terminate button -->
+          <button
+            *ngIf="contract.contractStatus === contractStatus.COMPLETED"
+            (click)="openTerminateModal()"
+            class="text-yellow-500 hover:text-yellow-700"
+            nz-button
+            nzType="link"
+            [nzLoading]="isLoading"
+          >
+            <mat-icon fontIcon="timer_off"></mat-icon>
+          </button>
+
+          <!-- Liquidation button -->
+          <button
+            *ngIf="checkLiquidation()"
+            (click)="openLiquidationModal()"
+            class="text-orange-500 hover:text-orange-700"
+            nz-button
+            nzType="link"
+            [nzLoading]="isLoading"
+          >
+            <mat-icon fontIcon="insert_page_break"></mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
