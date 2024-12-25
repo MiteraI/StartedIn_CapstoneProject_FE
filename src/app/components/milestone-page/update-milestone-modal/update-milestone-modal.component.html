@@ -19,7 +19,7 @@
       <nz-form-item>
         <nz-form-label>Description</nz-form-label>
         <nz-form-control>
-          <textarea nz-input formControlName="description" placeholder="Nhập thông tin cột mốc" (ngModelChange)="handleInfoChanged()"></textarea>
+          <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
         </nz-form-control>
       </nz-form-item>
 
@@ -46,8 +46,7 @@
             <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
             @if (initialPhaseId) {
             <nz-option [nzValue]="initialPhaseId" [nzLabel]="initialPhase!.phaseName"></nz-option>
-            }
-            @for (phase of phases; track $index) {
+            } @for (phase of phases; track $index) {
             <nz-option [nzValue]="phase.id" [nzLabel]="phase.phaseName"></nz-option>
             } @if (isPhasesFetchLoading) {
             <nz-option nzDisabled nzCustomContent>

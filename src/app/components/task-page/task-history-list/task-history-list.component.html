@@ -1,10 +1,12 @@
 <div class="flex flex-col p-1">
-  @if (isLoading) {
-  <br /><br /><br />
-  <nz-spin></nz-spin>
-  } @else { @for (history of taskHistories; track $index) {
+  @for (history of taskHistories; track $index) {
   <div class="bg-green-100 rounded-lg my-2 p-2">
     {{ history.content }}
   </div>
-  } }
+  } @if (isLoading) {
+  <br /><br /><br />
+  <nz-spin></nz-spin>
+  } @if (isEndOfList) {
+  <p class="text-center">Hết Lịch Sử</p>
+  }
 </div>

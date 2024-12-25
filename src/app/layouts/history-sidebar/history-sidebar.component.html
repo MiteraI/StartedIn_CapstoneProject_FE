@@ -1,6 +1,6 @@
 <mat-drawer-container style="height: 100%; width: 100%">
   <mat-drawer [opened]="!isCollapsed" [mode]="isLargeViewport ? 'side' : 'over'" position="end" [style.width]="'250px'" style="background-color: white; border-radius: 0px">
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-full overflow-y-scroll" (scroll)="onScroll($event)">
       <div class="flex items-center justify-between px-6 my-2">
         <span class="font-bold md:text-lg">{{ historyName }}</span>
         <button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-slate-200 transition-colors" (click)="toggleSidebar()">
@@ -14,9 +14,7 @@
 
   <mat-drawer-content>
     <div class="flex h-full">
-      <div class="w-full overflow-y-scroll">
-        <ng-container *ngTemplateOutlet="mainContent"></ng-container>
-      </div>
+      <ng-container *ngTemplateOutlet="mainContent"></ng-container>
       <button
         *ngIf="isCollapsed"
         (click)="toggleSidebar()"

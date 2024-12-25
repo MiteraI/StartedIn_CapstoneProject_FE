@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, inject, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
@@ -16,6 +17,7 @@ import { Subject, takeUntil } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { PhaseService } from 'src/app/services/phase.service'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { Task } from 'src/app/shared/models/task/task.model'
@@ -42,6 +44,7 @@ interface IModalData {
     NzSpinModule,
     NzPopconfirmModule,
     NzIconModule,
+    EditorModule
   ],
 })
 export class UpdateMilestoneModalComponent implements OnInit {
@@ -62,18 +65,28 @@ export class UpdateMilestoneModalComponent implements OnInit {
 
   isFetchMilestoneDetailLoading = false
 
+  editorKey = EDITOR_KEY
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {
+      this.handleInfoChanged()
+    },
+  }
+
   constructor(
     private fb: FormBuilder,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef,
     private milestoneService: MilestoneService,
-    private phaseService: PhaseService) {
+    private phaseService: PhaseService
+  ) {
     this.milestoneForm = this.fb.group({
       title: ['', Validators.required],
       description: [''],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
-      phase: [null]
+      phase: [null],
     })
   }
 
@@ -102,7 +115,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
             console.error('', error)
           }
@@ -139,7 +152,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
-              this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
           }
         },
@@ -156,7 +169,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
         if (error.status === 400) {
           this.antdNoti.openErrorNotification('', error.error)
         } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
         } else {
           console.error('', error)
         }
@@ -177,7 +190,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
           description: response.description,
           startDate: response.startDate,
           endDate: response.endDate,
-          phase: response.phase?.id
+          phase: response.phase?.id,
         })
         this.initialPhaseId = response.phase?.id || ''
         this.initialPhase = response.phase || null
