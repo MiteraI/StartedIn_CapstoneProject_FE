@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { MeetingCreateModel } from '../shared/models/meeting/meeting-create.model'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { MeetingDetailModel } from '../shared/models/meeting/meeting-detail.model'
 import { SearchResponseModel } from '../shared/models/search-response.model'
 import { MeetingStatus } from '../shared/enums/meeting-status.enum'
+import { MeetingFilterOptions } from '../shared/filter-options/meeting-filter-options.model'
 
 @Injectable({
   providedIn: 'root',
@@ -30,27 +31,30 @@ export class MeetingService {
     return this.http.post(this.applicationConfigService.getEndpointFor(url), meeting)
   }
 
-  getTableData(
-    projectId: string,
-    page: number,
-    size: number,
-    milestoneId?: string,
-    title?: string,
-    fromDate?: Date,
-    toDate?: Date,
-    meetingStatus?: MeetingStatus,
-    isDescending?: boolean
-  ): Observable<SearchResponseModel<MeetingDetailModel>> {
-    const query =
-      (milestoneId ? `MilestoneId=${milestoneId}&` : '') +
-      (title?.trim() ? `Title=${title.trim()}&` : '') +
-      (fromDate ? `FromDate=${fromDate.toISOString().split('T')[0]}&` : '') +
-      (toDate ? `ToDate=${toDate.toISOString().split('T')[0]}&` : '') +
-      (meetingStatus ? `MeetingStatus=${meetingStatus}&` : '') +
-      (isDescending ? `IsDescending=${isDescending}&` : '') +
-      `page=${page}&size=${size}`
-    const url = `/api/projects/${projectId}/appointments?${query}`
-    return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url))
+  getTableData(projectId: string, page: number, size: number, filterOptions: MeetingFilterOptions): Observable<SearchResponseModel<MeetingDetailModel>> {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString())
+
+    // Dynamically add filter options to params
+    if (filterOptions.milestoneId) {
+      params = params.set('MilestoneId', filterOptions.milestoneId)
+    }
+    if (filterOptions.title?.trim()) {
+      params = params.set('Title', filterOptions.title.trim())
+    }
+    if (filterOptions.fromDate) {
+      params = params.set('FromDate', filterOptions.fromDate.toISOString().split('T')[0])
+    }
+    if (filterOptions.toDate) {
+      params = params.set('ToDate', filterOptions.toDate.toISOString().split('T')[0])
+    }
+    if (filterOptions.meetingStatus) {
+      params = params.set('MeetingStatus', filterOptions.meetingStatus.toString())
+    }
+    if (filterOptions.isDescending != null) {
+      params = params.set('IsDescending', filterOptions.isDescending.toString())
+    }
+    const url = `/api/projects/${projectId}/appointments`
+    return this.http.get<SearchResponseModel<MeetingDetailModel>>(this.applicationConfigService.getEndpointFor(url), { params })
   }
 
   cancelMeeting(projectId: string, meetingId: string) {

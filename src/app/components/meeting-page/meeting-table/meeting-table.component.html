@@ -2,6 +2,65 @@
   <button nz-button nzType="primary" (click)="openCreateMeetingModal()">+ Tạo lịch hẹn</button>
 </div>
 
+<div class="border-b border-gray-300 mb-4">
+  <div class="flex">
+    <a
+      class="flex items-center p-2 xl:px-4 border-b-2"
+      (click)="onMeetingStatusFilterChange()"
+      [ngClass]="{
+        ' border-green-500 font-medium text-green-600': meetingStatusFilterOptions === undefined,
+        ' font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300': meetingStatusFilterOptions !== undefined
+      }"
+    >
+      <mat-icon fontIcon="list"></mat-icon>
+      <span class="hidden md:inline ml-1 text-sm">Tất cả</span>
+    </a>
+    <a
+      class="flex items-center p-2 xl:px-4 border-b-2"
+      (click)="onMeetingStatusFilterChange(MeetingStatus.PROPOSED)"
+      [ngClass]="{
+        ' border-green-500 font-medium text-green-600': meetingStatusFilterOptions === MeetingStatus.PROPOSED,
+        ' font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300': meetingStatusFilterOptions !== MeetingStatus.PROPOSED
+      }"
+    >
+      <mat-icon fontIcon="schedule"></mat-icon>
+      <span class="hidden md:inline ml-1 text-sm">{{ MeetingLabel[MeetingStatus.PROPOSED] }}</span>
+    </a>
+    <a
+      class="flex items-center p-2 xl:px-4 border-b-2"
+      (click)="onMeetingStatusFilterChange(MeetingStatus.ONGOING)"
+      [ngClass]="{
+        ' border-green-500 font-medium text-green-600': meetingStatusFilterOptions === MeetingStatus.ONGOING,
+        ' font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300': meetingStatusFilterOptions !== MeetingStatus.ONGOING
+      }"
+    >
+      <mat-icon fontIcon="sync"></mat-icon>
+      <span class="hidden md:inline ml-1 text-sm">{{ MeetingLabel[MeetingStatus.ONGOING] }}</span>
+    </a>
+    <a
+      class="flex items-center p-2 xl:px-4 border-b-2"
+      (click)="onMeetingStatusFilterChange(MeetingStatus.FINISHED)"
+      [ngClass]="{
+        ' border-green-500 font-medium text-green-600': meetingStatusFilterOptions === MeetingStatus.FINISHED,
+        ' font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300': meetingStatusFilterOptions !== MeetingStatus.FINISHED
+      }"
+    >
+      <mat-icon fontIcon="done"></mat-icon>
+      <span class="hidden md:inline ml-1 text-sm">{{ MeetingLabel[MeetingStatus.FINISHED] }}</span>
+    </a>
+    <a
+      class="flex items-center p-2 xl:px-4 border-b-2"
+      (click)="onMeetingStatusFilterChange(MeetingStatus.CANCELLED)"
+      [ngClass]="{
+        ' border-green-500 font-medium text-green-600': meetingStatusFilterOptions === MeetingStatus.CANCELLED,
+        ' font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300': meetingStatusFilterOptions !== MeetingStatus.CANCELLED
+      }"
+    >
+      <mat-icon fontIcon="cancel"></mat-icon>
+      <span class="hidden md:inline ml-1 text-sm">{{ MeetingLabel[MeetingStatus.CANCELLED] }}</span>
+    </a>
+  </div>
+</div>
 <nz-table
   [nzFrontPagination]="false"
   [nzData]="listMeeting.data"
