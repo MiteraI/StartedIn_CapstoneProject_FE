@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core'
-import { NZ_MODAL_DATA, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA, NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions'
@@ -18,7 +18,7 @@ import { MeetingNoteService } from 'src/app/services/meeting-note.service'
   templateUrl: './meeting-detail-modal.component.html',
   styleUrls: ['./meeting-detail-modal.component.scss'],
   standalone: true,
-  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule, NzButtonModule],
+  imports: [NzDescriptionsModule, NzMessageModule, DatePipe, NzSkeletonModule, NzIconModule, CommonModule, NzButtonModule, NzModalModule],
 })
 export class MeetingDetailModalComponent implements OnInit {
   ContractType = ContractType
@@ -126,20 +126,22 @@ export class MeetingDetailModalComponent implements OnInit {
 
   navigateToContract(contractType: ContractType, contractId: string) {
     console.log(contractType)
-    this.router.navigate([
-      '/projects',
-      this.projectId,
-      contractType === ContractType.INVESTMENT
-        ? 'investment-contract'
-        : contractType === ContractType.INTERNAL
-        ? 'internal-contract'
-        : contractType === ContractType.LIQUIDATIONNOTE
-        ? 'liquidation-contract'
-        : '',
-      contractId,
-    ])
-
     this.nzModalRef.close()
+
+    this.nzModalRef.afterClose.subscribe(() => {
+      this.router.navigate([
+        '/projects',
+        this.projectId,
+        contractType === ContractType.INVESTMENT
+          ? 'investment-contract'
+          : contractType === ContractType.INTERNAL
+          ? 'internal-contract'
+          : contractType === ContractType.LIQUIDATIONNOTE
+          ? 'liquidation-contract'
+          : '',
+        contractId,
+      ])
+    })
   }
 
   getMeetingNotes() {

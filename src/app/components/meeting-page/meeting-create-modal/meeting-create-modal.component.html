@@ -18,10 +18,23 @@
     <nz-form-item>
       <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
+        <nz-select [nzLoading]="loadingMilestones" formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
           <nz-option nzLabel="Không có" [nzValue]="0"></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <!-- Contracts Selection -->
+    <nz-form-item>
+      <nz-form-label>Hợp Đồng</nz-form-label>
+      <nz-form-control>
+        <nz-select [nzLoading]="loadingContracts" formControlName="contractId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
+          <nz-option nzLabel="Không có" [nzValue]="0"></nz-option>
+          @for (contract of contracts; track $index) {
+          <nz-option nzLabel="{{ contract.contractName }}" nzValue="{{ contract.id }}"></nz-option>
           }
         </nz-select>
       </nz-form-control>
@@ -52,7 +65,7 @@
             formControlName="appointmentEndTime"
             [nzDisabledDate]="disabledEndDate"
             [nzDisabledTime]="disabledEndTime"
-            nzShowTime
+            [nzShowTime]="{ nzFormat: 'HH:mm' }"
             placeholder="Chọn ngày và giờ"
             class="rounded-lg w-full"
           ></nz-date-picker>
