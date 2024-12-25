@@ -224,79 +224,75 @@
           </nz-form-item>
         </form>
       </nz-tab>
-      <nz-tab nzTitle="Danh Sách Đơn Nộp">
+      <nz-tab nzTitle="Danh Sách Đơn Nộp" (nzSelect)="onCollapseOpen()">
         <div class="mx-8 mt-6">
-          <nz-collapse>
-            <nz-collapse-panel nzHeader="Xem Danh Sách Đơn Nộp" [nzActive]="isCollapseOpen" (nzActiveChange)="onCollapseOpen($event)">
-              <nz-table #nestedTable [nzData]="applicantList" nzSize="small" [nzLoading]="isApplicantTableLoading" [nzShowPagination]="false">
-                <thead>
-                  <tr>
-                    <th style="width: 20px"></th>
-                    <th>Thông Tin</th>
-                    <th>Trạng Thái</th>
-                    <th>Hành Động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for (applicant of applicantList; track applicant.id) {
-                  <tr>
-                    <td [nzExpand]="expandSet.has(applicant.id)" [nzExpandIcon]="expandIcon"></td>
-                    <td>
-                      <span>{{ applicant.candidate.fullName }}</span>
-                    </td>
-                    <td>
-                      <nz-tag class="w-full text-center" [nzColor]="getStatusColor(applicant.status)">
-                        {{ applicationStatus[applicant.status] }}
-                      </nz-tag>
-                    </td>
-                    <td>
-                      <div class="flex flex-col items-center">
-                        <button nz-button nzType="primary" (click)="acceptApplicant(applicant.id)">Chấp nhận</button>
-                        <button nz-button nzType="default" nzDanger (click)="rejectApplicant(applicant.id)" class="mt-1">Từ chối</button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr [nzExpand]="expandSet.has(applicant.id)" class="px-4">
-                    <span>Email: {{ applicant.candidate.email }}</span>
-                    <br />
-                    <p class="text-right pt-2">Gửi vào: {{ applicant.createdTime | dateDisplay }}</p>
-                  </tr>
-                  @if (applicant.cvFiles.length > 0) {
-                  <tr [nzExpand]="expandSet.has(applicant.id)">
-                    <nz-table #innerTable [nzData]="applicant.cvFiles" nzSize="small" [nzShowPagination]="false">
-                      <thead>
-                        <tr>
-                          <th>Tên File</th>
-                          <th>Hành Động</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        @for (data of innerTable.data; track data) {
-                        <tr>
-                          <td>{{ data.fileName }}</td>
-                          <td class="flex justify-center">
-                            <button nz-button nzType="primary"><a [href]="data.url" [download]="data.fileName">Tải</a></button>
-                          </td>
-                        </tr>
-                        }
-                      </tbody>
-                    </nz-table>
-                  </tr>
-                  }
-                  <ng-template #expandIcon>
-                    @if (applicant.cvFiles) { @if (!expandSet.has(applicant.id)) {
-                    <span nz-icon nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, true)"></span>
-                    } @else {
-                    <span nz-icon nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, false)"></span>
-                    }}
-                  </ng-template>
-                  }
-                </tbody>
-              </nz-table>
-            </nz-collapse-panel>
-          </nz-collapse>
-        </div></nz-tab
-      >
+          <nz-table #nestedTable [nzData]="applicantList" nzSize="small" [nzLoading]="isApplicantTableLoading" [nzShowPagination]="false">
+            <thead>
+              <tr>
+                <th style="width: 20px"></th>
+                <th>Thông Tin</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (applicant of applicantList; track applicant.id) {
+              <tr>
+                <td [nzExpand]="expandSet.has(applicant.id)" [nzExpandIcon]="expandIcon"></td>
+                <td>
+                  <span>{{ applicant.candidate.fullName }}</span>
+                </td>
+                <td>
+                  <nz-tag class="w-full text-center" [nzColor]="getStatusColor(applicant.status)">
+                    {{ applicationStatus[applicant.status] }}
+                  </nz-tag>
+                </td>
+                <td>
+                  <div class="flex flex-col items-center">
+                    <button nz-button nzType="primary" (click)="acceptApplicant(applicant.id)">Chấp nhận</button>
+                    <button nz-button nzType="default" nzDanger (click)="rejectApplicant(applicant.id)" class="mt-1">Từ chối</button>
+                  </div>
+                </td>
+              </tr>
+              <tr [nzExpand]="expandSet.has(applicant.id)" class="px-4">
+                <span>Email: {{ applicant.candidate.email }}</span>
+                <br />
+                <p class="text-right pt-2">Gửi vào: {{ applicant.createdTime | dateDisplay }}</p>
+              </tr>
+              @if (applicant.cvFiles.length > 0) {
+              <tr [nzExpand]="expandSet.has(applicant.id)">
+                <nz-table #innerTable [nzData]="applicant.cvFiles" nzSize="small" [nzShowPagination]="false">
+                  <thead>
+                    <tr>
+                      <th>Tên File</th>
+                      <th>Hành Động</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (data of innerTable.data; track data) {
+                    <tr>
+                      <td>{{ data.fileName }}</td>
+                      <td class="flex justify-center">
+                        <button nz-button nzType="primary"><a [href]="data.url" [download]="data.fileName">Tải</a></button>
+                      </td>
+                    </tr>
+                    }
+                  </tbody>
+                </nz-table>
+              </tr>
+              }
+              <ng-template #expandIcon>
+                @if (applicant.cvFiles) { @if (!expandSet.has(applicant.id)) {
+                <span nz-icon nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, true)"></span>
+                } @else {
+                <span nz-icon nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, false)"></span>
+                }}
+              </ng-template>
+              }
+            </tbody>
+          </nz-table>
+        </div>
+      </nz-tab>
       <nz-tab nzTitle="Preview">
         @if (isDesktopView) {
         <div class="w-full">

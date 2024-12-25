@@ -46,7 +46,6 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs'
     EditorModule,
     RecruitmentPostDetailsComponent,
     CommonModule,
-    NzCollapseModule,
     NzTableModule,
     NzIconModule,
     DateDisplayPipe,
@@ -170,9 +169,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
     this.isUpdating = true
   }
 
-  onCollapseOpen($event: any) {
-    this.isCollapseOpen = $event
-
+  onCollapseOpen() {
     if (this.isCollapseEverOpened === false) {
       this.recruitInviteService
         .getRecruitmentApplications(this.projectId)
