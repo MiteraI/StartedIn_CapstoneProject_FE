@@ -1,5 +1,6 @@
 export type MeetingCreateModel = {
-  milestoneId: string
+  milestoneId?: string
+  contractId?: string
   title: string
   appointmentTime: string
   appointmentEndTime: string

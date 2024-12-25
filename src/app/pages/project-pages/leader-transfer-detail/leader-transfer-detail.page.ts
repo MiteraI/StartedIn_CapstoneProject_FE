@@ -26,8 +26,7 @@ export class LeaderTransferDetailPage implements OnInit {
   transfer!: LeaderTransferHistoryModel;
 
   constructor(
-    private route: ActivatedRoute,
-    private leaderTransferService: LeaderTransferService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {

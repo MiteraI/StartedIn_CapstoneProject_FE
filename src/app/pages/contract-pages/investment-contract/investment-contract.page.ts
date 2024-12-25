@@ -30,6 +30,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MeetingLabel, MeetingStatus } from 'src/app/shared/enums/meeting-status.enum';
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
+import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
+import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
+import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
 
 
 @Component({
@@ -57,31 +60,26 @@ import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
   ]
 })
 export class InvestmentContractPage implements OnInit {
-  isReadOnly = false;
-  isFromDeal = false;
-
   project!: ProjectModel;
   contract: InvestmentContractDetailModel | null = null;
   contractId: string | null = null;
   deal: ProjectDealItem | null = null;
   investorId!: string;
-  isUpdating = false;
-  editorKey = EDITOR_KEY
+
   contractStatus = ContractStatus;
   meetingStatus = MeetingStatus;
   statusLabels = ContractStatusLabels;
   meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
-
+  editorKey = EDITOR_KEY;
   init: EditorComponent['init'] = {
-      branding: false,
-      plugins: 'lists link code help wordcount image',
-      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-      setup: () => {
-        this.onInfoChange()
-      },
-  }
+    branding: false,
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => this.onInfoChange()
+  };
+
   percentFormatter = (value: number) => `${value}%`;
   percentParser = (value: string) => value.replace('%', '');
   vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe();
@@ -92,6 +90,10 @@ export class InvestmentContractPage implements OnInit {
   disbursementTotalAmount: number = 0;
 
   isLoading: boolean = false;
+  isReadOnly = false;
+  isLeader = false;
+  isFromDeal = false;
+  isUpdating = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -114,6 +116,7 @@ export class InvestmentContractPage implements OnInit {
     });
 
     this.roleService.role$.subscribe(role => {
+      this.isLeader = role === TeamRole.LEADER;
       if (role && role !== TeamRole.LEADER) {
         this.contractForm.disable();
       }
@@ -164,7 +167,7 @@ export class InvestmentContractPage implements OnInit {
   }
 
   onInfoChange() {
-    this.isUpdating = true
+    this.isUpdating = true;
   }
 
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
@@ -233,12 +236,12 @@ export class InvestmentContractPage implements OnInit {
           .sendContract(this.contractId!, this.project.id)
           .pipe(
             catchError(error => {
+              this.isLoading = false;
               this.notification.error("Lỗi", "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
-          .subscribe(response => {
-            this.contractId = response.id;
+          .subscribe(() => {
             this.isLoading = false;
             this.notification.success("Thành công", "Gửi hợp đồng thành công!", { nzDuration: 2000 });
             this.router.navigate(['projects', this.project.id, 'contracts']);
@@ -266,6 +269,7 @@ export class InvestmentContractPage implements OnInit {
     }
     return o.pipe(
       catchError(error => {
+        this.isLoading = false;
         this.notification.error("Lỗi", "Lưu dữ liệu thỏa thuận thất bại!", { nzDuration: 2000 });
         return throwError(() => new Error(error.error));
       })
@@ -322,6 +326,83 @@ export class InvestmentContractPage implements OnInit {
         this.isLoading = false;
         window.open(response.downLoadUrl, '_blank');
       });
+  }
+
+  cancelSign() {
+    this.modalService.confirm({
+      nzTitle: 'Từ chối ký hợp đồng',
+      nzContent: `Từ chối ký ${this.contract?.contractName}?`,
+      nzOkText: 'Từ chối',
+      nzCancelText: 'Hủy',
+      nzOkDanger: true,
+      nzOnOk: () => {
+        this.isLoading = true;
+        this.contractService.cancelSign(this.project.id, this.contract!.id)
+          .pipe(
+            catchError(error => {
+              this.isLoading = false;
+              this.notification.error("Lỗi", "Từ chối ký hợp đồng thất bại!", { nzDuration: 2000 });
+              return throwError(() => new Error(error.error));
+            })
+          )
+          .subscribe(() => {
+            this.isLoading = false;
+            this.notification.success("Thành công", "Từ chối ký hợp đồng thành công!", { nzDuration: 2000 });
+            this.contract!.contractStatus = ContractStatus.DECLINED;
+          });
+      }
+    });
+  }
+
+  openTerminateModal() {
+    if (this.isLeader) {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateMeetingModalComponent,
+        nzData: { projectId: this.project.id, contractId: this.contract!.id, isFromLeader: true },
+        nzFooter: null,
+        nzStyle: { top: '40px' },
+      }).afterClose.subscribe(result => {
+        if (result) this.navigateBack();
+      });
+    } else {
+      this.modalService.create({
+        nzTitle: 'Kết thúc hợp đồng',
+        nzContent: TerminateContractModalComponent,
+        nzData: { projectId: this.project.id, contractId: this.contract!.id },
+        nzFooter: null,
+      }).afterClose.subscribe(result => {
+        if (result) this.navigateBack();
+      });
+    }
+  }
+
+  openLiquidationModal() {
+    if (this.contract?.liquidationNoteId) {
+      this.router.navigate([
+        '/projects',
+        this.project.id,
+        'liquidation-contract',
+        this.contract.liquidationNoteId
+      ]);
+      return;
+    }
+
+    this.modalService.create({
+      nzTitle: 'Thanh lý hợp đồng',
+      nzContent: LiquidationModalComponent,
+      nzData: { projectId: this.project.id, contractId: this.contract!.id },
+      nzFooter: null,
+    }).afterClose.subscribe(result => {
+      if (result) this.navigateBack();
+    });
+  }
+
+  checkLiquidation() {
+    const meetingStatus = this.contract?.appointments.pop()?.status;
+    return this.contract?.contractStatus === ContractStatus.WAITING_FOR_LIQUIDATION
+      && this.isLeader
+      && meetingStatus === MeetingStatus.FINISHED;
   }
 
   navigateBack() {
