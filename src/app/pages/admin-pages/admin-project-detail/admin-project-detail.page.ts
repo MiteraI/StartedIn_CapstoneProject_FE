@@ -9,6 +9,8 @@ import { AdminService } from 'src/app/services/admin.service'
 import { ProjectStatus, ProjectStatusLabels } from 'src/app/shared/enums/project-status.enum'
 import { catchError, throwError } from 'rxjs'
 import { ProjectCharterComponent } from 'src/app/components/project-pages/project-overview/project-charter/project-charter.component'
+import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model'
+import { AdminApprovalModalComponent } from 'src/app/components/project-approval-pages/admin-approval-modal/admin-approval-modal.component'
 
 @Component({
   selector: 'app-admin-project-detail',
@@ -27,6 +29,24 @@ export class AdminProjectDetailPage implements OnInit {
   currentSelectedTab = 0
   ngOnInit() {
     this.route.data.subscribe((data) => (this.project = data['project']))
+  }
+
+  openRequestApprovalModal(approval: ProjectApprovalDetail | null): void {
+    if (!approval) {
+      // Log a warning or show a notification
+      console.warn('Approval data is null or undefined.');
+      this.notification.warning('Invalid Action', 'Approval details are missing.', { nzDuration: 3000 });
+      return;
+    }
+  
+    // Proceed with creating the modal
+    this.modalService.create({
+      nzTitle: 'Yêu cầu phê duyệt',
+      nzContent: AdminApprovalModalComponent,
+      nzData: { approval },
+      nzFooter: null,
+      nzWidth: '800px',
+    });
   }
 
   verifyProject() {

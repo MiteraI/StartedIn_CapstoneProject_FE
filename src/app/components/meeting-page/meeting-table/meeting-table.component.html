@@ -87,12 +87,12 @@
     @for (meeting of listMeeting.data; track $index) {
 
     <tr>
-      <td>{{ meeting.title }}</td>
-      <td>{{ meeting.milestoneName || 'Không có' }}</td>
-      <td>{{ formatDate(meeting.appointmentTime) }}</td>
-      <td>{{ meeting.appointmentEndTime ? formatDate(meeting.appointmentEndTime) : 'Chưa có giờ kết thúc' }}</td>
+      <td class="text-base">{{ meeting.title }}</td>
+      <td class="text-base">{{ meeting.milestoneName || 'Không có' }}</td>
+      <td class="text-base">{{ formatDate(meeting.appointmentTime) }}</td>
+      <td class="text-base">{{ meeting.appointmentEndTime ? formatDate(meeting.appointmentEndTime) : 'Chưa có giờ kết thúc' }}</td>
       <td>
-        <nz-tag class="w-full text-center" [nzColor]="getStatusColor(meeting.status)">
+        <nz-tag class="w-full text-center text-base" [nzColor]="getStatusColor(meeting.status)">
           {{ MeetingLabel[meeting.status] }}
         </nz-tag>
       </td>

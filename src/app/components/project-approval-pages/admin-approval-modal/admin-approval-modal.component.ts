@@ -14,6 +14,7 @@ import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/pr
 import { VndCurrencyPipe } from '../../../shared/pipes/vnd-currency.pipe'
 import { format } from 'date-fns'
 import { Router, RouterModule } from '@angular/router'
+import { CancelReasonForApproval } from 'src/app/shared/models/project-approval/project-approval-cancel.model'
 
 @Component({
   selector: 'app-admin-approval-modal',
@@ -30,7 +31,7 @@ export class AdminApprovalModalComponent implements OnInit {
   ProjectApprovalStatusLabel = ProjectApprovalStatusLabel
 
   projectId: string = ''
-  cancelReason: string = ''
+  cancelReason: CancelReasonForApproval = { cancelReason: '' }
   isModalVisible = false
 
   isAccepting = false
@@ -62,15 +63,12 @@ export class AdminApprovalModalComponent implements OnInit {
   }
 
   onCancel() {
-    if (!this.cancelReason) {
-      alert('Vui lòng nhập lý do hủy yêu cầu.')
-      return
-    }
-    // Replace with your API call for cancellation
+    // The validation is now handled by the form template, so we don't need the alert
     this.approvalService.rejectProjectRequest(this.approvalData.id, this.cancelReason).subscribe({
       next: () => {
         this.messageService.success('Hủy yêu cầu thành công')
-        this.closePopover()
+        this.cancelReason = { cancelReason: '' }  // Reset the reason
+        this.isModalVisible = false  // Close the popover
         this.approvalService.refreshApproval$.next(true)
         this.nzModalRef.close()
       },
@@ -80,12 +78,10 @@ export class AdminApprovalModalComponent implements OnInit {
         this.approvalService.refreshApproval$.next(true)
       },
     })
-    // Handle the response and close the modal
-    this.isModalVisible = false
   }
-
+  
   closePopover() {
-    this.cancelReason = ''
+    this.cancelReason = { cancelReason: '' }  // Reset the reason when closing
     this.isModalVisible = false
   }
 
