@@ -19,5 +19,6 @@ export type ProjectModel = {
   maxMember: number
   currentMember: number
   userStatusInProject: UserStatusInProject
-  appointmentUrl?: string;
+  appointmentUrl?: string
+  projectDetailPost?: string
 }

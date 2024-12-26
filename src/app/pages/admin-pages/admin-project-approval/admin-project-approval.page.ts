@@ -5,7 +5,7 @@ import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.compon
 import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { MatIconModule } from '@angular/material/icon'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { NzPaginationModule } from 'ng-zorro-antd/pagination'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe'
@@ -44,7 +44,8 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
     private viewMode: ViewModeConfigService,
     private scrollService: ScrollService,
     private projectApprovalService: ProjectApprovalService,
-    private modalService: NzModalService
+    private modalService: NzModalService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -110,5 +111,13 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
       nzFooter: null,
       nzWidth: '800px',
     })
+  }
+
+  navigateToProjectDetail(projectId: string | undefined): void {
+    if (projectId) {
+      this.router.navigate(['/admin/projects', projectId])
+    } else {
+      console.warn('Project ID is missing. Unable to navigate.')
+    }
   }
 }

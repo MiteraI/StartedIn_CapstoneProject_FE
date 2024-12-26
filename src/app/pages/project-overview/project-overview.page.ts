@@ -16,10 +16,9 @@ import { ProjectCharterComponent } from 'src/app/components/project-pages/projec
 export class ProjectOverviewPage {
   projectId = ''
   projectOverview: ProjectOveriewModel | undefined
-  constructor(
-    private route: ActivatedRoute,
-    private projectOverviewService: ProjectOverviewService
-  ) {
+
+  currentSelectedTab = 0
+  constructor(private route: ActivatedRoute, private projectOverviewService: ProjectOverviewService) {
     this.route.data.subscribe((data) => {
       this.projectOverview = data['projectOverview']
       this.projectOverviewService.setProjectOverview(this.projectOverview)

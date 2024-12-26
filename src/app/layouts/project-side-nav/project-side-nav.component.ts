@@ -18,7 +18,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   @Input() opened = true
   @Input() currentId = ''
 
-  showCall: boolean = false;
+  showCall: boolean = false
   private destroy$ = new Subject<void>()
 
   constructor(private roleService: RoleInTeamService) {}
@@ -27,30 +27,30 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     this.roleService.role$
       .pipe(
         takeUntil(this.destroy$),
-        filter(role => role !== null)
+        filter((role) => role !== null)
       )
-      .subscribe(role => {
-        this.resetLinks();
-        this.showLinksForRole(role!);
-      });
+      .subscribe((role) => {
+        this.resetLinks()
+        this.showLinksForRole(role!)
+      })
   }
 
   resetLinks() {
-    this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = true;
-    this.contractSideNavLinks.find(link => link.linkName === 'disbursements')!.hide = true;
-    this.contractSideNavLinks.find(link => link.linkName === 'investor-disbursements')!.hide = true;
-    this.showCall = false;
+    this.projectSideNavLinks.find((link) => link.linkName === 'tasks')!.hide = true
+    this.contractSideNavLinks.find((link) => link.linkName === 'disbursements')!.hide = true
+    this.contractSideNavLinks.find((link) => link.linkName === 'investor-disbursements')!.hide = true
+    this.showCall = false
   }
 
   showLinksForRole(role: TeamRole) {
     if (role === TeamRole.LEADER) {
-      this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = false;
-      this.contractSideNavLinks.find(link => link.linkName === 'disbursements')!.hide = false;
-      this.showCall = true;
+      this.projectSideNavLinks.find((link) => link.linkName === 'tasks')!.hide = false
+      this.contractSideNavLinks.find((link) => link.linkName === 'disbursements')!.hide = false
+      this.showCall = true
     } else if (role === TeamRole.INVESTOR) {
-      this.contractSideNavLinks.find(link => link.linkName === 'investor-disbursements')!.hide = false;
+      this.contractSideNavLinks.find((link) => link.linkName === 'investor-disbursements')!.hide = false
     } else {
-      this.projectSideNavLinks.find(link => link.linkName === 'tasks')!.hide = false;
+      this.projectSideNavLinks.find((link) => link.linkName === 'tasks')!.hide = false
     }
   }
 
@@ -72,6 +72,7 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
     { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
     { linkName: 'members', iconName: 'group', linkText: 'Thành viên' },
+    { linkName: 'project-detail', iconName: 'description', linkText: 'Miêu tả' },
   ]
 
   projectSideNavLinks: {
@@ -108,6 +109,6 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
   }[] = [
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
-    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng ký'}
+    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng ký' },
   ]
 }
