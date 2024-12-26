@@ -112,7 +112,7 @@ export class ProjectApprovalPage implements OnInit {
         currentProject: this.currentProject
       },
       nzFooter: null,
-      nzWidth: '800px',
+      nzWidth: 'fit-content',
     })
   }
   getApprovalStatusLabel(type: ProjectApprovalStatus): string {
