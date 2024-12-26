@@ -22,8 +22,7 @@ export class AdminService {
     formdata.append('formFile', file);
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/admin/excel-import`),
-      formdata,
-      { responseType: 'text' as 'json' }
+      formdata
     );
   }
 
