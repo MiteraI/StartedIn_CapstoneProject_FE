@@ -25,21 +25,27 @@ export class ProjectService {
   private parseNumericFields<T extends StartupModel>(startup: T): T {
     return {
       ...startup,
-      investmentCall: startup.investmentCall ? {
-        ...startup.investmentCall,
-        targetCall: typeof startup.investmentCall.targetCall === 'string' ? parseInt(startup.investmentCall.targetCall) : startup.investmentCall.targetCall,
-        amountRaised: typeof startup.investmentCall.amountRaised === 'string' ? parseInt(startup.investmentCall.amountRaised) : startup.investmentCall.amountRaised,
-        remainAvailableEquityShare: typeof startup.investmentCall.remainAvailableEquityShare === 'string' ? parseFloat(startup.investmentCall.remainAvailableEquityShare) : startup.investmentCall.remainAvailableEquityShare,
-        equityShareCall: typeof startup.investmentCall.equityShareCall === 'string' ? parseFloat(startup.investmentCall.equityShareCall) : startup.investmentCall.equityShareCall,
-      } : null
-    };
+      investmentCall: startup.investmentCall
+        ? {
+            ...startup.investmentCall,
+            targetCall: typeof startup.investmentCall.targetCall === 'string' ? parseInt(startup.investmentCall.targetCall) : startup.investmentCall.targetCall,
+            amountRaised: typeof startup.investmentCall.amountRaised === 'string' ? parseInt(startup.investmentCall.amountRaised) : startup.investmentCall.amountRaised,
+            remainAvailableEquityShare:
+              typeof startup.investmentCall.remainAvailableEquityShare === 'string'
+                ? parseFloat(startup.investmentCall.remainAvailableEquityShare)
+                : startup.investmentCall.remainAvailableEquityShare,
+            equityShareCall:
+              typeof startup.investmentCall.equityShareCall === 'string' ? parseFloat(startup.investmentCall.equityShareCall) : startup.investmentCall.equityShareCall,
+          }
+        : null,
+    }
   }
 
   private parseSearchResponse<T extends StartupModel>(response: SearchResponseModel<T>): SearchResponseModel<T> {
     return {
       ...response,
-      data: response.data.map(item => this.parseNumericFields(item))
-    };
+      data: response.data.map((item) => this.parseNumericFields(item)),
+    }
   }
 
   getProject(id: string): Observable<ProjectModel> {
@@ -62,15 +68,16 @@ export class ProjectService {
     availableShareFrom?: number,
     availableShareTo?: number
   ): Observable<SearchResponseModel<StartupModel>> {
-    const query = (projectName?.trim() ? `projectName=${projectName}&` : '')
-      + (status ? `status=${status}&` : '')
-      + (targetFrom ? `targetFrom=${targetFrom}&` : '')
-      + (targetTo ? `targetTo=${targetTo}&` : '')
-      + (raisedFrom ? `raisedFrom=${raisedFrom}&` : '')
-      + (raisedTo ? `raisedTo=${raisedTo}&` : '')
-      + (availableShareFrom ? `availableShareFrom=${availableShareFrom}&` : '')
-      + (availableShareTo ? `availableShareTo=${availableShareTo}&` : '')
-      + `page=${pageIndex}&size=${pageSize}`;
+    const query =
+      (projectName?.trim() ? `projectName=${projectName}&` : '') +
+      (status ? `status=${status}&` : '') +
+      (targetFrom ? `targetFrom=${targetFrom}&` : '') +
+      (targetTo ? `targetTo=${targetTo}&` : '') +
+      (raisedFrom ? `raisedFrom=${raisedFrom}&` : '') +
+      (raisedTo ? `raisedTo=${raisedTo}&` : '') +
+      (availableShareFrom ? `availableShareFrom=${availableShareFrom}&` : '') +
+      (availableShareTo ? `availableShareTo=${availableShareTo}&` : '') +
+      `page=${pageIndex}&size=${pageSize}`
     // return of(simulateStartupAPI(
     //   pageIndex,
     //   pageSize,
@@ -83,11 +90,9 @@ export class ProjectService {
     //   availableShareFrom,
     //   availableShareTo
     // )).pipe(delay(800));
-    return this.http.get<SearchResponseModel<StartupModel>>(
-      this.applicationConfigService.getEndpointFor(`/api/startups?${query}`)
-    ).pipe(
-      map(response => this.parseSearchResponse(response))
-    );
+    return this.http
+      .get<SearchResponseModel<StartupModel>>(this.applicationConfigService.getEndpointFor(`/api/startups?${query}`))
+      .pipe(map((response) => this.parseSearchResponse(response)))
   }
 
   getUserProjects(): Observable<ProjectModel[]> {
@@ -111,11 +116,7 @@ export class ProjectService {
   }
 
   updatePayosInfo(projectId: string, payosInfo: PayosInfoModel): Observable<any> {
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/payment-gateway`),
-      payosInfo,
-      { responseType: 'text' as 'json' },
-    )
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/payment-gateway`), payosInfo, { responseType: 'text' as 'json' })
   }
 
   checkProjectClosable(projectId: string): Observable<CheckProjectClosableModel> {
@@ -124,11 +125,7 @@ export class ProjectService {
   }
 
   closeProject(projectId: string): Observable<any> {
-    return this.http.put(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/close`),
-      null,
-      { responseType: 'text' as 'json' }
-    )
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/close`), null, { responseType: 'text' as 'json' })
   }
 
   checkUserLeaveable(projectId: string): Observable<CheckUserLeaveableModel> {
@@ -136,10 +133,10 @@ export class ProjectService {
   }
 
   setAppointmentUrl(projectId: string, appointmentUrl: string): Observable<any> {
-    return this.http.post(
-      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/add-appointment-url`),
-      { appointmentUrl },
-      { responseType: 'text' as 'json' }
-    );
+    return this.http.post(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/add-appointment-url`), { appointmentUrl }, { responseType: 'text' as 'json' })
+  }
+
+  editPost(projectId: string, projectDetailPost: string): Observable<any> {
+    return this.http.put(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/edit-post`), { projectDetailPost }, { responseType: 'text' })
   }
 }

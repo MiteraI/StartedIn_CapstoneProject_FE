@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, EventEmitter, OnDestroy, OnInit } from '@angular/core'
 import { MatIcon, MatIconModule } from '@angular/material/icon'
-import { ActivatedRoute, RouterModule } from '@angular/router'
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
@@ -40,7 +40,7 @@ export class ProjectApprovalPage implements OnInit {
   isLeader = false
 
   currentProject: ProjectOveriewModel | undefined
-  
+
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -66,7 +66,7 @@ export class ProjectApprovalPage implements OnInit {
     this.roleService.role$.subscribe((role) => {
       this.isLeader = role === TeamRole.LEADER
     })
-    
+
     this.fetchCurrentProject()
     console.log(this.currentProject)
     this.projectApprovalService.refreshApproval$.subscribe(() => {
@@ -107,9 +107,9 @@ export class ProjectApprovalPage implements OnInit {
     this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',
       nzContent: RequestApprovalModalComponent,
-      nzData: { 
+      nzData: {
         projectId: this.projectId,
-        currentProject: this.currentProject
+        currentProject: this.currentProject,
       },
       nzFooter: null,
       nzWidth: 'fit-content',
