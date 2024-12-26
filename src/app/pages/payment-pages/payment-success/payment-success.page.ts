@@ -17,18 +17,13 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [
     IonContent,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     MatIconModule,
   ],
 })
-export class PaymentSuccessPage implements OnInit {
+export class PaymentSuccessPage {
   constructor(private router: Router) {}
-
-  ngOnInit() {}
 
   return() {
     this.router.navigate(['']);
