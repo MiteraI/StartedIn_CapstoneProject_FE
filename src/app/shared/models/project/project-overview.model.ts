@@ -1,5 +1,5 @@
-import type { InvestmentCallResponseDto } from "../investment-call/investment-call-response-dto.model" 
-import type { ProjectCharter } from "../project-charter/project-charter.model"
+import type { InvestmentCallResponseDto } from '../investment-call/investment-call-response-dto.model'
+import type { ProjectCharter } from '../project-charter/project-charter.model'
 
 export type ProjectOveriewModel = {
   id: string
@@ -16,4 +16,5 @@ export type ProjectOveriewModel = {
   endDate: string
   investmentCallResponseDto: InvestmentCallResponseDto
   projectCharterResponseDto: ProjectCharter
+  projectDetailPost: string
 }

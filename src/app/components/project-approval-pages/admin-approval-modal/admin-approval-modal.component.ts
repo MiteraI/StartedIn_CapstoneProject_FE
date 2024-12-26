@@ -11,15 +11,16 @@ import { NzTagModule } from 'ng-zorro-antd/tag'
 import { ProjectApprovalService } from 'src/app/services/project-approval.service'
 import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum'
 import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model'
-import { VndCurrencyPipe } from "../../../shared/pipes/vnd-currency.pipe";
-import { format } from 'date-fns';
+import { VndCurrencyPipe } from '../../../shared/pipes/vnd-currency.pipe'
+import { format } from 'date-fns'
+import { Router, RouterModule } from '@angular/router'
 
 @Component({
   selector: 'app-admin-approval-modal',
   templateUrl: './admin-approval-modal.component.html',
   styleUrls: ['./admin-approval-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, NzTagModule, NzPopoverModule, FormsModule, NzButtonModule, NzInputModule, MatIconModule, VndCurrencyPipe,],
+  imports: [CommonModule, NzTagModule, NzPopoverModule, FormsModule, NzButtonModule, NzInputModule, MatIconModule, VndCurrencyPipe, RouterModule],
 })
 export class AdminApprovalModalComponent implements OnInit {
   //get data from nzdata
@@ -34,7 +35,7 @@ export class AdminApprovalModalComponent implements OnInit {
 
   isAccepting = false
   approvalData: ProjectApprovalDetail
-  constructor(private approvalService: ProjectApprovalService, private messageService: NzMessageService, private nzModalRef: NzModalRef) {
+  constructor(private approvalService: ProjectApprovalService, private messageService: NzMessageService, private nzModalRef: NzModalRef, private router: Router) {
     this.approvalData = this.nzModalData.approval
   }
 
@@ -57,8 +58,8 @@ export class AdminApprovalModalComponent implements OnInit {
   }
 
   formatDate(dateStr: string): string {
-      return format(new Date(dateStr), 'dd/MM/yyyy HH:mm');
-    }
+    return format(new Date(dateStr), 'dd/MM/yyyy HH:mm')
+  }
 
   onCancel() {
     if (!this.cancelReason) {
@@ -106,5 +107,14 @@ export class AdminApprovalModalComponent implements OnInit {
       },
     })
     this.isModalVisible = false
+  }
+
+  navigateToProjectDetail(projectId: string | undefined): void {
+    if (projectId) {
+      this.nzModalRef.close()
+      this.router.navigate(['/admin/projects', projectId])
+    } else {
+      console.warn('Project ID is missing. Unable to navigate.')
+    }
   }
 }

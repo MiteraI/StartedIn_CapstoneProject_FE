@@ -7,7 +7,7 @@
     <!-- Project Logo -->
     <div class="w-full lg:w-1/2 flex items-center justify-end pr-5">
       <!-- Circular Container -->
-      <div class="w-[500px] h-[500px] rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
+      <div class="md:w-[500px] md:h-[500px] rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
         <!-- Logo inside the circle -->
         <img class="object-cover w-full h-full" src="{{ projectOverview?.logoUrl }}" alt="project photo" />
       </div>
@@ -103,25 +103,38 @@
 </div>
 
 <!-- nav bar -->
-<div class="my-10 border-y border-gray-300 py-3 bg-white">
+<div class="my-10 py-3 bg-white">
   <div class="flex justify-between items-center mx-[10%]">
     <div class="flex gap-8">
       <button
-        [routerLink]="['./description']"
-        routerLinkActive="text-green-600"
-        class="py-3 px-4 font-medium hover:text-green-600 border-b-2 border-transparent hover:border-green-600"
+        (click)="currentSelectedTab = 0"
+        [ngClass]="{
+    'text-green-600 font-bold': currentSelectedTab === 0,
+    'text-gray-500 font-medium': currentSelectedTab !== 0
+  }"
+        class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
       >
         Thông tin dự án
       </button>
-      <!-- <button
-        [routerLink]="['./charter']"
-        routerLinkActive="text-green-600 "
-        class="py-3 px-4 font-medium hover:text-green-600 border-b-2 border-transparent hover:border-green-600"
+
+      <button
+        (click)="currentSelectedTab = 1"
+        [ngClass]="{
+    'text-green-600 font-bold': currentSelectedTab === 1,
+    'text-gray-500 font-medium': currentSelectedTab !== 1
+  }"
+        class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
       >
-        Điều lệ
-      </button> -->
+        Điều lệ dự án
+      </button>
     </div>
   </div>
 </div>
+<div class="md:mx-[10%]">
+  @if (currentSelectedTab === 0) {
+  <div class="bg-white px-9" [innerHTML]="projectOverview?.projectDetailPost  "></div>
+  } @else {
 
-<app-project-charter class="" [projectId]="projectId"></app-project-charter>
+  <app-project-charter class="w-full" [projectId]="projectId"></app-project-charter>
+  }
+</div>

@@ -9,7 +9,10 @@
             <mat-icon fontIcon="business" class="text-gray-600 mr-2"></mat-icon>
             Tên dự án:
           </p>
-          <p class="text-xl text-gray-800">{{ approvalData.projectName || 'Không có dữ liệu' }}</p>
+          <a (click)="navigateToProjectDetail(approvalData.projectId)" class="text-xl text-gray-800 cursor-pointer hover:underline">
+            {{ approvalData.projectName || 'Không có dữ liệu' }}
+          </a>
+          <!-- <p class="text-xl text-gray-800">{{ approvalData.projectName || 'Không có dữ liệu' }}</p> -->
         </div>
         <div>
           <p class="text-lg font-semibold text-gray-600">
@@ -36,7 +39,6 @@
           <div *ngIf="approvalData.status === ProjectApprovalStatus.PENDING">
             <p class="text-xl text-gray-800">Chưa phê duyệt</p>
           </div>
-
         </div>
         <div>
           <div>
@@ -54,7 +56,7 @@
         <div>
           <div>
             <p class="text-lg font-semibold text-gray-600">Số % cổ phần cần gọi</p>
-            <p class="text-xl text-gray-800 mt-2">{{ approvalData.equityShareCall / 100 | percent}}</p>
+            <p class="text-xl text-gray-800 mt-2">{{ approvalData.equityShareCall / 100 | percent }}</p>
           </div>
           <div>
             <p class="text-lg font-semibold text-gray-600">Số vốn cần gọi</p>
@@ -62,7 +64,7 @@
           </div>
         </div>
       </div>
-      
+
       <div>
         <p class="text-lg font-semibold text-gray-600 pt-5">Lý do:</p>
         <p class="text-xl text-gray-800 mt-2">{{ approvalData.reason || 'Không có lý do' }}</p>
@@ -88,34 +90,33 @@
       </ul>
     </div>
   </div>
-  
+
   @if( approvalData.status === ProjectApprovalStatus.PENDING){
-    <div class="mt-6 flex justify-end space-x-4">
-      <button
-        nz-button
-        nzDanger
-        nzType="primary"
-        nz-popover
-        nzPopoverTitle="Lý do từ chối"
-        [(nzPopoverVisible)]="isModalVisible"
-        nzPopoverTrigger="click"
-        [nzPopoverContent]="cancelTemplate"
-      >
-        Từ chối
-      </button>
-      <button nz-button nzType="primary" [nzLoading]="isAccepting" (click)="acceptProjectApproval()" [disabled]="isAccepting">Đồng ý</button>
-    </div>
+  <div class="mt-6 flex justify-end space-x-4">
+    <button
+      nz-button
+      nzDanger
+      nzType="primary"
+      nz-popover
+      nzPopoverTitle="Lý do từ chối"
+      [(nzPopoverVisible)]="isModalVisible"
+      nzPopoverTrigger="click"
+      [nzPopoverContent]="cancelTemplate"
+    >
+      Từ chối
+    </button>
+    <button nz-button nzType="primary" [nzLoading]="isAccepting" (click)="acceptProjectApproval()" [disabled]="isAccepting">Đồng ý</button>
+  </div>
   }
   <!-- Popover Content Template -->
-    <ng-template #cancelTemplate>
-      <div class="flex flex-col gap-2">
-        <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
-        <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
-        <div class="flex justify-end gap-2 mt-2">
-          <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
-          <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
-        </div>
+  <ng-template #cancelTemplate>
+    <div class="flex flex-col gap-2">
+      <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
+      <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
+      <div class="flex justify-end gap-2 mt-2">
+        <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
+        <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
       </div>
-    </ng-template>
+    </div>
+  </ng-template>
 </div>
-  

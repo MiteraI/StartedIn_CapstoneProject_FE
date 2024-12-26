@@ -16,9 +16,7 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
-  <div *ngIf="pagedApprovals.data.length === 0" class="text-center text-gray-500 py-4">
-    Không có yêu cầu xác thực nào!
-  </div>
+  <div *ngIf="pagedApprovals.data.length === 0" class="text-center text-gray-500 py-4">Không có yêu cầu xác thực nào!</div>
 
   <!-- Desktop Table View -->
   <table *ngIf="!isLoading && pagedApprovals.data.length > 0" class="w-full hidden md:table border bg-white">
@@ -34,7 +32,7 @@
     <tbody>
       <tr *ngFor="let approval of pagedApprovals.data" class="border-b hover:bg-purple-50">
         <td class="p-4">
-          <div class="font-medium">{{ approval.projectName }}</div>
+          <a (click)="navigateToProjectDetail(approval.projectId)" class="font-medium cursor-pointer hover:underline"> {{ approval.projectName || 'Không có dữ liệu' }} </a>
         </td>
         <td class="p-4">
           <div class="font-medium">{{ approval.leaderName }}</div>
@@ -116,8 +114,6 @@
       <nz-spin nzSimple></nz-spin>
     </div>
 
-    <div *ngIf="!isDesktopView && isEndOfList && pagedApprovals.data.length > 0" class="text-center text-gray-500 py-4">
-      Bạn đã xem hết danh sách yêu cầu!
-    </div>
+    <div *ngIf="!isDesktopView && isEndOfList && pagedApprovals.data.length > 0" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách yêu cầu!</div>
   </div>
 </div>

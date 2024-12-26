@@ -232,6 +232,10 @@ export const routes: Routes = [
         resolve: { transfer: LeaderTransferHistoryDataResolver },
         loadComponent: () => import('./pages/project-pages/leader-transfer-detail/leader-transfer-detail.page').then((m) => m.LeaderTransferDetailPage),
       },
+      {
+        path: 'project-detail',
+        loadComponent: () => import('./pages/project-detail/project-detail.page').then((m) => m.ProjectDetailPage),
+      },
     ],
   },
   {
