@@ -53,7 +53,7 @@
       <div class="text-xl md:text-2xl font-semibold mb-4">Tiến độ cột mốc</div>
 
       <div *ngFor="let milestone of dashboard.milestoneProgress" class="flex items-center justify-between hover:bg-slate-100 px-4 py-2 rounded-lg">
-        <span class="flex-1 md:text-xl">{{ milestone.title }}</span>
+        <span class="flex-1 md:text-xl text-purple-800">{{ milestone.title }}</span>
         <div class="w-16 h-16 relative">
           <canvas [id]="'milestone-' + milestone.id"></canvas>
           <div class="absolute inset-0 flex items-center justify-center">

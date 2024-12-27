@@ -74,6 +74,11 @@ export class RequestApprovalModalComponent implements OnInit {
     this.remainingEquityShare = this.nzModalData.currentProject.remainingPercentOfShares
   }
 
+  validateInput(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+  }
+
   
 
   vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe()

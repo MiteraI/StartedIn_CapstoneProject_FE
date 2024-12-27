@@ -11,7 +11,7 @@ export const ContractStatusLabels: Record<ContractStatus, string> = {
   [ContractStatus.DRAFT]: 'Bản nháp',
   [ContractStatus.SENT]: 'Đã gửi',
   [ContractStatus.COMPLETED]: 'Đã ký kết',
-  [ContractStatus.DECLINED]: 'Bị từ chối',
+  [ContractStatus.DECLINED]: 'Đã huỷ ký',
   [ContractStatus.EXPIRED]: 'Hết hiệu lực',
   [ContractStatus.WAITING_FOR_LIQUIDATION]: 'Chờ thanh lý'
 };

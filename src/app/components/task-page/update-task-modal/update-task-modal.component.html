@@ -11,14 +11,14 @@
       <!-- Title and Milestone Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Tên tác vụ</nz-form-label>
+          <nz-form-label [nzRequired]="true" class="font-medium">Tên tác vụ</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
             <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" (input)="handleInfoChanged()" />
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Cột mốc</nz-form-label>
+          <nz-form-label class="font-medium">Cột mốc</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="milestone"
@@ -46,7 +46,7 @@
 
       <!-- Description -->
       <nz-form-item>
-        <nz-form-label>Mô tả</nz-form-label>
+        <nz-form-label class="font-medium">Mô tả</nz-form-label>
         <nz-form-control>
           <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
         </nz-form-control>
@@ -55,7 +55,7 @@
       <!-- Status and Deadline Row and Man Hour -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Trạng thái</nz-form-label>
+          <nz-form-label class="font-medium">Trạng thái</nz-form-label>
           <nz-form-control>
             <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
               @for (status of statuses; track $index) {
@@ -75,7 +75,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Số giờ làm</nz-form-label>
+          <nz-form-label class="font-medium">Số giờ làm</nz-form-label>
           <nz-form-control>
             <div class="flex gap-2">
               <nz-input-number
@@ -100,7 +100,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Ngày bắt đầu</nz-form-label>
+          <nz-form-label class="font-medium">Ngày bắt đầu</nz-form-label>
           <nz-form-control>
             <nz-date-picker
               class="w-full"
@@ -116,7 +116,7 @@
         </nz-form-item>
 
         <nz-form-item *ngIf="!actualEndDate">
-          <nz-form-label>Ngày kết thúc</nz-form-label>
+          <nz-form-label class="font-medium">Ngày kết thúc</nz-form-label>
           <nz-form-control>
             <nz-date-picker
               class="w-full"
@@ -132,16 +132,17 @@
         </nz-form-item>
 
         <nz-form-item *ngIf="actualEndDate">
-          <nz-form-label class="w-full">Ngày hoàn thành</nz-form-label>
-          <div><span class="font-medium">Dự kiến:</span> {{ expectedEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
-          <div><span class="font-medium">Thực tế:</span> {{ actualEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
+          <nz-form-label class="font-medium">Ngày hoàn thành</nz-form-label>
+          <div class="w-full"><span class="font-medium">Dự kiến:</span> {{ expectedEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
+          <div class="w-full"><span class="font-medium">Thực tế:</span> {{ actualEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
         </nz-form-item>
+
       </div>
 
       <!-- Parent Task and Assignee Row -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Tác vụ mẹ</nz-form-label>
+          <nz-form-label class="font-medium">Tác vụ mẹ</nz-form-label>
           <nz-form-control>
             <nz-select
               class="w-full"
@@ -168,7 +169,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Người làm</nz-form-label>
+          <nz-form-label class="font-medium">Người làm</nz-form-label>
           <nz-form-control>
             <nz-select
               class="w-full"
@@ -189,7 +190,7 @@
 
       @if (subTasks.length > 0) {
       <nz-form-item>
-        <nz-form-label>Tác vụ con</nz-form-label>
+        <nz-form-label class="font-medium">Tác vụ con</nz-form-label>
         <nz-form-control>
           <nz-table #basicTable nzSize="small" nzShowPagination="false" [nzData]="subTasks">
             <thead>
@@ -218,7 +219,7 @@
       }
 
       <nz-form-item>
-        <nz-form-label [nzSpan]="24">Tệp đính kèm</nz-form-label>
+        <nz-form-label [nzSpan]="24" class="font-medium">Tệp đính kèm</nz-form-label>
         @for (attachment of attachmentList; track attachment.id) {
         <div>
           <nz-tag [nzColor]="'blue'" class="flex mb-2 py-1 space-x-2 items-center">
@@ -254,7 +255,7 @@
 
       <!-- Comment Section -->
       <nz-form-item>
-        <nz-form-label>Ghi chú</nz-form-label>
+        <nz-form-label class="font-medium">Ghi chú</nz-form-label>
         <nz-form-control>
           <div class="flex gap-2">
             <input nz-input placeholder="Để lại ý kiến" class="flex-grow" placeholder="Để lại góp ý" formControlName="taskComment" />
