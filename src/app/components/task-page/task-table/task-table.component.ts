@@ -54,8 +54,8 @@ export class TaskTableComponent implements OnInit {
   openUpdateTaskModal(taskId: string) {
     const modalRef = this.modalService.create({
       nzTitle: 'Thông Tin Tác Vụ',
-      nzWidth: '50vw',
-      nzStyle: { top: '20px' },
+      nzWidth: '90vw',
+      nzStyle: { top: '20px', maxWidth: '800px' },
       nzBodyStyle: { padding: '0px' },
       nzContent: UpdateTaskModalComponent,
       nzData: {

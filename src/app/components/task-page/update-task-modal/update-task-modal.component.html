@@ -77,7 +77,25 @@
         <nz-form-item>
           <nz-form-label>Số giờ làm</nz-form-label>
           <nz-form-control>
-            <nz-input-number class="w-full" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" (ngModelChange)="handleInfoChanged()"></nz-input-number>
+            <div class="flex gap-2">
+              <nz-input-number
+                class="flex-grow"
+                formControlName="manHour"
+                [nzMin]="0"
+                [nzPrecision]="0"
+                [nzMax]="48"
+                (ngModelChange)="handleInfoChanged()"
+              ></nz-input-number>
+              @if(isAssignedToMe()){
+                <button
+                  nz-button
+                  nzType="primary"
+                  (click)="openLogWorkModal()"
+                >
+                  Ghi nhận giờ làm
+                </button>
+              }
+            </div>
           </nz-form-control>
         </nz-form-item>
 
@@ -259,31 +277,6 @@
   }
   <div class="flex items-center justify-between px-4 py-2 bg-white border-t">
     <button nz-button nzType="primary" nzDanger="" (nzOnConfirm)="handleDeleteTask()" nz-popconfirm nzPopconfirmTitle="Bạn muốn xóa tác vụ này không?">Xóa tác vụ</button>
-    @if(isAssignedToMe()){
-    <button
-      nz-button
-      nzType="primary"
-      nz-popover
-      nzPopoverTitle="Ghi giờ làm"
-      [(nzPopoverVisible)]="isVisibleLogTimeModal"
-      nzPopoverTrigger="click"
-      [nzPopoverContent]="logTimeTemplate"
-    >
-      Ghi giờ làm
-    </button>
-    }
     <button nz-button nzType="primary" (click)="onSubmit()" [disabled]="taskForm.invalid || !isInfoChanged">Cập nhật</button>
   </div>
 </div>
-
-<!-- Popover Content Template -->
-<ng-template #logTimeTemplate>
-  <div class="flex flex-col gap-2">
-    <label for="logTimeInput" class="text-sm text-gray-600">Số giờ làm: </label>
-    <input [(ngModel)]="loggedHours" type="number" class="w-full border rounded px-2 py-1" placeholder="Nhập số giờ" min="0" />
-    <div class="flex justify-end gap-2 mt-2">
-      <button (click)="closeLogtime()" nz-button nzType="default">Hủy</button>
-      <button nz-button (click)="handleLogTime()" nzType="primary">Lưu</button>
-    </div>
-  </div>
-</ng-template>
