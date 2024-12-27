@@ -24,9 +24,12 @@
     <tr>
       <td class="text-base">{{ data.title }}</td>
       <td>
-        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-base font-medium text-center">
+        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-center">
           {{ labels[data.status] }}
         </nz-tag>
+        @if (data.isLate) {
+        <nz-tag nzColor="red" [nzBordered]="false" class="text-center"> Trễ Hạn </nz-tag>
+        }
       </td>
       <td class="text-base">{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
       <td class="text-base">{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>

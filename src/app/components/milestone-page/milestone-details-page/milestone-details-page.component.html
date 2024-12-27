@@ -39,7 +39,7 @@
       <nz-form-item>
         <nz-form-label>Nội dụng</nz-form-label>
         <nz-form-control>
-          <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
+          <editor [apiKey]="editorKey" [init]="init" formControlName="description" (onKeyUp)="handleInfoChanged()"></editor>
         </nz-form-control>
       </nz-form-item>
 

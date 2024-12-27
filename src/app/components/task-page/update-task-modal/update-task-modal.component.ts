@@ -141,9 +141,7 @@ export class UpdateTaskModalComponent implements OnInit {
   init: EditorComponent['init'] = {
     plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-    setup: () => {
-      this.handleInfoChanged()
-    },
+    setup: () => {},
   }
 
   constructor(
@@ -280,6 +278,13 @@ export class UpdateTaskModalComponent implements OnInit {
         next: (res) => {
           this.antdNoti.openSuccessNotification('', 'Cập nhật trạng thái thành công')
           this.initialStatus = status
+          if (this.initialStatus !== TaskStatus.NOT_STARTED && this.initialStatus !== TaskStatus.OPEN) {
+            this.taskForm.get('manHour')?.disable()
+            this.taskForm.get('startDate')?.disable()
+            this.taskForm.get('endDate')?.disable()
+            this.taskForm.get('title')?.disable()
+            this.taskForm.get('description')?.disable()
+          }
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
@@ -641,6 +646,13 @@ export class UpdateTaskModalComponent implements OnInit {
               },
               { emitEvent: false }
             )
+            if (this.initialStatus !== TaskStatus.NOT_STARTED && this.initialStatus !== TaskStatus.OPEN) {
+              this.taskForm.get('manHour')?.disable()
+              this.taskForm.get('startDate')?.disable()
+              this.taskForm.get('endDate')?.disable()
+              this.taskForm.get('title')?.disable()
+              this.taskForm.get('description')?.disable()
+            }
           },
           error: (error: HttpErrorResponse) => {
             if (error.status === 400) {
@@ -694,13 +706,13 @@ export class UpdateTaskModalComponent implements OnInit {
   }
 
   // check if the task is assigned to current user
-  isAssignedToMe(): boolean {
+  get isAssignedToMe(): boolean {
     return this.initialAssigneeIds.includes(this.currentUser?.id ?? '')
   }
 
   openLogWorkModal() {
     const modalRef = this.modalService.create({
-      nzTitle: 'Ghi nhận giờ làm',
+      nzTitle: this.actualEndDate ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm',
       nzContent: LogTaskModalComponent,
       nzWidth: '600px',
       nzBodyStyle: { padding: '0px' },
@@ -710,16 +722,17 @@ export class UpdateTaskModalComponent implements OnInit {
         expectedManHour: this.expectedManHour,
         actualManHour: this.loggedHours,
         status: this.taskForm.get('status')?.value,
-        assignees: this.userTasks
+        assignees: this.userTasks,
+        isAssignedToMe: this.isAssignedToMe,
       },
-      nzFooter: null
-    });
+      nzFooter: null,
+    })
 
     modalRef.afterClose.subscribe((result) => {
       if (result) {
         // Refresh task details to get updated hours
-        this.ngOnInit();
+        this.ngOnInit()
       }
-    });
+    })
   }
 }

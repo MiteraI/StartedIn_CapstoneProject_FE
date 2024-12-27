@@ -48,7 +48,7 @@
       <nz-form-item>
         <nz-form-label class="font-medium">Mô tả</nz-form-label>
         <nz-form-control>
-          <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
+          <editor [apiKey]="editorKey" [init]="init" formControlName="description" (onKeyUp)="handleInfoChanged()"></editor>
         </nz-form-control>
       </nz-form-item>
 
@@ -86,15 +86,7 @@
                 [nzMax]="48"
                 (ngModelChange)="handleInfoChanged()"
               ></nz-input-number>
-              @if(isAssignedToMe()){
-                <button
-                  nz-button
-                  nzType="primary"
-                  (click)="openLogWorkModal()"
-                >
-                  Ghi nhận giờ làm
-                </button>
-              }
+              <button nz-button nzType="primary" (click)="openLogWorkModal()">{{ isAssignedToMe ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}</button>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -133,10 +125,9 @@
 
         <nz-form-item *ngIf="actualEndDate">
           <nz-form-label class="font-medium">Ngày hoàn thành</nz-form-label>
-          <div class="w-full"><span class="font-medium">Dự kiến:</span> {{ expectedEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
-          <div class="w-full"><span class="font-medium">Thực tế:</span> {{ actualEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
+          <div class="w-full"><span class="font-medium">Dự kiến:</span> {{ expectedEndDate | date : 'dd/MM/yyyy hh:mm' }}</div>
+          <div class="w-full"><span class="font-medium">Thực tế:</span> {{ actualEndDate | date : 'dd/MM/yyyy hh:mm' }}</div>
         </nz-form-item>
-
       </div>
 
       <!-- Parent Task and Assignee Row -->
