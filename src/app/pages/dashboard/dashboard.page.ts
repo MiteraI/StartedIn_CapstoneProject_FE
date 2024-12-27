@@ -67,7 +67,9 @@ export class DashboardPage implements OnInit {
   getAssigneeNames(task: any): string {
     return task.assignees && task.assignees.length > 0
       ? task.assignees
-          .map((assignee: any) => `${assignee.fullName} (${assignee.actualManHour || 'N/A'})`)
+          .map((assignee: any) => 
+            `${assignee.fullName} (${assignee.actualManHour ? `${assignee.actualManHour} giờ` : 'N/A'})`
+          )
           .join(', ')
       : '';
   }

@@ -5,7 +5,7 @@
       <ng-container *ngIf="!isProjectCharterExist; else requestForm">
         <div class="flex items-center text-center justify-center text-red-500">
           <i nz-icon nzType="warning" nzTheme="outline" class="mr-2 text-lg mb-3"></i>
-          <p class="text-base">Không tìm thấy Project Charter. Vui lòng tạo Project Charter trước khi gửi yêu cầu phê duyệt.</p>
+          <p class="text-base">Không tìm thấy tuyên ngôn dự án. Vui lòng tạo tuyên ngôn dự án trước khi gửi yêu cầu phê duyệt.</p>
         </div>
       </ng-container>
     </nz-skeleton>
@@ -21,7 +21,8 @@
             formControlName="companyIdNumber"
             rows="1"
             placeholder="Nhập mã số doanh nghiệp"
-            nz-input
+            nz-input maxlength="10"
+            (input)="validateInput($event)"
           ></textarea>
           <!-- Hiển thị lỗi định dạng -->
           <div
@@ -34,7 +35,7 @@
 
         <!-- Reason Input -->
         <div class="mb-4">
-          <label class="block text-gray-700 font-medium mb-2">Lý do yêu cầu phê duyệt:</label>
+          <label class="block text-gray-700 font-medium mb-2"><span class="text-red-500">*</span> Lý do yêu cầu phê duyệt:</label>
           <textarea formControlName="requestReason" rows="4" class="w-full" placeholder="Nhập lý do yêu cầu phê duyệt" nz-input></textarea>
           <div *ngIf="approvalRequestForm.get('requestReason')?.invalid && approvalRequestForm.get('requestReason')?.touched" class="text-red-500 text-sm">Lý do là bắt buộc.</div>
         </div>
@@ -43,7 +44,7 @@
           <!-- Value Per Percentage Input -->
           <div>
             <nz-form-item>
-              <nz-form-label [nzRequired]="true">Số tiền/% cổ phần</nz-form-label>
+              <nz-form-label [nzRequired]="true" class="font-medium">Số tiền/% cổ phần:</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
                 <nz-input-number class="w-40" formControlName="valuePerPercentage" [nzMin]="1000" [nzStep]="1000" [nzFormatter]="vndFormatter" [nzParser]="vndParser" />
               </nz-form-control>
@@ -53,7 +54,7 @@
           <!-- Equity Share Call Input -->
           <div>
             <nz-form-item>
-              <nz-form-label class="text-right" [nzRequired]="true">Cổ phần(Còn lại: {{ remainingEquityShare / 100 | percent }})</nz-form-label>
+              <nz-form-label class="text-right" [nzRequired]="true" class="font-medium">Cổ phần(Còn lại: {{ remainingEquityShare / 100 | percent }}):</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
                 <nz-input-number
                   class = "w-15"
@@ -71,7 +72,7 @@
 
         <div class="mb-4 flex space-x-10">
           <nz-form-item class="w-1/2">
-            <nz-form-label [nzRequired]="false">Ngày kết thúc</nz-form-label>
+            <nz-form-label [nzRequired]="false" class="font-medium">Ngày kết thúc:</nz-form-label>
               <nz-date-picker
                 formControlName="endDate"
                 [nzDisabledDate]="disabledEndDate"
@@ -82,7 +83,7 @@
           </nz-form-item>
 
           <div class=" w-1/2 text-right">
-            <div class="text-gray-600 text-sm">Tổng số vốn cần gọi</div>
+            <div class="text-gray-600 text-sm">Tổng số vốn cần gọi:</div>
             <div class="text-xl font-bold text-red-500">
               {{ getTotalAmount() | vndCurrency }}
             </div>

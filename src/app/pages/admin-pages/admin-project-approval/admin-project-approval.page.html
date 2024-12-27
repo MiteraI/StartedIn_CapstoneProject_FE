@@ -22,6 +22,7 @@
   <table *ngIf="!isLoading && pagedApprovals.data.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
+        <th class="p-4 text-left">Mã yêu cầu</th>
         <th class="p-4 text-left">Tên dự án</th>
         <th class="p-4 text-left">Nhóm trưởng</th>
         <th class="p-4 text-left">Ngày gửi</th>
@@ -31,6 +32,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let approval of pagedApprovals.data" class="border-b hover:bg-purple-50">
+        <td class="p-4">
+          <div class="font-medium">{{ approval.id }}</div>
+        </td>
         <td class="p-4">
           <a (click)="navigateToProjectDetail(approval.projectId)" class="font-medium cursor-pointer hover:underline"> {{ approval.projectName || 'Không có dữ liệu' }} </a>
         </td>

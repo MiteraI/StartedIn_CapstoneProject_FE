@@ -1,7 +1,7 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4 py-2">
   <!-- Title Field -->
   <nz-form-item>
-    <nz-form-label [nzRequired]="true">Tên tác vụ</nz-form-label>
+    <nz-form-label [nzRequired]="true" class="font-medium">Tên tác vụ</nz-form-label>
     <nz-form-control [nzErrorTip]="'Vui lòng nhập tên tác vụ'">
       <input nz-input formControlName="title" placeholder="Nhập tên tác vụ" />
     </nz-form-control>
@@ -9,7 +9,7 @@
 
   <!-- Description Field -->
   <nz-form-item>
-    <nz-form-label>Nội dung</nz-form-label>
+    <nz-form-label class="font-medium">Nội dung</nz-form-label>
     <nz-form-control>
       <textarea nz-input formControlName="description" placeholder="Nhập thông tin tác vụ"></textarea>
     </nz-form-control>
@@ -17,7 +17,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Ngày bắt đầu</nz-form-label>
+      <nz-form-label class="font-medium">Ngày bắt đầu</nz-form-label>
       <nz-form-control>
         <nz-date-picker
           formControlName="startDate"
@@ -31,7 +31,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Ngày kết thúc</nz-form-label>
+      <nz-form-label class="font-medium">Ngày kết thúc</nz-form-label>
       <nz-form-control>
         <nz-date-picker
           formControlName="endDate"
@@ -48,7 +48,7 @@
   <!-- Deadline Field (Date and Time Picker) and Choose Parent Task-->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Tác vụ mẹ</nz-form-label>
+      <nz-form-label class="font-medium">Tác vụ mẹ</nz-form-label>
       <nz-form-control>
         <nz-select
           formControlName="parentTask"
@@ -73,7 +73,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Số giờ làm</nz-form-label>
+      <nz-form-label class="font-medium">Số giờ làm</nz-form-label>
       <nz-form-control>
         <nz-input-number formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" class="w-full"></nz-input-number>
       </nz-form-control>
@@ -83,7 +83,7 @@
   <!-- Choose milestone and assignees -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label>Cột mốc</nz-form-label>
+      <nz-form-label class="font-medium">Cột mốc</nz-form-label>
       <nz-form-control>
         <nz-select
           formControlName="milestone"
@@ -110,7 +110,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label>Người làm</nz-form-label>
+      <nz-form-label class="font-medium">Người làm</nz-form-label>
       <nz-form-control>
         <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện" [nzShowSearch]="true">
           @for (user of users; track $index) {
