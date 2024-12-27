@@ -115,7 +115,7 @@
           </nz-form-control>
         </nz-form-item>
 
-        <nz-form-item>
+        <nz-form-item *ngIf="!actualEndDate">
           <nz-form-label>Ngày kết thúc</nz-form-label>
           <nz-form-control>
             <nz-date-picker
@@ -129,6 +129,12 @@
             >
             </nz-date-picker>
           </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item *ngIf="actualEndDate">
+          <nz-form-label class="w-full">Ngày hoàn thành</nz-form-label>
+          <div><span class="font-medium">Dự kiến:</span> {{ expectedEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
+          <div><span class="font-medium">Thực tế:</span> {{ actualEndDate | date:'dd/MM/yyyy hh:mm' }}</div>
         </nz-form-item>
       </div>
 

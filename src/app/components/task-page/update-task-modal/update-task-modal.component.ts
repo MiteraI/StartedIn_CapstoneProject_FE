@@ -35,7 +35,7 @@ import { UserService } from 'src/app/services/user.service'
 import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
-import { LogTaskModalComponent } from '../task-list/log-task-modal/log-task-modal.component'
+import { LogTaskModalComponent } from './log-task-modal/log-task-modal.component'
 import { UserTask } from 'src/app/shared/models/task/user-task.model'
 
 interface IModalData {
@@ -78,7 +78,6 @@ export class UpdateTaskModalComponent implements OnInit {
     { value: 3, label: TaskStatusLabels[3], color: TaskStatusColors[3] },
     { value: 4, label: TaskStatusLabels[4], color: TaskStatusColors[4] },
     { value: 5, label: TaskStatusLabels[5], color: TaskStatusColors[5] },
-    { value: 6, label: TaskStatusLabels[6], color: TaskStatusColors[6] },
   ]
 
   getStatusColor(status: TaskStatus): string {
@@ -133,6 +132,10 @@ export class UpdateTaskModalComponent implements OnInit {
 
   // current user
   currentUser: FullProfile | undefined
+
+  // end dates
+  expectedEndDate: string = ''
+  actualEndDate?: string
 
   editorKey = EDITOR_KEY
   init: EditorComponent['init'] = {
@@ -621,6 +624,8 @@ export class UpdateTaskModalComponent implements OnInit {
             this.expectedManHour = task.expectedManHour
             this.loggedHours = task.actualManHour
             this.userTasks = task.userTasks
+            this.expectedEndDate = task.endDate
+            this.actualEndDate = task.actualFinishAt
             this.taskForm.setValue(
               {
                 title: task.title,

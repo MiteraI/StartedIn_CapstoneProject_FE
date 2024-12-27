@@ -28,7 +28,7 @@
     <div class="text-lg font-medium mb-2">Tổng quan thời gian</div>
     <div class="text-base">
       <div>Tổng số giờ đã làm: <span class="font-bold">{{ totalHoursLogged }} giờ</span></div>
-      @if (nzModalData.status === 6) {
+      @if (nzModalData.status === 5) {
         <p [class.text-red-600]="getHoursDifference().isOver" [class.text-green-600]="!getHoursDifference().isOver">
           {{ getHoursDifference().isOver ? 'Vượt' : 'Ít hơn' }}
           <span class="font-bold">{{ getHoursDifference().value }} giờ</span> so với dự kiến

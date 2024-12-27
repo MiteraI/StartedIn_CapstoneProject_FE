@@ -12,6 +12,7 @@ export type TaskDetails = {
   description: string
   startDate: string
   endDate: string
+  actualFinishAt?: string
   status: TaskStatus
   isLate: boolean
   expectedManHour: number
