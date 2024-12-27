@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { FilterBarComponent } from 'src/app/layouts/filter-bar/filter-bar.component'
@@ -17,15 +17,35 @@ import { Pagination } from 'src/app/shared/models/pagination.model'
 import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/shared/enums/project-approval-status.enum'
 import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model'
 import { AdminApprovalModalComponent } from 'src/app/components/project-approval-pages/admin-approval-modal/admin-approval-modal.component'
+import { ProjectApprovalFilterComponent } from '../../../components/admin-pages/project-approval-filter/project-approval-filter.component'
 
+interface FilterOptions {
+  approvalId?: string
+  periodFrom?: Date
+  periodTo?: Date
+  status?: ProjectApprovalStatus
+}
 @Component({
   selector: 'app-admin-project-approval',
   templateUrl: './admin-project-approval.page.html',
   styleUrls: ['./admin-project-approval.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, NzAvatarModule, NzModalModule, MatIconModule, RouterModule, NzPaginationModule, NzSpinModule, FilterBarComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NzAvatarModule,
+    NzModalModule,
+    MatIconModule,
+    RouterModule,
+    NzPaginationModule,
+    NzSpinModule,
+    FilterBarComponent,
+    ProjectApprovalFilterComponent,
+  ],
 })
 export class AdminProjectApprovalPage implements OnInit, OnDestroy {
+  @ViewChild('filterComponent') filterComponent!: ProjectApprovalFilterComponent
+
   ProjectApprovalStatusLabel = ProjectApprovalStatusLabel
   ProjectApprovalStatus = ProjectApprovalStatus
 
@@ -35,6 +55,7 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
     size: 20,
     total: 200,
   }
+  filter: FilterOptions = {}
 
   isLoading = false
   isDesktopView = false
@@ -90,17 +111,20 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
   }
 
   getApproval() {
+    console.log('Filter:', this.filter)
     this.isLoading = true
-    this.projectApprovalService.getApprovals(this.pagedApprovals.page, this.pagedApprovals.size).subscribe({
-      next: (response) => {
-        this.pagedApprovals = response
-        this.isLoading = false
-        console.log('Approvals:', response)
-      },
-      error: (error) => {
-        this.isLoading = false
-      },
-    })
+    this.projectApprovalService
+      .getApprovals(this.pagedApprovals.page, this.pagedApprovals.size, this.filter.approvalId, this.filter.periodFrom, this.filter.periodTo, this.filter.status)
+      .subscribe({
+        next: (response) => {
+          this.pagedApprovals = response
+          this.isLoading = false
+          console.log('Approvals:', response)
+        },
+        error: (error) => {
+          this.isLoading = false
+        },
+      })
   }
 
   openRequestAppovalModal(approval: ProjectApprovalDetail) {
@@ -119,5 +143,20 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
     } else {
       console.warn('Project ID is missing. Unable to navigate.')
     }
+  }
+  get filterData() {
+    return {
+      ...this.filter,
+    }
+  }
+
+  onFilterApplied(filterResult: any) {
+    this.filter = { ...filterResult }
+    this.pagedApprovals.page = 1
+    this.getApproval()
+  }
+
+  onFilterMenuOpened() {
+    this.filterComponent.updateForm(this.filter)
   }
 }
