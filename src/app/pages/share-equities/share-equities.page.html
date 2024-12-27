@@ -10,6 +10,7 @@
           (ngModelChange)="onDateChange($event)"
           [nzAllowClear]="false"
           [nzDisabledDate]="disableFutureDate"
+          [nzFormat]="'dd-MM-yyyy'"
         ></nz-date-picker>
       </div>
       <div class="aspect-square max-w-md mx-auto pt-20">

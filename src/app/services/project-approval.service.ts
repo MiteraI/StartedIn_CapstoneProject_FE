@@ -4,6 +4,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Pagination } from '../shared/models/pagination.model'
 import { ProjectApprovalDetail } from '../shared/models/project-approval/project-approval-detail.model'
 import { BehaviorSubject, tap } from 'rxjs'
+import { CancelReasonForApproval } from '../shared/models/project-approval/project-approval-cancel.model'
 
 @Injectable({
   providedIn: 'root',
@@ -43,7 +44,7 @@ export class ProjectApprovalService {
     return this.http.put(this.applicationConfigService.getEndpointFor(url), {})
   }
 
-  rejectProjectRequest(approvalId: string, reason: string) {
+  rejectProjectRequest(approvalId: string, reason: CancelReasonForApproval) {
     const url = `/api/approvals/${approvalId}/reject-project-request`
     return this.http.put(this.applicationConfigService.getEndpointFor(url), reason)
   }

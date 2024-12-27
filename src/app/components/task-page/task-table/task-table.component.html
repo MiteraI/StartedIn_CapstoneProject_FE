@@ -22,9 +22,9 @@
   <tbody>
     @for (data of basicTable.data; track data.id) {
     <tr>
-      <td class="font-semibold text-base">{{ data.title }}</td>
+      <td class="text-base">{{ data.title }}</td>
       <td>
-        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-sm font-medium text-center">
+        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-base font-medium text-center">
           {{ labels[data.status] }}
         </nz-tag>
       </td>

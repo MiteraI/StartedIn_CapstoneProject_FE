@@ -28,10 +28,10 @@
     >
       <div class="ml-2 flex-grow">
         <div class="font-medium mb-4">Yêu cầu số: {{ request.id }}</div>
-        <div class="text-sm text-gray-500 font-semibold">Ngày tạo: {{ request.sentDate| date:'dd/MM/yyyy' }}</div>
-        <div *ngIf="request.status !== approvalStatuses.PENDING" class="text-sm text-gray-500">Ngày duyệt: {{ request.approvalDate| date:'dd/MM/yyyy' }}</div>
-        <div class="text-sm text-gray-500 font-semibold">Người gửi: {{ request.leaderName }}</div>
-        <div class="text-sm text-gray-500 font-semibold">Dự án: {{ request.projectName }}</div>
+        <div class="text-sm text-gray-500"><strong>Ngày tạo: </strong>{{ request.sentDate| date:'dd/MM/yyyy' }}</div>
+        <div *ngIf="request.status !== approvalStatuses.PENDING" class="text-sm text-gray-500"><strong>Ngày duyệt: </strong>{{ request.approvalDate| date:'dd/MM/yyyy' }}</div>
+        <div class="text-sm text-gray-500"><strong>Người gửi: </strong>{{ request.leaderName }}</div>
+        <div class="text-sm text-gray-500"><strong>Dự án: </strong>{{ request.projectName }}</div>
         <div class="mt-2">
           <span
             [ngClass]="{

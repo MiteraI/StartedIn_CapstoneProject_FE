@@ -28,8 +28,8 @@ export class TaskListComponent implements OnInit {
   openUpdateTaskModal(taskId: string) {
     const modalRef = this.modalService.create({
       nzTitle: 'Thông Tin Tác Vụ',
-      nzStyle: { top: '20px' },
-      nzBodyStyle: { padding: '0px' },
+      nzWidth: '90vw',
+      nzStyle: { top: '20px', maxWidth: '800px' },
       nzContent: UpdateTaskModalComponent,
       nzData: {
         taskId: taskId,

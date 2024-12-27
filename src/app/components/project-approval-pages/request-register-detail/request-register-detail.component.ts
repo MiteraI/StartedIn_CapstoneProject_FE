@@ -15,6 +15,7 @@ import { ProjectApprovalStatus, ProjectApprovalStatusLabel } from 'src/app/share
 import { ProjectApprovalDetail } from 'src/app/shared/models/project-approval/project-approval-detail.model';
 import { VndCurrencyPipe } from "../../../shared/pipes/vnd-currency.pipe";
 import { format } from 'date-fns';
+import { CancelReasonForApproval } from 'src/app/shared/models/project-approval/project-approval-cancel.model';
 
 
 @Component({
@@ -40,7 +41,7 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
   ProjectApprovalStatusLabel = ProjectApprovalStatusLabel
 
   projectId: string = ''
-  cancelReason: string = ''
+  cancelReason: CancelReasonForApproval = { cancelReason: '' }
   isModalVisible = false
 
   isAccepting = false
@@ -96,7 +97,7 @@ readonly nzModalData = inject(NZ_MODAL_DATA)
   }
 
   closePopover() {
-    this.cancelReason = ''
+    this.cancelReason = { cancelReason: '' }
     this.isModalVisible = false
   }
 

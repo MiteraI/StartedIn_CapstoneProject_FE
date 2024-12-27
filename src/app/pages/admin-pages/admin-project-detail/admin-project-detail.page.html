@@ -67,13 +67,19 @@
           </div>
 
           <div>
-            <div class="text-gray-600 font-semibold mt-2">Số thành viên tối đa: {{project.maxMember}}</div>
-            <div class="text-gray-600 font-semibold mt-2">Số thành viên hiện tại: {{project.currentMember}}</div>
+            <div class="text-gray-600 font-semibold">Số thành viên hiện tại (Không bao gồm hướng dẫn và nhà đầu tư):</div>
+            <div class="text-gray-800 text-xl">{{project.currentMember}}</div>
           </div>
         </div>
 
         <div *ngIf="project?.projectStatus === projectStatus.CONSTRUCTING">
-          <button (click)="verifyProject()" class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">Xác nhận dự án</button>
+          <!-- Button is displayed only when pendingApproval is available -->
+          <button 
+            *ngIf="project?.pendingApproval" 
+            (click)="openRequestApprovalModal(project.pendingApproval!)" 
+            class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">
+            Xác nhận dự án
+          </button>
         </div>
       </div>
     </div>

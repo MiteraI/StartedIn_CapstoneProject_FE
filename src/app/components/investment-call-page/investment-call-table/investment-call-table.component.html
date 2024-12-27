@@ -51,7 +51,7 @@
             <td>{{ data.investorName }}</td>
             <td class="text-green-500">{{ data.amount | number }}</td>
             <td>{{ data.equityShareOffer / 100 | percent }}</td>
-            <td>{{ data.termCondition }}</td>
+            <td>{{ truncateText(data.termCondition, 70) }}</td>
             <td [ngClass]="{
               'text-orange-700':data.dealStatus === 4,
               'text-red-500': data.dealStatus === 3,

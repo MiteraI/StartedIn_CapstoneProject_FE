@@ -110,13 +110,49 @@
   }
   <!-- Popover Content Template -->
   <ng-template #cancelTemplate>
-    <div class="flex flex-col gap-2">
-      <label for="logTimeInput" class="text-sm text-gray-600">Lý do từ chối: </label>
-      <textarea nz-input [(ngModel)]="cancelReason" class="w-full border rounded px-2 py-1" placeholder="Lý do từ chối"></textarea>
-      <div class="flex justify-end gap-2 mt-2">
-        <button (click)="closePopover()" nz-button nzType="default">Hủy</button>
-        <button nz-button (click)="onCancel()" nzType="primary">Lưu</button>
-      </div>
+    <div class="p-6 w-96">
+      <form #cancelForm="ngForm">
+        <div class="mb-6">
+          <label class="block mb-3 text-base font-medium">Lý do từ chối:</label>
+          <textarea 
+            nz-input
+            [(ngModel)]="cancelReason.cancelReason"
+            name="cancelReason"
+            required
+            #reasonInput="ngModel"
+            rows="6"
+            placeholder="Nhập lý do từ chối..."
+            class="w-full text-base"
+          ></textarea>
+          <div 
+            *ngIf="reasonInput.invalid && (reasonInput.dirty || reasonInput.touched)"
+            class="text-red-500 text-sm mt-2"
+          >
+            <div *ngIf="reasonInput.errors?.['required']">
+              Vui lòng nhập lý do hủy yêu cầu
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-end gap-3">
+          <button 
+            nz-button 
+            nzType="default" 
+            class="min-w-[80px]"
+            (click)="closePopover()"
+          >
+            Hủy
+          </button>
+          <button 
+            nz-button
+            nzType="primary"
+            class="min-w-[80px]"
+            (click)="onCancel()"
+            [disabled]="cancelForm.invalid"
+          >
+            Xác nhận
+          </button>
+        </div>
+      </form>
     </div>
   </ng-template>
 </div>
