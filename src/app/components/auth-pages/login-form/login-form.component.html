@@ -1,30 +1,55 @@
-<div class="flex mt-10 flex-col items-center h-screen">
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
-    <p class="text-center border-b mb-10 pb-5 text-2xl font-semibold">Đăng nhập</p>
-    <div class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400">
-      <ion-input formControlName="email" class="border-0" label="Email" labelPlacement="floating" placeholder="Nhập email" type="email" [maxlength]="35" email></ion-input>
-    </div>
-    <div class="mb-2 border pl-4 rounded-lg transition-all flex items-center hover:border-slate-400">
-      <ion-input
-        formControlName="password"
-        class="border-0"
-        label="Mật khẩu"
-        labelPlacement="floating"
-        placeholder="Nhập mật khẩu"
-        [type]="showPassword ? 'text' : 'password'"
-      ></ion-input>
+<div class="flex w-full">
+  <div class="w-3/5">
+    <img
+      src="https://s3-alpha-sig.figma.com/img/6ed4/e6d2/84a75f84d8febdb14a23caca05efeda0?Expires=1736121600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=h-hh0aD~SWYQ2AvxNQrAEWiq~QqkSq0qkWyjghzhH4ESgaUJxzR-8idC7hUAX6N4RgAJ3uENCS1JjbY4MEuUBrWB0BaUUHqf3WSNYgEPbe1vdoT9pBkjWQyyVQapOQtjJkfj6jLwGNG5lJKtO9fUGYjw5NxYlLMrI5Higq6vqtRZCHaE5fyBwgfucDQhPvJl36asfplmVMBnJOOedmCZLjvfwQkNJ85nSntUlXRQOqA3I3I8SQU-W5AV078NMZHLoLgtaw5vZuyv-gNXaT6p-8GIVvimEwdghP3kwUp0DqWmQeOhhfSX03gg~8mqwEMoIWcBDNefKWCgNI9yUoKo1A__"
+      class="w-full h-screen object-cover"
+      alt="Login Image"
+    />
+  </div>
+  <div class="w-2/5 p-16">
+    <!-- logo section -->
+    <div class="flex items-center">
+      <img src="../../../assets/img/android-chrome-192x192.png" class="h-8 w-auto" alt="Logo" />
+      <div class="text-purple-600 text-2xl font-semibold ml-1">tartedIn</div>
     </div>
 
-    @if (failedValidation) {
-    <p class="text-red-500 text-sm mt-2">Vui lòng nhập email và mật khẩu</p>
-    }
-    <ion-button expand="full" fill="clear" type="submit" class="mt-4 rounded-md text-white bg-blue-700 hover:bg-blue-800 transition duration-75"> Đăng nhập </ion-button>
-    <div class="my-7 leading-5">
-      <p class="text-center cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75">Quên mật khẩu?</p>
-      <p class="text-center">
-        Chưa có tài khoản?
-        <a routerLink="/register" class="cursor-pointer fo text-blue-500 hover:text-blue-600 transition duration-75">Đăng ký</a>
-      </p>
-    </div>
-  </form>
+    <form [formGroup]="loginForm" class="">
+      <div class="mt-28 mb-8 text-2xl font-semibold">Chào mừng bạn đến với Startedin</div>
+
+      <nz-form-item class="mb-4">
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập email hợp lệ'">
+          <nz-form-label nzNoColon>Email</nz-form-label>
+          <nz-input-group nzSize="large" nzPrefixIcon="mail">
+            <input nz-input formControlName="email" placeholder="Nhập email" type="email" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item class="mb-4">
+        <nz-form-control [nzErrorTip]="'Vui lòng nhập mật khẩu'">
+          <nz-form-label nzNoColon>Mật Khẩu</nz-form-label>
+          <nz-input-group nzSize="large" nzPrefixIcon="lock">
+            <input nz-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Nhập mật khẩu" />
+            <button (click)="togglePasswordVisibility()" class="">
+              <i nz-icon [nzType]="showPassword ? 'eye-invisible' : 'eye'"></i>
+            </button>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div *ngIf="failedValidation" class="text-red-500 text-sm mt-2">Vui lòng nhập email và mật khẩu</div>
+
+      <button [nzLoading]="loading" nz-button nzType="primary" nzSize="large" nzBlock [disabled]="loginForm.invalid" class="mt-4 rounded-[10px]" type="submit" (click)="onSubmit()">
+        Đăng nhập
+      </button>
+
+      <div class="my-7 leading-5">
+        <p class="text-center cursor-pointer text-blue-500 hover:text-blue-600 transition duration-75">Quên mật khẩu?</p>
+        <p class="text-center">
+          Bạn chưa có tài khoản?
+          <a routerLink="/register" class="cursor-pointer text-blue-500 hover:text-blue-600 transition duration-75"> Đăng ký ngay</a>
+        </p>
+      </div>
+    </form>
+  </div>
 </div>

@@ -9,7 +9,7 @@ import { RegisterFormComponent } from 'src/app/components/auth-pages/register-fo
   templateUrl: './register.page.html',
   styleUrls: ['./register.page.scss'],
   standalone: true,
-  imports: [IonContent, CommonModule, FormsModule, RegisterFormComponent],
+  imports: [FormsModule, RegisterFormComponent],
 })
 export class RegisterPage implements OnInit {
   constructor() {}

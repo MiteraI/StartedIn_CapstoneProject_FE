@@ -1,230 +1,111 @@
-<!-- <div class="flex flex-col mt-10 items-center h-screen">
-  <div class="w-full max-w-md p-6 bg-white rounded-md shadow-lg">
-    <p class="text-center border-b mb-10 pb-5 text-2xl font-semibold">
-      Tạo tài khoản
-    </p>
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div
-        class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
-      >
-        <ion-input
-          formControlName="fullName"
-          class="border-0"
-          label="Họ và tên"
-          labelPlacement="floating"
-          placeholder="Nhập họ và tên"
-          [maxlength]="40"
-        ></ion-input>
-      </div>
-      <div
-        class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
-      >
-        <ion-input
-          formControlName="phoneNumber"
-          class="border-0"
-          label="Số điện thoại"
-          labelPlacement="floating"
-          placeholder="000-000-0000"
-          type="tel"
-
-          [maskitoElement]="maskPredicate"
-          [minlength]="12"
-        ></ion-input>
-      </div>
-      <div
-        class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
-      >
-        <ion-input
-          formControlName="email"
-          class="border-0"
-          label="Email"
-          labelPlacement="floating"
-          placeholder="Nhập email"
-          type="email"
-          [maxlength]="35"
-          email
-        ></ion-input>
-      </div>
-      <div
-        class="mb-2 border pl-4 rounded-lg transition-all flex items-center hover:border-slate-400"
-      >
-        <ion-input
-          formControlName="password"
-          class="border-0"
-          label="Mật khẩu"
-          labelPlacement="floating"
-          placeholder="Nhập mật khẩu"
-          [type]="showPassword ? 'text' : 'password'"
-          [maxlength]="40"
-          [minlength]="8"
-        ></ion-input>
-        <ion-icon
-          name="{{ showPassword ? 'eye-outline' : 'eye-off-outline' }}"
-          slot="end"
-          (click)="togglePasswordVisibility()"
-          class="cursor-pointer size-6 hover:scale-105 mr-2"
-        ></ion-icon>
-      </div>
-      @if(registerForm.get('password')?.invalid &&
-      (registerForm.get('password')?.touched ||
-      registerForm.get('password')?.dirty)){
-      @if(registerForm.get('password')?.hasError('required')){
-      <p class="text-red-500 text-sm mt-2">Vui lòng nhập mật khẩu</p>
-      } @if (registerForm.get('password')?.hasError('minlength')) {
-      <p class="text-red-500 text-sm mt-2">Mật khẩu phải có ít nhất 8 ký tự</p>
-      } }
-      <div
-        class="mb-2 border pl-4 pr-1 rounded-lg transition-all hover:border-slate-400"
-      >
-        <ion-input
-          formControlName="confirmedPassword"
-          class="border-0"
-          label="Xác nhận mật khẩu"
-          labelPlacement="floating"
-          placeholder="Nhập lại mật khẩu"
-          type="password"
-          [maxlength]="40"
-        ></ion-input>
-      </div>
-      @if(registerForm.get('confirmedPassword')?.hasError('passwordMismatch') &&
-      (registerForm.get('confirmedPassword')?.touched ||
-      registerForm.get('confirmedPassword')?.dirty)){
-      <div>
-        <p class="text-red-500 text-sm mt-2">Mật khẩu không khớp</p>
-      </div>
-      }
-      <ion-button
-        disabled="{{ registerForm.invalid }}"
-        expand="full"
-        fill="clear"
-        type="submit"
-        class="mt-4 rounded-md text-white bg-blue-700 hover:bg-blue-800 transition duration-75"
-      >
-        Tạo tài khoản
-      </ion-button>
-    </form>
+<form class="w-full px-12 pt-14" nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <!-- logo section -->
+  <div class="flex items-center">
+    <img src="../../../assets/img/android-chrome-192x192.png" class="h-8 w-auto" alt="Logo" />
+    <div class="text-purple-600 text-2xl font-semibold ml-1">tartedIn</div>
   </div>
-</div> -->
-<div class="flex justify-center mt-10">
-  <form class="w-1/2 rounded-md shadow-lg p-5" nz-form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <p class="text-center mb-10 pb-5 text-2xl font-semibold">Tạo tài khoản</p>
-    <!-- select role -->
 
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="role">Vai Trò</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24">
-        <nz-select formControlName="role" id="role">
-          @for (item of authorityOptions; track $index) { @if ($index != 0) {
-          <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
-          } }
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-    <!-- Email -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="getEmailErrorMessage()">
-        <input nz-input formControlName="email" type="email" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" placeholder="khangnv@fpt.edu.vn" />
-      </nz-form-control>
-    </nz-form-item>
+  <div class="mt-20 text-2xl font-semibold">Tạo tài khoản</div>
+  <!-- select role -->
 
-    <!-- Password -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Mật Khẩu </nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="getPasswordErrorMessage()">
+  <nz-form-item>
+    <nz-form-control>
+      <nz-form-label nzNoColon>Vai Trò</nz-form-label>
+      <nz-select formControlName="role" id="role">
+        @for (item of authorityOptions; track $index) { @if ($index != 0) {
+        <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+        } }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <!-- Email -->
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="getEmailErrorMessage()">
+      <nz-form-label nzNoColon>E-mail</nz-form-label>
+      <input nz-input formControlName="email" type="email" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" placeholder="khangnv@fpt.edu.vn" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Password -->
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="getPasswordErrorMessage()">
+      <nz-form-label nzNoColon>Mật Khẩu </nz-form-label>
+      <input maxlength="40" minlength="8" nz-input formControlName="password" type="password" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" placeholder="abszc@123!" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Confirm Password -->
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Mật khẩu không giống nhau">
+      <nz-form-label nzNoColon>Xác Nhận Mật Khẩu</nz-form-label>
+      <input nz-input maxlength="40" type="password" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" formControlName="confirmedPassword" placeholder="abszc@123!" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- FullName -->
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Vui lòng nhập họ và tên">
+      <nz-form-label nzNoColon> Họ và Tên </nz-form-label>
+      <input nz-input formControlName="fullName" id="nickname" placeholder="Nguyễn Văn Khang" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Phone Number -->
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Số điện thoại không hợp lệ">
+      <nz-form-label nzNoColon>Số Điện Thoại</nz-form-label>
+      <nz-input-group>
         <input
-          maxlength="40"
-          minlength="8"
-          nz-input
-          formControlName="password"
-          type="password"
           class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm"
-          placeholder="abszc@123!"
+          formControlName="phoneNumber"
+          type="tel"
+          nz-input
+          [minlength]="10"
+          [maxlength]="10"
+          placeholder="0903111013"
         />
-      </nz-form-control>
-    </nz-form-item>
+      </nz-input-group>
+    </nz-form-control>
+  </nz-form-item>
 
-    <!-- Confirm Password -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkPassword">Xác Nhận Mật Khẩu</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Mật khẩu không giống nhau">
-        <input nz-input maxlength="40" type="password" class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm" formControlName="confirmedPassword" placeholder="abszc@123!" />
-      </nz-form-control>
-    </nz-form-item>
+  <!-- Address -->
+  <nz-form-item>
+    <nz-form-control nzErrorTip="Vui lòng nhập địa chỉ">
+      <nz-form-label nzNoColon>Địa Chỉ</nz-form-label>
+      <input nz-input formControlName="address" placeholder="19 Lê Quý Đôn, Phường 6, Quận 3" />
+    </nz-form-control>
+  </nz-form-item>
 
-    <!-- FullName -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="nickname"> Họ và Tên </nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập họ và tên">
-        <input nz-input formControlName="fullName" id="nickname" placeholder="Nguyễn Văn Khang" />
-      </nz-form-control>
-    </nz-form-item>
+  <!-- IdCardNumber -->
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="getIdCardNumberErrorMessage()">
+      <nz-form-label nzNoColon>Căn Cước Công Dân</nz-form-label>
+      <input nz-input formControlName="idCardNumber" placeholder="0793000111" maxlength="12" />
+    </nz-form-control>
+  </nz-form-item>
 
-    <!-- Phone Number -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber">Số Điện Thoại</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Số điện thoại không hợp lệ">
-        <nz-input-group>
-          <input
-            class="text-sm py-1 px-[11px] border-[#d9d9d9] rounded-sm"
-            formControlName="phoneNumber"
-            type="tel"
-            nz-input
-            [minlength]="10"
-            [maxlength]="10"
-            placeholder="0903111013"
-          />
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
+  <!-- check if role is user -->
+  @if(registerForm.get('role')?.value === 'User'){
+  <!-- studentCode -->
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="registerForm.get('studentCode')?.hasError('invalidFormat') ? 'Mã số sinh viên chưa đúng định dạng' : 'Vui lòng nhập mã số sinh viên'">
+      <nz-form-label nzNoColon>Mã số sinh viên</nz-form-label>
+      <input nz-input formControlName="studentCode" id="studentCode" placeholder="SE171212" />
+    </nz-form-control>
+  </nz-form-item>
 
-    <!-- Address -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="password">Địa Chỉ</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Vui lòng nhập địa chỉ">
-        <input nz-input formControlName="address" placeholder="19 Lê Quý Đôn, Phường 6, Quận 3" />
-      </nz-form-control>
-    </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzErrorTip]="registerForm.get('academicYear')?.hasError('invalidFormat') ? 'Niên khoá phải theo định dạng YYYY-YYYY' : 'Vui lòng nhập niên khoá'">
+      <nz-form-label nzNoColon>Niên khoá</nz-form-label>
+      <input nz-input formControlName="academicYear" id="academicYear" placeholder="2020-2024" maxlength="9" />
+    </nz-form-control>
+  </nz-form-item>
 
-    <!-- IdCardNumber -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="idCardNumber">Căn Cước Công Dân</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzErrorTip]="getIdCardNumberErrorMessage()">
-        <input nz-input formControlName="idCardNumber" placeholder="0793000111" maxlength="12"/>
-      </nz-form-control>
-    </nz-form-item>
-
-    <!-- check if role is user -->
-    @if(registerForm.get('role')?.value === 'User'){
-    <!-- studentCode -->
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="studentCode">Mã số sinh viên</nz-form-label>
-      <nz-form-control  [nzSm]="14" [nzXs]="24" [nzErrorTip]="registerForm.get('studentCode')?.hasError('invalidFormat') 
-        ? 'Mã số sinh viên chưa đúng định dạng' 
-        : 'Vui lòng nhập mã số sinh viên'">
-        <input nz-input formControlName="studentCode" id="studentCode" placeholder="SE171212" />
-      </nz-form-control>
-    </nz-form-item>
-  
-    <nz-form-item>
-      <nz-form-label [nzSm]="6" [nzXs]="24" [nzRequired]="true" nzFor="academicYear">Niên khoá</nz-form-label>
-      <nz-form-control [nzSm]="14" [nzXs]="24"
-        [nzErrorTip]="
-          registerForm.get('academicYear')?.hasError('invalidFormat')
-            ? 'Niên khoá phải theo định dạng YYYY-YYYY'
-            : 'Vui lòng nhập niên khoá'
-        "
-      >
-        <input nz-input formControlName="academicYear" id="academicYear" placeholder="2020-2024" maxlength="9" />
-      </nz-form-control>
-    </nz-form-item>
-
-    }
-    <!-- Submit Button -->
-    <nz-form-item>
-      <nz-form-control [nzSm]="14" [nzXs]="24" [nzOffset]="6">
-        <button [disabled]="registerForm.invalid" nz-button nzType="primary">Đăng Ký</button>
-      </nz-form-control>
-    </nz-form-item>
-  </form>
-</div>
+  }
+  <!-- Submit Button -->
+  <button [nzLoading]="loading" class="mt-4 mb-6 rounded-[10px]" [disabled]="registerForm.invalid" nzSize="large" nzBlock nz-button nzType="primary">Đăng Ký</button>
+  <p class="text-center">
+    Bạn đã có tài khoản?
+    <a routerLink="/login" class="cursor-pointer text-blue-500 hover:text-blue-600 transition duration-75"> Đăng nhập ngay</a>
+  </p>
+</form>
