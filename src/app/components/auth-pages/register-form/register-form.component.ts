@@ -4,7 +4,7 @@ import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validat
 import { addIcons } from 'ionicons'
 import { eyeOffOutline, eyeOutline } from 'ionicons/icons'
 import { RegisterService } from 'src/app/services/register.service'
-import { Router } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'
@@ -22,9 +22,10 @@ import { NzMessageService } from 'ng-zorro-antd/message'
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.scss'],
   standalone: true,
-  imports: [FormsModule, MatInputModule, ReactiveFormsModule, NzButtonModule, NzCheckboxModule, NzFormModule, NzInputModule, NzSelectModule, CommonModule],
+  imports: [RouterModule, FormsModule, MatInputModule, ReactiveFormsModule, NzButtonModule, NzCheckboxModule, NzFormModule, NzInputModule, NzSelectModule, CommonModule],
 })
 export class RegisterFormComponent implements OnInit {
+  loading = false
   showPassword = false
   registerForm = this.formBuilder.group(
     {
@@ -50,98 +51,92 @@ export class RegisterFormComponent implements OnInit {
 
   ngOnInit() {
     this.authorityOptions = Object.values(Authority).map((value) => {
-      let label = ''; // Initialize label
+      let label = '' // Initialize label
       switch (value) {
         case 'User':
-          label = 'Sinh viên';
-          break;
+          label = 'Sinh viên'
+          break
         case 'Mentor':
-          label = 'Người hướng dẫn';
-          break;
+          label = 'Người hướng dẫn'
+          break
         case 'Investor':
-          label = 'Nhà đầu tư';
-          break;
+          label = 'Nhà đầu tư'
+          break
         default:
-          label = value; // Fallback to the original value if no match
+          label = value // Fallback to the original value if no match
       }
-  
-      return { label, value };
-    });
-  
+
+      return { label, value }
+    })
+
     // Check if 'role' is already set to 'User'
-    const initialRole = this.registerForm.get('role')?.value;
-    this.updateRoleValidators(initialRole);
-  
+    const initialRole = this.registerForm.get('role')?.value
+    this.updateRoleValidators(initialRole)
+
     // Listen to role changes to update validators dynamically
     this.registerForm.get('role')?.valueChanges.subscribe((role) => {
-      this.updateRoleValidators(role);
-    });
+      this.updateRoleValidators(role)
+    })
   }
-  
+
   updateRoleValidators(role: string | null) {
-    const studentCodeControl = this.registerForm.get('studentCode');
-    const academicYearControl = this.registerForm.get('academicYear');
-  
+    const studentCodeControl = this.registerForm.get('studentCode')
+    const academicYearControl = this.registerForm.get('academicYear')
+
     if (role === 'User') {
-      studentCodeControl?.setValidators([
-        Validators.required,
-        this.studentCodeFormatValidator()
-      ]);
-      academicYearControl?.setValidators([
-        Validators.required,
-        this.academicYearFormatValidator(),
-      ]);
+      studentCodeControl?.setValidators([Validators.required, this.studentCodeFormatValidator()])
+      academicYearControl?.setValidators([Validators.required, this.academicYearFormatValidator()])
     } else {
-      studentCodeControl?.clearValidators();
-      academicYearControl?.clearValidators();
+      studentCodeControl?.clearValidators()
+      academicYearControl?.clearValidators()
     }
-  
+
     // Update validation status
-    studentCodeControl?.updateValueAndValidity();
-    academicYearControl?.updateValueAndValidity();
-    this.registerForm.get('email')?.updateValueAndValidity();
+    studentCodeControl?.updateValueAndValidity()
+    academicYearControl?.updateValueAndValidity()
+    this.registerForm.get('email')?.updateValueAndValidity()
   }
 
   getIdCardNumberErrorMessage() {
-    const idCardNumberControl = this.registerForm.get('idCardNumber');
+    const idCardNumberControl = this.registerForm.get('idCardNumber')
     if (idCardNumberControl?.hasError('required')) {
-      return 'Vui lòng nhập mã thẻ ID';
+      return 'Vui lòng nhập mã thẻ ID'
     }
     if (idCardNumberControl?.hasError('invalidIdCardNumber')) {
-      return 'Mã thẻ ID phải có 12 chữ số';
+      return 'Mã thẻ ID phải có 12 chữ số'
     }
-    return ''; // No error
+    return '' // No error
   }
-  
+
   academicYearFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const academicYearRegex = /^\d{4}-\d{4}$/; // Format: YYYY-YYYY
+      const academicYearRegex = /^\d{4}-\d{4}$/ // Format: YYYY-YYYY
       if (control.value && !academicYearRegex.test(control.value)) {
-        return { invalidFormat: true };
+        return { invalidFormat: true }
       }
-      return null;
-    };
+      return null
+    }
   }
 
   studentCodeFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const studentCodeRegex = /^(SE|SA|SS|IA)\d{6}$/; // Prefix (SE, SA, SS, IA) + 6 digits
+      const studentCodeRegex = /^(SE|SA|SS|IA)\d{6}$/ // Prefix (SE, SA, SS, IA) + 6 digits
       if (control.value && !studentCodeRegex.test(control.value)) {
-        return { invalidFormat: true }; // Invalid format error
+        return { invalidFormat: true } // Invalid format error
       }
-      return null; // Valid format
-    };
+      return null // Valid format
+    }
   }
 
   idCardNumberValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const idCardNumber = control.value;
-      const idCardRegex = /^\d{12}$/;  // Checks if the value is exactly 12 digits
+      const idCardNumber = control.value
+      const idCardRegex = /^\d{12}$/ // Checks if the value is exactly 12 digits
       if (idCardNumber && !idCardRegex.test(idCardNumber)) {
-        return { invalidIdCardNumber: true };  // Invalid if it doesn't match 12 digits
+        return { invalidIdCardNumber: true } // Invalid if it doesn't match 12 digits
       }
-      return null;  // Valid if it matches the format
-    };
+      return null // Valid if it matches the format
+    }
   }
 
   onSubmit() {
@@ -153,24 +148,27 @@ export class RegisterFormComponent implements OnInit {
     if (this.registerForm.invalid) {
       return
     }
+    this.loading = true
     const registerData: RegisterRequest = this.registerForm.getRawValue()
     this.registerService
       .register(registerData)
       .pipe(
         tap((response: string) => {
+          this.loading = false
           this.router.navigate(['login'])
           this.message.success(response)
         }),
         catchError((error) => {
+          this.loading = false
           if (error.status === 400 && error.error) {
             // Handle the specific error case, such as account already exists
-            this.message.error(error.error || 'Đã xảy ra lỗi khi đăng ký');
+            this.message.error(error.error || 'Đã xảy ra lỗi khi đăng ký')
           } else {
             // Handle other errors
-            this.message.error('Đã xảy ra lỗi, vui lòng thử lại!');
+            this.message.error('Đã xảy ra lỗi, vui lòng thử lại!')
             console.log(error.message)
           }
-          return throwError(error); // Re-throw the error for further handling if needed
+          return throwError(error) // Re-throw the error for further handling if needed
         })
       )
       .subscribe()
