@@ -44,7 +44,7 @@
           <!-- Value Per Percentage Input -->
           <div>
             <nz-form-item>
-              <nz-form-label [nzRequired]="true" class="font-medium">Số tiền/% cổ phần:</nz-form-label>
+              <nz-form-label [nzRequired]="true" class="font-medium">Số tiền/% cổ phần</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập số vốn cần gọi'">
                 <nz-input-number class="w-40" formControlName="valuePerPercentage" [nzMin]="1000" [nzStep]="1000" [nzFormatter]="vndFormatter" [nzParser]="vndParser" />
               </nz-form-control>
@@ -54,7 +54,7 @@
           <!-- Equity Share Call Input -->
           <div>
             <nz-form-item>
-              <nz-form-label class="text-right" [nzRequired]="true" class="font-medium">Cổ phần(Còn lại: {{ remainingEquityShare / 100 | percent }}):</nz-form-label>
+              <nz-form-label class="text-right" [nzRequired]="true" class="font-medium">Cổ phần(Còn lại: {{ remainingEquityShare / 100 | percent }})</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập cổ phần cần gọi'">
                 <nz-input-number
                   class = "w-15"
@@ -72,7 +72,7 @@
 
         <div class="mb-4 flex space-x-10">
           <nz-form-item class="w-1/2">
-            <nz-form-label [nzRequired]="false" class="font-medium">Ngày kết thúc:</nz-form-label>
+            <nz-form-label [nzRequired]="false" class="font-medium">Ngày kết thúc</nz-form-label>
               <nz-date-picker
                 formControlName="endDate"
                 [nzDisabledDate]="disabledEndDate"
