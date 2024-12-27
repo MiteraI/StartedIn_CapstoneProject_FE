@@ -1,0 +1,64 @@
+<div class="p-6">
+  <!-- Log Hours Form -->
+  <form [formGroup]="logForm" (ngSubmit)="onSubmit()" class="mb-4">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="8" nzLabelAlign="left">Số giờ làm</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="Vui lòng nhập số giờ hợp lệ (0-24)">
+        <div class="flex gap-2">
+          <nz-input-number
+            class="w-full"
+            formControlName="hours"
+            [nzMin]="0"
+            [nzMax]="24"
+            [nzStep]="0.5"
+            [nzPlaceHolder]="'Nhập số giờ làm'"
+          ></nz-input-number>
+          <button nz-button nzType="primary" [disabled]="!logForm.valid">
+            Ghi nhận giờ làm
+          </button>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+
+  <hr class="mb-4" />
+
+  <!-- Hours Summary -->
+  <div class="mb-6">
+    <div class="text-lg font-medium mb-2">Tổng quan thời gian</div>
+    <div class="text-base">
+      <div>Tổng số giờ đã làm: <span class="font-bold">{{ totalHoursLogged }} giờ</span></div>
+      @if (nzModalData.status === 5) {
+        <p [class.text-red-600]="getHoursDifference().isOver" [class.text-green-600]="!getHoursDifference().isOver">
+          {{ getHoursDifference().isOver ? 'Vượt' : 'Ít hơn' }}
+          <span class="font-bold">{{ getHoursDifference().value }} giờ</span> so với dự kiến
+        </p>
+      } @else {
+        <p [class.text-red-600]="getHoursDifference().isOver">
+          {{ getHoursDifference().isOver ? 'Đã vượt quá:' : 'Còn lại:' }}
+          <span class="font-bold">{{ getHoursDifference().value }} giờ</span>
+        </p>
+      }
+    </div>
+  </div>
+
+  <!-- Assignees List -->
+  <div>
+    <div class="text-lg font-medium mb-3">Danh sách người thực hiện</div>
+    <div class="space-y-3">
+      @for (assignee of nzModalData.assignees; track assignee.userId) {
+        <div class="flex justify-between items-center">
+          <div>
+            <a [routerLink]="['/user', assignee.userId]" class="text-blue-600 font-medium hover:underline">
+              {{ assignee.fullName }}
+            </a>
+            <div class="text-xs text-gray-500">
+              Đã cập nhật vào lúc {{ assignee.lastUpdatedTime | date:'dd/MM/yyyy hh:mm' }}
+            </div>
+          </div>
+          <span class="text-gray-600">{{ assignee.actualManHour }} giờ</span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

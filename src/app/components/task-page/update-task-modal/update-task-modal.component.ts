@@ -35,6 +35,8 @@ import { UserService } from 'src/app/services/user.service'
 import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
+import { LogTaskModalComponent } from './log-task-modal/log-task-modal.component'
+import { UserTask } from 'src/app/shared/models/task/user-task.model'
 
 interface IModalData {
   taskId: string
@@ -76,7 +78,6 @@ export class UpdateTaskModalComponent implements OnInit {
     { value: 3, label: TaskStatusLabels[3], color: TaskStatusColors[3] },
     { value: 4, label: TaskStatusLabels[4], color: TaskStatusColors[4] },
     { value: 5, label: TaskStatusLabels[5], color: TaskStatusColors[5] },
-    { value: 6, label: TaskStatusLabels[6], color: TaskStatusColors[6] },
   ]
 
   getStatusColor(status: TaskStatus): string {
@@ -125,11 +126,16 @@ export class UpdateTaskModalComponent implements OnInit {
   isFetchTaskDetailsLoading: boolean = false
 
   // log time vars
+  expectedManHour: number = 0
   loggedHours: number = 0
-  isVisibleLogTimeModal: boolean = false
+  userTasks: UserTask[] = []
 
-  //current user
+  // current user
   currentUser: FullProfile | undefined
+
+  // end dates
+  expectedEndDate: string = ''
+  actualEndDate?: string
 
   editorKey = EDITOR_KEY
   init: EditorComponent['init'] = {
@@ -150,7 +156,8 @@ export class UpdateTaskModalComponent implements OnInit {
     private taskCommentService: TaskCommentService,
     private taskAttachmentService: TaskAttachmentService,
     private nzModalRef: NzModalRef,
-    private userService: UserService
+    private userService: UserService,
+    private modalService: NzModalService
   ) {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
@@ -614,7 +621,11 @@ export class UpdateTaskModalComponent implements OnInit {
             this.subTasks = task.subTasks
             this.commentList = task.taskComments
             this.attachmentList = task.taskAttachments
+            this.expectedManHour = task.expectedManHour
             this.loggedHours = task.actualManHour
+            this.userTasks = task.userTasks
+            this.expectedEndDate = task.endDate
+            this.actualEndDate = task.actualFinishAt
             this.taskForm.setValue(
               {
                 title: task.title,
@@ -665,28 +676,7 @@ export class UpdateTaskModalComponent implements OnInit {
     this.filteredUsers = this.users.filter((user) => !selectedUsers.includes(user.id))
   }
 
-  // log time section
-  closeLogtime() {
-    this.isVisibleLogTimeModal = false
-  }
-
-  handleLogTime() {
-    this.taskService.logTime(this.nzModalData.projectId, this.nzModalData.taskId, this.loggedHours).subscribe({
-      next: (res) => {
-        this.antdNoti.openSuccessNotification('', 'Đã ghi nhận thời gian làm việc')
-        this.isVisibleLogTimeModal = false
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.status === 400) {
-          this.antdNoti.openErrorNotification('', error.error)
-        } else if (error.status === 500) {
-          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-        } else {
-        }
-      },
-    })
-  }
-  //get current user
+  // get current user
   getCurrentUser() {
     return this.userService.getFullProfile().subscribe({
       next: (res) => {
@@ -703,11 +693,33 @@ export class UpdateTaskModalComponent implements OnInit {
     })
   }
 
-  //check if the task is assigned to current user
+  // check if the task is assigned to current user
   isAssignedToMe(): boolean {
     return this.initialAssigneeIds.includes(this.currentUser?.id ?? '')
   }
-  ///////////////////////////////////////////////////////
-  // End of log time section ////////////////////////////
-  ///////////////////////////////////////////////////////
+
+  openLogWorkModal() {
+    const modalRef = this.modalService.create({
+      nzTitle: 'Ghi nhận giờ làm',
+      nzContent: LogTaskModalComponent,
+      nzWidth: '600px',
+      nzBodyStyle: { padding: '0px' },
+      nzData: {
+        taskId: this.nzModalData.taskId,
+        projectId: this.nzModalData.projectId,
+        expectedManHour: this.expectedManHour,
+        actualManHour: this.loggedHours,
+        status: this.taskForm.get('status')?.value,
+        assignees: this.userTasks
+      },
+      nzFooter: null
+    });
+
+    modalRef.afterClose.subscribe((result) => {
+      if (result) {
+        // Refresh task details to get updated hours
+        this.ngOnInit();
+      }
+    });
+  }
 }
