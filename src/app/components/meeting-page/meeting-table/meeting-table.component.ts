@@ -12,17 +12,20 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message'
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
-import { catchError, throwError } from 'rxjs'
+import { catchError, Subject, takeUntil, throwError } from 'rxjs'
 import { format } from 'date-fns'
 import { MeetingFilterOptions } from 'src/app/shared/filter-options/meeting-filter-options.model'
 import { CommonModule } from '@angular/common'
+import { ScrollService } from 'src/app/core/util/scroll.service'
+import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
+import { NzSpinModule } from 'ng-zorro-antd/spin'
 
 @Component({
   selector: 'app-meeting-table',
   templateUrl: './meeting-table.component.html',
   styleUrls: ['./meeting-table.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzButtonModule, MatIconModule, NzToolTipModule, NzTagModule, NzMessageModule, CommonModule],
+  imports: [NzTableModule, NzButtonModule, MatIconModule, NzToolTipModule, NzTagModule, NzMessageModule, CommonModule, NzSpinModule],
 })
 export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
@@ -42,8 +45,17 @@ export class MeetingTableComponent implements OnInit, OnChanges {
   meetingStatusFilterOptions: MeetingStatus | undefined = undefined
 
   isLoading = false
+  isDesktopView = false
 
-  constructor(private modalService: NzModalService, private meetingService: MeetingService, private messageService: NzMessageService) {}
+  private destroy$ = new Subject<void>()
+
+  constructor(
+    private modalService: NzModalService,
+    private meetingService: MeetingService,
+    private messageService: NzMessageService,
+    private scrollService: ScrollService,
+    private viewMode: ViewModeConfigService
+  ) {}
   ngOnChanges(changes: SimpleChanges): void {
     // If filterResult changes, filter meetings
     if (changes['filterResult'] && !changes['filterResult'].firstChange) {
@@ -61,6 +73,13 @@ export class MeetingTableComponent implements OnInit, OnChanges {
     // subsribe to refresh table data
     this.meetingService.refreshMeeting$.subscribe(() => {
       this.getTableData()
+    })
+    this.viewMode.isDesktopView$.subscribe((isDesktop) => {
+      this.isDesktopView = isDesktop
+    })
+
+    this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.loadMore()
     })
 
     if (this.meetingId != '') {
@@ -120,7 +139,7 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       nzData: { meetingId: meetingDetail.id, projectId: this.projectId },
       nzContent: MeetingDetailModalComponent,
       nzFooter: null,
-      nzWidth: '70%',
+      nzWidth: '900px',
     })
   }
 
@@ -197,6 +216,20 @@ export class MeetingTableComponent implements OnInit, OnChanges {
 
   onMeetingStatusFilterChange(status?: MeetingStatus) {
     this.meetingStatusFilterOptions = status
+    if (!this.isDesktopView) {
+      this.listMeeting.page = 1
+    }
     this.getTableData()
+  }
+
+  get isEndOfList(): boolean {
+    return this.listMeeting.page * this.listMeeting.size >= this.listMeeting.total
+  }
+
+  loadMore(): void {
+    if (this.isDesktopView || this.isLoading || this.isEndOfList) return
+
+    this.listMeeting.page++
+    this.filterMeetings(true)
   }
 }
