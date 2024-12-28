@@ -57,7 +57,7 @@ export class CreateMilestoneModalComponent implements OnInit {
   ) {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
-      description: [''],
+      description: ['', Validators.required],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       phase: [null],
