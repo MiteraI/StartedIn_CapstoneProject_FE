@@ -69,7 +69,7 @@ export class InvestorDisbursementDetailPage implements OnInit {
     this.modalService.create({
       nzTitle: 'Giải ngân',
       nzContent: DisburseModalComponent,
-      nzData: { disbursement: this.disbursement, isLoading: this.isLoading },
+      nzData: this.disbursement,
       nzCancelText: 'Hủy',
       nzOnOk: (componentInstance) => {
         return componentInstance.handleConfirm();
