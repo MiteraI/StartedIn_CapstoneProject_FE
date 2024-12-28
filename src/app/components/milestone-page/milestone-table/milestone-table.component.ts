@@ -61,7 +61,6 @@ export class MilestoneTableComponent {
     this.milestoneService.deleteMilestone(this.projectId, milestoneId).subscribe({
       next: (response) => {
         this.antdNoti.openSuccessNotification('Xóa Cột Mốc Thành Công', '')
-        this.milestoneService.refreshMilestone$.next(true)
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {

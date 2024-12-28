@@ -92,16 +92,10 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
       this.loadMore()
     })
 
-    this.milestoneService.refreshMilestone$.pipe().subscribe(() => {
-      this.fetchMilestones(this.isDesktopView)
-    })
-
     this.websocketService.websocketData
       .pipe(
         takeUntil(this.destroy$),
         tap((data) => {
-          console.log(data?.data);
-          
           if (!data) return
           if (!this.isMilestone(data.data)) {
             return // Exit if not a Milestone type
@@ -164,11 +158,11 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMilestones(isDesktop: boolean) {
+    this.isFetchAllMilestonesLoading = true
     this.milestoneService
       .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId)
       .pipe(
         takeUntil(this.destroy$),
-        tap(() => (this.isFetchAllMilestonesLoading = true)),
         finalize(() => (this.isFetchAllMilestonesLoading = false))
       )
       .subscribe({

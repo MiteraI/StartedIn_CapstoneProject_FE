@@ -14,8 +14,6 @@ import { MilestoneHistory } from '../shared/models/milestone/milestone-history.m
   providedIn: 'root',
 })
 export class MilestoneService {
-  refreshMilestone$ = new BehaviorSubject<boolean>(true)
-
   constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
 
   getMilestones(projectId: string, page: number, size: number, title?: string, phaseId?: string): Observable<Pagination<Milestone>> {

@@ -15,14 +15,19 @@
   <mat-drawer-content>
     <div class="flex h-full">
       <ng-container *ngTemplateOutlet="mainContent"></ng-container>
+      @if (isLargeViewport) {
       <button
         *ngIf="isCollapsed"
         (click)="toggleSidebar()"
         class="absolute top-2 right-4 px-4 py-2 flex items-center rounded-full bg-slate-100 hover:bg-slate-200"
         [ngClass]="{ 'opacity-50 bg-white': !isLargeViewport }"
       >
+        <mat-icon fontIcon="history"></mat-icon></button
+      >} @else {
+      <button *ngIf="isCollapsed" (click)="toggleSidebar()" class="fixed top-32 right-4 p-2 flex items-center rounded-full bg-slate-100 hover:bg-slate-200">
         <mat-icon fontIcon="history"></mat-icon>
       </button>
+      }
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
