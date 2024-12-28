@@ -1,0 +1,27 @@
+::ng-deep .custom-table {
+  thead {
+    tr {
+      th {
+        background-color: #f3e8ff; // Light blue background
+        color: #333; // Text color
+        font-weight: bold; // Optional: Bold text
+      }
+    }
+  }
+}
+
+::ng-deep .custom-inner-table {
+  thead {
+    tr {
+      th {
+        background-color: #faf5ff; // Light blue background
+        color: #333; // Text color
+        font-weight: 500; // Optional: Bold text
+      }
+    }
+  }
+}
+
+::ng-deep .ant-collapse-header-text {
+  font-weight: 600; // Optional: Bold text
+}

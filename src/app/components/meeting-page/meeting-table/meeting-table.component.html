@@ -61,6 +61,8 @@
     </a>
   </div>
 </div>
+
+<!-- Desktop table view -->
 <nz-table
   [nzFrontPagination]="false"
   [nzData]="listMeeting.data"
@@ -71,7 +73,7 @@
   [nzPageSize]="listMeeting.size"
   [nzTotal]="listMeeting.total"
   (nzPageIndexChange)="onPageIndexChange($event)"
-  class="custom-table"
+  class="custom-table hidden lg:block"
 >
   <thead>
     <tr>
@@ -108,3 +110,38 @@
     }
   </tbody>
 </nz-table>
+
+<!-- Mobile Card view -->
+<div class="block lg:hidden space-y-4">
+  @for (meeting of listMeeting.data; track $index) {
+  <div class="bg-white rounded-lg shadow p-4">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-lg font-semibold">{{ meeting.title }}</h3>
+      <nz-tag class="text-sm" [nzColor]="getStatusColor(meeting.status)">
+        {{ MeetingLabel[meeting.status] }}
+      </nz-tag>
+    </div>
+    <div class="text-sm text-gray-600">
+      <p><strong>Cột Mốc:</strong> {{ meeting.milestoneName || 'Không có' }}</p>
+      <p><strong>Bắt đầu:</strong> {{ formatDate(meeting.appointmentTime) }}</p>
+      <p><strong>Kết thúc:</strong> {{ meeting.appointmentEndTime ? formatDate(meeting.appointmentEndTime) : 'Chưa có giờ kết thúc' }}</p>
+    </div>
+    <div class="mt-2 flex gap-4">
+      <button (click)="openMeetingDetail(meeting)" class="flex items-center text-blue-500"><mat-icon fontIcon="info"></mat-icon> Chi Tiết</button>
+      @if (meeting.status === 3 || meeting.status === 4) {
+      <button class="flex items-center text-gray-300 cursor-not-allowed"><mat-icon fontIcon="block"></mat-icon> Hủy</button>
+      } @else {
+      <button (click)="openCancelMeetingModal(meeting)" class="flex items-center text-red-500"><mat-icon fontIcon="block"></mat-icon> Hủy</button>
+      }
+    </div>
+  </div>
+  }
+
+  <div *ngIf="isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  <!-- không có buổi họp -->
+  <div *ngIf="!isLoading && listMeeting.data.length === 0" class="text-center text-gray-500 py-4">Không có cuộc họp nào</div>
+
+  <div *ngIf="isEndOfList && listMeeting.data.length > 0" class="text-center text-gray-500 py-4">Bạn đã xem hết các cuộc họp</div>
+</div>

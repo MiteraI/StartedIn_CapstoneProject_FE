@@ -74,10 +74,11 @@
 
         <div *ngIf="project?.projectStatus === projectStatus.CONSTRUCTING">
           <!-- Button is displayed only when pendingApproval is available -->
-          <button 
-            *ngIf="project?.pendingApproval" 
-            (click)="openRequestApprovalModal(project.pendingApproval!)" 
-            class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700">
+          <button
+            *ngIf="project?.pendingApproval"
+            (click)="openRequestApprovalModal(project.pendingApproval!)"
+            class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700"
+          >
             Xác nhận dự án
           </button>
         </div>
@@ -87,35 +88,35 @@
 
   <!-- nav bar -->
   <div class="my-10 py-3 bg-white">
-    <div class="flex justify-between items-center ml-9">
-      <div class="flex gap-8">
-        <button
-          (click)="currentSelectedTab = 0"
-          [ngClass]="{
+    <div class="flex items-center ml-2 md:ml-9">
+      <button
+        (click)="currentSelectedTab = 0"
+        [ngClass]="{
     'text-green-600 font-bold': currentSelectedTab === 0,
     'text-gray-500 font-medium': currentSelectedTab !== 0
   }"
-          class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
-        >
-          Thông tin dự án
-        </button>
+        class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
+      >
+        Thông tin dự án
+      </button>
 
-        <button
-          (click)="currentSelectedTab = 1"
-          [ngClass]="{
+      <button
+        (click)="currentSelectedTab = 1"
+        [ngClass]="{
     'text-green-600 font-bold': currentSelectedTab === 1,
     'text-gray-500 font-medium': currentSelectedTab !== 1
   }"
-          class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
-        >
-          Điều lệ dự án
-        </button>
-      </div>
+        class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
+      >
+        Điều lệ dự án
+      </button>
     </div>
   </div>
-  @if (currentSelectedTab === 0) {
+  @if (currentSelectedTab === 0) { @if (project.projectDetailPost) {
   <div class="bg-white p-9" [innerHTML]="project.projectDetailPost"></div>
   } @else {
+  <div class="bg-white p-9">Không có thông tin dự án!</div>
+  } } @else {
 
   <app-project-charter [projectId]="project.id"></app-project-charter>
   }
