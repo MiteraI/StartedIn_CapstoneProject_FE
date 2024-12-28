@@ -56,7 +56,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   // filter options default have start date to 2 weeks ago and priority order mode = true
   filter: TaskFilterOptions = {
     startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString(),
-    priorityOrderMode: true
+    priorityOrderMode: true,
   }
   @ViewChild(TaskFilterComponent) filterComponent!: TaskFilterComponent
   taskList: Task[] = []
@@ -99,7 +99,19 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   private fetchTasks(isDesktop: boolean) {
     this.isFetchAllTaskLoading = true
     this.taskService
-      .getTaskListForProject(this.projectId, this.page, this.size, this.filter.title, this.filter.status, this.filter.isLate, this.filter.assigneeId, this.filter.milestoneId, this.filter.startDate, this.filter.endDate, this.filter.priorityOrderMode)
+      .getTaskListForProject(
+        this.projectId,
+        this.page,
+        this.size,
+        this.filter.title,
+        this.filter.status,
+        this.filter.isLate,
+        this.filter.assigneeId,
+        this.filter.milestoneId,
+        this.filter.startDate,
+        this.filter.endDate,
+        this.filter.priorityOrderMode
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -168,8 +180,11 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     this.websocketService.websocketData
       .pipe(
         takeUntil(this.destroy$),
-        tap((data) => {
+        tap((data) => {          
           if (!data) return
+          if (!this.isTask(data.data)) {
+            return // Exit if not a Task type
+          }
           switch (data.action) {
             case 'create':
               // chekc pagination is on final page and array length is not equal to size
@@ -198,6 +213,10 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe()
+  }
+
+  isTask(data: any): data is Task {
+    return 'isLate' in data && 'expectedManHour' in data && 'priority' in data
   }
 
   ngOnDestroy() {

@@ -116,7 +116,6 @@ export class MilestoneDetailsPageComponent implements OnInit {
       this.milestoneService.updateMilestone(this.projectId, this.milestoneId, milestone).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Cập Nhật Cột Mốc Thành Công', '')
-          this.milestoneService.refreshMilestone$.next(true)
         },
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
@@ -220,11 +219,6 @@ export class MilestoneDetailsPageComponent implements OnInit {
     })
     this.isFetchMilestoneDetailLoading = true
     this.fetchMilestoneDetail()
-
-    // Refresh milestone list by observing refreshTask$ and refresh milestone details
-    // this.taskService.refreshTask$.pipe(takeUntil(this.destroy$)).subscribe((val) => {
-    //   this.fetchMilestoneDetail()
-    // })
   }
 
   private fetchMilestoneDetail() {

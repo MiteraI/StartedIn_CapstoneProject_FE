@@ -57,7 +57,7 @@ export class CreateMilestoneModalComponent implements OnInit {
   ) {
     this.milestoneForm = this.fb.group({
       title: ['', [Validators.required]],
-      description: [''],
+      description: ['', Validators.required],
       startDate: [null, Validators.required],
       endDate: [null, Validators.required],
       phase: [null],
@@ -121,7 +121,6 @@ export class CreateMilestoneModalComponent implements OnInit {
       this.milestoneService.createMilestone(this.nzModalData.projectId, milestone).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Tạo Cột Mốc Thành Công', '')
-          this.milestoneService.refreshMilestone$.next(true)
           this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {

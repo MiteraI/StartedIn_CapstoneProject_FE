@@ -50,9 +50,9 @@ export class TaskFilterComponent implements OnInit {
   isMilestoneLoading = false
 
   priorityOrderModes = [
-    { value: undefined, label: 'Không sắp xếp' },
-    { value: true, label: 'Tăng dần' },
-    { value: false, label: 'Giảm dần' },
+    { value: null, label: 'Không sắp xếp' },
+    { value: true, label: 'Ưu tiên cao đến thấp' },
+    { value: false, label: 'Ưu tiên thấp đến cao' },
   ]
 
   constructor(

@@ -45,7 +45,7 @@ export class TaskService {
       (milestoneId ? `milestoneId=${milestoneId}&` : '') +
       (startDate ? `startDate=${startDate}&` : '') +
       (endDate ? `endDate=${endDate}&` : '') +
-      (priority !== undefined ? `priority=${priority}&` : '') +
+      (priority !== null ? `priority=${priority}&` : '') +
       `page=${page}&size=${size}`
 
     return this.http.get<Pagination<Task>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks?${query}`))
