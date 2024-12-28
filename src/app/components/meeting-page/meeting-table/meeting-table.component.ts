@@ -216,6 +216,9 @@ export class MeetingTableComponent implements OnInit, OnChanges {
 
   onMeetingStatusFilterChange(status?: MeetingStatus) {
     this.meetingStatusFilterOptions = status
+    if (!this.isDesktopView) {
+      this.listMeeting.page = 1
+    }
     this.getTableData()
   }
 
