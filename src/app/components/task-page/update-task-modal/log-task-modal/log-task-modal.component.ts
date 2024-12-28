@@ -19,6 +19,7 @@ interface IModalData {
   actualManHour: number;
   status: TaskStatus;
   assignees: UserTask[];
+  isAssignedToMe: boolean;
 }
 
 @Component({

@@ -22,14 +22,9 @@
         (nzOnSearch)="onAssigneeSearch($event)"
       >
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let user of filteredAssignees"
-          [nzValue]="user.id"
-          [nzLabel]="user.fullName"
-          nzCustomContent
-        >
-          <span class="font-medium mr-2">{{user.fullName}}</span>
-          <span class="text-xs opacity-50">{{user.email}}</span>
+        <nz-option *ngFor="let user of filteredAssignees" [nzValue]="user.id" [nzLabel]="user.fullName" nzCustomContent>
+          <span class="font-medium mr-2">{{ user.fullName }}</span>
+          <span class="text-xs opacity-50">{{ user.email }}</span>
         </nz-option>
       </nz-select>
     </nz-form-control>
@@ -39,19 +34,9 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Cột mốc</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="milestoneId"
-        nzPlaceHolder="Chọn cột mốc"
-        nzAllowClear
-        (nzScrollToBottom)="onMilestoneScroll()"
-      >
+      <nz-select class="w-full" formControlName="milestoneId" nzPlaceHolder="Chọn cột mốc" nzAllowClear (nzScrollToBottom)="onMilestoneScroll()">
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let milestone of milestones"
-          [nzValue]="milestone.id"
-          [nzLabel]="milestone.title"
-        ></nz-option>
+        <nz-option *ngFor="let milestone of milestones" [nzValue]="milestone.id" [nzLabel]="milestone.title"></nz-option>
         <nz-option *ngIf="isMilestoneLoading" nzDisabled nzCustomContent>
           <span class="text-center w-full block">Loading...</span>
         </nz-option>
@@ -63,18 +48,9 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Trạng thái</nz-form-label>
     <nz-form-control [nzSpan]="24">
-      <nz-select
-        class="w-full"
-        formControlName="status"
-        nzPlaceHolder="Chọn trạng thái"
-        nzAllowClear
-      >
+      <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái" nzAllowClear>
         <nz-option nzValue="" nzLabel="Tất cả"></nz-option>
-        <nz-option
-          *ngFor="let option of taskStatusOptions"
-          [nzValue]="option.value"
-          [nzLabel]="option.label"
-        ></nz-option>
+        <nz-option *ngFor="let option of taskStatusOptions" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>
@@ -82,22 +58,33 @@
   <!-- Is Late Checkbox -->
   <nz-form-item>
     <nz-form-control [nzSpan]="24">
-      <label nz-checkbox formControlName="isLate">
-        Chỉ hiện tác vụ trễ hạn
-      </label>
+      <label nz-checkbox formControlName="isLate"> Chỉ hiện tác vụ trễ hạn </label>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Select priority order mode -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Sắp xếp theo ưu tiên</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select class="w-full" formControlName="priorityOrderMode" nzPlaceHolder="Chọn cách sắp xếp">
+        <nz-option *ngFor="let option of priorityOrderModes" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <!-- Filter by created time to the last 2 weeks with date picker -->
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Lọc theo thời gian tạo</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <div class="flex gap-2">
+        <nz-date-picker formControlName="startDate" [nzShowTime]="false" nzPlaceHolder="Từ ngày"> </nz-date-picker>
+        <nz-date-picker formControlName="endDate" [nzShowTime]="false" nzPlaceHolder="Đến ngày"> </nz-date-picker>
+      </div>
     </nz-form-control>
   </nz-form-item>
 </form>
 
 <div class="ant-modal-footer">
-  <button nz-button (click)="resetFilters()">
-    Đặt lại bộ lọc
-  </button>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="applyFilters()"
-  >
-    Lọc
-  </button>
+  <button nz-button (click)="resetFilters()">Đặt lại bộ lọc</button>
+  <button nz-button nzType="primary" (click)="applyFilters()">Lọc</button>
 </div>
