@@ -11,7 +11,25 @@
   <nz-form-item>
     <nz-form-label class="font-medium">Nội dung</nz-form-label>
     <nz-form-control>
-      <textarea nz-input formControlName="description" placeholder="Nhập thông tin tác vụ"></textarea>
+      <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label class="font-medium">Ưu tiên</nz-form-label>
+    <nz-form-control>
+      <div class="flex gap-2">
+        <nz-input-number class="w-1/2" formControlName="priority" [nzMin]="0" [nzPrecision]="0" [nzMax]="10"></nz-input-number>
+        @if (taskForm.get('priority')?.value === null) {
+        <nz-tag class="w-1/2" nzColor="default" class="text-center"> Thấp </nz-tag>
+        } @else if (taskForm.get('priority')?.value <= 3) {
+        <nz-tag class="w-1/2" nzColor="default" class="text-center"> Thấp </nz-tag>
+        } @else if (taskForm.get('priority')?.value <= 6) {
+        <nz-tag class="w-1/2" nzColor="yellow" class="text-center"> Vừa </nz-tag>
+        } @else if (taskForm.get('priority')?.value <= 10) {
+        <nz-tag class="w-1/2" nzColor="orange" class="text-center"> Cao </nz-tag>
+        }
+      </div>
     </nz-form-control>
   </nz-form-item>
 

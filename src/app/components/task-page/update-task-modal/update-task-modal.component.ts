@@ -163,6 +163,7 @@ export class UpdateTaskModalComponent implements OnInit {
       startDate: [null],
       endDate: [null],
       manHour: [null],
+      priority: [null],
       status: [null],
       parentTask: [''],
       milestone: [null],
@@ -248,6 +249,7 @@ export class UpdateTaskModalComponent implements OnInit {
         description: this.taskForm.value.description,
         startDate: startDate,
         endDate: endDate,
+        priority: this.taskForm.value.priority,
         manHour: this.taskForm.value.manHour,
       }
 
@@ -291,8 +293,10 @@ export class UpdateTaskModalComponent implements OnInit {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else {
+          } else if (error.status === 403){
+            this.antdNoti.openWarningNotification('', error.error)
           }
+          this.taskForm.get('status')?.setValue(this.initialStatus)
         },
       })
     }
@@ -362,7 +366,6 @@ export class UpdateTaskModalComponent implements OnInit {
           this.otherTasks = [...this.otherTasks, ...tasks]
           this.otherTasksTotal = val.total
           this.isOtherTasksFetchLoading = false
-          console.log(this.otherTasks)
         },
         error: (error: HttpErrorResponse) => {
           this.isOtherTasksFetchLoading = false
@@ -506,7 +509,6 @@ export class UpdateTaskModalComponent implements OnInit {
           this.milestones = [...this.milestones, ...moreMilestones]
           this.milestonesTotal = val.total
           this.isMilestonesFetchLoading = false
-          console.log(this.milestones)
         },
         error: (error: HttpErrorResponse) => {
           this.isMilestonesFetchLoading = false
@@ -643,6 +645,7 @@ export class UpdateTaskModalComponent implements OnInit {
                 milestone: task.milestone === null ? '' : task.milestone.id,
                 assignees: task.assignees.map((user) => user.id),
                 taskComment: '',
+                priority: task.priority ? task.priority : 0,
               },
               { emitEvent: false }
             )

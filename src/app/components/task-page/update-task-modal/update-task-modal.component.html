@@ -52,25 +52,43 @@
         </nz-form-control>
       </nz-form-item>
 
+      <nz-form-item>
+        <nz-form-label class="font-medium">Trạng thái</nz-form-label>
+        <nz-form-control>
+          <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
+            @for (status of statuses; track $index) {
+            <nz-option nzCustomContent [nzValue]="status.value" [nzLabel]="status.label">
+              <nz-tag [nzColor]="status.color" [nzBordered]="false">
+                {{ status.label }}
+              </nz-tag>
+            </nz-option>
+            }
+          </nz-select>
+          <ng-template #selectedTemplate let-selected>
+            <nz-tag [nzColor]="getStatusColor(selected.nzValue)" [nzBordered]="false">
+              {{ selected.nzLabel }}
+            </nz-tag>
+          </ng-template>
+        </nz-form-control>
+      </nz-form-item>
+
       <!-- Status and Deadline Row and Man Hour -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label class="font-medium">Trạng thái</nz-form-label>
+          <nz-form-label class="font-medium">Ưu tiên</nz-form-label>
           <nz-form-control>
-            <nz-select class="w-full" formControlName="status" nzPlaceHolder="Chọn trạng thái" (ngModelChange)="handleStatusChanged($event)" [nzCustomTemplate]="selectedTemplate">
-              @for (status of statuses; track $index) {
-              <nz-option nzCustomContent [nzValue]="status.value" [nzLabel]="status.label">
-                <nz-tag [nzColor]="status.color" [nzBordered]="false">
-                  {{ status.label }}
-                </nz-tag>
-              </nz-option>
+            <div class="flex gap-2">
+              <nz-input-number class="w-1/2" formControlName="priority" [nzMin]="0" [nzPrecision]="0" [nzMax]="10" (ngModelChange)="handleInfoChanged()"></nz-input-number>
+              @if (taskForm.get('priority')?.value === null) {
+              <nz-tag class="w-1/2" nzColor="default" class="text-center"> Thấp </nz-tag>
+              } @else if (taskForm.get('priority')?.value <= 3) {
+              <nz-tag class="w-1/2" nzColor="default" class="text-center"> Thấp </nz-tag>
+              } @else if (taskForm.get('priority')?.value <= 6) {
+              <nz-tag class="w-1/2" nzColor="yellow" class="text-center"> Vừa </nz-tag>
+              } @else if (taskForm.get('priority')?.value <= 10) {
+              <nz-tag class="w-1/2" nzColor="orange" class="text-center"> Cao </nz-tag>
               }
-            </nz-select>
-            <ng-template #selectedTemplate let-selected>
-              <nz-tag [nzColor]="getStatusColor(selected.nzValue)" [nzBordered]="false">
-                {{ selected.nzLabel }}
-              </nz-tag>
-            </ng-template>
+            </div>
           </nz-form-control>
         </nz-form-item>
 
@@ -78,14 +96,7 @@
           <nz-form-label class="font-medium">Số giờ làm</nz-form-label>
           <nz-form-control>
             <div class="flex gap-2">
-              <nz-input-number
-                class="flex-grow"
-                formControlName="manHour"
-                [nzMin]="0"
-                [nzPrecision]="0"
-                [nzMax]="48"
-                (ngModelChange)="handleInfoChanged()"
-              ></nz-input-number>
+              <nz-input-number class="flex-grow" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" (ngModelChange)="handleInfoChanged()"></nz-input-number>
               <button nz-button nzType="primary" (click)="openLogWorkModal()">{{ isAssignedToMe ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}</button>
             </div>
           </nz-form-control>

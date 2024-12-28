@@ -3,5 +3,6 @@ export type UpdateTaskInfo = {
   description: string
   startDate: string
   endDate: string
+  priority: number
   manHour: number
 }

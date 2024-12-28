@@ -27,6 +27,9 @@ interface TaskFilterOptions {
   milestoneId?: string
   status?: TaskStatus
   isLate?: boolean
+  startDate?: string
+  endDate?: string
+  priorityOrderMode?: boolean
 }
 
 @Component({
@@ -50,7 +53,11 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   isDesktopView: boolean = false
   private destroy$ = new Subject<void>()
   projectId = ''
-  filter: TaskFilterOptions = {}
+  // filter options default have start date to 2 weeks ago and priority order mode = true
+  filter: TaskFilterOptions = {
+    startDate: new Date(new Date().setDate(new Date().getDate() - 14)).toISOString(),
+    priorityOrderMode: true
+  }
   @ViewChild(TaskFilterComponent) filterComponent!: TaskFilterComponent
   taskList: Task[] = []
   size: number = 12
@@ -92,7 +99,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   private fetchTasks(isDesktop: boolean) {
     this.isFetchAllTaskLoading = true
     this.taskService
-      .getTaskListForProject(this.projectId, this.page, this.size, this.filter.title, this.filter.status, this.filter.isLate, this.filter.assigneeId, this.filter.milestoneId)
+      .getTaskListForProject(this.projectId, this.page, this.size, this.filter.title, this.filter.status, this.filter.isLate, this.filter.assigneeId, this.filter.milestoneId, this.filter.startDate, this.filter.endDate, this.filter.priorityOrderMode)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {

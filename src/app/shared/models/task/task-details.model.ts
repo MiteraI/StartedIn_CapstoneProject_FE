@@ -17,6 +17,7 @@ export type TaskDetails = {
   isLate: boolean
   expectedManHour: number
   actualManHour: number
+  priority: number
   parentTask: Task
   milestone: Milestone
   assignees: TeamMemberModel[]
