@@ -81,7 +81,7 @@
     <div *ngFor="let approval of pagedApprovals.data" class="bg-white rounded-lg shadow">
       <div class="p-4">
         <div class="flex items-start space-x-4">
-          <div class="flex-1">
+          <div class="flex-1" (click)="openRequestAppovalModal(approval)">
             <div class="font-medium">{{ approval.projectName }}</div>
             <div class="text-sm text-gray-500">{{ approval.leaderName }}</div>
             <div class="text-sm text-gray-500">{{ approval.sentDate | date: 'hh:mm aa - dd/MM/yy'}}</div>
@@ -97,9 +97,6 @@
                 {{ ProjectApprovalStatusLabel[approval.status] }}
               </span>
             </div>
-            <button>
-              <mat-icon [fontIcon]="true ? 'person_off' : 'person_add'"></mat-icon>
-            </button>
           </div>
         </div>
       </div>
