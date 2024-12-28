@@ -79,7 +79,6 @@ export class InternalContractPage implements OnInit {
     branding: false,
     plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-    setup: () => this.onInfoChange(),
   }
 
   percentFormatter = (value: number) => `${value}%`
@@ -111,11 +110,12 @@ export class InternalContractPage implements OnInit {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
-      contractIdNumber: ['', [Validators.required]],
       shares: this.fb.array([]),
     })
 
-    this.accountService.account$.pipe(filter((account) => !!account)).subscribe((account) => (this.currentUserId = account!.id))
+    this.accountService.account$
+      .pipe(filter((account) => !!account))
+      .subscribe((account) => (this.currentUserId = account!.id))
 
     this.roleService.role$.subscribe((role) => {
       this.isLeader = role === TeamRole.LEADER
@@ -130,7 +130,7 @@ export class InternalContractPage implements OnInit {
         .getMembers(this.project.id)
         .pipe(
           catchError((error) => {
-            this.notification.error('Lỗi', 'Lấy danh sách thành viên thất bại!', { nzDuration: 2000 })
+            this.notification.error('Lỗi', error.error || 'Lấy danh sách thành viên thất bại!', { nzDuration: 2000 })
             return throwError(() => new Error(error.error))
           })
         )
@@ -159,10 +159,6 @@ export class InternalContractPage implements OnInit {
         })
       }
     })
-  }
-
-  onInfoChange() {
-    this.isUpdating = true
   }
 
   get sharesFormArray() {
@@ -198,7 +194,6 @@ export class InternalContractPage implements OnInit {
       this.contractId = response.id
       this.isLoading = false
       this.notification.success('Thành công', 'Lưu hợp đồng thành công!', { nzDuration: 2000 })
-      this.router.navigate(['projects', this.project.id, 'contracts'])
     })
   }
 
@@ -215,7 +210,7 @@ export class InternalContractPage implements OnInit {
         .pipe(
           catchError((error) => {
             this.isLoading = false
-            this.notification.error('Lỗi', 'Gửi thỏa thuận thất bại!', { nzDuration: 2000 })
+            this.notification.error('Lỗi', error.error || 'Gửi thỏa thuận thất bại!', { nzDuration: 2000 })
             return throwError(() => new Error(error.error))
           })
         )
@@ -239,7 +234,7 @@ export class InternalContractPage implements OnInit {
     return o.pipe(
       catchError((error) => {
         this.isLoading = false
-        this.notification.error('Lỗi', 'Lưu dữ liệu thỏa thuận thất bại!', { nzDuration: 2000 })
+        this.notification.error('Lỗi', error.error || 'Lưu dữ liệu thỏa thuận thất bại!', { nzDuration: 2000 })
         return throwError(() => new Error(error.error))
       })
     )
@@ -275,7 +270,7 @@ export class InternalContractPage implements OnInit {
       .pipe(
         catchError((error) => {
           this.isLoading = false
-          this.notification.error('Lỗi', 'Tải hợp đồng thất bại!', { nzDuration: 2000 })
+          this.notification.error('Lỗi', error.error || 'Tải hợp đồng thất bại!', { nzDuration: 2000 })
           return throwError(() => new Error(error.error))
         })
       )
@@ -299,7 +294,7 @@ export class InternalContractPage implements OnInit {
           .pipe(
             catchError((error) => {
               this.isLoading = false
-              this.notification.error('Lỗi', 'Từ chối ký hợp đồng thất bại!', { nzDuration: 2000 })
+              this.notification.error('Lỗi', error.error || 'Từ chối ký hợp đồng thất bại!', { nzDuration: 2000 })
               return throwError(() => new Error(error.error))
             })
           )

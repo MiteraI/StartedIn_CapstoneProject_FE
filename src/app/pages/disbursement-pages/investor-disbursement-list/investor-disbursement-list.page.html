@@ -72,21 +72,19 @@
   <table *ngIf="!isLoading && disbursements.length > 0" class="w-full hidden md:table border bg-white">
     <thead>
       <tr class="border-b">
-        <th class="p-4 text-left">Tiêu đề</th>
-        <th class="p-4 text-left">Dự án</th>
-        <th class="p-4 text-left">Số hợp đồng</th>
-        <th class="p-4 text-left">Thời gian dự kiến giải ngân</th>
-        <th class="p-4 text-left">Hạn chót giải ngân</th>
-        <th class="p-4 text-left">Số tiền</th>
+        <th></th>
+        <th class="p-4 text-left">Giải ngân</th>
+        <th class="p-4 text-left" *ngIf="!isInProject">Dự án</th>
+        <th class="p-4 text-left">Thời gian</th>
         <th class="p-4 text-left">Trạng thái</th>
-        <th class="p-4 text-left"></th>
+        <th class="p-4 w-24"></th>
       </tr>
     </thead>
     <tbody>
       <ng-container *ngFor="let group of disbursementGroups; index as i">
         <!-- Date Header Row -->
         <tr class="bg-gray-100">
-          <td colspan="8" class="px-3 py-1 font-medium">
+          <td colspan="6" class="px-3 py-1 font-medium">
             {{ formatGroupHeader(keys[i]) }}
           </td>
         </tr>
@@ -96,14 +94,19 @@
           class="border-b hover:bg-gray-50 cursor-pointer"
           [routerLink]="['/disbursements', disbursement.id]"
         >
+          <td></td>
           <td class="p-4">
-            <div class="font-medium">{{ disbursement.title }}</div>
+            <div class="text-base font-bold">{{ disbursement.title }}</div>
+            <div class="text-xs text-gray-500 mb-1">{{ disbursement.contractIdNumber }}</div>
+            <div class="text-sm font-medium text-blue-600">{{ disbursement.amount | vndCurrency }}</div>
           </td>
-          <td class="p-4">{{ disbursement.projectName }}</td>
-          <td class="p-4">{{ disbursement.contractIdNumber }}</td>
-          <td class="p-4 text-center">{{ formatDate(disbursement.startDate) }}</td>
-          <td class="p-4 text-center">{{ formatDate(disbursement.endDate) }}</td>
-          <td class="p-4">{{ disbursement.amount | vndCurrency }}</td>
+          <td class="p-4" *ngIf="!isInProject">
+            {{ disbursement.projectName }}
+          </td>
+          <td class="p-4">
+            <div><span class="font-bold">Dự kiến:</span> {{ formatDate(disbursement.startDate) }}</div>
+            <div><span class="font-bold">Hạn chót:</span> {{ formatDate(disbursement.endDate) }}</div>
+          </td>
           <td class="p-4">
             <span [ngClass]="{
               'text-gray-500': disbursement.disbursementStatus === disbursementStatuses.PENDING,
