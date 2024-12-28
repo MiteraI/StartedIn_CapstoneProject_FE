@@ -62,7 +62,7 @@
         <tr
           *ngFor="let disbursement of group"
           class="border-b hover:bg-gray-50 cursor-pointer"
-          [routerLink]="['/disbursements', disbursement.id]"
+          [routerLink]="['/projects', projectId, 'disbursements', disbursement.id]"
         >
           <td></td>
           <td class="p-4">
