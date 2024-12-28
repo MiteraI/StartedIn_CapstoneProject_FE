@@ -60,15 +60,6 @@
             {{ statusLabels[project.projectStatus] }}
           </span>
         </td>
-        <td class="p-4">
-          <button
-            *ngIf="project.projectStatus === projectStatus.CONSTRUCTING"
-            (click)="$event.stopPropagation(); verifyProject(project)"
-            class="text-green-500 hover:text-green-700"
-          >
-            <mat-icon fontIcon="verified"></mat-icon>
-          </button>
-        </td>
       </tr>
     </tbody>
   </table>

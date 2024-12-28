@@ -1,18 +1,10 @@
 <app-filter-bar viewName="Quản lý yêu cầu ">
-  <!-- <div desktop class="p-4 min-w-[400px]">
-    <app-user-filter
-      #filterComponent
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-user-filter>
+  <div desktop class="p-4 min-w-[400px]">
+    <app-project-approval-filter #filterComponent [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-project-approval-filter>
   </div>
   <div mobile class="p-4">
-    <app-user-filter
-      #filterComponent
-      [data]="filterData"
-      (filterApplied)="onFilterApplied($event)"
-    ></app-user-filter>
-  </div> -->
+    <app-project-approval-filter #filterComponent [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-project-approval-filter>
+  </div>
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
@@ -114,10 +106,10 @@
     </div>
 
     <!-- Mobile Loading Spinner -->
-    <div *ngIf="isLoading" class="flex justify-center py-4">
-      <nz-spin nzSimple></nz-spin>
-    </div>
-
-    <div *ngIf="!isDesktopView && isEndOfList && pagedApprovals.data.length > 0" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách yêu cầu!</div>
   </div>
+  <div *ngIf="isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+
+  <div *ngIf="!isDesktopView && isEndOfList && pagedApprovals.data.length > 0" class="text-center text-gray-500 py-4">Bạn đã xem hết danh sách yêu cầu!</div>
 </div>
