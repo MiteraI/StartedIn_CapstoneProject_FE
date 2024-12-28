@@ -70,7 +70,6 @@ export class UpdateMilestoneModalComponent implements OnInit {
     plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
     setup: () => {
-      this.handleInfoChanged()
     },
   }
 

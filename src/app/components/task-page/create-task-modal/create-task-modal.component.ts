@@ -19,6 +19,9 @@ import { Task } from 'src/app/shared/models/task/task.model'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
+import { NzTagModule } from 'ng-zorro-antd/tag'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 
 interface IModalData {
   projectId: string
@@ -31,8 +34,7 @@ interface IModalData {
   templateUrl: './create-task-modal.component.html',
   styleUrls: ['./create-task-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzInputNumberModule],
-  providers: [DatePipe],
+  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzInputNumberModule, NzTagModule, EditorModule],
 })
 export class CreateTaskModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
@@ -42,7 +44,6 @@ export class CreateTaskModalComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private datePipe: DatePipe,
     private taskService: TaskService,
     private milestoneService: MilestoneService,
     private projectService: ProjectService,
@@ -58,6 +59,7 @@ export class CreateTaskModalComponent implements OnInit {
       assignees: [[]],
       manHour: [0],
       parentTask: [null],
+      priority: [0]
     })
   }
 
@@ -76,6 +78,13 @@ export class CreateTaskModalComponent implements OnInit {
   milestonesPage = 1
   milestonesSize = 10
   milestonesTotal = 0
+
+  editorKey = EDITOR_KEY
+    init: EditorComponent['init'] = {
+      plugins: 'lists link code help wordcount image',
+      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+      setup: () => {},
+    }
 
   disableStartDate = (startDate: Date): boolean => {
     const endDate = this.taskForm.get('endDate')?.value

@@ -13,6 +13,7 @@
     <tr>
       <th>Tên Tác Vụ</th>
       <th>Trạng Thái</th>
+      <th>Ưu Tiên</th>
       <th>Ngày Bắt Đầu</th>
       <th>Ngày Kết Thúc</th>
       <th>Người Tạo</th>
@@ -24,12 +25,26 @@
     <tr>
       <td class="text-base">{{ data.title }}</td>
       <td>
-        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-base font-medium text-center">
+        <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-center">
           {{ labels[data.status] }}
         </nz-tag>
+        @if (data.isLate) {
+        <nz-tag nzColor="red" [nzBordered]="false" class="text-center"> Trễ Hạn </nz-tag>
+        }
       </td>
-      <td class="text-base">{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
-      <td class="text-base">{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
+      <td>
+        @if (data.priority === null) {
+        <nz-tag nzColor="default" class="text-center"> Thấp </nz-tag>
+        } @else if (data.priority <= 3) {
+        <nz-tag nzColor="default" class="text-center"> Thấp </nz-tag>
+        } @else if (data.priority <= 6) {
+        <nz-tag nzColor="yellow" class="text-center"> Vừa </nz-tag>
+        } @else if (data.priority <= 10) {
+        <nz-tag nzColor="orange" class="text-center"> Cao </nz-tag>
+        }
+      </td>
+      <td class="text-base">{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M Y, h:mm a") }}</td>
+      <td class="text-base">{{ data.endDate === null ? 'Không Có Ngày Kết Thúc' : (data.endDate | date : "d 'tháng' M Y, h:mm a") }}</td>
       <td class="text-base">{{ data.createdBy }}</td>
       <td>
         <button nz-button nzType="text" (click)="openUpdateTaskModal(data.id)"><i class="text-blue-500" nz-icon nzType="info-circle" nzTheme="outline"></i></button>

@@ -13,6 +13,7 @@ export type Task = {
   createdBy: string,
   createdTime: string,
   manHour: number,
+  priority: number,
   actualFinishAt: string,
   actualManHour: number,
   assignees: AssigneeInTask[],
