@@ -3,9 +3,9 @@
     <p class="text-4xl font-bold">{{ projectOverview?.projectName }}</p>
   </div>
   <!-- Logo and gọi vốn -->
-  <div class="flex flex-col lg:flex-row w-full mt-10 gap-10">
+  <div class="flex flex-col lg:flex-row w-full mt-10 gap-10 items-center justify-center">
     <!-- Project Logo -->
-    <div class="w-full lg:w-1/2 flex items-center justify-end pr-5">
+    <div class="w-full lg:w-1/2 flex items-center justify-center">
       <!-- Circular Container -->
       <div class="md:w-[500px] md:h-[500px] rounded-full overflow-hidden flex items-center justify-center bg-gray-200">
         <!-- Logo inside the circle -->
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Investment Call Information -->
-    <div class="w-full lg:w-1/2" *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-3 rounded-lg flex flex-col w-[550px] h-full bg-green-600 justify-left">
+    <div class="w-full lg:w-1/2" *ngIf="projectOverview?.investmentCallResponseDto; else noCall" class="p-3 rounded-lg flex flex-col lg:w-[550px] h-full bg-green-600 justify-left">
       <div class="bg-white px-6 py-6 w-full rounded-lg">
         <!-- Progress Bar -->
         <div class="h-2 bg-green-600 rounded-full w-full"></div>
@@ -103,7 +103,7 @@
 </div>
 
 <!-- nav bar -->
-<div class="my-10 py-3 bg-white">
+<!-- <div class="my-10 py-3 bg-white">
   <div class="flex justify-between items-center mx-[10%]">
     <div class="flex gap-8">
       <button
@@ -129,10 +129,36 @@
       </button>
     </div>
   </div>
+</div> -->
+<div class="my-10 py-3 bg-white">
+  <div class="flex items-center ml-2 md:ml-9">
+    <button
+      (click)="currentSelectedTab = 0"
+      [ngClass]="{
+    'text-green-600 font-bold': currentSelectedTab === 0,
+    'text-gray-500 font-medium': currentSelectedTab !== 0
+  }"
+      class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
+    >
+      Thông tin dự án
+    </button>
+
+    <button
+      (click)="currentSelectedTab = 1"
+      [ngClass]="{
+    'text-green-600 font-bold': currentSelectedTab === 1,
+    'text-gray-500 font-medium': currentSelectedTab !== 1
+  }"
+      class="py-3 px-4 border-b-2 border-transparent hover:text-green-600 hover:border-green-600"
+    >
+      Điều lệ dự án
+    </button>
+  </div>
 </div>
+
 <div class="md:mx-[10%]">
   @if (currentSelectedTab === 0) {
-  <div class="bg-white px-9" [innerHTML]="projectOverview?.projectDetailPost  "></div>
+  <div class="bg-white px-9 rounded-lg" [innerHTML]="projectOverview?.projectDetailPost  "></div>
   } @else {
 
   <app-project-charter class="w-full" [projectId]="projectId"></app-project-charter>
