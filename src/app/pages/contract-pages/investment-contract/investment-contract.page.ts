@@ -125,6 +125,9 @@ export class InvestmentContractPage implements OnInit {
       this.contract = data['contract'];
       this.deal = data['deal'];
 
+      console.log(this.contract);
+
+
       if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;
@@ -392,7 +395,7 @@ export class InvestmentContractPage implements OnInit {
   }
 
   checkLiquidation() {
-    const meetingStatus = this.contract?.appointments.pop()?.status;
+    const meetingStatus = this.contract?.appointments[this.contract.appointments.length - 1]?.status;
     return this.contract?.contractStatus === ContractStatus.WAITING_FOR_LIQUIDATION
       && this.isLeader
       && meetingStatus === MeetingStatus.FINISHED;
