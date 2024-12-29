@@ -14,25 +14,6 @@
     <ng-template #requestForm>
 
       <form [formGroup]="approvalRequestForm" style="width: fit-content;">
-        <!-- CompanyId -->
-        <div class="mb-4">
-          <label class="block text-gray-700 font-medium mb-2">Mã số doanh nghiệp:</label>
-          <textarea
-            formControlName="companyIdNumber"
-            rows="1"
-            placeholder="Nhập mã số doanh nghiệp"
-            nz-input maxlength="10"
-            (input)="validateInput($event)"
-          ></textarea>
-          <!-- Hiển thị lỗi định dạng -->
-          <div
-            *ngIf="approvalRequestForm.get('companyIdNumber')?.hasError('pattern') && approvalRequestForm.get('companyIdNumber')?.touched"
-            class="text-red-500 text-sm"
-          >
-            Mã số doanh nghiệp phải gồm 10 chữ số.
-          </div>
-        </div>
-
         <!-- Reason Input -->
         <div class="mb-4">
           <label class="block text-gray-700 font-medium mb-2"><span class="text-red-500">*</span> Lý do yêu cầu phê duyệt:</label>
