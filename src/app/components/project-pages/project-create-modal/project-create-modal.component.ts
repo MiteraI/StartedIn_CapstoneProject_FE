@@ -89,8 +89,6 @@ export class ProjectCreateModalComponent implements OnInit {
       if (formattedEndDate) {
         formData.append('EndDate', formattedEndDate)
       }
-      formData.append('CompanyIdNumer', this.projectForm.get('companyIdNumer')?.value)
-
       this.projectService.createProject(formData).subscribe({
         next: (response) => {
           this.messageService.success('Tạo dự án thành công')

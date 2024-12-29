@@ -13,8 +13,7 @@ export type ProjectApprovalDetail = {
   targetCall: number,
   equityShareCall: number,
   endDate: Date,
-  projectId: string,
-  companyIdNumber: string
+  projectId: string
 }
 
 export type Document = {
