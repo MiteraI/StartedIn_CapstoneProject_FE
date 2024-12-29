@@ -137,6 +137,8 @@ export class InternalContractPage implements OnInit {
         .subscribe((response) => (this.memberList = response.filter((m) => m.roleInTeam !== TeamRole.INVESTOR)))
 
       this.contract = data['contract']
+      console.log(this.contract);
+
       if (this.contract) {
         // import data
         this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT)
@@ -353,7 +355,7 @@ export class InternalContractPage implements OnInit {
   }
 
   checkLiquidation() {
-    const meetingStatus = this.contract?.appointments.pop()?.status
+    const meetingStatus = this.contract?.appointments[this.contract.appointments.length - 1]?.status
     return this.contract?.contractStatus === ContractStatus.WAITING_FOR_LIQUIDATION && this.isLeader && meetingStatus === MeetingStatus.FINISHED
   }
 
