@@ -125,6 +125,9 @@ export class InvestmentContractPage implements OnInit {
       this.contract = data['contract'];
       this.deal = data['deal'];
 
+      console.log(this.contract);
+
+
       if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;

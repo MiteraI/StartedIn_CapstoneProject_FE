@@ -137,6 +137,8 @@ export class InternalContractPage implements OnInit {
         .subscribe((response) => (this.memberList = response.filter((m) => m.roleInTeam !== TeamRole.INVESTOR)))
 
       this.contract = data['contract']
+      console.log(this.contract);
+
       if (this.contract) {
         // import data
         this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT)
