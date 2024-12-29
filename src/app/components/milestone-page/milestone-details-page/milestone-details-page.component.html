@@ -37,7 +37,7 @@
 
       <!-- Description Field -->
       <nz-form-item>
-        <nz-form-label>Nội dụng</nz-form-label>
+        <nz-form-label [nzRequired]="true">Nội dụng</nz-form-label>
         <nz-form-control>
           <editor [apiKey]="editorKey" [init]="init" formControlName="description" (onKeyUp)="handleInfoChanged()"></editor>
         </nz-form-control>
@@ -45,14 +45,14 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label>Ngày Bắt Đầu</nz-form-label>
+          <nz-form-label [nzRequired]="true">Ngày Bắt Đầu</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
             <nz-date-picker class="w-full" formControlName="startDate" nzPlaceHolder="Chọn ngày bắt đầu cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label>Ngày Kết Thúc</nz-form-label>
+          <nz-form-label [nzRequired]="true">Ngày Kết Thúc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
             <nz-date-picker class="w-full" formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc cột mốc" (ngModelChange)="handleInfoChanged()"></nz-date-picker>
           </nz-form-control>

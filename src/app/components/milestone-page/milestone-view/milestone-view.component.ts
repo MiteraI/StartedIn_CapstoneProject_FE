@@ -20,6 +20,8 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { CommonModule } from '@angular/common'
 import { HistorySidebarComponent } from 'src/app/layouts/history-sidebar/history-sidebar.component'
 import { MilestoneHistoryListComponent } from '../milestone-history-list/milestone-history-list.component'
+import { WebsocketService } from 'src/app/services/websocket.service'
+import { createData, deleteData, updateData } from 'src/app/core/util/websocket.utils'
 
 interface MilestoneFilterOptions {
   title?: string
@@ -65,7 +67,8 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     private milestoneService: MilestoneService,
     private antdNoti: AntdNotificationService,
     private scrollService: ScrollService,
-    private roleService: RoleInTeamService
+    private roleService: RoleInTeamService,
+    private websocketService: WebsocketService
   ) {}
 
   ngOnInit() {
@@ -75,6 +78,7 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     } else {
       this.size = 12
     }
+
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
       this.roleService.role$.subscribe((role) => {
@@ -82,13 +86,52 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
         this.isLeader = role === TeamRole.LEADER
       })
     })
+
     this.fetchMilestones(this.isDesktopView)
     this.scrollService.scroll$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadMore()
     })
-    this.milestoneService.refreshMilestone$.pipe().subscribe(() => {
-      this.fetchMilestones(this.isDesktopView)
-    })
+
+    this.websocketService.websocketData
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((data) => {
+          if (!data) return
+          if (!this.isMilestone(data.data)) {
+            return // Exit if not a Milestone type
+          }
+          switch (data.action) {
+            case 'create':
+              // chekc pagination is on final page and array length is not equal to size
+              if (this.page * this.size >= this.total && this.milestoneList.length < this.size) {
+                this.milestoneList = createData(this.milestoneList, data.data) as Milestone[]
+              } else if (!this.isDesktopView) {
+                // is mobile, simply append end
+                this.milestoneList = createData(this.milestoneList, data.data) as Milestone[]
+              }
+              break
+            case 'update':
+              // check if data.id exist on current array
+              if (this.milestoneList.find((item) => item.id === data.data.id)) {
+                this.milestoneList = updateData(this.milestoneList, data.data) as Milestone[]
+              }
+              break
+            case 'delete':
+              if (this.page * this.size >= this.total && this.milestoneList.length < this.size) {
+                this.milestoneList = deleteData(this.milestoneList, data.data.id) as Milestone[]
+              } else if (!this.isDesktopView) {
+                // is mobile, simply append end
+                this.milestoneList = deleteData(this.milestoneList, data.data.id) as Milestone[]
+              }
+              break
+          }
+        })
+      )
+      .subscribe()
+  }
+
+  isMilestone(data: any): data is Milestone {
+    return 'progress' in data
   }
 
   ngOnDestroy() {
@@ -115,11 +158,11 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchMilestones(isDesktop: boolean) {
+    this.isFetchAllMilestonesLoading = true
     this.milestoneService
       .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId)
       .pipe(
         takeUntil(this.destroy$),
-        tap(() => (this.isFetchAllMilestonesLoading = true)),
         finalize(() => (this.isFetchAllMilestonesLoading = false))
       )
       .subscribe({

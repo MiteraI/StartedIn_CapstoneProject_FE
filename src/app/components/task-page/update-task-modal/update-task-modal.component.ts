@@ -286,6 +286,7 @@ export class UpdateTaskModalComponent implements OnInit {
             this.taskForm.get('endDate')?.disable()
             this.taskForm.get('title')?.disable()
             this.taskForm.get('description')?.disable()
+            this.taskForm.get('priority')?.disable()
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -655,6 +656,7 @@ export class UpdateTaskModalComponent implements OnInit {
               this.taskForm.get('endDate')?.disable()
               this.taskForm.get('title')?.disable()
               this.taskForm.get('description')?.disable()
+              this.taskForm.get('priority')?.disable()
             }
           },
           error: (error: HttpErrorResponse) => {

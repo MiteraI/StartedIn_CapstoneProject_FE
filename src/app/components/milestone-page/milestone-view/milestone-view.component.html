@@ -33,10 +33,17 @@
   </ng-template>
 </app-history-sidebar>
 } @else {
-<div class="overflow-y-auto">
-  <div (click)="openCreateTaskModal()" class="flex justify-center items-center absolute right-7 bottom-7 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
-    <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
-  </div>
-  <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllMilestonesLoading" [isLeader]="isLeader"></app-milestone-list>
-</div>
+<app-history-sidebar [isCollapsed]="isHistoryCollasped" (isCollapsedEmit)="isHistoryCollasped = $event">
+  <ng-template #mainContent>
+    <div class="overflow-y-auto w-full">
+      <div (click)="openCreateTaskModal()" class="flex justify-center items-center fixed right-7 bottom-20 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+        <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
+      </div>
+      <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllMilestonesLoading" [isLeader]="isLeader"></app-milestone-list>
+    </div>
+  </ng-template>
+  <ng-template #drawerContent>
+    <app-milestone-history-list [projectId]="projectId" [isCollasped]="isHistoryCollasped"></app-milestone-history-list>
+  </ng-template>
+</app-history-sidebar>
 }

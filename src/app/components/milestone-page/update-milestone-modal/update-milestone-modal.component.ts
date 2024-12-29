@@ -44,7 +44,7 @@ interface IModalData {
     NzSpinModule,
     NzPopconfirmModule,
     NzIconModule,
-    EditorModule
+    EditorModule,
   ],
 })
 export class UpdateMilestoneModalComponent implements OnInit {
@@ -69,8 +69,7 @@ export class UpdateMilestoneModalComponent implements OnInit {
   init: EditorComponent['init'] = {
     plugins: 'lists link code help wordcount image',
     toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-    setup: () => {
-    },
+    setup: () => {},
   }
 
   constructor(
@@ -107,7 +106,6 @@ export class UpdateMilestoneModalComponent implements OnInit {
       this.milestoneService.updateMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId, milestone).subscribe({
         next: (response) => {
           this.antdNoti.openSuccessNotification('Cập Nhật Cột Mốc Thành Công', '')
-          this.milestoneService.refreshMilestone$.next(true)
           this.nzModalRef.close()
         },
         error: (error: HttpErrorResponse) => {
@@ -162,7 +160,6 @@ export class UpdateMilestoneModalComponent implements OnInit {
     this.milestoneService.deleteMilestone(this.nzModalData.projectId, this.nzModalData.milestoneId).subscribe({
       next: (response) => {
         this.antdNoti.openSuccessNotification('Xóa Cột Mốc Thành Công', '')
-        this.milestoneService.refreshMilestone$.next(true)
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
