@@ -16,12 +16,16 @@ import { AssetStatus, AssetStatusLabels } from 'src/app/shared/enums/asset-statu
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { AssetModel } from 'src/app/shared/models/asset/asset.model';
+import { MatIconModule } from '@angular/material/icon';
+import { TransactionModel } from 'src/app/shared/models/transaction/transaction.model';
+import { Router } from '@angular/router';
 
 interface IModalData {
   assetId: string
   projectId: string
   quantity: number
   remainQuantity: number
+  editable?: boolean
 }
 
 @Component({
@@ -41,7 +45,8 @@ interface IModalData {
     NzSpinModule,
     DatePipe,
     VndCurrencyPipe,
-    CommonModule
+    CommonModule,
+    MatIconModule
   ]
 })
 
@@ -58,12 +63,14 @@ export class UpdateAssetModalComponent  implements OnInit {
   assetForm: FormGroup
   isFetchAssetDetailLoading = false
   asset!: AssetModel;
+  buyTransaction?: TransactionModel
 
   constructor(
     private fb: FormBuilder,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef,
     private assetService: AssetService,
+    private router: Router
   ) {
     this.assetForm = this.fb.group({
       remainQuantity: [0, [Validators.required, Validators.min(0), Validators.max(this.nzModalData.remainQuantity)]],
@@ -104,7 +111,6 @@ export class UpdateAssetModalComponent  implements OnInit {
       .subscribe({
         next: (response) => {
           this.asset = response;
-          console.log(response);
           this.assetForm.patchValue({
             remainQuantity: response.remainQuantity,
             status: response.status
@@ -126,6 +132,12 @@ export class UpdateAssetModalComponent  implements OnInit {
             }
           });
 
+          this.buyTransaction = this.asset.transactions
+            .find(transaction => this.extractTransactionInfo(transaction.content).quantity === 0)
+
+          this.asset.transactions = this.asset.transactions
+            .filter(transaction => this.extractTransactionInfo(transaction.content).quantity !== 0)
+
           this.isFetchAssetDetailLoading = false;
         },
         error: (error) => {
@@ -133,5 +145,25 @@ export class UpdateAssetModalComponent  implements OnInit {
           this.nzModalRef.close();
         },
       });
+  }
+
+  extractTransactionInfo(content: string) {
+    const quantityMatch = content.match(/Số lượng: (\d+)/);
+    const priceMatch = content.match(/Đơn giá: (\d+)/);
+
+    return {
+      quantity: quantityMatch ? parseInt(quantityMatch[1]) : 0,
+      unitPrice: priceMatch ? parseInt(priceMatch[1]) : 0
+    };
+  }
+
+  navigateToBuyTransaction() {
+    this.router.navigate([
+      '/projects',
+      this.nzModalData.projectId,
+      'transactions',
+      this.buyTransaction?.id
+    ])
+    this.nzModalRef.close()
   }
 }

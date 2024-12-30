@@ -77,8 +77,16 @@
     <nz-form-label [nzSpan]="24">Lọc theo thời gian tạo</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <div class="flex gap-2">
-        <nz-date-picker formControlName="startDate" [nzShowTime]="false" nzPlaceHolder="Từ ngày"> </nz-date-picker>
-        <nz-date-picker formControlName="endDate" [nzShowTime]="false" nzPlaceHolder="Đến ngày"> </nz-date-picker>
+        <nz-date-picker
+          formControlName="startDate"
+          nzPlaceHolder="Từ ngày"
+          nzFormat="dd/MM/yyyy"
+        ></nz-date-picker>
+        <nz-date-picker
+          formControlName="endDate"
+          nzPlaceHolder="Đến ngày"
+          nzFormat="dd/MM/yyyy"
+        ></nz-date-picker>
       </div>
     </nz-form-control>
   </nz-form-item>

@@ -69,7 +69,6 @@ export class RequestApprovalModalComponent implements OnInit {
       valuePerPercentage: [1000, [Validators.required]],
       equityShareCall: [1, [Validators.required]],
       endDate: [null, [Validators.required]],
-      companyIdNumber: [null,[Validators.pattern(/^[0-9]{10}$/)]],
     })
     this.remainingEquityShare = this.nzModalData.currentProject.remainingPercentOfShares
   }
@@ -136,7 +135,6 @@ export class RequestApprovalModalComponent implements OnInit {
       formData.append('ValuePerPercentage', this.approvalRequestForm.get('valuePerPercentage')?.value);
       formData.append('EquityShareCall', this.approvalRequestForm.get('equityShareCall')?.value);
       formData.append('EndDate', endDate || null);
-      formData.append('CompanyIdNumber',this.approvalRequestForm.get('companyIdNumber')?.value)
       
       this.projectApprovalService.requestApproval(this.projectId, formData).subscribe({
         next: (response) => {

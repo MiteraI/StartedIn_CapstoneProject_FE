@@ -38,14 +38,14 @@ export class AdminProjectDetailPage implements OnInit {
       this.notification.warning('Invalid Action', 'Approval details are missing.', { nzDuration: 3000 });
       return;
     }
-  
+
     // Proceed with creating the modal
     this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',
       nzContent: AdminApprovalModalComponent,
       nzData: { approval },
       nzFooter: null,
-      nzWidth: '800px',
+      nzWidth: 800,
     });
   }
 

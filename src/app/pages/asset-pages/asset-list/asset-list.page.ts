@@ -211,17 +211,22 @@ export class AssetListPage implements OnInit, OnDestroy {
     })
   }
 
-  openUpdateAssetModel(asset: AssetModel) {
+  openUpdateAssetModel(asset: AssetModel, editable?: boolean) {
     const modalRef = this.modalService.create({
       nzTitle: 'Thông tin tài sản',
       nzStyle: { top: '20px' },
-      nzBodyStyle: { padding: '0px' },
+      nzBodyStyle: {
+        padding: '0px',
+        maxHeight: '80vh',
+        overflowY: 'auto'
+      },
       nzContent: UpdateAssetModalComponent,
       nzData: {
         assetId: asset.id,
         projectId: this.projectId,
         quantity: asset.quantity,
-        remainQuantity: asset.remainQuantity
+        remainQuantity: asset.remainQuantity,
+        editable: editable
       },
       nzFooter: null,
     })

@@ -73,11 +73,9 @@ export class InvestmentCallTableComponent {
               this.notification.error("Lỗi", "Chấp nhận thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
-            
           )
           .subscribe(() => {
             this.notification.success("Thành công", "Chấp nhận thỏa thuận thành công!", { nzDuration: 2000 });
-            data = { ...data!, dealStatus: DealStatus.ACCEPTED };
             this.refreshNeeded.emit();
           });
       }
@@ -101,7 +99,6 @@ export class InvestmentCallTableComponent {
           )
           .subscribe(() => {
             this.notification.success("Thành công", "Từ chối thỏa thuận thành công!", { nzDuration: 2000 });
-            data = { ...data, dealStatus: DealStatus.REJECTED };
             this.refreshNeeded.emit();
           });
       }
@@ -117,7 +114,7 @@ export class InvestmentCallTableComponent {
       queryParams: { dealId: deal.id }
     });
   }
-  
+
   truncateText(text: string, maxLength: number): string {
     return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
   }

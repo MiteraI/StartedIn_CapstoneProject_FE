@@ -39,13 +39,6 @@
 
         </div>
         <div>
-          <div>
-            <p class="text-lg font-semibold text-gray-600">
-              <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
-              Mã số doanh nghiệp:
-            </p>
-            <p class="text-xl text-gray-800">{{ approvalData.companyIdNumber || 'Không có' }}</p>
-          </div>
           <p class="text-lg font-semibold text-gray-600">Trạng thái:</p>
           <nz-tag [nzColor]="getStatusColor(approvalData.status)" class="text-lg font-semibold">
             {{ ProjectApprovalStatusLabel[approvalData.status] }}

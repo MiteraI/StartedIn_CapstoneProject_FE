@@ -70,9 +70,9 @@ export class ProjectSideNavComponent implements OnInit, OnDestroy {
     hide?: boolean
   }[] = [
     { linkName: 'dashboard', iconName: 'dashboard', linkText: 'Dashboard' },
-    { linkName: 'charter', iconName: 'info', linkText: 'Tuyên ngôn' },
-    { linkName: 'members', iconName: 'group', linkText: 'Thành viên' },
-    { linkName: 'project-detail', iconName: 'description', linkText: 'Miêu tả' },
+    { linkName: 'charter', iconName: 'info', linkText: 'Tuyên Ngôn' },
+    { linkName: 'members', iconName: 'group', linkText: 'Thành Viên' },
+    { linkName: 'project-detail', iconName: 'description', linkText: 'Miêu Tả' },
   ]
 
   projectSideNavLinks: {

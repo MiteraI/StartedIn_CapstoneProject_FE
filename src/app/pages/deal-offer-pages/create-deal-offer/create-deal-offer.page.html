@@ -1,6 +1,6 @@
-<div class="max-w-4xl mx-auto p-6">
+<div class="max-w-7xl mx-auto p-6">
   <!-- Project Info Section -->
-  <div class="mb-8 bg-white rounded-lg shadow-sm p-6">
+  <div class="mb-8 bg-white rounded-lg shadow-sm p-6 md:mx-4">
     <div class="flex items-center gap-4">
       <img
         [src]="projectInfo.logoUrl"
@@ -21,9 +21,9 @@
   <form
     [formGroup]="dealOfferForm"
     (ngSubmit)="onSubmit()"
-    class="max-w-3xl mx-auto my-4 px-0 md:px-4 py-0"
+    class="mx-auto my-4 md:px-4"
   >
-    <div class="p-4 md:p-8 bg-white rounded border">
+    <div class="p-4 md:p-8 bg-white rounded-lg border">
       <div class="text-2xl font-medium mb-6">Tạo thỏa thuận đầu tư</div>
 
       <nz-form-item>
@@ -61,12 +61,11 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="24">Điều khoản</nz-form-label>
         <nz-form-control [nzSpan]="24" nzErrorTip="Bạn chưa nhập điều khoản!">
-          <textarea
-            nz-input
-            formControlName="termCondition"
-            placeholder="Nhập điều khoản"
-            [nzAutosize]="{ minRows: 8, maxRows: 12 }"
-          ></textarea>
+          <editor
+            [apiKey]="editorKey"
+            [init]="init"
+            formControlName="termCondition">
+          </editor>
         </nz-form-control>
       </nz-form-item>
 

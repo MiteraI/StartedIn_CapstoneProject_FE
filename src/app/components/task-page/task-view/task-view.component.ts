@@ -81,8 +81,9 @@ export class TaskViewComponent implements OnInit, OnDestroy {
   openCreateTaskModal() {
     const modalRef = this.modalService.create({
       nzTitle: 'Tác Vụ Mới',
-      nzStyle: { top: '20px' },
+      nzStyle: { top: '20px', maxWidth: '800px' },
       nzBodyStyle: { padding: '0px' },
+      nzWidth: '90vw',
       nzContent: CreateTaskModalComponent,
       nzData: {
         projectId: this.projectId,
@@ -180,7 +181,7 @@ export class TaskViewComponent implements OnInit, OnDestroy {
     this.websocketService.websocketData
       .pipe(
         takeUntil(this.destroy$),
-        tap((data) => {          
+        tap((data) => {
           if (!data) return
           if (!this.isTask(data.data)) {
             return // Exit if not a Task type

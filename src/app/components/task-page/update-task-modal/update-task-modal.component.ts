@@ -719,7 +719,7 @@ export class UpdateTaskModalComponent implements OnInit {
     const modalRef = this.modalService.create({
       nzTitle: this.actualEndDate ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm',
       nzContent: LogTaskModalComponent,
-      nzWidth: '600px',
+      nzWidth: 600,
       nzBodyStyle: { padding: '0px' },
       nzData: {
         taskId: this.nzModalData.taskId,
