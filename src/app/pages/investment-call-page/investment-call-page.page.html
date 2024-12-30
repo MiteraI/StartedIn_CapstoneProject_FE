@@ -26,6 +26,7 @@
     *ngIf="!isLoading"
     [projectId]="projectId"
     [listInvestmentCall]="listInvestmentCall"
+    (refreshNeeded)="filterInvestmentCalls()"
   ></app-investment-call-table>
   <div *ngIf="!isLoading" class="hidden md:flex justify-end mt-4">
     <nz-pagination

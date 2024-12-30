@@ -1,62 +1,60 @@
 <app-contract-history-sidebar *ngIf="contract" [contractId]="contract.id" [projectId]="project.id">
-  <div class="max-w-3xl mx-auto md:my-4 md:px-4">
+  <div class="max-w-7xl mx-auto md:my-4 md:px-4">
     <div class="p-4 md:p-8 bg-white rounded border">
       <div class="font-bold text-3xl text-black mb-6 flex justify-center">Chi tiết biên bản</div>
-      <div class="max-w-2xl mx-auto overflow-hidden">
-        <!-- Project Name -->
-        <div class="flex items-center justify-center text-xl text-gray-800 bg-blue-50 p-2 rounded mb-4">
-          <span class="font-bold">Dự án:</span>
-          <span class="ml-2">{{ contract.projectName }}</span>
+      <!-- Project Name -->
+      <div class="flex items-center justify-center text-xl text-gray-800 bg-blue-50 p-2 rounded mb-4">
+        <span class="font-bold">Dự án:</span>
+        <span class="ml-2">{{ contract.projectName }}</span>
+      </div>
+
+      <!-- Contract Details -->
+      <div class="px-2 md:px-6">
+        <!-- Contract Name -->
+        <div class="text-xl font-medium py-2">
+          Biên bản thanh lý cho hợp đồng
+          <a
+            class="inline-block font-black hover:text-purple-500"
+            (click)="navigateToParentContract(contract)"
+          >
+            {{ getParentContractNumber() }}
+          </a>
         </div>
 
-        <!-- Contract Details -->
-        <div class="px-2 md:px-6">
-          <!-- Contract Name -->
-          <div class="text-xl font-medium py-2">
-            Biên bản thanh lý cho hợp đồng
-            <a
-              class="inline-block font-black hover:text-purple-500"
-              (click)="navigateToParentContract(contract)"
-            >
-              {{ getParentContractNumber() }}
-            </a>
+        <!-- Contract ID Number -->
+        <div class="mt-2">
+          <div class="flex items-center">
+            <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
+            <span class="font-semibold text-gray-700">Mã số</span>
           </div>
-
-          <!-- Contract ID Number -->
-          <div class="mt-2">
-            <div class="flex items-center">
-              <mat-icon fontIcon="numbers" class="text-gray-600 mr-2"></mat-icon>
-              <span class="font-semibold text-gray-700">Mã số</span>
-            </div>
-            <div class="text-gray-800 ml-8">
-              {{ contract.contractIdNumber || 'Không có dữ liệu' }}
-            </div>
+          <div class="text-gray-800 ml-8">
+            {{ contract.contractIdNumber || 'Không có dữ liệu' }}
           </div>
+        </div>
 
-          <!-- Parent Contract ID Number -->
-          <div class="mt-2">
-            <div class="flex items-center">
-              <mat-icon fontIcon="insert_page_break" class="text-gray-600 mr-2"></mat-icon>
-              <span class="font-semibold text-gray-700">Hợp đồng gốc</span>
-            </div>
-            <div
-              class="text-gray-800 ml-8 flex items-center hover:text-blue-500 transition-colors cursor-pointer"
-              (click)="navigateToParentContract(contract)"
-            >
-              Hợp đồng số {{ getParentContractNumber() }}
-              <mat-icon fontIcon="info" class="ml-1 scale-75 text-blue-500"></mat-icon>
-            </div>
+        <!-- Parent Contract ID Number -->
+        <div class="mt-2">
+          <div class="flex items-center">
+            <mat-icon fontIcon="insert_page_break" class="text-gray-600 mr-2"></mat-icon>
+            <span class="font-semibold text-gray-700">Hợp đồng gốc</span>
           </div>
+          <div
+            class="text-gray-800 ml-8 flex items-center hover:text-blue-500 transition-colors cursor-pointer"
+            (click)="navigateToParentContract(contract)"
+          >
+            Hợp đồng số {{ getParentContractNumber() }}
+            <mat-icon fontIcon="info" class="ml-1 scale-75 text-blue-500"></mat-icon>
+          </div>
+        </div>
 
-          <!-- Contract Policy -->
-          <div class="mt-2">
-            <div class="flex items-center">
-              <mat-icon fontIcon="policy" class="text-gray-600 mr-2"></mat-icon>
-              <span class="font-semibold text-gray-700">Điều khoản</span>
-            </div>
-            <div class="text-gray-800 ml-8">
-              {{ contract.contractPolicy || 'Không có điều khoản' }}
-            </div>
+        <!-- Contract Policy -->
+        <div class="mt-2">
+          <div class="flex items-center">
+            <mat-icon fontIcon="policy" class="text-gray-600 mr-2"></mat-icon>
+            <span class="font-semibold text-gray-700">Điều khoản</span>
+          </div>
+          <div class="text-gray-800 ml-8">
+            {{ contract.contractPolicy || 'Không có điều khoản' }}
           </div>
         </div>
       </div>

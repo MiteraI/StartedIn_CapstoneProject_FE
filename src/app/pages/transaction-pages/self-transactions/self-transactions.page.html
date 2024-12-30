@@ -74,14 +74,14 @@
         class="flex items-center px-4 py-2 border-b-2 font-medium text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
         (click)="typeFilter = transactionTypes.ASSET_LIQUIDATION; applyTypeFilters()"
       >
-        <mat-icon fontIcon="insert_page_break"></mat-icon>
+        <mat-icon fontIcon="sell"></mat-icon>
         <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_LIQUIDATION] }}</span>
       </a>
       <a
         *ngIf="typeFilter === transactionTypes.ASSET_LIQUIDATION"
         class="flex items-center px-4 py-2 border-b-2 border-green-500 font-medium text-green-600"
       >
-        <mat-icon fontIcon="insert_page_break"></mat-icon>
+        <mat-icon fontIcon="sell"></mat-icon>
         <span class="hidden md:inline ml-1">{{ typeLabels[transactionTypes.ASSET_LIQUIDATION] }}</span>
       </a>
 
@@ -131,6 +131,7 @@
                 [fontIcon]="
                   transaction.type === transactionTypes.DISBURSEMENT ? 'account_balance_icon' :
                   transaction.type === transactionTypes.ASSET_EXPENSE ? 'inventory_icon' :
+                  transaction.type === transactionTypes.ASSET_LIQUIDATION ? 'sell' :
                   'swap_horiz'
                 "
               ></mat-icon>

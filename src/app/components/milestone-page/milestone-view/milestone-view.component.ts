@@ -139,11 +139,12 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
-  openCreateTaskModal() {
+  openCreateMilestoneModal() {
     const modalRef = this.modalService.create({
       nzTitle: 'Cột Mốc Mới',
-      nzStyle: { top: '20px' },
+      nzStyle: { top: '20px', maxWidth: '800px' },
       nzBodyStyle: { padding: '0px' },
+      nzWidth: '90vw',
       nzContent: CreateMilestoneModalComponent,
       nzData: {
         projectId: this.projectId,

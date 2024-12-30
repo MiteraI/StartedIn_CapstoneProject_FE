@@ -30,7 +30,11 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu và kết thúc">
-      <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate"></nz-date-picker>
+      <nz-date-picker
+        formControlName="startDate"
+        [nzDisabledDate]="disabledStartDate"
+        nzFormat="dd/MM/yyyy"
+      ></nz-date-picker>
     </nz-form-control>
   </nz-form-item>
 
@@ -38,7 +42,11 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">Ngày Kết thúc</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate"></nz-date-picker>
+      <nz-date-picker
+        formControlName="endDate"
+        [nzDisabledDate]="disabledEndDate"
+        nzFormat="dd/MM/yyyy"
+      ></nz-date-picker>
     </nz-form-control>
   </nz-form-item>
 

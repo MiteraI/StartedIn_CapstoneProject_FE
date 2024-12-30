@@ -13,16 +13,46 @@
       <div class="flex items-center space-x-8">
         @if (!isAdmin)
         {
-            <a routerLink="/projects" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Dự án </a>
-            @if (isInvestor) {
-            <a routerLink="/explore" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Khám phá </a>
-            <a routerLink="/disbursements/overview" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Giải ngân </a>
-            <a routerLink="/deals" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Thỏa thuận </a>
-            } @else {
-            <a routerLink="/team-explore" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Tìm nhóm </a>
-            } <a routerLink="/about-us" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"> Về chúng tôi </a>
+          <a
+            routerLink="/projects"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Dự án
+          </a>
+          @if (isInvestor) {
+          <a
+            routerLink="/disbursements/overview"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Giải ngân
+          </a>
+          <a
+            routerLink="/deals"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Thỏa thuận
+          </a>
+          } @else {
+          <a
+            routerLink="/team-explore"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Tìm nhóm
+          </a>
+          }
+          <!-- <a
+            routerLink="/about-us"
+            routerLinkActive="text-purple-600"
+            class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
+          >
+            Về chúng tôi
+          </a> -->
         }
-      </div>  
+      </div>
 
       <!-- Profile Dropdown -->
       <div class="flex items-center">

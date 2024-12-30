@@ -19,7 +19,7 @@
       <nz-form-label>Cột Mốc</nz-form-label>
       <nz-form-control>
         <nz-select [nzLoading]="loadingMilestones" formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
-          <nz-option nzLabel="Không có" [nzValue]="0"></nz-option>
+          <nz-option nzLabel="Không có" nzValue=""></nz-option>
           @for (milestone of milestones; track $index) {
           <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
           }
@@ -49,6 +49,7 @@
             formControlName="appointmentTime"
             [nzDisabledDate]="disabledDate"
             [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            nzFormat="dd/MM/yyyy hh:mm"
             placeholder="Chọn ngày và giờ"
             class="rounded-lg w-full"
           ></nz-date-picker>
@@ -66,6 +67,7 @@
             [nzDisabledDate]="disabledEndDate"
             [nzDisabledTime]="disabledEndTime"
             [nzShowTime]="{ nzFormat: 'HH:mm' }"
+            nzFormat="dd/MM/yyyy hh:mm"
             placeholder="Chọn ngày và giờ"
             class="rounded-lg w-full"
           ></nz-date-picker>

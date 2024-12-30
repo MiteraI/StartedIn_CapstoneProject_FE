@@ -33,7 +33,12 @@
     <nz-form-item>
       <nz-form-label [nzRequired]="true">Ngày kết thúc</nz-form-label>
       <nz-form-control>
-        <nz-date-picker formControlName="endDate" nzPlaceHolder="Chọn ngày kết thúc" [nzDisabledDate]="disabledEndDate"></nz-date-picker>
+        <nz-date-picker
+          formControlName="endDate"
+          nzPlaceHolder="Chọn ngày kết thúc"
+          [nzDisabledDate]="disabledEndDate"
+          nzFormat="dd/MM/yyyy"
+        ></nz-date-picker>
       </nz-form-control>
     </nz-form-item>
   </div>

@@ -28,8 +28,8 @@ import { TaskStatus } from 'src/app/shared/enums/task-status.enum';
     ViewTitleBarComponent,
     NzTableModule,
     NzSpinModule,
-    MatIconModule, 
-    NzButtonModule, 
+    MatIconModule,
+    NzButtonModule,
     NzModalModule]
 })
 export class DashboardPage implements OnInit {
@@ -67,7 +67,7 @@ export class DashboardPage implements OnInit {
   getAssigneeNames(task: any): string {
     return task.assignees && task.assignees.length > 0
       ? task.assignees
-          .map((assignee: any) => 
+          .map((assignee: any) =>
             `${assignee.fullName} (${assignee.actualManHour ? `${assignee.actualManHour} giờ` : 'N/A'})`
           )
           .join(', ')
@@ -80,7 +80,7 @@ export class DashboardPage implements OnInit {
       task.forEach(t => {
         completedCount++;
       });
-    } 
+    }
     return completedCount;
   }
 
@@ -213,7 +213,7 @@ export class DashboardPage implements OnInit {
       nzContent: RequestApprovalModalComponent,
       nzData: { projectId: this.projectId },
       nzFooter: null,
-      nzWidth: '800px',
+      nzWidth: 800,
     })
   }
 }
