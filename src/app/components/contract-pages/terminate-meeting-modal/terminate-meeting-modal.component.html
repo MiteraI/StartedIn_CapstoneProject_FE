@@ -1,6 +1,6 @@
 <!-- Form -->
 <form nz-form [formGroup]="meetingForm" (ngSubmit)="submit()" nzLayout="vertical">
-  <div class="text-gray-500 mb-4">Bạn sẽ cần phải tổ chức một cuộc họp với các bên liên quan khác để thanh lý hợp đồng</div>
+  <div class="text-gray-500 mb-4 text-xs">Bạn sẽ cần phải tổ chức một cuộc họp với các bên liên quan khác để thanh lý hợp đồng</div>
   <div *ngIf="data.request" class="mb-4">
     <div class="flex items-center">
       <mat-icon fontIcon="description" class="text-gray-600 mr-2"></mat-icon>
@@ -10,9 +10,12 @@
       {{ data.request.reason || 'Không có lý do' }}
     </div>
   </div>
+
+  <div class="text-base md:text-lg font-bold mb-4">Thông tin cuộc họp kết thúc hợp đồng</div>
+
   <!-- Title -->
   <nz-form-item>
-    <nz-form-label nzRequired>Tiêu đề</nz-form-label>
+    <nz-form-label nzRequired>Tiêu đề cuộc họp kết thúc hợp đồng</nz-form-label>
     <nz-form-control nzErrorTip="Vui lòng nhập tiêu đề">
       <nz-input-group>
         <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc họp"/>
@@ -22,7 +25,7 @@
 
   <!-- Appointment Time -->
   <nz-form-item>
-    <nz-form-label nzRequired>Ngày họp</nz-form-label>
+    <nz-form-label nzRequired>Ngày họp kết thúc hợp đồng</nz-form-label>
     <nz-form-control nzErrorTip="Vui lòng chọn ngày">
       <nz-input-group>
         <nz-date-picker
@@ -38,7 +41,7 @@
 
   <!-- Meeting Link -->
   <nz-form-item>
-    <nz-form-label nzRequired>Link cuộc họp</nz-form-label>
+    <nz-form-label nzRequired>Link cuộc họp kết thúc hợp đồng</nz-form-label>
     <nz-form-control [nzErrorTip]="meetingForm.get('meetingLink')?.hasError('required') ? 'Vui lòng nhập link' : 'Link không hợp lệ'">
       <nz-input-group>
         <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/abc-defg-hij" />
@@ -48,7 +51,7 @@
 
   <!-- Description -->
   <nz-form-item>
-    <nz-form-label>Thông tin buổi họp</nz-form-label>
+    <nz-form-label>Thông tin buổi họp kết thúc hợp đồng</nz-form-label>
     <nz-form-control>
       <div class="flex items-start relative">
         <!-- Textarea -->
