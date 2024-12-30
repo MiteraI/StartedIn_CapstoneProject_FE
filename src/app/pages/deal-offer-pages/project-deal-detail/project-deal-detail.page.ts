@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
@@ -28,7 +28,8 @@ export class ProjectDealDetailPage implements OnInit {
     private router: Router,
     private modalService: NzModalService,
     private dealOfferService: DealOfferService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -88,5 +89,9 @@ export class ProjectDealDetailPage implements OnInit {
     this.router.navigate(['projects', this.projectId, 'create-investment-contract'], {
       queryParams: { dealId: this.deal?.id }
     });
+  }
+
+  goBack(): void {
+    this.location.back(); // Navigate to the previous page
   }
 }

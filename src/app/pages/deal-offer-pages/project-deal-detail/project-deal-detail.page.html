@@ -1,6 +1,6 @@
 <div class="max-w-7xl px-8 mx-auto my-12 space-y-8">
   <!-- Card Content -->
-  <div class="rounded-lg shadow-lg border border-gray-300">
+  <div class="rounded-lg shadow-lg border border-gray-300 bg-white">
     <!-- Header -->
     <div class="py-6 px-8 border-b border-gray-300">
       <div class="flex justify-between items-center">
@@ -19,7 +19,7 @@
     </div>
 
     <!-- Card Body -->
-    <div class="py-8 px-10 space-y-8">
+    <div class="py-8 px-10 space-y-8 border-b border-gray-300">
       <!-- Details Section -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
         <div>
@@ -41,7 +41,7 @@
       <!-- Terms and Conditions Section -->
       <div>
         <div class="text-gray-500 text-sm uppercase">Điều khoản</div>
-        <div class="mt-4 whitespace-pre-wrap text-gray-800 text-base">{{ deal.termCondition }}</div>
+        <div class="mt-4 text-gray-800 text-base" [innerHTML]="deal.termCondition"></div>
       </div>
 
       <!-- Action Buttons -->
@@ -68,6 +68,15 @@
           Tạo hợp đồng
         </button>
       </div>
+    </div>
+
+
+    <div class="flex justify-end">
+      <button
+        (click)="goBack()"
+        class="text-blue-500 hover:text-blue-700 px-8 py-3">
+        Quay lại
+      </button>
     </div>
   </div>
 </div>

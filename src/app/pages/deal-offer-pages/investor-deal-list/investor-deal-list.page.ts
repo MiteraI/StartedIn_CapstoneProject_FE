@@ -10,13 +10,12 @@ import { SearchResponseModel } from 'src/app/shared/models/search-response.model
 import { DealOfferService } from 'src/app/services/deal-offer.service';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
-import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service';
 
 interface FilterOptions {
   projectName?: string;
@@ -40,7 +39,8 @@ interface FilterOptions {
     VndCurrencyPipe,
     MatIconModule,
     NzPaginationModule,
-    NzSpinModule
+    NzSpinModule,
+    RouterModule
   ]
 })
 export class InvestorDealListPage implements OnInit, OnDestroy {

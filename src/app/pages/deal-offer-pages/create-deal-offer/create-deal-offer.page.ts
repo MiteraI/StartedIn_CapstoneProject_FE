@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
 import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overview.model';
 import { CommonModule } from '@angular/common';
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
 
 
 @Component({
@@ -27,7 +29,8 @@ import { CommonModule } from '@angular/common';
     NzFormModule,
     NzInputModule,
     NzInputNumberModule,
-    CommonModule
+    CommonModule,
+    EditorModule
   ]
 })
 export class CreateDealOfferPage implements OnInit {
@@ -41,6 +44,14 @@ export class CreateDealOfferPage implements OnInit {
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
   isLoading = false;
+
+  // Add editor configuration
+  editorKey = EDITOR_KEY;
+  init: EditorComponent['init'] = {
+    branding: false,
+    plugins: 'lists link code help wordcount',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help'
+  };
 
   constructor(
     private route: ActivatedRoute,
