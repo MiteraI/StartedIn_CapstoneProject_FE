@@ -16,13 +16,13 @@
       <div class="overflow-y-auto h-full" (scroll)="onScroll($event)">
         @for (post of recruitmentPostList; track post.id) {
         <app-recruitment-post-card [currrrentPostId]="currentPostId" [recruitmentPost]="post" (onPostSelected)="onPostSelected($event)"></app-recruitment-post-card>
-        } @if (isEndOfList) {
+        } @if (isEndOfList || !isLoading) {
         <p class="py-12 text-sm text-center">Bạn đã xem hết danh sách</p>
         }
       </div>
       }
     </mat-drawer>
-    <mat-drawer-content style="background-color: white; display: flex; height: 100%;">
+    <mat-drawer-content style="background-color: white; display: flex; height: 100%">
       @if (isCollapsed) {
       <div class="h-full w-[50px]">
         <button (click)="toggleSidebar()" class="p-2 mx-1 my-2 flex items-center rounded-full bg-slate-100 hover:bg-slate-200">
@@ -36,10 +36,14 @@
 </div>
 } @else {
 <div class="overflow-y-auto h-full" (scroll)="onScroll($event)">
-  @for (post of recruitmentPostList; track post.id) {
+  @if (isLoading) {
+  <div class="flex justify-center items-center h-full w-full">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+  } @else { @for (post of recruitmentPostList; track post.id) {
   <app-recruitment-post-card [recruitmentPost]="post" (onPostSelected)="onPostSelected($event)"></app-recruitment-post-card>
-  } @if (isEndOfList) {
+  } @if (isEndOfList || !isLoading) {
   <p class="py-12 text-sm text-center">Bạn đã xem hết danh sách</p>
-  }
+  } }
 </div>
 }

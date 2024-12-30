@@ -75,6 +75,7 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
   }
 
   private fetchRecruitmentPosts() {
+    this.isLoading = true
     this.recruitmentService
       .getExploreTeamRecruitmentPosts(this.page, this.size)
       .pipe(
