@@ -22,6 +22,7 @@ export class ProjectDealDetailPage implements OnInit {
   projectId!: string;
   dealStatuses = DealStatus;
   statusLabels = DealStatusLabels;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,14 +48,17 @@ export class ProjectDealDetailPage implements OnInit {
       nzOkType: 'primary',
       nzCancelText: 'Hủy',
       nzOnOk: () => {
+        this.isLoading = true;
         this.dealOfferService.acceptDeal(this.deal!.id, this.projectId)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Chấp nhận thỏa thuận thất bại!", { nzDuration: 2000 });
+              this.isLoading = false;
+              this.notification.error("Lỗi", error.error || "Chấp nhận thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
           .subscribe(() => {
+            this.isLoading = false;
             this.notification.success("Thành công", "Chấp nhận thỏa thuận thành công!", { nzDuration: 2000 });
             this.deal = { ...this.deal!, dealStatus: DealStatus.ACCEPTED };
           });
@@ -70,14 +74,17 @@ export class ProjectDealDetailPage implements OnInit {
       nzCancelText: 'Hủy',
       nzOkDanger: true,
       nzOnOk: () => {
+        this.isLoading = true;
         this.dealOfferService.rejectDeal(this.deal!.id, this.projectId)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Từ chối thỏa thuận thất bại!", { nzDuration: 2000 });
+              this.isLoading = false;
+              this.notification.error("Lỗi", error.error || "Từ chối thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
           .subscribe(() => {
+            this.isLoading = false;
             this.notification.success("Thành công", "Từ chối thỏa thuận thành công!", { nzDuration: 2000 });
             this.deal = { ...this.deal!, dealStatus: DealStatus.REJECTED };
           });

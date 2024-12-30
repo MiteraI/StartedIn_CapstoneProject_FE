@@ -14,7 +14,7 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
-  <div *ngIf="assets.length === 0" class="text-center text-gray-500 py-4">
+  <div *ngIf="!isLoading && assets.length === 0" class="text-center text-gray-500 py-4">
     Không có tài sản nào!
   </div>
 
@@ -39,21 +39,22 @@
         <th class="p-4 text-center">Giá</th>
         <th class="p-4 text-center">Ngày mua</th>
         <th class="p-4 text-center">Trạng thái</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let asset of assets" class="border-b hover:bg-gray-50 cursor-pointer">
         <td class="p-4 text-center">
-          <div class="font-medium hover:font-bold">{{asset.assetName}}</div>
+          <div class="font-medium hover:font-bold">{{ asset.assetName }}</div>
         </td>
         <td class="p-4 text-center">
-          <div class="text-gray-600">{{asset.serialNumber}}</div>
+          <div class="text-gray-600">{{ asset.serialNumber }}</div>
         </td>
         <td class="p-4 text-center">
-          <div class="text-gray-600 flex justify-center">{{asset.quantity}}</div>
+          <div class="text-gray-600 flex justify-center">{{ asset.quantity }}</div>
         </td>
         <td class="p-4 text-center">
-          <div class="text-gray-600 flex justify-center">{{asset.remainQuantity}}</div>
+          <div class="text-gray-600 flex justify-center">{{ asset.remainQuantity }}</div>
         </td>
         <td class="p-4 text-gray-600 text-center">{{ asset.price | vndCurrency }}</td>
         <td class="p-4 text-gray-600 text-center">{{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}</td>
@@ -66,23 +67,29 @@
               'text-purple-500': asset.status === assetStatuses.SOLD
             }"
           >
-            ● {{statusLabels[asset.status]}}
+            ● {{ statusLabels[asset.status] }}
           </span>
         </td>
-        <td class="p-4 space-x-2 h-6" [ngClass]="{'hidden': !isLeader}">
+        <td *ngIf="isLeader && asset.status !== assetStatuses.SOLD" class="p-4 space-x-2 h-6">
           <button
-            *ngIf="isLeader && asset.status !== assetStatuses.SOLD"
-            (click)="openUpdateAssetModel(asset)"
+            (click)="openUpdateAssetModel(asset, true)"
             class="text-yellow-500 hover:text-yellow-700"
           >
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
           <button
-            *ngIf="isLeader && asset.status !== assetStatuses.SOLD"
             (click)="sellAsset(asset)"
             class="text-purple-500 hover:text-purple-700"
           >
             <mat-icon fontIcon="sell"></mat-icon>
+          </button>
+        </td>
+        <td *ngIf="!isLeader || asset.status === assetStatuses.SOLD" class="p-4 space-x-2 h-6">
+          <button
+            (click)="openUpdateAssetModel(asset)"
+            class="text-blue-500 hover:text-blue-700"
+          >
+            <mat-icon fontIcon="info"></mat-icon>
           </button>
         </td>
       </tr>
@@ -106,7 +113,7 @@
   <div class="md:hidden space-y-4">
     <div
       *ngFor="let asset of assets"
-      class="border p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white"
+      class="border p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow bg-white"
     >
       <div class="flex justify-between items-start">
         <!-- Asset Details -->
@@ -154,23 +161,28 @@
         </div>
 
         <!-- Action Buttons -->
-        <div *ngIf="isLeader" class="flex space-x-2 mt-2">
+        <div *ngIf="isLeader && asset.status !== assetStatuses.SOLD" class="flex">
           <button
-            *ngIf="asset.status !== assetStatuses.SOLD"
-            (click)="openUpdateAssetModel(asset)"
+            (click)="openUpdateAssetModel(asset, true)"
             class="p-2 text-yellow-500 hover:bg-yellow-200"
           >
             <mat-icon fontIcon="edit"></mat-icon>
           </button>
           <button
-            *ngIf="asset.status !== assetStatuses.SOLD"
             (click)="sellAsset(asset)"
             class="p-2 text-purple-500 hover:bg-purple-200"
           >
             <mat-icon fontIcon="sell"></mat-icon>
           </button>
         </div>
-
+        <div *ngIf="!isLeader || asset.status === assetStatuses.SOLD" class="flex">
+          <button
+            (click)="openUpdateAssetModel(asset)"
+            class="p-2 text-blue-500 hover:bg-blue-200"
+          >
+            <mat-icon fontIcon="info"></mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
