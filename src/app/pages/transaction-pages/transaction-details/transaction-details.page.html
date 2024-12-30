@@ -10,6 +10,7 @@
               [fontIcon]="
                 transaction.type === transactionTypes.DISBURSEMENT ? 'account_balance_icon' :
                 transaction.type === transactionTypes.ASSET_EXPENSE ? 'inventory_icon' :
+                transaction.type === transactionTypes.ASSET_LIQUIDATION ? 'sell' :
                 'swap_horiz'
               "
               class="text-gray-600"
