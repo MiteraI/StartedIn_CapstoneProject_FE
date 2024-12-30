@@ -35,7 +35,6 @@
       routerLinkActive="text-purple-600"
       class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center"
     >
-      Thêm
       <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
     </a>
   </div>
@@ -47,19 +46,48 @@
     <a routerLink="/explore" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Khám phá </a>
     <div class="relative group">
       <button class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors flex items-center">
-        Thêm
         <mat-icon fontIcon="keyboard_arrow_up_icon"></mat-icon>
       </button>
       <!-- Dropdown Menu -->
       <div class="absolute bottom-full left-0 mb-1 w-40 bg-white border border-gray-200 rounded-lg shadow-lg hidden group-hover:block">
-        <a routerLink="/disbursements/overview" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Giải ngân </a>
-        <a routerLink="/deals" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Thỏa thuận </a>
-        <a routerLink="/about-us" routerLinkActive="text-purple-600 bg-purple-50" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"> Về chúng tôi </a>
+        <a
+          routerLink="/disbursements/overview"
+          routerLinkActive="text-purple-600 bg-purple-50"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+        >
+          Giải ngân
+        </a>
+        <a
+          routerLink="/deals"
+          routerLinkActive="text-purple-600 bg-purple-50"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+        >
+          Thỏa thuận
+        </a>
+        <!-- <a
+          routerLink="/about-us"
+          routerLinkActive="text-purple-600 bg-purple-50"
+          class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+        >
+          Về chúng tôi
+        </a> -->
       </div>
     </div>
     } @else {
-    <a routerLink="/team-explore" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Tìm nhóm </a>
-    <a routerLink="/about-us" routerLinkActive="text-purple-600" class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"> Về chúng tôi </a>
+    <a
+      routerLink="/team-explore"
+      routerLinkActive="text-purple-600"
+      class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
+    >
+      Tìm nhóm
+    </a>
+    <!-- <a
+      routerLink="/about-us"
+      routerLinkActive="text-purple-600"
+      class="text-gray-700 hover:text-purple-600 py-2 text-sm font-medium transition-colors"
+    >
+      Về chúng tôi
+    </a> -->
     }
   </div>
   } }
