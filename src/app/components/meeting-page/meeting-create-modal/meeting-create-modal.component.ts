@@ -40,8 +40,8 @@ export class MeetingCreateModalComponent implements OnInit {
     private contractService: ContractService
   ) {
     this.meetingForm = this.fb.group({
-      milestoneId: [0],
-      contractId: [0],
+      milestoneId: [''],
+      contractId: [''],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
       appointmentEndTime: [null, [Validators.required]],
@@ -97,11 +97,11 @@ export class MeetingCreateModalComponent implements OnInit {
   }
 
   createMeeting() {
-    if (this.meetingForm.get('milestoneId')?.value === 0) {
+    if (this.meetingForm.get('milestoneId')?.value === '') {
       this.meetingForm.patchValue({ milestoneId: null })
     }
 
-    if (this.meetingForm.get('contractId')?.value === 0) {
+    if (this.meetingForm.get('contractId')?.value === '') {
       this.meetingForm.patchValue({ contractId: null })
     }
     this.meetingService.createMeeting(this.nzModalData.projectId, this.meetingForm.value).subscribe({
