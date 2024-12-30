@@ -133,7 +133,7 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
       nzContent: AdminApprovalModalComponent,
       nzData: { approval },
       nzFooter: null,
-      nzWidth: '800px',
+      nzWidth: 800,
     })
   }
 

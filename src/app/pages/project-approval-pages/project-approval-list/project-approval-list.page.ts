@@ -99,7 +99,7 @@ export class ProjectApprovalPage implements OnInit {
       nzContent: RequestRegisterDetailComponent,
       nzData: { approval },
       nzFooter: null,
-      nzWidth: '800px',
+      nzWidth: 800,
     })
   }
 

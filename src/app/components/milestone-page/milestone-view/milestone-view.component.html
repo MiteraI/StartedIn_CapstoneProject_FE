@@ -11,7 +11,7 @@
   <ng-template #mainContent>
     <div class="flex flex-col w-full px-3 mt-4">
       <div class="flex justify-start">
-        <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
+        <button (click)="openCreateMilestoneModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
           <mat-icon fontIcon="add_icon"></mat-icon>
           Thêm Cột Mốc
         </button>
@@ -36,7 +36,7 @@
 <app-history-sidebar [isCollapsed]="isHistoryCollasped" (isCollapsedEmit)="isHistoryCollasped = $event">
   <ng-template #mainContent>
     <div class="overflow-y-auto w-full">
-      <div (click)="openCreateTaskModal()" class="flex justify-center items-center fixed right-7 bottom-20 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
+      <div (click)="openCreateMilestoneModal()" class="flex justify-center items-center fixed right-7 bottom-20 bg-slate-300 min-h-[50px] min-w-[50px] rounded-lg opacity-80">
         <mat-icon fontIcon="add_icon" class="text-white"></mat-icon>
       </div>
       <app-milestone-list [milestoneList]="milestoneList" [projectId]="projectId" [isFetchAllTaskLoading]="isFetchAllMilestonesLoading" [isLeader]="isLeader"></app-milestone-list>

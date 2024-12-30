@@ -29,8 +29,9 @@ export class MilestoneListComponent {
     }
     const modalRef = this.modalService.create({
       nzTitle: 'Thông Tin Cột Mốc',
-      nzStyle: { top: '20px' },
+      nzStyle: { top: '20px', maxWidth: '800px' },
       nzBodyStyle: { padding: '0px' },
+      nzWidth: '90vw',
       nzContent: UpdateMilestoneModalComponent,
       nzData: {
         milestoneId: milestoneId,
