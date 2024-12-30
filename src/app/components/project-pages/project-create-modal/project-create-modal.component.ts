@@ -19,7 +19,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
   imports: [NzIconModule, NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, CommonModule, NzButtonModule, NzInputNumberModule],
   providers: [DatePipe],
 })
-export class ProjectCreateModalComponent implements OnInit {
+export class ProjectCreateModalComponent {
   dateFormat = 'dd-MM-yyyy'
   selectedFile: File | null = null
   previewUrl: string | ArrayBuffer | null = null
@@ -43,7 +43,7 @@ export class ProjectCreateModalComponent implements OnInit {
 
   disabledStartDate = (current: Date): boolean => {
     // Disable past dates
-    return current && current < new Date()
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0))
   }
 
   disabledEndDate = (current: Date): boolean => {
@@ -67,8 +67,6 @@ export class ProjectCreateModalComponent implements OnInit {
       this.previewUrl = null
     }
   }
-
-  ngOnInit() {}
 
   onSubmit() {
     if (this.projectForm.valid) {

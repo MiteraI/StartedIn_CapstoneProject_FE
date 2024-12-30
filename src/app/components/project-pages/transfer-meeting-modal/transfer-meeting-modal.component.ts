@@ -81,7 +81,7 @@ export class TransferMeetingModalComponent implements OnInit {
 
   disabledDate = (current: Date): boolean => {
     // Can only select today or future dates
-    return current && current < new Date();
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0));
   }
 
   closeModal() {
