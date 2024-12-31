@@ -33,6 +33,7 @@ import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
 import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
 import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
 import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
+import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
 
 
 @Component({
@@ -67,8 +68,10 @@ export class InvestmentContractPage implements OnInit {
   investorId!: string;
 
   contractStatus = ContractStatus;
+  disbursementStatus = DisbursementStatus;
   meetingStatus = MeetingStatus;
   statusLabels = ContractStatusLabels;
+  disbursementLabels = DisbursementStatusLabels;
   meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
@@ -86,7 +89,6 @@ export class InvestmentContractPage implements OnInit {
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
   disbursements: DisbursementCreateModel[] = [];
-  disbursementTotalAmount: number = 0;
 
   isLoading: boolean = false;
   isReadOnly = false;
@@ -148,7 +150,6 @@ export class InvestmentContractPage implements OnInit {
           const {id, ...rest} = d;
           return rest;
         })
-        this.disbursementTotalAmount = this.disbursements.reduce((total, disbursement) => total + (disbursement.amount || 0), 0);
       } else if (!!this.deal) {
         this.isFromDeal = true;
         this.investorId = this.deal.investorId;
@@ -167,8 +168,21 @@ export class InvestmentContractPage implements OnInit {
     });
   }
 
+  get disbursementTotalAmount(): number {
+    return this.disbursements
+      .filter(d => d.amount)
+      .reduce((sum, d) => sum + d.amount, 0);
+  }
+
+  get disbursedAmount(): number {
+    return this.contract!.disbursements
+      .filter(d => d.amount && d.disbursementStatus === DisbursementStatus.FINISHED)
+      .reduce((sum, d) => sum + d.amount, 0);
+  }
+
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
     const isEdit = disbursement !== undefined;
+    const totalContractAmount = this.contractForm.get('buyPrice')?.value || 0;
 
     this.modalService.create({
       nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
@@ -176,29 +190,32 @@ export class InvestmentContractPage implements OnInit {
       nzData: {
         disbursement,
         projectStartDate: new Date(this.project.startDate),
-        projectEndDate: this.project.endDate ? new Date(this.project.endDate) : null
+        projectEndDate: this.project.endDate ? new Date(this.project.endDate) : null,
+        totalContractAmount: totalContractAmount,
+        totalDisbursedAmount: this.disbursementTotalAmount,
+        currentAmount: isEdit ? disbursement.amount : 0
       },
       nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {
+        if (componentInstance.disbursementForm.invalid) {
+          return false;
+        }
+
         const formValue = componentInstance.disbursementForm.value;
         formValue.startDate = formValue.startDate.toISOString().substring(0, 10);
         formValue.endDate = formValue.endDate.toISOString().substring(0, 10);
 
         if (isEdit) {
-          // Update total amount
-          this.disbursementTotalAmount += formValue.amount - this.disbursements[index!].amount;
-          // Create new array with the updated item
           this.disbursements = [
             ...this.disbursements.slice(0, index),
             formValue,
             ...this.disbursements.slice(index! + 1)
           ];
         } else {
-          // Update total amount
-          this.disbursementTotalAmount += formValue.amount;
-          // Create new array with the added item
           this.disbursements = [...this.disbursements, formValue];
         }
+
+        return true;
       }
     });
   }
@@ -208,6 +225,10 @@ export class InvestmentContractPage implements OnInit {
       ...this.disbursements.slice(0, index),
       ...this.disbursements.slice(index + 1)
     ];
+  }
+
+  getDisbursementLabel(status: DisbursementStatus) {
+    return DisbursementStatusLabels[status];
   }
 
   save() {

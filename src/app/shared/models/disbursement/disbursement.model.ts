@@ -1,3 +1,5 @@
+import { DisbursementStatus } from "../../enums/disbursement-status.enum";
+
 export type DisbursementModel = {
   id: string;
   title: string;
@@ -5,4 +7,5 @@ export type DisbursementModel = {
   endDate: Date;
   amount: number;
   condition: string;
+  disbursementStatus: DisbursementStatus;
 }

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, OnDestroy, afterNextRender } from '@angular/core';
 import { ContractService } from 'src/app/services/contract.service';
-import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ContractHistoryModel } from 'src/app/shared/models/contract/contract-history.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
