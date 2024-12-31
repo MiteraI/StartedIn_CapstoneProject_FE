@@ -10,6 +10,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contract/investment-contract-create-update.model';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
@@ -35,7 +36,6 @@ import { TerminateContractModalComponent } from 'src/app/components/contract-pag
 import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
 
-
 @Component({
   selector: 'app-investment-contract',
   templateUrl: './investment-contract.page.html',
@@ -52,6 +52,7 @@ import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enu
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
+    NzDatePickerModule,
     VndCurrencyPipe,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
@@ -111,6 +112,7 @@ export class InvestmentContractPage implements OnInit {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
+      expiredDate: [null],
       percentage: [0, [Validators.required]],
       buyPrice: [100000000, [Validators.required]]
     });
@@ -127,9 +129,6 @@ export class InvestmentContractPage implements OnInit {
       this.contract = data['contract'];
       this.deal = data['deal'];
 
-      console.log(this.contract);
-
-
       if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;
@@ -142,7 +141,7 @@ export class InvestmentContractPage implements OnInit {
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
-          contractIdNumber: this.contract.contractIdNumber,
+          expiredDate: this.contract.expiredDate,
           percentage: this.contract.sharePercentage,
           buyPrice: this.contract.buyPrice
         })
@@ -166,6 +165,11 @@ export class InvestmentContractPage implements OnInit {
         })
       }
     });
+  }
+
+  disabledDate = (current: Date): boolean => {
+    // Can only select today or future dates
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0));
   }
 
   get disbursementTotalAmount(): number {
@@ -298,6 +302,7 @@ export class InvestmentContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
+        expiredDate: this.contractForm.value.expiredDate?.toISOString().split('T')[0]
       },
       investorInfo: {
         userId: this.investorId,
