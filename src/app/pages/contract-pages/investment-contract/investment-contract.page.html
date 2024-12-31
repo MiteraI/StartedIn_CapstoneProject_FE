@@ -5,14 +5,20 @@
 
       <!-- Liquidation Note -->
       <div *ngIf="contract.liquidationNoteId" class="flex items-center bg-blue-50 p-2 rounded mb-4">
-        <mat-icon fontIcon="info" class="scale-75 text-blue-500 mr-1"></mat-icon>
-        Hợp đồng này {{ contract.contractStatus === contractStatus.WAITING_FOR_LIQUIDATION ? 'đang chờ' : 'đã được' }} thanh lý.
-        <a
-          class="ml-1 font-bold"
-          [routerLink]="['/projects', project.id, 'liquidation-contract', contract.liquidationNoteId]"
-        >
-          Xem biên bản thanh lý
-        </a>
+        <div class="w-8 flex items-center">
+          <mat-icon fontIcon="info" class="scale-75 text-blue-500 mr-1"></mat-icon>
+        </div>
+        <div class="flex flex-wrap">
+          <span class="w-fit mr-1 text-sm md:text-base">
+            Hợp đồng này {{ contract.contractStatus === contractStatus.WAITING_FOR_LIQUIDATION ? 'đang chờ' : 'đã được' }} thanh lý.
+          </span>
+          <a
+            class="font-bold w-fit text-sm md:text-base"
+            [routerLink]="['/projects', project.id, 'liquidation-contract', contract.liquidationNoteId]"
+          >
+            Xem biên bản thanh lý
+          </a>
+        </div>
       </div>
 
       <div class="flex justify-center text-lg mb-6">
@@ -36,6 +42,26 @@
         </div>
         <div class="w-full md:w-2/3 text-gray-800 ml-8 md:ml-0">
           {{ contract.contractName || 'Không có dữ liệu' }}
+        </div>
+      </div>
+
+      <div *ngIf="contract.validDate" class="flex flex-wrap mb-4">
+        <div class="w-full md:w-1/3 flex items-center">
+          <mat-icon fontIcon="timer" class="text-gray-600 mr-2"></mat-icon>
+          <span class="font-semibold text-gray-700">Ngày hiệu lực</span>
+        </div>
+        <div class="w-full md:w-2/3 text-gray-800 ml-8 md:ml-0">
+          {{ contract.validDate | date:'dd/MM/yyyy' }}
+        </div>
+      </div>
+
+      <div *ngIf="contract.expiredDate" class="flex flex-wrap mb-4">
+        <div class="w-full md:w-1/3 flex items-center">
+          <mat-icon fontIcon="timer_off" class="text-gray-600 mr-2"></mat-icon>
+          <span class="font-semibold text-gray-700">Ngày hết hiệu lực</span>
+        </div>
+        <div class="w-full md:w-2/3 text-gray-800 ml-8 md:ml-0">
+          {{ contract.expiredDate | date:'dd/MM/yyyy' }}
         </div>
       </div>
 
@@ -98,34 +124,66 @@
       </div>
 
       <div class="mt-6">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-2 mb-4">
           <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
-          <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="openDisbursementModal()">
-            <i nz-icon nzType="plus"></i>
-          </button>
+          <div class="text-gray-600 text-lg font-medium">
+            Chưa giải ngân: {{ (contract.buyPrice - disbursedAmount) | vndCurrency }}
+          </div>
         </div>
 
         <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
           <ng-template #disbursementItem let-item let-index="index">
             <nz-list-item>
-              <div class="flex w-full items-center justify-between">
-                <div class="flex flex-col">
-                  <span class="font-medium">{{ item.title }}</span>
-                  <div class="text-sm text-gray-500">
-                    <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
-                    <span class="mx-2 hidden md:inline">•</span>
-                    <div class="md:inline">
-                      Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
+              <div class="w-full p-4 rounded-lg shadow-sm transition-all" [ngClass]="{
+                'bg-gray-50': !item.disbursementStatus || item.disbursementStatus === disbursementStatus.PENDING,
+                'bg-yellow-50': item.disbursementStatus === disbursementStatus.ACCEPTED,
+                'bg-red-50': item.disbursementStatus === disbursementStatus.REJECTED,
+                'bg-green-50': item.disbursementStatus === disbursementStatus.FINISHED,
+                'bg-orange-50': item.disbursementStatus === disbursementStatus.OVERDUE,
+                'bg-red-100': item.disbursementStatus === disbursementStatus.ERROR || item.disbursementStatus === disbursementStatus.CANCELLED
+              }">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <!-- Left section -->
+                  <div class="flex-grow">
+                    <div class="flex items-center gap-2 mb-2">
+                      <mat-icon class="text-gray-600" fontIcon="account_balance"></mat-icon>
+                      <div class="text-lg font-semibold m-0">{{ item.title }}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-600">
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="calendar_today"></mat-icon>
+                        <span>{{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}</span>
+                      </div>
+
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="payments"></mat-icon>
+                        <span class="font-medium text-lg">{{ item.amount | vndCurrency }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Status badge - Only show for existing disbursements -->
+                    <div *ngIf="item.disbursementStatus" class="mt-2">
+                      <span class="inline-flex items-center gap-1 pr-4 py-1 rounded-full text-sm" [ngClass]="{
+                        'bg-gray-200 text-gray-700': item.disbursementStatus === disbursementStatus.PENDING,
+                        'bg-yellow-200 text-yellow-700': item.disbursementStatus === disbursementStatus.ACCEPTED,
+                        'bg-red-200 text-red-700': item.disbursementStatus === disbursementStatus.REJECTED,
+                        'bg-green-200 text-green-700': item.disbursementStatus === disbursementStatus.FINISHED,
+                        'bg-orange-200 text-orange-700': item.disbursementStatus === disbursementStatus.OVERDUE,
+                        'bg-red-200 text-red-800': item.disbursementStatus === disbursementStatus.ERROR || item.disbursementStatus === disbursementStatus.CANCELLED
+                      }">
+                        <mat-icon class="ml-2 scale-75" [fontIcon]="
+                          item.disbursementStatus === disbursementStatus.PENDING ? 'schedule' :
+                          item.disbursementStatus === disbursementStatus.ACCEPTED ? 'thumb_up' :
+                          item.disbursementStatus === disbursementStatus.REJECTED ? 'thumb_down' :
+                          item.disbursementStatus === disbursementStatus.FINISHED ? 'check_circle' :
+                          item.disbursementStatus === disbursementStatus.OVERDUE ? 'warning' : 'error'
+                        ">
+                        </mat-icon>
+                        {{ getDisbursementLabel(item.disbursementStatus) }}
+                      </span>
                     </div>
                   </div>
-                </div>
-                <div class="flex gap-2">
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
-                    <i nz-icon nzType="edit"></i>
-                  </button>
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
-                    <i nz-icon nzType="delete"></i>
-                  </button>
                 </div>
               </div>
             </nz-list-item>
@@ -319,6 +377,19 @@
       </nz-form-item>
 
       <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Ngày hết hiệu lực</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-date-picker
+            class="w-full"
+            formControlName="expiredDate"
+            nzPlaceHolder="Chọn ngày hết hiệu lực"
+            nzFormat="dd/MM/yyyy"
+            [nzDisabledDate]="disabledDate"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
         <nz-form-label [nzSpan]="6" nzLabelAlign="left">Điều khoản</nz-form-label>
         <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung điều khoản'">
           <editor [apiKey]="editorKey" [init]="init" formControlName="contractPolicy"></editor>
@@ -326,34 +397,68 @@
       </nz-form-item>
 
       <div class="mt-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="font-bold text-3xl text-black">Đợt giải ngân</div>
-          <button *ngIf="!isReadOnly" nz-button nzType="primary" (click)="openDisbursementModal()">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="font-bold text-3xl text-black w-fit">Đợt giải ngân</div>
+          <button
+            *ngIf="!isReadOnly"
+            nz-button
+            nzType="primary"
+            [disabled]="disbursementTotalAmount >= contractForm.get('buyPrice')?.value"
+            (click)="openDisbursementModal()"
+          >
             <i nz-icon nzType="plus"></i>
           </button>
+        </div>
+        <div class="text-red-500 text-lg font-medium mb-4">
+          Còn thiếu: {{ (contractForm.get('buyPrice')?.value - disbursementTotalAmount) | vndCurrency }}
         </div>
 
         <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
           <ng-template #disbursementItem let-item let-index="index">
             <nz-list-item>
-              <div class="flex w-full items-center justify-between">
-                <div class="flex flex-col">
-                  <span class="font-medium">{{ item.title }}</span>
-                  <div class="text-sm text-gray-500">
-                    <div class="md:inline">Số tiền: {{ item.amount | vndCurrency }}</div>
-                    <span class="mx-2 hidden md:inline">•</span>
-                    <div class="md:inline">
-                      Thời hạn: {{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}
+              <div class="w-full p-4 rounded-lg shadow-sm transition-all bg-green-50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <!-- Left section -->
+                  <div class="flex-grow">
+                    <div class="flex items-center gap-2 mb-2">
+                      <mat-icon class="text-gray-600" fontIcon="account_balance"></mat-icon>
+                      <div class="text-lg font-semibold m-0">{{ item.title }}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-600">
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="calendar_today"></mat-icon>
+                        <span>{{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}</span>
+                      </div>
+
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="payments"></mat-icon>
+                        <span class="font-medium text-lg">{{ item.amount | vndCurrency }}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="flex gap-2">
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" (click)="openDisbursementModal(item, index)">
-                    <i nz-icon nzType="edit"></i>
-                  </button>
-                  <button *ngIf="!isReadOnly" nz-button nzType="link" nzDanger (click)="removeDisbursement(index)">
-                    <i nz-icon nzType="delete"></i>
-                  </button>
+
+                  <!-- Right section - Actions -->
+                  <div class="flex gap-2 md:flex-col justify-end">
+                    <button
+                      *ngIf="!isReadOnly"
+                      nz-button
+                      nzType="link"
+                      class="text-blue-600 hover:text-blue-800"
+                      (click)="openDisbursementModal(item, index)"
+                    >
+                      <mat-icon fontIcon="edit"></mat-icon>
+                    </button>
+                    <button
+                      *ngIf="!isReadOnly"
+                      nz-button
+                      nzType="link"
+                      class="text-red-600 hover:text-red-800"
+                      (click)="removeDisbursement(index)"
+                    >
+                      <mat-icon fontIcon="delete"></mat-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </nz-list-item>
@@ -366,24 +471,21 @@
           Quay lại
         </button>
         <div class="flex-grow"></div>
-        <button nz-button nzType="link" (click)="showPreview()" [nzLoading]="isLoading" class="px-0">
+        <button nz-button nzType="link" (click)="showPreview()" [nzLoading]="isLoading" class="px-0 hidden md:block">
           Bản xem trước
         </button>
         <button nz-button nzType="default" (click)="save()" [nzLoading]="isLoading">
           Lưu
         </button>
-        <button nz-button nzType="primary" type="submit" [disabled]="!contractForm.valid" (click)="saveAndSend()" [nzLoading]="isLoading">
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [disabled]="!contractForm.valid && disbursementTotalAmount === contractForm.get('buyPrice')?.value"
+          (click)="saveAndSend()"
+          [nzLoading]="isLoading"
+        >
           Lưu & Gửi
-        </button>
-      </div>
-
-      <div *ngIf="isReadOnly" class="mt-6 text-right">
-        <button nz-button nzType="link" (click)="navigateBack()">
-          Quay lại
-        </button>
-        <div class="flex-grow"></div>
-        <button nz-button nzType="primary" (click)="download()" [nzLoading]="isLoading">
-          Tải xuống
         </button>
       </div>
     </div>

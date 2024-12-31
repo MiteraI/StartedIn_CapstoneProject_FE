@@ -10,6 +10,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { InvestmentContractCreateUpdateModel } from 'src/app/shared/models/contract/investment-contract-create-update.model';
 import { ProjectModel } from 'src/app/shared/models/project/project.model';
 import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe';
@@ -33,7 +34,7 @@ import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
 import { LiquidationModalComponent } from 'src/app/components/contract-pages/liquidation-modal/liquidation-modal.component';
 import { TerminateContractModalComponent } from 'src/app/components/contract-pages/terminate-contract-modal/terminate-contract-modal.component';
 import { TerminateMeetingModalComponent } from 'src/app/components/contract-pages/terminate-meeting-modal/terminate-meeting-modal.component';
-
+import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
 
 @Component({
   selector: 'app-investment-contract',
@@ -51,6 +52,7 @@ import { TerminateMeetingModalComponent } from 'src/app/components/contract-page
     NzListModule,
     NzIconModule,
     NzInputNumberModule,
+    NzDatePickerModule,
     VndCurrencyPipe,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
@@ -67,8 +69,10 @@ export class InvestmentContractPage implements OnInit {
   investorId!: string;
 
   contractStatus = ContractStatus;
+  disbursementStatus = DisbursementStatus;
   meetingStatus = MeetingStatus;
   statusLabels = ContractStatusLabels;
+  disbursementLabels = DisbursementStatusLabels;
   meetingLabels = MeetingLabel;
 
   contractForm!: FormGroup;
@@ -86,7 +90,6 @@ export class InvestmentContractPage implements OnInit {
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
 
   disbursements: DisbursementCreateModel[] = [];
-  disbursementTotalAmount: number = 0;
 
   isLoading: boolean = false;
   isReadOnly = false;
@@ -109,6 +112,7 @@ export class InvestmentContractPage implements OnInit {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
+      expiredDate: [null],
       percentage: [0, [Validators.required]],
       buyPrice: [100000000, [Validators.required]]
     });
@@ -125,9 +129,6 @@ export class InvestmentContractPage implements OnInit {
       this.contract = data['contract'];
       this.deal = data['deal'];
 
-      console.log(this.contract);
-
-
       if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;
@@ -140,7 +141,7 @@ export class InvestmentContractPage implements OnInit {
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
-          contractIdNumber: this.contract.contractIdNumber,
+          expiredDate: this.contract.expiredDate,
           percentage: this.contract.sharePercentage,
           buyPrice: this.contract.buyPrice
         })
@@ -148,7 +149,6 @@ export class InvestmentContractPage implements OnInit {
           const {id, ...rest} = d;
           return rest;
         })
-        this.disbursementTotalAmount = this.disbursements.reduce((total, disbursement) => total + (disbursement.amount || 0), 0);
       } else if (!!this.deal) {
         this.isFromDeal = true;
         this.investorId = this.deal.investorId;
@@ -167,8 +167,26 @@ export class InvestmentContractPage implements OnInit {
     });
   }
 
+  disabledDate = (current: Date): boolean => {
+    // Can only select today or future dates
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0));
+  }
+
+  get disbursementTotalAmount(): number {
+    return this.disbursements
+      .filter(d => d.amount)
+      .reduce((sum, d) => sum + d.amount, 0);
+  }
+
+  get disbursedAmount(): number {
+    return this.contract!.disbursements
+      .filter(d => d.amount && d.disbursementStatus === DisbursementStatus.FINISHED)
+      .reduce((sum, d) => sum + d.amount, 0);
+  }
+
   openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
     const isEdit = disbursement !== undefined;
+    const totalContractAmount = this.contractForm.get('buyPrice')?.value || 0;
 
     this.modalService.create({
       nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
@@ -176,29 +194,32 @@ export class InvestmentContractPage implements OnInit {
       nzData: {
         disbursement,
         projectStartDate: new Date(this.project.startDate),
-        projectEndDate: this.project.endDate ? new Date(this.project.endDate) : null
+        projectEndDate: this.project.endDate ? new Date(this.project.endDate) : null,
+        totalContractAmount: totalContractAmount,
+        totalDisbursedAmount: this.disbursementTotalAmount,
+        currentAmount: isEdit ? disbursement.amount : 0
       },
       nzCancelText: "Hủy",
       nzOnOk: (componentInstance) => {
+        if (componentInstance.disbursementForm.invalid) {
+          return false;
+        }
+
         const formValue = componentInstance.disbursementForm.value;
         formValue.startDate = formValue.startDate.toISOString().substring(0, 10);
         formValue.endDate = formValue.endDate.toISOString().substring(0, 10);
 
         if (isEdit) {
-          // Update total amount
-          this.disbursementTotalAmount += formValue.amount - this.disbursements[index!].amount;
-          // Create new array with the updated item
           this.disbursements = [
             ...this.disbursements.slice(0, index),
             formValue,
             ...this.disbursements.slice(index! + 1)
           ];
         } else {
-          // Update total amount
-          this.disbursementTotalAmount += formValue.amount;
-          // Create new array with the added item
           this.disbursements = [...this.disbursements, formValue];
         }
+
+        return true;
       }
     });
   }
@@ -208,6 +229,10 @@ export class InvestmentContractPage implements OnInit {
       ...this.disbursements.slice(0, index),
       ...this.disbursements.slice(index + 1)
     ];
+  }
+
+  getDisbursementLabel(status: DisbursementStatus) {
+    return DisbursementStatusLabels[status];
   }
 
   save() {
@@ -277,6 +302,7 @@ export class InvestmentContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
+        expiredDate: this.contractForm.value.expiredDate?.toISOString().split('T')[0]
       },
       investorInfo: {
         userId: this.investorId,

@@ -56,6 +56,42 @@
         </div>
       </div>
 
+      <!-- Contract Period -->
+      <div class="px-2 md:px-6">
+        <div class="flex flex-col md:flex-row gap-4 mb-4">
+          <!-- Valid Date -->
+          <div *ngIf="contract.validDate" class="flex-1">
+            <div class="flex items-center">
+              <mat-icon fontIcon="timer" class="text-gray-600 mr-2"></mat-icon>
+              <span class="font-semibold text-gray-700">Ngày hiệu lực</span>
+            </div>
+            <div class="text-gray-800 ml-8">
+              {{ contract.validDate | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+
+          <!-- Expired Date -->
+          <div *ngIf="contract.expiredDate" class="flex-1">
+            <div class="flex items-center">
+              <mat-icon fontIcon="timer_off" class="text-gray-600 mr-2"></mat-icon>
+              <span class="font-semibold text-gray-700">Ngày hết hiệu lực</span>
+            </div>
+            <div class="text-gray-800 ml-8">
+              {{ contract.expiredDate | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Contract Policy -->
+        <div>
+          <div class="flex items-center">
+            <mat-icon fontIcon="policy" class="text-gray-600 mr-2"></mat-icon>
+            <span class="font-semibold text-gray-700">Điều khoản</span>
+          </div>
+          <div class="pt-4" [innerHTML]="contract.contractPolicy"></div>
+        </div>
+      </div>
+
       <!-- Phân chia cổ phần -->
       <div class="mt-6 px-2 md:px-6">
         <div class="font-bold text-3xl text-black mb-4">Phân chia cổ phần</div>
@@ -230,6 +266,19 @@
         <nz-form-label [nzSpan]="6" nzLabelAlign="left">Tên hợp đồng</nz-form-label>
         <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tên hợp đồng!">
           <input nz-input formControlName="contractName" placeholder="Nhập tên hợp đồng" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzLabelAlign="left">Ngày hết hiệu lực</nz-form-label>
+        <nz-form-control [nzSpan]="18">
+          <nz-date-picker
+            class="w-full"
+            formControlName="expiredDate"
+            nzPlaceHolder="Chọn ngày hết hiệu lực"
+            nzFormat="dd/MM/yyyy"
+            [nzDisabledDate]="disabledDate"
+          ></nz-date-picker>
         </nz-form-control>
       </nz-form-item>
 

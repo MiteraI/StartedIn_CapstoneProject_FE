@@ -8,6 +8,8 @@ export type InternalContractDetailModel = {
   contractPolicy: string;
   contractIdNumber: string;
   contractStatus: ContractStatus;
+  validDate: string;
+  expiredDate?: string;
   projectName?: string;
   liquidationNoteId?: string;
   shareEquities: ShareEquityCreateUpdateModel[];
