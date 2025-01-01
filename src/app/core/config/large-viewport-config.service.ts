@@ -2,14 +2,15 @@ import { Platform } from '@ionic/angular'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { environment } from 'src/environments/environment'
-import { OnDestroy } from '@angular/core'
 
 @Injectable({
   providedIn: 'root',
 })
 export class LargeViewportConfigService {
   private isLargeViewportSubject$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
-  private largeViewportBreakpoint = 768
+  // du ma thg kiet nha large la 1024px m muon lay 768 thi lay cai desktop view, sua sua cai lon
+  // t ma can 768 thi da xai cai kia cmnr chu mac deo j phai tao file moi
+  private largeViewportBreakpoint = 1024
 
   constructor(private platform: Platform) {
     if (environment.production) {

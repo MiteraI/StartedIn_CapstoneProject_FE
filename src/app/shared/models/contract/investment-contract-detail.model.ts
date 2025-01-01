@@ -9,6 +9,8 @@ export type InvestmentContractDetailModel = {
   contractPolicy: string;
   contractIdNumber: string;
   contractStatus: ContractStatus;
+  validDate: string;
+  expiredDate?: string;
   investorId: string;
   investorName: string;
   investorEmail: string;

@@ -8,12 +8,13 @@ import { NzListModule } from 'ng-zorro-antd/list'
 import { NzIconModule } from 'ng-zorro-antd/icon'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { ProjectModel } from 'src/app/shared/models/project/project.model'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { Location } from '@angular/common'
 import { ContractService } from 'src/app/services/contract.service'
-import { catchError, filter, Observable, Subject, takeUntil, throwError } from 'rxjs'
+import { catchError, filter, Observable, throwError } from 'rxjs'
 import { ContractStatus, ContractStatusLabels } from 'src/app/shared/enums/contract-status.enum'
 import { ShareEquityCreateUpdateModel } from 'src/app/shared/models/share-equity/share-equity-create-update.model'
 import { InternalContractCreateUpdateModel } from 'src/app/shared/models/contract/internal-contract-create-update.model'
@@ -51,6 +52,7 @@ import { TerminateMeetingModalComponent } from 'src/app/components/contract-page
     NzIconModule,
     NzSelectModule,
     NzInputNumberModule,
+    NzDatePickerModule,
     ContractHistorySidebarComponent,
     PercentFormatterPipe,
     MatIconModule,
@@ -110,6 +112,7 @@ export class InternalContractPage implements OnInit {
     this.contractForm = this.fb.group({
       contractName: ['', [Validators.required]],
       contractPolicy: [''],
+      expiredDate: [null],
       shares: this.fb.array([]),
     })
 
@@ -137,7 +140,6 @@ export class InternalContractPage implements OnInit {
         .subscribe((response) => (this.memberList = response.filter((m) => m.roleInTeam !== TeamRole.INVESTOR)))
 
       this.contract = data['contract']
-      console.log(this.contract);
 
       if (this.contract) {
         // import data
@@ -150,7 +152,7 @@ export class InternalContractPage implements OnInit {
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
-          contractIdNumber: this.contract.contractIdNumber,
+          expiredDate: this.contract.expiredDate
         })
         this.contract.shareEquities.forEach((share) => this.addShare(share))
       } else {
@@ -161,6 +163,11 @@ export class InternalContractPage implements OnInit {
         })
       }
     })
+  }
+
+  disabledDate = (current: Date): boolean => {
+    // Can only select today or future dates
+    return current && current < new Date(new Date().setHours(0, 0, 0, 0));
   }
 
   get sharesFormArray() {
@@ -247,6 +254,7 @@ export class InternalContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
+        expiredDate: this.contractForm.value.expiredDate?.toISOString().split('T')[0]
       },
       shareEquitiesOfMembers: this.sharesFormArray.value.map((share: any) => ({
         userId: share.userId,

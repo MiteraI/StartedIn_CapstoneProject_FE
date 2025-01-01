@@ -11,6 +11,8 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { ProjectModel } from 'src/app/shared/models/project/project.model'
 import { ProjectService } from 'src/app/services/project.service'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 
 @Component({
   selector: 'app-project-title-bar',
@@ -29,6 +31,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification'
 export class ProjectTitleBarComponent implements OnInit, OnDestroy {
   project: ProjectModel | null = null;
   isDesktopView: boolean = false;
+  isLeader: boolean = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -37,13 +40,17 @@ export class ProjectTitleBarComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private projectService: ProjectService,
     private modal: NzModalService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private roleService: RoleInTeamService,
   ) {}
 
   ngOnInit() {
     this.viewMode.isDesktopView$
       .pipe(takeUntil(this.destroy$))
       .subscribe((val) => (this.isDesktopView = val));
+    this.roleService.role$.subscribe(role => {
+      this.isLeader = role === TeamRole.LEADER;
+    });
     this.route.paramMap.subscribe(map => {
       if (!map.get('id')) {
         return;
