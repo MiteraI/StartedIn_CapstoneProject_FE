@@ -40,19 +40,36 @@
         <ng-template #noLink>Không có liên kết</ng-template>
       </nz-descriptions-item>
 
-      <nz-descriptions-item nzTitle="Ghi chú cuộc họp" [nzSpan]="3">
+      <!-- meeting attachment -->
+      <nz-descriptions-item nzTitle="Tài liệu đính kèm" [nzSpan]="3">
+        <ul>
+          @if(meetingDetail.documents.length === 0) {
+          <li>
+            <i nz-icon nzType="file" nzTheme="outline" class="mr-2"></i>
+            Không có tài liệu đính kèm
+          </li>
+          } @for (document of meetingDetail.documents; track $index) {
+          <li>
+            <a href="{{ document.attachmentLink }}" target="_blank">{{ document.documentName }}</a>
+          </li>
+          }
+        </ul>
+      </nz-descriptions-item>
+
+      <!-- Meeting notes -->
+      <nz-descriptions-item nzTitle="Biên bản cuộc họp" [nzSpan]="3">
         <!-- Only show when meeting finished -->
         @if(meetingDetail.status === 3) {
         <ul>
           @for (meetingNote of meetingDetail.meetingNotes; track $index) {
           <li>
-            <a *ngIf="meetingDetail.meetingLink; else noLink" href="{{ meetingNote.meetingNoteLink }}" target="_blank">{{ meetingNote.fileName }}</a>
+            <a href="{{ meetingNote.meetingNoteLink }}" target="_blank">{{ meetingNote.fileName }}</a>
           </li>
           }
         </ul>
 
         <div class="mt-4">
-          <button nz-button nzType="default" (click)="openUploadModal()"><i nz-icon nzType="upload" nzTheme="outline" class="mr-2"></i>Tải lên ghi chú</button>
+          <button nz-button nzType="default" (click)="openUploadModal()"><i nz-icon nzType="upload" nzTheme="outline" class="mr-2"></i>Tải lên biên bản cuộc họp</button>
         </div>
         }@else {
         <ul>

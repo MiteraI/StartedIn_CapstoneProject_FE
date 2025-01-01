@@ -26,9 +26,9 @@ export class MeetingService {
     return this.http.get<MeetingDetailModel>(this.applicationConfigService.getEndpointFor(url))
   }
 
-  createMeeting(projectId: string, meeting: MeetingCreateModel) {
+  createMeeting(projectId: string, meetingDetail: FormData) {
     const url = `/api/projects/${projectId}/appointments`
-    return this.http.post(this.applicationConfigService.getEndpointFor(url), meeting)
+    return this.http.post(this.applicationConfigService.getEndpointFor(url), meetingDetail)
   }
 
   getTableData(projectId: string, page: number, size: number, filterOptions: MeetingFilterOptions): Observable<SearchResponseModel<MeetingDetailModel>> {

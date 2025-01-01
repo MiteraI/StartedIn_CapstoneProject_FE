@@ -1,5 +1,6 @@
 import { ContractType } from '../../enums/contract-type.enum'
 import { MeetingStatus } from '../../enums/meeting-status.enum'
+import { MeetingDocumentModel } from './meeting-document/meeting-document.model'
 import { MeetingNoteDetail } from './meeting-note/meeting-note-detail.model'
 
 export type MeetingDetailModel = {
@@ -17,4 +18,5 @@ export type MeetingDetailModel = {
   contractName?: string
   contractType?: ContractType
   meetingNotes: MeetingNoteDetail[]
+  documents: MeetingDocumentModel[]
 }
