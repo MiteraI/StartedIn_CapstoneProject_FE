@@ -5,6 +5,7 @@ import { Observable } from 'rxjs'
 import { AcceptInvite } from '../shared/models/recruit-invite/accept-invite.model'
 import { ApplyRecruitment } from '../shared/models/recruit-invite/apply-recruitment.model'
 import { Applicant } from '../shared/models/recruit-invite/applicant.model'
+import { PendingInvitationModel } from '../shared/models/recruit-invite/pending-invitation.model'
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +45,10 @@ export class RecruitInviteService {
 
   rejectApplication(projectId: string, applicationId: string) {
     return this.http.patch(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/applications/${applicationId}/reject`), null, { responseType: 'text' as 'json' })
+  }
+
+  getPendingInvitations(projectId: string): Observable<PendingInvitationModel[]> {
+    const url = `/api/projects/${projectId}/pending-invitations`
+    return this.http.get<PendingInvitationModel[]>(this.applicationConfigService.getEndpointFor(url))
   }
 }
