@@ -11,6 +11,7 @@
       nzPlaceHolder="Nhập email (bấm Enter để thêm)"
     ></nz-select>
     <button
+      [nzLoading]="isSubmitting"
       nz-button
       nzType="primary"
       class="flex-grow mb-2"
@@ -21,26 +22,35 @@
     </button>
   </div>
 
-  <div class="text-sm font-medium text-gray-500 mb-4">Danh sách thành viên</div>
+  <div class="text-sm font-medium text-gray-500 mb-4">Danh sách lời mời đang chờ</div>
 
-  <div class="space-y-3 max-h-[50vh] overflow-y-auto">
+  <div *ngIf="isLoading" class="flex justify-center py-4">
+    <nz-spin nzSimple></nz-spin>
+  </div>
+
+  <div *ngIf="!isLoading && invitations.length === 0" class="text-center text-gray-500 py-4">
+    Không có lời mời đang chờ nào!
+  </div>
+
+  <div *ngIf="!isLoading && invitations.length > 0" class="space-y-3 max-h-[50vh] overflow-y-auto">
     <div
-      *ngFor="let member of members"
+      *ngFor="let invitation of invitations"
       class="flex items-center justify-between cursor-pointer hover:bg-gray-100 rounded-lg p-2"
-      (click)="navigateToUser(member.id)"
+      (click)="navigateToUser(invitation.candidateId)"
     >
       <div class="flex items-center space-x-3">
         <nz-avatar
-          [nzText]="member.fullName | initialsOnly"
+          [nzSrc]="invitation.candidateProfilePicture"
+          [nzText]="invitation.candidateName | initialsOnly"
           class="bg-blue-500"
         ></nz-avatar>
         <div>
-          <div class="font-medium">{{ member.fullName }}</div>
-          <div class="text-sm text-gray-500">{{ member.email }}</div>
+          <div class="font-medium">{{ invitation.candidateName }}</div>
+          <div class="text-sm text-gray-500">{{ invitation.candidateEmail }}</div>
         </div>
       </div>
       <div class="text-sm text-gray-600">
-        {{ teamRoleLabels[member.roleInTeam] }}
+        {{ teamRoleLabels[invitation.role] }}
       </div>
     </div>
   </div>
