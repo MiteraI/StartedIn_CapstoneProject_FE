@@ -396,7 +396,7 @@
         </nz-form-control>
       </nz-form-item>
 
-      <div class="mt-6">
+      <div *ngIf="!isFromDeal" class="mt-6">
         <div class="flex items-center justify-between gap-2 mb-2">
           <div class="font-bold text-3xl text-black w-fit">Đợt giải ngân</div>
           <button
@@ -409,7 +409,7 @@
             <i nz-icon nzType="plus"></i>
           </button>
         </div>
-        <div class="text-red-500 text-lg font-medium mb-4">
+        <div *ngIf="contractForm.get('buyPrice')?.value > disbursementTotalAmount" class="text-red-500 text-lg font-medium mb-4">
           Còn thiếu: {{ (contractForm.get('buyPrice')?.value - disbursementTotalAmount) | vndCurrency }}
         </div>
 
@@ -481,7 +481,7 @@
           nz-button
           nzType="primary"
           type="submit"
-          [disabled]="!contractForm.valid && disbursementTotalAmount === contractForm.get('buyPrice')?.value"
+          [disabled]="!validateContract()"
           (click)="saveAndSend()"
           [nzLoading]="isLoading"
         >

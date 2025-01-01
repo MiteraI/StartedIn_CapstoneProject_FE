@@ -15,6 +15,12 @@ import { ProjectOveriewModel } from 'src/app/shared/models/project/project-overv
 import { CommonModule } from '@angular/common';
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular';
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
+import { CreateDisbursementFormComponent } from 'src/app/components/contract-pages/create-disbursement-form/create-disbursement-form.component';
+import { DisbursementCreateModel } from 'src/app/shared/models/disbursement/disbursement-create.model';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { MatIconModule } from '@angular/material/icon';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 
 @Component({
@@ -29,8 +35,13 @@ import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants';
     NzFormModule,
     NzInputModule,
     NzInputNumberModule,
+    NzModalModule,
+    NzListModule,
+    NzIconModule,
     CommonModule,
-    EditorModule
+    EditorModule,
+    VndCurrencyPipe,
+    MatIconModule
   ]
 })
 export class CreateDealOfferPage implements OnInit {
@@ -42,6 +53,8 @@ export class CreateDealOfferPage implements OnInit {
   vndCurrencyPipe!: VndCurrencyPipe;
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value);
   vndParser = (value: string) => value.replace(/\D/g,''); // remove all non-digits
+
+  disbursements: DisbursementCreateModel[] = [];
 
   isLoading = false;
 
@@ -58,6 +71,7 @@ export class CreateDealOfferPage implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private dealOfferService: DealOfferService,
+    private modalService: NzModalService,
     private notification: NzNotificationService
   ) {}
 
@@ -78,7 +92,8 @@ export class CreateDealOfferPage implements OnInit {
     if (this.dealOfferForm.valid) {
       const dealOffer: DealOfferCreateModel = {
         ...this.dealOfferForm.value,
-        projectId: this.route.snapshot.paramMap.get('projectId')!
+        projectId: this.route.snapshot.paramMap.get('projectId')!,
+        disbursements: this.disbursements
       };
       this.isLoading = true;
       this.dealOfferService
@@ -96,5 +111,58 @@ export class CreateDealOfferPage implements OnInit {
           this.router.navigate(['deals']);
         });
     }
+  }
+
+  get disbursementTotalAmount(): number {
+    return this.disbursements
+      .filter(d => d.amount)
+      .reduce((sum, d) => sum + d.amount, 0);
+  }
+
+  openDisbursementModal(disbursement?: DisbursementCreateModel, index?: number) {
+    const isEdit = disbursement !== undefined;
+    const totalContractAmount = this.dealOfferForm.get('amount')?.value || 0;
+
+    this.modalService.create({
+      nzTitle: isEdit ? 'Sửa lần giải ngân' : 'Thêm lần giải ngân',
+      nzContent: CreateDisbursementFormComponent,
+      nzData: {
+        disbursement,
+        projectStartDate: new Date(this.projectInfo.startDate),
+        projectEndDate: this.projectInfo.endDate ? new Date(this.projectInfo.endDate) : null,
+        totalContractAmount: totalContractAmount,
+        totalDisbursedAmount: this.disbursementTotalAmount,
+        currentAmount: isEdit ? disbursement.amount : 0
+      },
+      nzCancelText: "Hủy",
+      nzOnOk: (componentInstance) => {
+        if (componentInstance.disbursementForm.invalid) {
+          return false;
+        }
+
+        const formValue = componentInstance.disbursementForm.value;
+        formValue.startDate = formValue.startDate.toISOString().substring(0, 10);
+        formValue.endDate = formValue.endDate.toISOString().substring(0, 10);
+
+        if (isEdit) {
+          this.disbursements = [
+            ...this.disbursements.slice(0, index),
+            formValue,
+            ...this.disbursements.slice(index! + 1)
+          ];
+        } else {
+          this.disbursements = [...this.disbursements, formValue];
+        }
+
+        return true;
+      }
+    });
+  }
+
+  removeDisbursement(index: number): void {
+    this.disbursements = [
+      ...this.disbursements.slice(0, index),
+      ...this.disbursements.slice(index + 1)
+    ];
   }
 }

@@ -1,4 +1,5 @@
 import { DealStatus } from "../../enums/deal-status.enum";
+import { DisbursementModel } from "../disbursement/disbursement.model";
 
 export type ProjectDealItem = {
   id: string;
@@ -8,4 +9,5 @@ export type ProjectDealItem = {
   equityShareOffer: number;
   termCondition: string;
   dealStatus: DealStatus;
+  disbursements: DisbursementModel[];
 }

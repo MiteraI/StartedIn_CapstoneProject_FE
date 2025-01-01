@@ -1,14 +1,14 @@
 <!-- disbursement-form.component.html -->
 <form [formGroup]="disbursementForm" class="md:p-6">
   <nz-form-item>
-    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Tiêu đề</nz-form-label>
+    <nz-form-label nzRequired [nzSpan]="6" [nzLabelAlign]="'left'">Tiêu đề</nz-form-label>
     <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập tiêu đề!">
       <input nz-input formControlName="title" placeholder="Nhập tiêu đề lần giải ngân" />
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Thời gian</nz-form-label>
+    <nz-form-label nzRequired [nzSpan]="6" [nzLabelAlign]="'left'">Thời gian</nz-form-label>
     <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập thời gian!">
       <div class="flex gap-2">
         <nz-date-picker
@@ -30,7 +30,7 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Số tiền</nz-form-label>
+    <nz-form-label nzRequired [nzSpan]="6" [nzLabelAlign]="'left'">Số tiền</nz-form-label>
     <nz-form-control [nzSpan]="18" [nzErrorTip]="amountErrorTpl">
       <nz-input-number
         formControlName="amount"
@@ -43,7 +43,7 @@
         class="w-full">
       </nz-input-number>
       <div class="mt-2 text-gray-500">
-        Số tiền còn lại: {{ remainingAmount | vndCurrency }}
+        Số tiền còn thiếu: {{ remainingAmount | vndCurrency }}
       </div>
     </nz-form-control>
   </nz-form-item>
@@ -55,7 +55,7 @@
   </ng-template>
 
   <nz-form-item>
-    <nz-form-label [nzSpan]="6" [nzLabelAlign]="'left'">Điều kiện</nz-form-label>
+    <nz-form-label nzRequired [nzSpan]="6" [nzLabelAlign]="'left'">Điều kiện</nz-form-label>
     <nz-form-control [nzSpan]="18" nzErrorTip="Bạn chưa nhập điều kiện!">
       <textarea
         nz-input
