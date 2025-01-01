@@ -132,7 +132,7 @@ export class InvestmentContractPage implements OnInit {
       if (!!this.contract) {
         // import data
         this.isFromDeal = !!this.contract.dealOfferId;
-        this.isReadOnly = !(this.contract.contractStatus === ContractStatus.DRAFT);
+        this.isReadOnly = this.contract.contractStatus !== ContractStatus.DRAFT;
         if (this.isReadOnly) {
           this.contractForm.disable();
         }
@@ -141,7 +141,7 @@ export class InvestmentContractPage implements OnInit {
         this.contractForm.patchValue({
           contractName: this.contract.contractName,
           contractPolicy: this.contract.contractPolicy,
-          expiredDate: this.contract.expiredDate,
+          expiredDate: this.contract.expiredDate ? new Date(this.contract.expiredDate) : null,
           percentage: this.contract.sharePercentage,
           buyPrice: this.contract.buyPrice
         })
@@ -235,6 +235,12 @@ export class InvestmentContractPage implements OnInit {
     return DisbursementStatusLabels[status];
   }
 
+  validateContract() {
+    const validDisbursements = this.isFromDeal
+      || this.disbursementTotalAmount === this.contractForm.get('buyPrice')?.value
+    return this.contractForm.valid && validDisbursements;
+  }
+
   save() {
     this.isLoading = true;
     this.createOrUpdateContract().subscribe(response => {
@@ -319,8 +325,8 @@ export class InvestmentContractPage implements OnInit {
       contract: {
         contractName: this.contractForm.value.contractName || 'Hợp đồng chưa có tên',
         contractPolicy: this.contractForm.value.contractPolicy || '',
+        expiredDate: this.contractForm.value.expiredDate?.toISOString().split('T')[0]
       },
-      disbursements: this.disbursements
     };
   }
 

@@ -69,6 +69,74 @@
         </nz-form-control>
       </nz-form-item>
 
+      <div class="mt-6">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="font-bold text-3xl text-black w-fit">Đợt giải ngân</div>
+          <button
+            nz-button
+            nzType="primary"
+            type="button"
+            [disabled]="disbursementTotalAmount >= dealOfferForm.get('amount')?.value"
+            (click)="openDisbursementModal()"
+          >
+            <i nz-icon nzType="plus"></i>
+          </button>
+        </div>
+        <div *ngIf="dealOfferForm.get('amount')?.value > disbursementTotalAmount" class="text-red-500 text-lg font-medium mb-4">
+          Còn thiếu: {{ (dealOfferForm.get('amount')?.value - disbursementTotalAmount) | vndCurrency }}
+        </div>
+
+        <nz-list [nzDataSource]="disbursements" [nzRenderItem]="disbursementItem">
+          <ng-template #disbursementItem let-item let-index="index">
+            <nz-list-item>
+              <div class="w-full p-4 rounded-lg shadow-sm transition-all bg-green-50">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <!-- Left section -->
+                  <div class="flex-grow">
+                    <div class="flex items-center gap-2 mb-2">
+                      <mat-icon class="text-gray-600" fontIcon="account_balance"></mat-icon>
+                      <div class="text-lg font-semibold m-0">{{ item.title }}</div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-gray-600">
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="calendar_today"></mat-icon>
+                        <span>{{ item.startDate | date:'dd/MM/yyyy' }} - {{ item.endDate | date:'dd/MM/yyyy' }}</span>
+                      </div>
+
+                      <div class="flex items-center gap-2">
+                        <mat-icon class="text-gray-500 scale-90" fontIcon="payments"></mat-icon>
+                        <span class="font-medium text-lg">{{ item.amount | vndCurrency }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Right section - Actions -->
+                  <div class="flex gap-2 md:flex-col justify-end">
+                    <button
+                      nz-button
+                      nzType="link"
+                      class="text-blue-600 hover:text-blue-800"
+                      (click)="openDisbursementModal(item, index)"
+                    >
+                      <mat-icon fontIcon="edit"></mat-icon>
+                    </button>
+                    <button
+                      nz-button
+                      nzType="link"
+                      class="text-red-600 hover:text-red-800"
+                      (click)="removeDisbursement(index)"
+                    >
+                      <mat-icon fontIcon="delete"></mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </nz-list-item>
+          </ng-template>
+        </nz-list>
+      </div>
+
       <div class="flex justify-end mt-6 space-x-4">
         <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid" [nzLoading]="isLoading">
           Tạo
