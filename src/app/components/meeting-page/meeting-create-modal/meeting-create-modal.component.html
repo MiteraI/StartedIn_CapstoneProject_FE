@@ -1,12 +1,12 @@
 <div class="p-6 bg-white rounded-lg shadow-md max-w-2xl mx-auto">
   <!-- Form Header -->
-  <h2 class="text-2xl font-semibold mb-6 text-gray-800">Tạo Lịch Họp</h2>
+  <div class="text-2xl font-semibold mb-6 text-gray-800">Tạo Lịch họp</div>
 
   <!-- Form -->
-  <form nz-form [formGroup]="meetingForm" (ngSubmit)="submit()" nzLayout="vertical">
+  <form nz-form [formGroup]="meetingForm" nzLayout="vertical">
     <!-- Title -->
     <nz-form-item>
-      <nz-form-label nzRequired>Tiêu Đề</nz-form-label>
+      <nz-form-label class="font-medium" nzRequired>Tiêu Đề</nz-form-label>
       <nz-form-control nzErrorTip="Vui lòng nhập tiêu đề">
         <nz-input-group nzPrefixIcon="edit">
           <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc họp" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
@@ -14,79 +14,96 @@
       </nz-form-control>
     </nz-form-item>
 
-    <!-- Milestone Selection -->
+    <div class="flex gap-2">
+      <!-- Appointment Time -->
+      <nz-form-item>
+        <nz-form-label class="font-medium" nzRequired>Giờ Bắt Đầu </nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng chọn ngày">
+          <nz-input-group nzPrefixIcon="calendar">
+            <nz-date-picker
+              formControlName="appointmentTime"
+              [nzDisabledDate]="disabledDate"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              nzFormat="dd/MM/yyyy hh:mm a"
+              placeholder="Chọn ngày và giờ"
+              class="rounded-lg w-full"
+            ></nz-date-picker>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Appointment End Time -->
+      <nz-form-item>
+        <nz-form-label class="font-medium" nzRequired>Giờ Kết Thúc</nz-form-label>
+        <nz-form-control nzErrorTip="Vui lòng chọn ngày">
+          <nz-input-group nzPrefixIcon="calendar">
+            <nz-date-picker
+              formControlName="appointmentEndTime"
+              [nzDisabledDate]="disabledEndDate"
+              [nzDisabledTime]="disabledEndTime"
+              [nzShowTime]="{ nzFormat: 'HH:mm' }"
+              nzFormat="dd/MM/yyyy hh:mm a"
+              placeholder="Chọn ngày và giờ"
+              class="rounded-lg w-full"
+            ></nz-date-picker>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <!-- Assignees -->
     <nz-form-item>
-      <nz-form-label>Cột Mốc</nz-form-label>
+      <nz-form-label nzRequired class="font-medium">Người tham dự</nz-form-label>
       <nz-form-control>
-        <nz-select [nzLoading]="loadingMilestones" formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
-          <nz-option nzLabel="Không có" nzValue=""></nz-option>
-          @for (milestone of milestones; track $index) {
-          <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
+        <nz-select formControlName="parties" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện" [nzShowSearch]="true">
+          @for (user of users; track $index) {
+          <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
           }
         </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
-    <!-- Contracts Selection -->
-    <nz-form-item>
-      <nz-form-label>Hợp Đồng</nz-form-label>
-      <nz-form-control>
-        <nz-select [nzLoading]="loadingContracts" formControlName="contractId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
-          <nz-option nzLabel="Không có" [nzValue]="0"></nz-option>
-          @for (contract of contracts; track $index) {
-          <nz-option nzLabel="{{ contract.contractName }}" nzValue="{{ contract.id }}"></nz-option>
-          }
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
-    <!-- Appointment Time -->
-    <nz-form-item>
-      <nz-form-label nzRequired>Bắt Đầu Họp</nz-form-label>
-      <nz-form-control nzErrorTip="Vui lòng chọn ngày">
-        <nz-input-group nzPrefixIcon="calendar">
-          <nz-date-picker
-            formControlName="appointmentTime"
-            [nzDisabledDate]="disabledDate"
-            [nzShowTime]="{ nzFormat: 'HH:mm' }"
-            nzFormat="dd/MM/yyyy hh:mm"
-            placeholder="Chọn ngày và giờ"
-            class="rounded-lg w-full"
-          ></nz-date-picker>
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
-
-    <!-- Appointment End Time -->
-    <nz-form-item>
-      <nz-form-label nzRequired>Kết Thúc Họp</nz-form-label>
-      <nz-form-control nzErrorTip="Vui lòng chọn ngày">
-        <nz-input-group nzPrefixIcon="calendar">
-          <nz-date-picker
-            formControlName="appointmentEndTime"
-            [nzDisabledDate]="disabledEndDate"
-            [nzDisabledTime]="disabledEndTime"
-            [nzShowTime]="{ nzFormat: 'HH:mm' }"
-            nzFormat="dd/MM/yyyy hh:mm"
-            placeholder="Chọn ngày và giờ"
-            class="rounded-lg w-full"
-          ></nz-date-picker>
-        </nz-input-group>
       </nz-form-control>
     </nz-form-item>
 
     <!-- Meeting Link -->
     <nz-form-item>
-      <nz-form-label nzRequired>Link Cuộc Họp</nz-form-label>
+      <nz-form-label class="font-medium" nzRequired>Link Cuộc Họp</nz-form-label>
       <nz-form-control [nzErrorTip]="meetingForm.get('meetingLink')?.hasError('required') ? 'Vui lòng nhập link' : 'Link không hợp lệ'">
         <nz-input-group nzPrefixIcon="link">
           <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/abc-defg-hij" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
+
+    <div class="flex gap-2">
+      <!-- Milestone Selection -->
+      <nz-form-item class="w-full">
+        <nz-form-label class="font-medium">Cột Mốc</nz-form-label>
+        <nz-form-control>
+          <nz-select [nzLoading]="loadingMilestones" formControlName="milestoneId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
+            <nz-option nzLabel="Không có" nzValue=""></nz-option>
+            @for (milestone of milestones; track $index) {
+            <nz-option nzLabel="{{ milestone.title }}" nzValue="{{ milestone.id }}"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <!-- Contracts Selection -->
+      <nz-form-item class="w-full">
+        <nz-form-label class="font-medium">Hợp Đồng</nz-form-label>
+        <nz-form-control>
+          <nz-select [nzLoading]="loadingContracts" formControlName="contractId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
+            <nz-option nzLabel="Không có" nzValue=""></nz-option>
+            @for (contract of contracts; track $index) {
+            <nz-option nzLabel="{{ contract.contractName }}" nzValue="{{ contract.id }}"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
     <!-- Description -->
     <nz-form-item>
-      <nz-form-label>Thông Tin Buổi Họp</nz-form-label>
+      <nz-form-label class="font-medium">Thông Tin Buổi Họp</nz-form-label>
       <nz-form-control>
         <div class="flex items-start relative">
           <!-- Icon -->
@@ -103,9 +120,22 @@
       </nz-form-control>
     </nz-form-item>
 
+    <!-- Documents -->
+    <nz-form-item>
+      <nz-form-label class="font-medium">Đính Kèm Tài Liệu</nz-form-label>
+      <nz-form-control>
+        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [nzShowUploadList]="true" nzListType="text" class="upload-wrapper">
+          <button nz-button nzType="default" class="flex items-center">
+            <span nz-icon nzType="upload" class="mr-2"></span>
+            Chọn tài liệu đính kèm
+          </button>
+        </nz-upload>
+      </nz-form-control>
+    </nz-form-item>
+
     <!-- Submit Button -->
     <div class="flex justify-end mt-6">
-      <button type="submit" [disabled]="meetingForm.invalid" nz-button nzType="primary" class="text-white font-semibold rounded-lg">
+      <button [nzLoading]="loadingSubmit" type="submit" (click)="submit()" [disabled]="meetingForm.invalid" nz-button nzType="primary" class="text-white font-semibold rounded-lg">
         <i nz-icon nzType="check" nzTheme="outline"></i> Tạo Lịch Họp
       </button>
     </div>
