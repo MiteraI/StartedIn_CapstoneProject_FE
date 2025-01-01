@@ -14,8 +14,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { RequestApprovalModalComponent } from 'src/app/components/project-approval-pages/request-approval-modal/request-approval-modal.component'
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { TaskStatus } from 'src/app/shared/enums/task-status.enum';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,7 +29,8 @@ import { TaskStatus } from 'src/app/shared/enums/task-status.enum';
     NzSpinModule,
     MatIconModule,
     NzButtonModule,
-    NzModalModule]
+    NzModalModule
+  ]
 })
 export class DashboardPage implements OnInit {
   dashboard: DashboardModel | null = null
