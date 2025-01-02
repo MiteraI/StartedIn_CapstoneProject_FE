@@ -1,6 +1,8 @@
 <nz-skeleton [nzLoading]="loading" [nzActive]="true" [nzTitle]="true" [nzParagraph]="{ rows: 5 }">
+  @if(!loading){
+
   <div class="modal-content">
-    <h2 class="text-xl font-bold text-center mb-4">{{ meetingDetail.title }}</h2>
+    <div class="text-3xl font-bold text-center mb-4">{{ meetingDetail.title }}</div>
 
     <nz-descriptions [nzSize]="'middle'" [nzBordered]="true">
       <nz-descriptions-item nzTitle="Chi tiết" [nzSpan]="3">
@@ -87,4 +89,5 @@
       <button nz-button nzDanger nzShape="round" (click)="endMeeting()" [disabled]="meetingDetail.status !== MeetingStatus.ONGOING">Kết thúc cuộc họp</button>
     </div>
   </div>
+  }
 </nz-skeleton>
