@@ -133,7 +133,6 @@ export class MeetingTableComponent implements OnInit, OnChanges {
 
   openMeetingDetail(meetingDetail: MeetingDetailModel) {
     const modalRef = this.modalService.create({
-      nzTitle: 'Chi Tiết Cuộc Họp',
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '16px' },
       nzData: { meetingId: meetingDetail.id, projectId: this.projectId },

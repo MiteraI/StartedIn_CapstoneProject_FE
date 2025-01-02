@@ -56,6 +56,7 @@ export class MeetingDetailModalComponent implements OnInit {
       },
       error: (error) => {
         this.nzMessage.error(error)
+        this.loading = false
       },
     })
   }

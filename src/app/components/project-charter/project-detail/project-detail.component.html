@@ -5,28 +5,28 @@
 
 <div class="gap-5 flex flex-col bg-white border w-full">
   <!-- Project Logo and General Info -->
-  <div class="flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 bg-purple-200 rounded-lg p-4">
+  <div class="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-6 bg-purple-200 rounded-lg p-4">
     <!-- Logo Section -->
     <div class="p-2">
       <img
         *ngIf="projectGeneralInfo?.logoUrl"
         [src]="projectGeneralInfo?.logoUrl"
         alt="Project Logo"
-        class="w-20 h-20 md:w-32 md:h-32 rounded-full border-2 border-purple-400 shadow-md"
+        class="w-20 h-20 lg:w-32 lg:h-32 rounded-full border-2 border-purple-400 shadow-md"
       />
-      <div *ngIf="!projectGeneralInfo?.logoUrl" class="w-20 h-20 md:w-32 md:h-32 rounded-full bg-gray-300 flex items-center justify-center">
-        <span nz-icon nzType="project" nzTheme="outline" class="text-xl md:text-3xl text-gray-500"></span>
+      <div *ngIf="!projectGeneralInfo?.logoUrl" class="w-20 h-20 lg:w-32 lg:h-32 rounded-full bg-gray-300 flex items-center justify-center">
+        <span nz-icon nzType="project" nzTheme="outline" class="text-xl lg:text-3xl text-gray-500"></span>
       </div>
     </div>
 
     <!-- General Info -->
-    <div class="text-center md:text-left">
-      <h2 class="text-xl md:text-2xl font-bold text-gray-700">{{ projectGeneralInfo?.projectName }}</h2>
-      <p class="text-sm md:text-base text-gray-600 mt-2">
+    <div class="text-center lg:text-left">
+      <h2 class="text-xl lg:text-2xl font-bold text-gray-700">{{ projectGeneralInfo?.projectName }}</h2>
+      <p class="text-sm lg:text-base text-gray-600 mt-2">
         <span nz-icon nzType="calendar" nzTheme="outline"></span>
         Ngày thành lập: {{ projectGeneralInfo?.startDate | date : 'dd-MM-yyyy' }}
       </p>
-      <p class="text-sm md:text-base text-gray-600 mt-1">
+      <p class="text-sm lg:text-base text-gray-600 mt-1">
         <span nz-icon nzType="idcard" nzTheme="outline"></span>
         Thông tin dự án: {{ projectGeneralInfo?.description }}
       </p>
@@ -37,34 +37,8 @@
   <nz-collapse class="w-full">
     <!-- Team Members Table -->
     <nz-collapse-panel [nzHeader]="'Các thành viên dự án'" nzActive="true" class="bg-purple-200 rounded-lg w-full">
-      <!-- Table Wrapper for Mobile -->
-      <!-- <div class="overflow-x-auto w-auto">
-        <nz-table class="custom-table shadow-md w-full" #teamMemberTable [nzShowPagination]="false" nzBordered="true" [nzData]="projectGeneralInfo?.members ?? []">
-          <thead>
-            <tr>
-              <th>Tên Thành Viên</th>
-              <th>Vai Trò</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (data of teamMemberTable.data; track $index) {
-            <tr class="hover:bg-purple-50">
-              <td class="text-center text-sm md:text-base">{{ data.fullName }}</td>
-              <td class="text-center text-sm md:text-base">{{ teamRoleLabels[data.roleInTeam] }}</td>
-              <td class="text-center text-sm md:text-base">
-                <a href="mailto:{{ data.email }}" class="text-purple-600 hover:text-purple-800">
-                  {{ data.email }}
-                </a>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </nz-table>
-      </div> -->
-
       <!-- Table for Desktop -->
-      <div class="overflow-x-auto w-auto md:block hidden">
+      <div class="overflow-x-auto w-auto lg:block hidden">
         <nz-table nzSize="small" class="custom-table shadow-md w-full" #teamMemberTable [nzShowPagination]="false" nzBordered="true" [nzData]="projectGeneralInfo?.members ?? []">
           <thead>
             <tr>
@@ -90,12 +64,12 @@
       </div>
 
       <!-- List for Mobile -->
-      <div class="md:hidden flex flex-col gap-4">
+      <div class="lg:hidden flex flex-col gap-4">
         @for (data of projectGeneralInfo?.members ?? []; track $index) {
         <div class="border rounded-lg p-4 shadow-md flex flex-col gap-2 bg-purple-50 hover:bg-purple-100">
-          <p class="text-sm md:text-base"><span class="font-bold">Tên Thành Viên:</span> {{ data.fullName }}</p>
-          <p class="text-sm md:text-base"><span class="font-bold">Vai Trò:</span> {{ teamRoleLabels[data.roleInTeam] }}</p>
-          <p class="text-sm md:text-base">
+          <p class="text-sm lg:text-base"><span class="font-bold">Tên Thành Viên:</span> {{ data.fullName }}</p>
+          <p class="text-sm lg:text-base"><span class="font-bold">Vai Trò:</span> {{ teamRoleLabels[data.roleInTeam] }}</p>
+          <p class="text-sm lg:text-base">
             <span class="font-bold">Email:</span>
             <a href="mailto:{{ data.email }}" class="text-purple-600 hover:text-purple-800">
               {{ data.email }}
