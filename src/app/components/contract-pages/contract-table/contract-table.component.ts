@@ -216,6 +216,23 @@ export class ContractTableComponent  implements OnInit {
     });
   }
 
+  cancelLiquidation(contract: ContractListItemModel)
+  {
+    this.contractService.cancelLiquidation(this.projectId, contract.id)
+    .pipe(
+      catchError(error => {
+        this.notification.error("Lỗi", "Huỷ thanh lý thất bại!", { nzDuration: 2000 });
+        return throwError(() => new Error(error.error));
+      })
+    )
+    .subscribe(result => {
+      contract.contractStatus = this.contractStatuses.COMPLETED;
+      contract.lastUpdatedTime = new Date().toISOString();
+      this.notification.success("Thành công", "Huỷ thanh lý thành công!", { nzDuration: 2000 });
+    });
+  }
+
+
   navigateToContract(contract: ContractListItemModel) {
     this.router.navigate([
       '/projects',
