@@ -116,6 +116,16 @@
             class="text-orange-500 hover:text-orange-700">
             <mat-icon fontIcon="insert_page_break"></mat-icon>
           </button>
+          
+          <button
+            *ngIf="data.contractStatus === contractStatuses.WAITING_FOR_LIQUIDATION
+              && isLeader
+              && data.meetingStatus === 3"
+            (click)="$event.stopPropagation(); cancelLiquidation(data)"
+            class="text-red-500 hover:text-red-700">
+            <mat-icon fontIcon="not_interested"></mat-icon>
+          </button>
+
         </div>
       </td>
     </tr>
