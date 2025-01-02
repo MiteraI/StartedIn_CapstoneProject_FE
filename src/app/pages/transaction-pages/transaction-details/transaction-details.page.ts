@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TransactionModel } from 'src/app/shared/models/transaction/transaction.model';
 import { TransactionType, TransactionTypeLabels } from 'src/app/shared/enums/transaction-type.enum';
@@ -28,7 +28,8 @@ export class TransactionDetailsPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -49,5 +50,9 @@ export class TransactionDetailsPage implements OnInit {
     if (userId) {
       this.router.navigate(['/users', userId]);
     }
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }
