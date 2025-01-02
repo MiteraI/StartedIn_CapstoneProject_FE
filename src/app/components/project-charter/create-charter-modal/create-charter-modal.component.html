@@ -2,7 +2,7 @@
   <div class="flex gap-4">
     <div class="w-1/2">
       <p class="font-semibold text-xl text-gray-600 mb-2">Điều Lệ Dự Án</p>
-      <div class="p-2 bg-amber-100 rounded-md">
+      <div class="p-2 bg-purple-100 rounded-md">
         <div>
           <label class="block text-sm font-semibold p-2">BỐI CẢNH DỰ ÁN</label>
           <editor [apiKey]="editorKey" [init]="init" formControlName="businessCase"></editor>
@@ -50,7 +50,7 @@
       </div>
       <div formArrayName="listCreatePhaseDtos">
         @for (phase of listCreatePhaseDtos.controls; track $index; let i = $index) {
-        <div class="space-y-4 p-2 bg-amber-100 rounded-md mb-4" [formGroupName]="i">
+        <div class="space-y-4 p-2 bg-purple-100 rounded-md mb-4" [formGroupName]="i">
           <div class="flex flex-col">
             <label class="text-gray-600 font-semibold text-sm p-2">GIAI ĐOẠN</label>
             <input nz-input placeholder="Nhập giai đoạn" formControlName="phaseName" class="" />

@@ -1,58 +1,68 @@
-<form nz-form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-  <!-- Project Name -->
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="projectName">Tên dự án</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập tên dự án">
-      <input nz-input formControlName="projectName" id="projectName" />
-    </nz-form-control>
-  </nz-form-item>
+<div class="p-6">
+  <div class="text-xl font-bold mb-4 text-center text-gray-800">Tạo Dự Án</div>
+  <form nz-form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <!-- Project Name -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="projectName">
+        <span class="text-gray-700 font-medium">Tên Dự Án</span>
+      </nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Xin hãy nhập tên dự án">
+        <input nz-input formControlName="projectName" id="projectName" placeholder="Nhập tên dự án" class="border border-gray-300 rounded-lg px-4 py-2 w-full" />
+      </nz-form-control>
+    </nz-form-item>
 
-  <!-- Description -->
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="description">Miêu tả</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập miêu tả dự án">
-      <textarea nz-input formControlName="description" id="description"></textarea>
-    </nz-form-control>
-  </nz-form-item>
+    <!-- Description -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="description">
+        <span class="text-gray-700 font-medium">Miêu Tả</span>
+      </nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Xin hãy nhập miêu tả dự án">
+        <textarea nz-input formControlName="description" id="description" placeholder="Nhập miêu tả dự án" class="border border-gray-300 rounded-lg px-4 py-2 w-full"></textarea>
+      </nz-form-control>
+    </nz-form-item>
 
-  <!-- Logo -->
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired="" nzFor="logoFile">Logo</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input type="file" (change)="onFileSelected($event)" required />
-      @if (previewUrl) {<img [src]="previewUrl" alt="Logo Preview" class="size-24" />} @else {
-      <img src="https://www.energyfit.com.mk/wp-content/plugins/ap_background/images/default/default_large.png" alt="Default Logo" class="size-24" />
-      }
-    </nz-form-control>
-  </nz-form-item>
+    <!-- Logo -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="logoFile">
+        <span class="text-gray-700 font-medium">Logo</span>
+      </nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <div class="flex flex-col md:flex-1 md:items-center md:justify-between gap-4">
+          <input type="file" (change)="onFileSelected($event)" class="border md:w-2/3 border-gray-300 rounded-lg px-4 py-2" />
+          <img
+            [src]="previewUrl || 'https://www.energyfit.com.mk/wp-content/plugins/ap_background/images/default/default_large.png'"
+            alt="Logo Preview"
+            class="size-24 rounded-full border"
+          />
+        </div>
+      </nz-form-control>
+    </nz-form-item>
 
-  <!-- Start Date -->
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="startDate">Ngày bắt đầu</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu và kết thúc">
-      <nz-date-picker
-        formControlName="startDate"
-        [nzDisabledDate]="disabledStartDate"
-        nzFormat="dd/MM/yyyy"
-      ></nz-date-picker>
-    </nz-form-control>
-  </nz-form-item>
+    <!-- Start Date -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzRequired nzFor="startDate">
+        <span class="text-gray-700 font-medium">Ngày Bắt Đầu</span>
+      </nz-form-label>
+      <nz-form-control [nzSpan]="24" nzErrorTip="Xin hãy nhập ngày bắt đầu">
+        <nz-date-picker formControlName="startDate" [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy" class="w-full"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
 
-  <!-- End Date -->
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="endDate">Ngày Kết thúc</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-date-picker
-        formControlName="endDate"
-        [nzDisabledDate]="disabledEndDate"
-        nzFormat="dd/MM/yyyy"
-      ></nz-date-picker>
-    </nz-form-control>
-  </nz-form-item>
+    <!-- End Date -->
+    <nz-form-item>
+      <nz-form-label [nzSpan]="24" nzFor="endDate">
+        <span class="text-gray-700 font-medium">Ngày Kết Thúc</span>
+      </nz-form-label>
+      <nz-form-control [nzSpan]="24">
+        <nz-date-picker formControlName="endDate" [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy" class="w-full"></nz-date-picker>
+      </nz-form-control>
+    </nz-form-item>
 
-  <nz-form-item nz-row class="submit-area">
-    <nz-form-control [nzSpan]="14" [nzOffset]="6">
-      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid">Tạo dự án</button>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+    <!-- Submit Button -->
+    <div class="mt-6 text-center">
+      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400">
+        Tạo Dự Án
+      </button>
+    </div>
+  </form>
+</div>

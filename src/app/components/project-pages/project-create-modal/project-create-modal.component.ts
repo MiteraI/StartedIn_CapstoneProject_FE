@@ -25,6 +25,7 @@ export class ProjectCreateModalComponent {
   previewUrl: string | ArrayBuffer | null = null
   projectForm: FormGroup
 
+  loading = false
   date = null
   onChange(result: Date[]): void {
     console.log('onChange: ', result)
@@ -70,6 +71,8 @@ export class ProjectCreateModalComponent {
 
   onSubmit() {
     if (this.projectForm.valid) {
+      this.loading = true
+
       const formData = new FormData()
 
       formData.append('ProjectName', this.projectForm.get('projectName')?.value)
@@ -91,12 +94,14 @@ export class ProjectCreateModalComponent {
         next: (response) => {
           this.messageService.success('Tạo dự án thành công')
           this.projectService.refreshProject$.next(true)
+          this.loading = true
           this.modalRef.close()
         },
         error: (error) => {
           this.messageService.error(error.error)
           console.error('Error creating project', error.error)
           this.projectService.refreshProject$.next(true)
+          this.loading = true
           this.modalRef.close()
         },
       })

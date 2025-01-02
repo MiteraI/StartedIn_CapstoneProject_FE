@@ -63,6 +63,7 @@ export class CreateCharterModalComponent implements OnInit {
   ngOnInit() {
     this.projectId = this.nzModalData.projectId
     this.getCurrentProject()
+    this.addMilestone()
   }
 
   onSubmit() {
