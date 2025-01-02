@@ -8,6 +8,7 @@ import { DisbursementStatus } from "../shared/enums/disbursement-status.enum";
 import { DisbursementDetailModel } from "../shared/models/disbursement/disbursement-detail.model";
 import { DisbursementMonthlyInfoModel } from "../shared/models/disbursement/disbursement-monthly-info.model";
 import { DisbursementForProjectModel } from "../shared/models/disbursement/disbursement-for-project.model";
+import { DisbursementOverallModel } from "../shared/models/disbursement/disbursement-overall.model";
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +28,9 @@ export class DisbursementService {
 
   private parseMonthlyInfo(info: DisbursementMonthlyInfoModel): DisbursementMonthlyInfoModel {
     return {
-      ...info,
+      totalDisbursement: typeof info.totalDisbursement === 'string' ? parseFloat(info.totalDisbursement) : info.totalDisbursement,
       disbursedAmount: typeof info.disbursedAmount === 'string' ? parseFloat(info.disbursedAmount) : info.disbursedAmount,
+      notDisbursedAmount: typeof info.notDisbursedAmount === 'string' ? parseFloat(info.notDisbursedAmount) : info.notDisbursedAmount,
       remainingDisbursement: typeof info.remainingDisbursement === 'string' ? parseFloat(info.remainingDisbursement) : info.remainingDisbursement
     };
   }
@@ -146,6 +148,21 @@ export class DisbursementService {
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/${id}`)
     ).pipe(
       map(disbursement => this.parseNumericFields(disbursement))
+    );
+  }
+
+  getOverallInfo() {
+    return this.http.get<DisbursementOverallModel>(
+      this.applicationConfigService.getEndpointFor(`/api/disbursements/investor-overview`)
+    ).pipe(
+      map(disbursement => {
+        return {
+          overall: this.parseMonthlyInfo(disbursement.overall),
+          lastMonth: this.parseMonthlyInfo(disbursement.lastMonth),
+          currentMonth: this.parseMonthlyInfo(disbursement.currentMonth),
+          nextMonth: this.parseMonthlyInfo(disbursement.nextMonth)
+        }
+      })
     );
   }
 

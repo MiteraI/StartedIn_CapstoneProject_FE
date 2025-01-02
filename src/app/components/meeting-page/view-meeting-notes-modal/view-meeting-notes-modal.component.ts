@@ -39,7 +39,6 @@ export class ViewMeetingNotesModalComponent implements OnInit {
 
   handleUpload(): void {
     const formData = new FormData()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     this.fileList.forEach((file: any) => {
       formData.append('Notes', file)
     })

@@ -9,6 +9,7 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { ContractService } from 'src/app/services/contract.service'
+import { ProjectService } from 'src/app/services/project.service'
 import { TerminationRequestService } from 'src/app/services/termination-request.service'
 import { TerminationRequestModel } from 'src/app/shared/models/termination-request/termination-request.model'
 
@@ -43,7 +44,8 @@ export class TerminateMeetingModalComponent implements OnInit {
     private notification: NzNotificationService,
     private nzModalRef: NzModalRef,
     private terminationRequestService: TerminationRequestService,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private projectService: ProjectService
   ) { }
 
   ngOnInit() {
@@ -52,6 +54,18 @@ export class TerminateMeetingModalComponent implements OnInit {
       appointmentTime: ['', [Validators.required]],
       description: [''],
       meetingLink: ['', [Validators.required, urlValidator()]],
+    });
+    this.loadDefaultMeetingUrl();
+  }
+
+  loadDefaultMeetingUrl() {
+    this.projectService.getProject(this.data.projectId).subscribe({
+      next: (project) => {
+        this.meetingForm.patchValue({ meetingLink: project.appointmentUrl || ''});
+      },
+      error: (error) => {
+        this.notification.error('Lỗi', error.error || 'Không thể tải link cuộc họp mặc định!', { nzDuration: 2000 });
+      }
     });
   }
 

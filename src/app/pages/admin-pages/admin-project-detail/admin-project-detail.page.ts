@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
 import { ActivatedRoute } from '@angular/router'
 import { MatIconModule } from '@angular/material/icon'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
@@ -24,7 +24,13 @@ export class AdminProjectDetailPage implements OnInit {
   projectStatus = ProjectStatus
   statusLabels = ProjectStatusLabels
 
-  constructor(private route: ActivatedRoute, private modalService: NzModalService, private adminService: AdminService, private notification: NzNotificationService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private modalService: NzModalService,
+    private adminService: AdminService,
+    private notification: NzNotificationService,
+    private location: Location
+  ) {}
 
   currentSelectedTab = 0
   ngOnInit() {
@@ -70,5 +76,9 @@ export class AdminProjectDetailPage implements OnInit {
           })
       },
     })
+  }
+
+  navigateBack() {
+    this.location.back()
   }
 }

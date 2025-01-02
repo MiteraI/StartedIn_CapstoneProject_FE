@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DisbursementService } from 'src/app/services/disbursement.service';
 import { DisbursementDetailModel } from 'src/app/shared/models/disbursement/disbursement-detail.model';
@@ -39,7 +39,8 @@ export class ProjectDisbursementDetailPage implements OnInit {
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private disbursementService: DisbursementService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -87,5 +88,9 @@ export class ProjectDisbursementDetailPage implements OnInit {
           });
       }
     });
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }
