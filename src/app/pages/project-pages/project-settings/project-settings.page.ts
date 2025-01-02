@@ -10,7 +10,6 @@ import { TeamRole } from 'src/app/shared/enums/team-role.enum';
 import { LeaveProjectModalComponent } from 'src/app/components/project-pages/leave-project-modal/leave-project-modal.component';
 import { LeavingRequestListComponent } from 'src/app/components/project-pages/leaving-request-list/leaving-request-list.component';
 import { ProjectService } from 'src/app/services/project.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -65,7 +64,7 @@ export class ProjectSettingsPage implements OnInit {
         this.defaultMeetingUrl = project.appointmentUrl || '';
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể tải link cuộc họp mặc định!', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể tải link cuộc họp mặc định!', { nzDuration: 2000 });
       }
     });
   }
