@@ -20,6 +20,8 @@ import { CreateMilestone } from 'src/app/shared/models/milestone/milestone-creat
 import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { MeetingCreateModalComponent } from '../../meeting-page/meeting-create-modal/meeting-create-modal.component'
 import { CommonModule } from '@angular/common'
+import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 
 interface IModalData {
   projectId: string
@@ -30,7 +32,20 @@ interface IModalData {
   templateUrl: './create-milestone-modal.component.html',
   styleUrls: ['./create-milestone-modal.component.scss'],
   standalone: true,
-  imports: [NzFormModule, NzInputModule, NzDatePickerModule, ReactiveFormsModule, NzButtonModule, NzSelectModule, NzIconModule, NzTableModule, MatIconModule, NzModalModule, CommonModule],
+  imports: [
+    NzFormModule,
+    NzInputModule,
+    NzDatePickerModule,
+    ReactiveFormsModule,
+    NzButtonModule,
+    NzSelectModule,
+    NzIconModule,
+    NzTableModule,
+    MatIconModule,
+    NzModalModule,
+    CommonModule,
+    EditorModule
+  ],
 })
 export class CreateMilestoneModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
@@ -45,6 +60,13 @@ export class CreateMilestoneModalComponent implements OnInit {
     } else {
       this.expandSet.delete(id)
     }
+  }
+
+  editorKey = EDITOR_KEY
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {},
   }
 
   constructor(

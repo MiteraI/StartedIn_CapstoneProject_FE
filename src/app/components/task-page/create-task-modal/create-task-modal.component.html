@@ -16,7 +16,7 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label class="font-medium">Ưu tiên</nz-form-label>
+    <nz-form-label [nzRequired]="true" class="font-medium">Ưu tiên</nz-form-label>
     <nz-form-control>
       <div class="flex gap-2">
         <nz-input-number class="w-1/2" formControlName="priority" [nzMin]="0" [nzPrecision]="0" [nzMax]="10"></nz-input-number>
@@ -35,8 +35,8 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label class="font-medium">Ngày bắt đầu</nz-form-label>
-      <nz-form-control>
+      <nz-form-label [nzRequired]="true" class="font-medium">Ngày bắt đầu</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày bắt đầu'">
         <nz-date-picker
           formControlName="startDate"
           [nzShowTime]="{ nzFormat: 'HH' }"
@@ -49,8 +49,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="font-medium">Ngày kết thúc</nz-form-label>
-      <nz-form-control>
+      <nz-form-label [nzRequired]="true" class="font-medium">Ngày kết thúc</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng chọn ngày kết thúc'">
         <nz-date-picker
           formControlName="endDate"
           [nzShowTime]="{ nzFormat: 'HH' }"
@@ -66,7 +66,7 @@
   <!-- Deadline Field (Date and Time Picker) and Choose Parent Task-->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     <nz-form-item>
-      <nz-form-label class="font-medium">Tác vụ mẹ</nz-form-label>
+      <nz-form-label [nzRequired]="currentRole !== roleInTeamEnum.LEADER" class="font-medium">Tác vụ mẹ</nz-form-label>
       <nz-form-control>
         <nz-select
           formControlName="parentTask"
@@ -91,8 +91,8 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label class="font-medium">Số giờ làm</nz-form-label>
-      <nz-form-control>
+      <nz-form-label [nzRequired]="true" class="font-medium">Số giờ làm</nz-form-label>
+      <nz-form-control [nzErrorTip]="'Vui lòng nhập số giờ làm'">
         <nz-input-number formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" class="w-full"></nz-input-number>
       </nz-form-control>
     </nz-form-item>

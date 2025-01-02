@@ -37,6 +37,12 @@ export class TaskService {
     endDate?: string,
     priority?: boolean
   ): Observable<Pagination<Task>> {
+    let priorityString = null;
+    if (priority !== null && priority !== undefined) {
+      priorityString = priority ? 'true' : 'false';
+    } else {
+      priorityString = '';
+    }
     const query =
       (title?.trim() ? `title=${title.trim()}&` : '') +
       (status ? `status=${status}&` : '') +
@@ -45,7 +51,7 @@ export class TaskService {
       (milestoneId ? `milestoneId=${milestoneId}&` : '') +
       (startDate ? `startDate=${startDate}&` : '') +
       (endDate ? `endDate=${endDate}&` : '') +
-      (priority !== null ? `priority=${priority}&` : '') +
+      `priority=${priorityString}&` +
       `page=${page}&size=${size}`
 
     return this.http.get<Pagination<Task>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks?${query}`))
