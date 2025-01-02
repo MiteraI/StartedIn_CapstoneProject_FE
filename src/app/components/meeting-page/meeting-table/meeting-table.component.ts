@@ -124,7 +124,7 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       nzData: {
         projectId: this.projectId,
         appendMode: false,
-        appointmentTime: new Date().toISOString(),
+        appointmentTime: new Date(),
       },
       nzFooter: null,
       nzWidth: '700px',

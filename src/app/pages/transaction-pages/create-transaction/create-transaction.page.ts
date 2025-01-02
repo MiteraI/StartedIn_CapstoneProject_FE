@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -51,7 +51,8 @@ export class CreateTransactionPage implements OnInit {
     private roleService: RoleInTeamService,
     private notification: NzNotificationService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -120,5 +121,9 @@ export class CreateTransactionPage implements OnInit {
             this.router.navigate(['../transactions'], { relativeTo: this.route });
           });
       });
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

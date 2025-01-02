@@ -9,6 +9,7 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef } from 'ng-zorro-antd/modal'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { LeaderTransferService } from 'src/app/services/leader-transfer.service'
+import { ProjectService } from 'src/app/services/project.service'
 
 interface IModalData {
   projectId: string
@@ -39,7 +40,8 @@ export class TransferMeetingModalComponent implements OnInit {
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private nzModalRef: NzModalRef,
-    private leaderTransferService: LeaderTransferService
+    private leaderTransferService: LeaderTransferService,
+    private projectService: ProjectService
   ) { }
 
   ngOnInit() {
@@ -48,6 +50,18 @@ export class TransferMeetingModalComponent implements OnInit {
       appointmentTime: ['', [Validators.required]],
       description: [''],
       meetingLink: ['', [Validators.required, urlValidator()]],
+    });
+    this.loadDefaultMeetingUrl();
+  }
+
+  loadDefaultMeetingUrl() {
+    this.projectService.getProject(this.data.projectId).subscribe({
+      next: (project) => {
+        this.meetingForm.patchValue({ meetingLink: project.appointmentUrl || ''});
+      },
+      error: (error) => {
+        this.notification.error('Lỗi', error.error || 'Không thể tải link cuộc họp mặc định!', { nzDuration: 2000 });
+      }
     });
   }
 

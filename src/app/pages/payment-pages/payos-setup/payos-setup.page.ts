@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -39,7 +39,8 @@ export class PayosSetupPage implements OnInit {
     private router: Router,
     private projectService: ProjectService,
     private notification: NzNotificationService,
-    private roleService: RoleInTeamService
+    private roleService: RoleInTeamService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -95,5 +96,9 @@ export class PayosSetupPage implements OnInit {
           this.notification.success('Thành công', 'Đã cập nhật thông tin PayOS', { nzDuration: 2000 });
         });
     }
+  }
+
+  navigateBack() {
+    this.location.back()
   }
 }

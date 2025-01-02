@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http'
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
 import { NzButtonModule } from 'ng-zorro-antd/button'
@@ -8,28 +9,37 @@ import { NzInputModule } from 'ng-zorro-antd/input'
 import { NZ_MODAL_DATA, NzModalModule, NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { NzSelectModule } from 'ng-zorro-antd/select'
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton'
+import { NzUploadFile, NzUploadModule } from 'ng-zorro-antd/upload'
 import { tap } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { ContractService } from 'src/app/services/contract.service'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
+import { ProjectService } from 'src/app/services/project.service'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
+import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 
 @Component({
   selector: 'app-meeting-create-modal',
   templateUrl: './meeting-create-modal.component.html',
   styleUrls: ['./meeting-create-modal.component.scss'],
   standalone: true,
-  imports: [ReactiveFormsModule, NzButtonModule, NzFormModule, NzInputModule, NzModalModule, NzSelectModule, NzDatePickerModule, NzSkeletonModule, NzIconModule],
+  imports: [ReactiveFormsModule, NzButtonModule, NzFormModule, NzInputModule, NzModalModule, NzSelectModule, NzDatePickerModule, NzSkeletonModule, NzIconModule, NzUploadModule],
 })
 export class MeetingCreateModalComponent implements OnInit {
   readonly nzModalData = inject(NZ_MODAL_DATA)
   meetingForm: FormGroup
   milestones: Milestone[] = []
   contracts: ContractListItemModel[] = []
+  users: TeamMemberModel[] = []
+  fileList: NzUploadFile[] = []
+
   loadingMilestones = false
   loadingContracts = false
+  loadingSubmit = false
+
   constructor(
     private fb: FormBuilder,
     private milestoneService: MilestoneService,
@@ -37,16 +47,18 @@ export class MeetingCreateModalComponent implements OnInit {
     private nzModalRef: NzModalRef,
     private modalService: NzModalService,
     private meetingService: MeetingService,
-    private contractService: ContractService
+    private contractService: ContractService,
+    private projectService: ProjectService
   ) {
     this.meetingForm = this.fb.group({
       milestoneId: [''],
       contractId: [''],
       title: ['', [Validators.required]],
       appointmentTime: [this.nzModalData.appointmentTime, [Validators.required]],
-      appointmentEndTime: [null, [Validators.required]],
+      appointmentEndTime: [this.addOneHour(this.nzModalData.appointmentTime), [Validators.required]],
       description: [''],
       meetingLink: ['', [Validators.required, urlValidator()]],
+      parties: [[], [Validators.required]],
     })
   }
 
@@ -54,6 +66,7 @@ export class MeetingCreateModalComponent implements OnInit {
     if (!this.nzModalData.appendMode) {
       this.loadingMilestones = true
       this.loadingContracts = true
+
       this.milestoneService.getMilestones(this.nzModalData.projectId, 1, 20).subscribe({
         next: (milestones) => {
           this.milestones = milestones.data
@@ -61,16 +74,40 @@ export class MeetingCreateModalComponent implements OnInit {
           this.loadingMilestones = false
         },
       })
-      this.contractService
-        .getContractListForProject(this.nzModalData.projectId, 1, 20)
-        .pipe(tap())
-        .subscribe({
-          next: (contracts) => {
-            this.contracts = contracts.data
-            this.loadingContracts = false
-          },
-        })
+
+      this.contractService.getContractListForProject(this.nzModalData.projectId, 1, 20).subscribe({
+        next: (contracts) => {
+          this.contracts = contracts.data
+          this.loadingContracts = false
+        },
+      })
+      // get meeting link
+      this.projectService.getProject(this.nzModalData.projectId).subscribe({
+        next: (project) => {
+          this.meetingForm.patchValue({ meetingLink: project.appointmentUrl })
+        },
+      })
+
+      // get team members
+      this.projectService.getMembers(this.nzModalData.projectId).subscribe({
+        next: (res) => {
+          this.users = res.filter((u) => u.roleInTeam !== TeamRole.LEADER)
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.status === 400) {
+            this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 500) {
+            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+          } else {
+          }
+        },
+      })
     }
+
+    // Subscribe to startTime changes to update endTime
+    this.meetingForm.get('appointmentTime')?.valueChanges.subscribe((newStartTime: Date) => {
+      this.updateEndTime(newStartTime)
+    })
   }
 
   submit() {
@@ -96,7 +133,13 @@ export class MeetingCreateModalComponent implements OnInit {
     })
   }
 
+  beforeUpload = (file: NzUploadFile): boolean => {
+    this.fileList = this.fileList.concat(file)
+    return false
+  }
+
   createMeeting() {
+    this.loadingSubmit = true
     if (this.meetingForm.get('milestoneId')?.value === '') {
       this.meetingForm.patchValue({ milestoneId: null })
     }
@@ -104,8 +147,31 @@ export class MeetingCreateModalComponent implements OnInit {
     if (this.meetingForm.get('contractId')?.value === '') {
       this.meetingForm.patchValue({ contractId: null })
     }
-    this.meetingService.createMeeting(this.nzModalData.projectId, this.meetingForm.value).subscribe({
+
+    const formData = new FormData()
+
+    // Append each form field to the FormData object
+    formData.append('MilestoneId', this.meetingForm.get('milestoneId')?.value || '')
+    formData.append('ContractId', this.meetingForm.get('contractId')?.value || '')
+    formData.append('Title', this.meetingForm.get('title')?.value)
+    formData.append('AppointmentTime', this.meetingForm.get('appointmentTime')?.value.toISOString())
+    formData.append('AppointmentEndTime', this.meetingForm.get('appointmentEndTime')?.value.toISOString())
+    formData.append('Description', this.meetingForm.get('description')?.value || '')
+    formData.append('MeetingLink', this.meetingForm.get('meetingLink')?.value)
+
+    // Handle arrays
+    const parties = this.meetingForm.get('parties')?.value || []
+    parties.forEach((party: string) => {
+      formData.append('Parties', party)
+    })
+
+    this.fileList.forEach((document: any) => {
+      formData.append('Documents', document)
+    })
+
+    this.meetingService.createMeeting(this.nzModalData.projectId, formData).subscribe({
       next: () => {
+        this.loadingSubmit = false
         this.antdNoti.openSuccessNotification('Thành công', 'Tạo cuộc họp thành công')
         this.meetingService.refreshMeeting$.next(true)
         this.nzModalRef.close()
@@ -182,6 +248,17 @@ export class MeetingCreateModalComponent implements OnInit {
       console.error('Invalid URL:', url)
       return url // Return original if parsing fails
     }
+  }
+
+  addOneHour(date: Date): Date {
+    const newDate = new Date(date)
+    newDate.setHours(newDate.getHours() + 1)
+    return newDate
+  }
+
+  updateEndTime(newStartTime: Date): void {
+    const newEndTime = this.addOneHour(newStartTime)
+    this.meetingForm.get('appointmentEndTime')?.setValue(newEndTime)
   }
 }
 

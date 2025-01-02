@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DisbursementDetailModel } from 'src/app/shared/models/disbursement/disbursement-detail.model';
 import { DisbursementStatus, DisbursementStatusLabels } from 'src/app/shared/enums/disbursement-status.enum';
@@ -40,7 +40,8 @@ export class InvestorDisbursementDetailPage implements OnInit {
     private route: ActivatedRoute,
     private modalService: NzModalService,
     private notification: NzNotificationService,
-    private disbursementService: DisbursementService
+    private disbursementService: DisbursementService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -101,5 +102,9 @@ export class InvestorDisbursementDetailPage implements OnInit {
           });
       }
     });
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

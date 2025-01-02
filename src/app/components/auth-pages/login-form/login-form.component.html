@@ -30,9 +30,9 @@
           <nz-form-label nzNoColon>Mật Khẩu</nz-form-label>
           <nz-input-group nzSize="large" nzPrefixIcon="lock">
             <input nz-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Nhập mật khẩu" />
-            <button (click)="togglePasswordVisibility()" class="">
+            <div (click)="togglePasswordVisibility()" class="cursor-pointer">
               <i nz-icon [nzType]="showPassword ? 'eye-invisible' : 'eye'"></i>
-            </button>
+            </div>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
