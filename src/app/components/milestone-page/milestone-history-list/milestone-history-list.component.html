@@ -6,7 +6,7 @@
   } @if (isLoading) {
   <br /><br /><br />
   <nz-spin></nz-spin>
-  } @if (isEndOfList) {
+  } @if (isEndOfList || !isLoading) {
   <p class="text-center">Hết Lịch Sử</p>
   }
 </div>
