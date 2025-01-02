@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -26,7 +26,8 @@ export class LeaderTransferDetailPage implements OnInit {
   transfer!: LeaderTransferHistoryModel;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -52,5 +53,9 @@ export class LeaderTransferDetailPage implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 }

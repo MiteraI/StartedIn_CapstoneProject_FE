@@ -29,7 +29,7 @@
     </div>
 
     <!-- Content -->
-    <div class="p-6">
+    <div class="p-6 border-b">
       <!-- From - To -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-gray-50 p-4 rounded-lg" [ngClass]="{'cursor-pointer': transaction.fromID}" (click)="navigateToUser(transaction.fromID)">
@@ -135,6 +135,16 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-between">
+      <button
+        (click)="navigateBack()"
+        class="text-blue-500 hover:text-blue-700 px-8 py-3"
+      >
+        Quay lại
+      </button>
     </div>
   </div>
 </div>
