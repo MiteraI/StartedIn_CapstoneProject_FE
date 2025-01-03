@@ -21,7 +21,7 @@
 </app-filter-bar>
 
 <div class="p-4 max-w-7xl mx-auto overflow-y-auto">
-  <div *ngIf="projects.length === 0" class="text-center text-gray-500 py-4">
+  <div *ngIf="!isLoading && projects.length === 0" class="text-center text-gray-500 py-4">
     Không có dự án nào!
   </div>
 
