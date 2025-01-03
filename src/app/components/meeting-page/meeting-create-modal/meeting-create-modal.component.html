@@ -1,6 +1,6 @@
 <div class="p-6 bg-white rounded-lg shadow-md max-w-2xl mx-auto">
   <!-- Form Header -->
-  <div class="text-2xl font-semibold mb-6 text-gray-800">Tạo Lịch họp</div>
+  <div class="text-2xl font-semibold mb-6 text-gray-800">Tạo Lịch hẹn</div>
 
   <!-- Form -->
   <form nz-form [formGroup]="meetingForm" nzLayout="vertical">
@@ -9,7 +9,7 @@
       <nz-form-label class="font-medium" nzRequired>Tiêu Đề</nz-form-label>
       <nz-form-control nzErrorTip="Vui lòng nhập tiêu đề">
         <nz-input-group nzPrefixIcon="edit">
-          <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc họp" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
+          <input nz-input formControlName="title" placeholder="Nhập tiêu đề cuộc hẹn" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
         </nz-input-group>
       </nz-form-control>
     </nz-form-item>
@@ -65,7 +65,7 @@
 
     <!-- Meeting Link -->
     <nz-form-item>
-      <nz-form-label class="font-medium" nzRequired>Link Cuộc Họp</nz-form-label>
+      <nz-form-label class="font-medium" nzRequired>Link Cuộc hẹn</nz-form-label>
       <nz-form-control [nzErrorTip]="meetingForm.get('meetingLink')?.hasError('required') ? 'Vui lòng nhập link' : 'Link không hợp lệ'">
         <nz-input-group nzPrefixIcon="link">
           <input nz-input formControlName="meetingLink" placeholder="https://meet.google.com/abc-defg-hij" class="rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500" />
@@ -103,7 +103,7 @@
 
     <!-- Description -->
     <nz-form-item>
-      <nz-form-label class="font-medium">Thông Tin Buổi Họp</nz-form-label>
+      <nz-form-label class="font-medium">Thông Tin Buổi Hẹn</nz-form-label>
       <nz-form-control>
         <div class="flex items-start relative">
           <!-- Icon -->
@@ -112,7 +112,7 @@
           <textarea
             nz-input
             formControlName="description"
-            placeholder="Mô tả chi tiết cuộc họp"
+            placeholder="Mô tả chi tiết cuộc hẹn"
             nzAutosize
             class="pl-10 rounded-lg border-gray-300 focus:ring-1 focus:ring-blue-500 w-full"
           ></textarea>
@@ -136,7 +136,7 @@
     <!-- Submit Button -->
     <div class="flex justify-end mt-6">
       <button [nzLoading]="loadingSubmit" type="submit" (click)="submit()" [disabled]="meetingForm.invalid" nz-button nzType="primary" class="text-white font-semibold rounded-lg">
-        <i nz-icon nzType="check" nzTheme="outline"></i> Tạo Lịch Họp
+        <i nz-icon nzType="check" nzTheme="outline"></i> Tạo Lịch Hẹn
       </button>
     </div>
   </form>
