@@ -21,15 +21,15 @@
 
     <!-- General Info -->
     <div class="text-center lg:text-left">
-      <h2 class="text-xl lg:text-2xl font-bold text-gray-700">{{ projectGeneralInfo?.projectName }}</h2>
-      <p class="text-sm lg:text-base text-gray-600 mt-2">
+      <div class="text-xl lg:text-2xl font-bold text-gray-700">{{ projectGeneralInfo?.projectName }}</div>
+      <div class="text-sm lg:text-base text-gray-600 mt-2">
         <span nz-icon nzType="calendar" nzTheme="outline"></span>
         Ngày thành lập: {{ projectGeneralInfo?.startDate | date : 'dd-MM-yyyy' }}
-      </p>
-      <p class="text-sm lg:text-base text-gray-600 mt-1">
+      </div>
+      <div class="text-sm lg:text-base text-gray-600 mt-1">
         <span nz-icon nzType="idcard" nzTheme="outline"></span>
         Thông tin dự án: {{ projectGeneralInfo?.description }}
-      </p>
+      </div>
     </div>
   </div>
 

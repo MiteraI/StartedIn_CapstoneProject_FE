@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
@@ -62,6 +62,8 @@ export class MembersPage implements OnInit {
 
   teamRoles = TeamRole;
   teamRoleLabels = TeamRoleLabels;
+
+  @ViewChild(LeaderHistorySidebarComponent) historyComponent!: LeaderHistorySidebarComponent;
 
   leaderTransfer?: LeaderTransferModel;
   isLeader: boolean = false;
@@ -239,6 +241,8 @@ export class MembersPage implements OnInit {
         this.loadMembers();
         this.leaderTransfer = undefined;
         this.loadTransfer();
+        this.historyComponent.loadHistory();
+        this.roleService.fetchRole();
       }
     });
   }
