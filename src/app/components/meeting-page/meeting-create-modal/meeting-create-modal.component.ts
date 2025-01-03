@@ -16,9 +16,11 @@ import { ContractService } from 'src/app/services/contract.service'
 import { MeetingService } from 'src/app/services/meeting.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { ProjectService } from 'src/app/services/project.service'
+import { UserService } from 'src/app/services/user.service'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
+import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
 import { TeamMemberModel } from 'src/app/shared/models/user/team-member.model'
 
 @Component({
@@ -33,6 +35,7 @@ export class MeetingCreateModalComponent implements OnInit {
   meetingForm: FormGroup
   milestones: Milestone[] = []
   contracts: ContractListItemModel[] = []
+  currentUser: FullProfile | null = null
   users: TeamMemberModel[] = []
   fileList: NzUploadFile[] = []
 
@@ -48,7 +51,8 @@ export class MeetingCreateModalComponent implements OnInit {
     private modalService: NzModalService,
     private meetingService: MeetingService,
     private contractService: ContractService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private userService: UserService
   ) {
     this.meetingForm = this.fb.group({
       milestoneId: [''],
@@ -81,32 +85,42 @@ export class MeetingCreateModalComponent implements OnInit {
           this.loadingContracts = false
         },
       })
-      // get meeting link
-      this.projectService.getProject(this.nzModalData.projectId).subscribe({
-        next: (project) => {
-          this.meetingForm.patchValue({ meetingLink: project.appointmentUrl })
-        },
-      })
-
-      // get team members
-      this.projectService.getMembers(this.nzModalData.projectId).subscribe({
-        next: (res) => {
-          this.users = res.filter((u) => u.roleInTeam !== TeamRole.LEADER)
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.status === 400) {
-            this.antdNoti.openErrorNotification('', error.error)
-          } else if (error.status === 500) {
-            this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else {
-          }
-        },
-      })
     }
+    // get meeting link
+    this.projectService.getProject(this.nzModalData.projectId).subscribe({
+      next: (project) => {
+        this.meetingForm.patchValue({ meetingLink: project.appointmentUrl })
+      },
+    })
+
+    //get current user
+    this.userService.getFullProfile().subscribe({
+      next: (res) => {
+        this.currentUser = res
+        this.fetchTeamMembers()
+      },
+    })
 
     // Subscribe to startTime changes to update endTime
     this.meetingForm.get('appointmentTime')?.valueChanges.subscribe((newStartTime: Date) => {
       this.updateEndTime(newStartTime)
+    })
+  }
+
+  fetchTeamMembers() {
+    // get team members
+    this.projectService.getMembers(this.nzModalData.projectId).subscribe({
+      next: (res) => {
+        this.users = res.filter((u) => u.id !== this.currentUser?.id)
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          this.antdNoti.openErrorNotification('', error.error)
+        } else if (error.status === 500) {
+          this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
+        } else {
+        }
+      },
     })
   }
 
@@ -177,6 +191,7 @@ export class MeetingCreateModalComponent implements OnInit {
         this.nzModalRef.close()
       },
       error: (err) => {
+        this.loadingSubmit = false
         console.error('Error:', err)
         this.antdNoti.openErrorNotification('Thất bại', err.error)
       },

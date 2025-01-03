@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common'
 import { ScrollService } from 'src/app/core/util/scroll.service'
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 
 @Component({
   selector: 'app-meeting-table',
@@ -30,6 +31,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin'
 export class MeetingTableComponent implements OnInit, OnChanges {
   @Input({ required: true }) projectId = ''
   @Input({ required: true }) filterResult: MeetingFilterOptions = {}
+  @Input({ required: true }) role: TeamRole | null = null
   @Input() meetingId: string = ''
 
   listMeeting: SearchResponseModel<MeetingDetailModel> = {
@@ -230,5 +232,12 @@ export class MeetingTableComponent implements OnInit, OnChanges {
 
     this.listMeeting.page++
     this.filterMeetings(true)
+  }
+
+  isValidRole() {
+    if (this.role === TeamRole.LEADER || this.role === TeamRole.MENTOR) {
+      return true
+    }
+    return false
   }
 }
