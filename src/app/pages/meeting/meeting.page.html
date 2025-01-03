@@ -1,4 +1,4 @@
-<app-filter-bar viewName="Danh mục các cuộc họp" (filterMenuOpened)="onFilterMenuOpened()">
+<app-filter-bar viewName="Danh mục các cuộc hẹn" (filterMenuOpened)="onFilterMenuOpened()">
   <div desktop class="p-4 min-w-[400px]">
     <app-meeting-filter [projectId]="projectId" [data]="filterData" (filterApplied)="onFilterApplied($event)"></app-meeting-filter>
   </div>
@@ -10,7 +10,7 @@
 @if(isDesktopView){
 <div class="px-10 mt-5">
   <p>
-    Danh sách lịch họp
+    Danh sách lịch hẹn
     <nz-switch [(ngModel)]="isTable"></nz-switch>
   </p>
   @if(isTable){
