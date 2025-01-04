@@ -68,7 +68,7 @@ export class DashboardPage implements OnInit {
     return task.assignees && task.assignees.length > 0
       ? task.assignees
           .map((assignee: any) =>
-            `${assignee.fullName} (${assignee.actualManHour ? `${assignee.actualManHour} giờ` : 'N/A'})`
+            `${assignee.fullName}`
           )
           .join(', ')
       : '';
