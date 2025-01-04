@@ -97,7 +97,7 @@
           <nz-form-control>
             <div class="flex gap-2">
               <nz-input-number class="flex-grow" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" (ngModelChange)="handleInfoChanged()"></nz-input-number>
-              <button nz-button nzType="primary" (click)="openLogWorkModal()">{{ isAssignedToMe ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}</button>
+              <button nz-button nzType="primary" (click)="openLogWorkModal()">{{ isAssignedToMe && !isParentTaskSimple ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}</button>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -169,7 +169,7 @@
           </nz-form-control>
         </nz-form-item>
 
-        @if (!isParentTask) {
+        @if (!isParentTask) {}
         <nz-form-item>
           <nz-form-label class="font-medium">Người làm</nz-form-label>
           <nz-form-control>
@@ -186,9 +186,8 @@
               <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
               }
             </nz-select>
-          </nz-form-control> 
-          </nz-form-item>
-        }
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
       @if (subTasks.length > 0) {
