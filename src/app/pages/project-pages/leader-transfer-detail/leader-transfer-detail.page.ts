@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe';
 import { LeaderTransferHistoryModel } from 'src/app/shared/models/leader-transfer/leader-transfer-history.model';
-import { LeaderTransferService } from 'src/app/services/leader-transfer.service';
 import { format } from 'date-fns';
 
 @Component({
