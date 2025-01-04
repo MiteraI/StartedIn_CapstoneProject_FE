@@ -20,6 +20,7 @@ interface IModalData {
   status: TaskStatus;
   assignees: UserTask[];
   isAssignedToMe: boolean;
+  isParentTask: boolean;
 }
 
 @Component({

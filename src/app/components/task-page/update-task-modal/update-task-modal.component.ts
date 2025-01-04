@@ -797,6 +797,11 @@ export class UpdateTaskModalComponent implements OnInit {
     }
   }
 
+  get isParentTaskSimple() {
+    // if parenttask id exist then it is a child task
+    return !!!this.initialParentTaskId
+  }
+
   openLogWorkModal() {
     const modalRef = this.modalService.create({
       nzTitle: this.actualEndDate ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm',
@@ -811,6 +816,7 @@ export class UpdateTaskModalComponent implements OnInit {
         status: this.taskForm.get('status')?.value,
         assignees: this.userTasks,
         isAssignedToMe: this.isAssignedToMe,
+        isParentTask : this.isParentTaskSimple
       },
       nzFooter: null,
     })
