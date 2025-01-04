@@ -37,6 +37,7 @@ import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { LogTaskModalComponent } from './log-task-modal/log-task-modal.component'
 import { UserTask } from 'src/app/shared/models/task/user-task.model'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 
 interface IModalData {
   taskId: string
@@ -132,6 +133,7 @@ export class UpdateTaskModalComponent implements OnInit {
 
   // current user
   currentUser: FullProfile | undefined
+  currentRole: TeamRole | null = null
 
   // end dates
   expectedEndDate: string = ''
@@ -153,6 +155,7 @@ export class UpdateTaskModalComponent implements OnInit {
     private projectService: ProjectService,
     private taskCommentService: TaskCommentService,
     private taskAttachmentService: TaskAttachmentService,
+    private roleInTeamService: RoleInTeamService,
     private nzModalRef: NzModalRef,
     private userService: UserService,
     private modalService: NzModalService
@@ -287,6 +290,19 @@ export class UpdateTaskModalComponent implements OnInit {
             this.taskForm.get('title')?.disable()
             this.taskForm.get('description')?.disable()
             this.taskForm.get('priority')?.disable()
+            this.taskForm.get('parentTask')?.disable()
+            this.taskForm.get('milestone')?.disable()
+            this.taskForm.get('assignees')?.disable()
+          } else {
+            this.taskForm.get('manHour')?.enable()
+            this.taskForm.get('startDate')?.enable()
+            this.taskForm.get('endDate')?.enable()
+            this.taskForm.get('title')?.enable()
+            this.taskForm.get('description')?.enable()
+            this.taskForm.get('priority')?.enable()
+            this.taskForm.get('parentTask')?.enable()
+            this.taskForm.get('milestone')?.enable()
+            this.taskForm.get('assignees')?.enable()
           }
         },
         error: (error: HttpErrorResponse) => {
@@ -294,7 +310,7 @@ export class UpdateTaskModalComponent implements OnInit {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
-          } else if (error.status === 403){
+          } else if (error.status === 403) {
             this.antdNoti.openWarningNotification('', error.error)
           }
           this.taskForm.get('status')?.setValue(this.initialStatus)
@@ -359,7 +375,20 @@ export class UpdateTaskModalComponent implements OnInit {
   private fetchTasks() {
     this.isOtherTasksFetchLoading = true
     this.taskService
-      .getTaskListForProject(this.nzModalData.projectId, this.otherTasksPage, this.otherTasksSize)
+      .getTaskListForProject(
+        this.nzModalData.projectId,
+        this.otherTasksPage,
+        this.otherTasksSize,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {
@@ -387,10 +416,17 @@ export class UpdateTaskModalComponent implements OnInit {
         this.initialAssigneeIds.push(addedId)
         this.filteredUsers = this.filteredUsers.filter((u) => u.id !== addedId)
         this.taskService.updateTaskAssignment(this.nzModalData.projectId, this.nzModalData.taskId, { assigneeId: addedId }).subscribe({
-          next: (res) => {},
+          next: (res) => {
+            this.antdNoti.openSuccessNotification('', 'Gán người làm tác vụ thành công')
+          },
           error: (error: HttpErrorResponse) => {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
+              // Remove this user from the initialAssigneeIds
+              this.initialAssigneeIds = this.initialAssigneeIds.filter((id) => id !== addedId)
+              this.filteredUsers.push(...this.users.filter((u) => u.id === addedId))
+              // Remove this user from the currentSelectedIds
+              this.taskForm.patchValue({ assignees: this.initialAssigneeIds })
             } else if (error.status === 500) {
               this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
             } else {
@@ -657,6 +693,19 @@ export class UpdateTaskModalComponent implements OnInit {
               this.taskForm.get('title')?.disable()
               this.taskForm.get('description')?.disable()
               this.taskForm.get('priority')?.disable()
+              this.taskForm.get('parentTask')?.disable()
+              this.taskForm.get('milestone')?.disable()
+              this.taskForm.get('assignees')?.disable()
+            } else {
+              this.taskForm.get('manHour')?.enable()
+              this.taskForm.get('startDate')?.enable()
+              this.taskForm.get('endDate')?.enable()
+              this.taskForm.get('title')?.enable()
+              this.taskForm.get('description')?.enable()
+              this.taskForm.get('priority')?.enable()
+              this.taskForm.get('parentTask')?.enable()
+              this.taskForm.get('milestone')?.enable()
+              this.taskForm.get('assignees')?.enable()
             }
           },
           error: (error: HttpErrorResponse) => {
@@ -670,6 +719,13 @@ export class UpdateTaskModalComponent implements OnInit {
         })
 
       this.getCurrentUser()
+
+      this.roleInTeamService.role$.subscribe((role) => {
+        this.currentRole = role
+        if (role !== TeamRole.LEADER) {
+          this.taskForm.get('milestone')?.disable()
+        }
+      })
     }
 
     this.projectService.getMembers(this.nzModalData.projectId).subscribe({
@@ -713,6 +769,28 @@ export class UpdateTaskModalComponent implements OnInit {
   // check if the task is assigned to current user
   get isAssignedToMe(): boolean {
     return this.initialAssigneeIds.includes(this.currentUser?.id ?? '')
+  }
+
+  // Can only assign member for children tasks
+  get isParentTask() {
+    this.taskForm.get('parentTask')?.disable()
+    if (this.currentRole === TeamRole.LEADER) {
+      if (this.taskForm.get('parentTask')?.value) {
+        if (this.initialStatus !== TaskStatus.NOT_STARTED && this.initialStatus !== TaskStatus.OPEN) {
+          return false
+        }
+        this.taskForm.get('assignees')?.enable()
+        return false
+      }
+      this.taskForm.get('assignees')?.disable()
+      return true
+    } else {
+      if (this.initialStatus !== TaskStatus.NOT_STARTED && this.initialStatus !== TaskStatus.OPEN) {
+        return false
+      }
+      this.taskForm.get('assignees')?.enable()
+      return false
+    }
   }
 
   openLogWorkModal() {
