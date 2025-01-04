@@ -48,7 +48,7 @@
     @if (isCharterExist) {
     <nz-collapse>
       <nz-collapse-panel [nzHeader]="'Các Giai Đoạn'" nzActive="true" class="bg-purple-200">
-        <nz-table class="custom-table" #nestedTable nzSize="small" [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
+        <nz-table class="hidden lg:block custom-table" #nestedTable nzSize="small" [nzShowPagination]="false" [nzData]="projectCharter?.phases!" [nzBordered]="true">
           <thead>
             <tr>
               <th nzWidth="10px" [nzAlign]="'center'"></th>
@@ -84,7 +84,7 @@
                   @for (data of innerTable.data; track data) {
                   <tr>
                     <td>{{ data.title }}</td>
-                    <td>{{ data.description }}</td>
+                    <td [innerHTML]="data.description"></td>
                     <td>{{ data.startDate | date : 'dd/MM/yyyy' }}</td>
                     <td>{{ data.endDate | date : 'dd/MM/yyyy' }}</td>
                   </tr>
@@ -95,6 +95,34 @@
             }
           </tbody>
         </nz-table>
+
+        <!-- Mobile Cards -->
+        <div class="space-y-4 lg:hidden">
+          <ng-container *ngFor="let phase of projectCharter?.phases">
+            <div class="border border-gray-300 rounded-lg bg-purple-50 shadow p-4">
+              <div class="mb-2">
+                <div class="text-lg font-medium text-gray-800">{{ phase.phaseName }}</div>
+                <div class="flex gap-1 text-xs text-gray-600">
+                  <p>{{ phase.startDate | date : 'dd/MM/yyyy' }}</p>
+                  -
+                  <p>{{ phase.endDate | date : 'dd/MM/yyyy' }}</p>
+                </div>
+              </div>
+              <div *ngIf="phase.milestones.length > 0" class="">
+                <div class="text-lg font-medium text-gray-700">Các Cột Mốc:</div>
+                <div *ngFor="let milestone of phase.milestones" class="mt-2 border border-gray-100 rounded-lg p-2 bg-white bg-opacity-70">
+                  <div class="font-semibold text-gray-800">{{ milestone.title }}</div>
+                  <div class="text-gray-600" [innerHTML]="milestone.description"></div>
+                  <div class="text-xs flex gap-1 text-gray-500">
+                    <p>{{ milestone.startDate | date : 'dd/MM/yyyy' }}</p>
+                    -
+                    <p>{{ milestone.endDate | date : 'dd/MM/yyyy' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
       </nz-collapse-panel>
     </nz-collapse>
     }

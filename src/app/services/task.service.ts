@@ -35,8 +35,22 @@ export class TaskService {
     milestoneId?: string,
     startDate?: string,
     endDate?: string,
-    priority?: boolean
+    priority?: boolean,
+    isParentTask?: boolean
   ): Observable<Pagination<Task>> {
+    let priorityString = null
+    let isParentTaskString = null
+    if (priority !== null && priority !== undefined) {
+      priorityString = priority ? 'true' : 'false'
+    } else {
+      priorityString = ''
+    }
+
+    if (isParentTask !== null && isParentTask !== undefined) {
+      isParentTaskString = isParentTask ? 'true' : 'false'
+    } else {
+      isParentTaskString = ''
+    }
     const query =
       (title?.trim() ? `title=${title.trim()}&` : '') +
       (status ? `status=${status}&` : '') +
@@ -45,7 +59,8 @@ export class TaskService {
       (milestoneId ? `milestoneId=${milestoneId}&` : '') +
       (startDate ? `startDate=${startDate}&` : '') +
       (endDate ? `endDate=${endDate}&` : '') +
-      (priority !== null ? `priority=${priority}&` : '') +
+      (priorityString ? `priority=${priorityString}&` : '') +
+      (isParentTaskString ? `isParentTask=${isParentTaskString}&` : '') +
       `page=${page}&size=${size}`
 
     return this.http.get<Pagination<Task>>(this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/tasks?${query}`))

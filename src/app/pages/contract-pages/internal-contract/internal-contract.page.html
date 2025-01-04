@@ -161,7 +161,7 @@
                   nz-button
                   nzType="primary"
                   class="mt-2"
-                  [routerLink]="['/projects', project.id, 'meeting']"
+                  [routerLink]="['/projects', project.id, 'meeting', meeting.id]"
                 >
                   Xem chi tiết
                 </button>
@@ -185,7 +185,7 @@
               </ng-container>
               <ng-template #meetingLink>
                 <ng-container *ngIf="meeting.status !== meetingStatus.CANCELLED">
-                  <h4 class="font-medium mb-2">Link cuộc họp</h4>
+                  <div class="font-medium mb-2">Link cuộc họp</div>
                   <a [href]="meeting.meetingLink"
                       target="_blank"
                       class="flex items-center gap-2 p-2 bg-white rounded hover:bg-gray-50">

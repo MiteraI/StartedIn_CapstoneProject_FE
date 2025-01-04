@@ -46,7 +46,7 @@
         </thead>
         <tbody>
           @for (data of innerTable.data; track data) {
-          <tr (click)="navigateToDealDetails(data)">
+          <tr (click)="navigateToDealDetails(data)" class="cursor-pointer">
             <td>{{ data.investorName }}</td>
             <td class="text-green-500">{{ data.amount | number }}</td>
             <td>{{ data.equityShareOffer / 100 | percent }}</td>

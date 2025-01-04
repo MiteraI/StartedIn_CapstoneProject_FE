@@ -22,6 +22,7 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number'
 import { NzTagModule } from 'ng-zorro-antd/tag'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 
 interface IModalData {
   projectId: string
@@ -40,6 +41,8 @@ export class CreateTaskModalComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
   users: TeamMemberModel[] = []
   taskForm: FormGroup
+  currentRole: TeamRole | null = null
+  roleInTeamEnum = TeamRole
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -47,19 +50,20 @@ export class CreateTaskModalComponent implements OnInit {
     private taskService: TaskService,
     private milestoneService: MilestoneService,
     private projectService: ProjectService,
+    private roleInTeamService: RoleInTeamService,
     private antdNoti: AntdNotificationService,
     private nzModalRef: NzModalRef
   ) {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required]],
       description: [''],
-      startDate: [null],
-      endDate: [null],
+      startDate: [null, [Validators.required]],
+      endDate: [null, [Validators.required]],
       milestone: [null],
       assignees: [[]],
-      manHour: [0],
+      manHour: [0, [Validators.required, Validators.min(0.5), Validators.max(100)]],
       parentTask: [null],
-      priority: [0]
+      priority: [0, [Validators.required]],
     })
   }
 
@@ -80,11 +84,11 @@ export class CreateTaskModalComponent implements OnInit {
   milestonesTotal = 0
 
   editorKey = EDITOR_KEY
-    init: EditorComponent['init'] = {
-      plugins: 'lists link code help wordcount image',
-      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-      setup: () => {},
-    }
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {},
+  }
 
   disableStartDate = (startDate: Date): boolean => {
     const endDate = this.taskForm.get('endDate')?.value
@@ -212,8 +216,25 @@ export class CreateTaskModalComponent implements OnInit {
     this.fetchMilestones()
   }
 
+  // Can only assign member for children tasks
+  get isCreatingParentTask() {
+    if (this.currentRole === TeamRole.LEADER) {
+      if (this.taskForm.get('parentTask')?.value) {
+        return false
+      }
+      return true
+    } else {
+      return false
+    }
+  }
+
   onSubmit() {
     if (this.taskForm.valid) {
+      // if creating parent task, assignees should be empty
+      if (this.isCreatingParentTask) {
+        this.taskForm.get('assignees')?.setValue([])
+      }
+
       let startDate = this.taskForm.value.startDate
       if (startDate) {
         startDate = startDate instanceof Date ? startDate : new Date(startDate)
@@ -249,6 +270,13 @@ export class CreateTaskModalComponent implements OnInit {
     }
   }
 
+  handleSelectAssignChanged(currentSelectedIds: string[]) {
+    // Only allow 1 assignee at a time
+    if (currentSelectedIds.length > 1) {
+      this.taskForm.get('assignees')?.setValue([currentSelectedIds[currentSelectedIds.length - 1]])
+    }
+  }
+
   ngOnInit(): void {
     this.projectService.getMembers(this.nzModalData.projectId).subscribe({
       next: (res) => {
@@ -267,12 +295,43 @@ export class CreateTaskModalComponent implements OnInit {
     if (this.nzModalData.milestoneId) {
       this.taskForm.get('milestone')?.setValue(this.nzModalData.milestoneId)
     }
+
+    this.roleInTeamService.role$.pipe(takeUntil(this.destroy$)).subscribe((role) => {
+      this.currentRole = role
+      if (role !== TeamRole.LEADER) {
+        this.taskForm.get('milestone')?.disable()
+      }
+      this.updateParentTaskValidation()
+    })
+  }
+
+  updateParentTaskValidation() {
+    const milestoneControl = this.taskForm.get('parentTask')
+    if (this.currentRole !== TeamRole.LEADER) {
+      milestoneControl?.setValidators(Validators.required)
+    } else {
+      milestoneControl?.clearValidators()
+    }
+    milestoneControl?.updateValueAndValidity()
   }
 
   private fetchTasks() {
     this.isOtherTasksFetchLoading = true
     this.taskService
-      .getTaskListForProject(this.nzModalData.projectId, this.otherTasksPage, this.otherTasksSize)
+      .getTaskListForProject(
+        this.nzModalData.projectId,
+        this.otherTasksPage,
+        this.otherTasksSize,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {

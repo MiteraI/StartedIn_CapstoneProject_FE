@@ -6,11 +6,17 @@
   </div>
   } @else {
   <div class="flex-1 overflow-y-auto my-6">
+    <div class="px-4 mb-2">
+      <button nz-button class="flex justify-center items-center" (click)="back()">
+        <mat-icon fontIcon="chevron_left" class="text-black"></mat-icon>
+        <span> Back</span>
+      </button>
+    </div>
     <form [formGroup]="milestoneForm" nz-form nzLayout="vertical" class="px-4">
       <!-- Title Field -->
       <div class="flex justify-between">
         <nz-form-item class="w-1/4">
-          <nz-form-label [nzRequired]="true">Title</nz-form-label>
+          <nz-form-label [nzRequired]="true">Tên cột mốc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
             <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" (ngModelChange)="handleInfoChanged()" />
           </nz-form-control>
