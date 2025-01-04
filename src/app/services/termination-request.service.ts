@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ApplicationConfigService } from '../core/config/application-config.service'
 import { TerminationRequestModel } from '../shared/models/termination-request/termination-request.model'
-import { simulateGetList } from '../shared/mocks/termination-request-mock'
-import { delay, of } from 'rxjs'
 import { TerminateMeetingModel } from '../shared/models/contract/terminate-meeting.model'
 
 @Injectable({
