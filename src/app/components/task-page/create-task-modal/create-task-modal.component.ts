@@ -61,7 +61,7 @@ export class CreateTaskModalComponent implements OnInit {
       endDate: [null, [Validators.required]],
       milestone: [null],
       assignees: [[]],
-      manHour: [0],
+      manHour: [0, [Validators.required, Validators.min(0.5), Validators.max(100)]],
       parentTask: [null],
       priority: [0, [Validators.required]],
     })
@@ -216,12 +216,23 @@ export class CreateTaskModalComponent implements OnInit {
     this.fetchMilestones()
   }
 
+  // Can only assign member for children tasks
+  get isCreatingParentTask() {
+    if (this.currentRole === TeamRole.LEADER) {
+      if (this.taskForm.get('parentTask')?.value) {
+        return false
+      }
+      return true
+    } else {
+      return false
+    }
+  }
+
   onSubmit() {
     if (this.taskForm.valid) {
-      // If role in team is not leader then MilestoneId is required, show message in the form label
-      if (this.currentRole !== TeamRole.LEADER && !this.taskForm.value.milestone) {
-        this.taskForm.get('milestone')?.setErrors({ message: 'Vui lòng chọn cột mốc' })
-        return
+      // if creating parent task, assignees should be empty
+      if (this.isCreatingParentTask) {
+        this.taskForm.get('assignees')?.setValue([])
       }
 
       let startDate = this.taskForm.value.startDate
@@ -259,6 +270,13 @@ export class CreateTaskModalComponent implements OnInit {
     }
   }
 
+  handleSelectAssignChanged(currentSelectedIds: string[]) {
+    // Only allow 1 assignee at a time
+    if (currentSelectedIds.length > 1) {
+      this.taskForm.get('assignees')?.setValue([currentSelectedIds[currentSelectedIds.length - 1]])
+    }
+  }
+
   ngOnInit(): void {
     this.projectService.getMembers(this.nzModalData.projectId).subscribe({
       next: (res) => {
@@ -280,6 +298,9 @@ export class CreateTaskModalComponent implements OnInit {
 
     this.roleInTeamService.role$.pipe(takeUntil(this.destroy$)).subscribe((role) => {
       this.currentRole = role
+      if (role !== TeamRole.LEADER) {
+        this.taskForm.get('milestone')?.disable()
+      }
       this.updateParentTaskValidation()
     })
   }
@@ -297,7 +318,20 @@ export class CreateTaskModalComponent implements OnInit {
   private fetchTasks() {
     this.isOtherTasksFetchLoading = true
     this.taskService
-      .getTaskListForProject(this.nzModalData.projectId, this.otherTasksPage, this.otherTasksSize)
+      .getTaskListForProject(
+        this.nzModalData.projectId,
+        this.otherTasksPage,
+        this.otherTasksSize,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        true
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (val) => {

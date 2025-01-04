@@ -91,7 +91,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzRequired]="true" class="font-medium">Số giờ làm</nz-form-label>
+      <nz-form-label [nzRequired]="true" class="font-medium">Số giờ làm dự tính</nz-form-label>
       <nz-form-control [nzErrorTip]="'Vui lòng nhập số giờ làm'">
         <nz-input-number formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" class="w-full"></nz-input-number>
       </nz-form-control>
@@ -127,16 +127,18 @@
       </nz-form-control>
     </nz-form-item>
 
+    @if (!isCreatingParentTask) {
     <nz-form-item>
       <nz-form-label class="font-medium">Người làm</nz-form-label>
       <nz-form-control>
-        <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện" [nzShowSearch]="true">
+        <nz-select formControlName="assignees" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện" [nzShowSearch]="true" (ngModelChange)="handleSelectAssignChanged($event)">
           @for (user of users; track $index) {
           <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
           }
         </nz-select>
       </nz-form-control>
     </nz-form-item>
+    }
   </div>
 
   <!-- Submit Button -->

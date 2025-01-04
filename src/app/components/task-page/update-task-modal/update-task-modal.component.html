@@ -93,7 +93,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label class="font-medium">Số giờ làm</nz-form-label>
+          <nz-form-label class="font-medium">Số giờ làm dự tính</nz-form-label>
           <nz-form-control>
             <div class="flex gap-2">
               <nz-input-number class="flex-grow" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" (ngModelChange)="handleInfoChanged()"></nz-input-number>
@@ -155,7 +155,6 @@
               (nzScrollToBottom)="loadMoreOtherTasks()"
               [nzShowSearch]="true"
             >
-              <nz-option nzValue="" nzLabel="Không chọn"></nz-option>
               @if (initialParentTask) {
               <nz-option [nzValue]="initialParentTask.id" [nzLabel]="initialParentTask.title"></nz-option>
               } @for (task of otherTasks; track $index) {
@@ -170,6 +169,7 @@
           </nz-form-control>
         </nz-form-item>
 
+        @if (!isParentTask) {
         <nz-form-item>
           <nz-form-label class="font-medium">Người làm</nz-form-label>
           <nz-form-control>
@@ -186,8 +186,9 @@
               <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
               }
             </nz-select>
-          </nz-form-control>
-        </nz-form-item>
+          </nz-form-control> 
+          </nz-form-item>
+        }
       </div>
 
       @if (subTasks.length > 0) {
