@@ -44,7 +44,7 @@ interface IModalData {
     MatIconModule,
     NzModalModule,
     CommonModule,
-    EditorModule
+    EditorModule,
   ],
 })
 export class CreateMilestoneModalComponent implements OnInit {
@@ -106,6 +106,7 @@ export class CreateMilestoneModalComponent implements OnInit {
     const modalRef = this.modalService.create({
       nzStyle: { top: '20px' },
       nzBodyStyle: { padding: '16px' },
+      nzWidth: '810px',
       nzContent: MeetingCreateModalComponent,
       nzTitle: 'Tạo Cuộc Họp',
       nzData: {

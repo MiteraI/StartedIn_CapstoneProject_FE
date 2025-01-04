@@ -13,6 +13,8 @@ import { Subject } from 'rxjs'
 import { SearchResponseModel } from 'src/app/shared/models/search-response.model'
 import { MeetingDetailModel } from 'src/app/shared/models/meeting/meeting-detail.model'
 import { FilterBarComponent } from '../../layouts/filter-bar/filter-bar.component'
+import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
+import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 
 interface FilterOptions {
   milestoneId?: string
@@ -49,14 +51,14 @@ export class MeetingPage implements OnInit {
   totalRecords: number = 200
 
   isLoading = false
-  isLeader = false
   isFetchAllMeetingLoading: boolean = false
 
   projectId = ''
   isTable = true
   isDesktopView = true
+  role: TeamRole | null = null
 
-  constructor(private activatedRoute: ActivatedRoute, private viewMode: ViewModeConfigService) {
+  constructor(private activatedRoute: ActivatedRoute, private viewMode: ViewModeConfigService, private roleInTeamService: RoleInTeamService) {
     this.activatedRoute.parent?.paramMap.subscribe((value) => {
       this.projectId = value.get('id')!
     })
@@ -68,6 +70,10 @@ export class MeetingPage implements OnInit {
   ngOnInit(): void {
     this.viewMode.isDesktopView$.subscribe((isDesktop) => {
       this.isDesktopView = isDesktop
+    })
+
+    this.roleInTeamService.role$.subscribe((role) => {
+      this.role = role
     })
   }
 
