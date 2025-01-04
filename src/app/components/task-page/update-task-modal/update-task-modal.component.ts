@@ -771,7 +771,7 @@ export class UpdateTaskModalComponent implements OnInit {
     return this.initialAssigneeIds.includes(this.currentUser?.id ?? '')
   }
 
-  // Can only assign member for children tasks
+  // Can only assign member for children tasks, làm tùm lum cho chạy được không optimize nhưng kệ
   get isParentTask() {
     this.taskForm.get('parentTask')?.disable()
     if (this.currentRole === TeamRole.LEADER) {
@@ -789,6 +789,10 @@ export class UpdateTaskModalComponent implements OnInit {
         return false
       }
       this.taskForm.get('assignees')?.enable()
+      if (!this.taskForm.get('parentTask')?.value) {
+        this.taskForm.get('assignees')?.disable()
+        return false
+      }
       return false
     }
   }

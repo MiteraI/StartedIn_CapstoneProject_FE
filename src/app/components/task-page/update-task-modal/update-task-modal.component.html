@@ -169,7 +169,7 @@
           </nz-form-control>
         </nz-form-item>
 
-        @if (!isParentTask) {
+        @if (!isParentTask) {}
         <nz-form-item>
           <nz-form-label class="font-medium">Người làm</nz-form-label>
           <nz-form-control>
@@ -186,9 +186,8 @@
               <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
               }
             </nz-select>
-          </nz-form-control> 
-          </nz-form-item>
-        }
+          </nz-form-control>
+        </nz-form-item>
       </div>
 
       @if (subTasks.length > 0) {

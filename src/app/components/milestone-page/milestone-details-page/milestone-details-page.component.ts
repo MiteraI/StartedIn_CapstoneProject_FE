@@ -169,7 +169,7 @@ export class MilestoneDetailsPageComponent implements OnInit {
     this.milestoneService.deleteMilestone(this.projectId, this.milestoneId).subscribe({
       next: (response) => {
         this.antdNoti.openSuccessNotification('Xóa Cột Mốc Thành Công', '')
-        this.location.back()
+        this.back()
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
@@ -181,6 +181,10 @@ export class MilestoneDetailsPageComponent implements OnInit {
         }
       },
     })
+  }
+
+  back() {
+    this.location.back()
   }
 
   handleInfoChanged() {
