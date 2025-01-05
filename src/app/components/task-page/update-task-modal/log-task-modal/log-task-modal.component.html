@@ -1,6 +1,6 @@
 <div class="p-6">
   <!-- Log Hours Form -->
-  @if (!nzModalData.isParentTask && nzModalData.isAssignedToMe) {
+  @if (nzModalData.canLogTime) {
   <form [formGroup]="logForm" (ngSubmit)="onSubmit()" class="mb-4">
     <nz-form-item>
       <nz-form-label [nzSpan]="8" nzLabelAlign="left">Số giờ làm</nz-form-label>
