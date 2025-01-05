@@ -81,6 +81,8 @@ export class UpdateTaskModalComponent implements OnInit {
     { value: 5, label: TaskStatusLabels[5], color: TaskStatusColors[5] },
   ]
 
+  statusEnum = TaskStatus
+
   getStatusColor(status: TaskStatus): string {
     return TaskStatusColors[status]
   }
@@ -264,6 +266,8 @@ export class UpdateTaskModalComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
+          } else if (error.status === 403) {
+            this.antdNoti.openWarningNotification('', error.error)
           } else if (error.status === 500) {
             this.antdNoti.openErrorNotification('Lỗi', 'Đã xảy ra lỗi, vui lòng thử lại sau')
           } else {
@@ -443,7 +447,9 @@ export class UpdateTaskModalComponent implements OnInit {
         this.initialAssigneeIds = this.initialAssigneeIds.filter((id) => id !== removedId)
         this.filteredUsers.push(...this.users.filter((u) => u.id === removedId))
         this.taskService.updateTaskUnassignment(this.nzModalData.projectId, this.nzModalData.taskId, { assigneeId: removedId }).subscribe({
-          next: (res) => {},
+          next: (res) => {
+            this.antdNoti.openSuccessNotification('', 'Hủy gán người làm tác vụ thành công  ')
+          },
           error: (error: HttpErrorResponse) => {
             if (error.status === 400) {
               this.antdNoti.openErrorNotification('', error.error)
@@ -816,7 +822,8 @@ export class UpdateTaskModalComponent implements OnInit {
         status: this.taskForm.get('status')?.value,
         assignees: this.userTasks,
         isAssignedToMe: this.isAssignedToMe,
-        isParentTask : this.isParentTaskSimple
+        isParentTask: this.isParentTaskSimple,
+        canLogTime: this.isAssignedToMe && !this.isParentTaskSimple && this.initialStatus != this.statusEnum.DONE,
       },
       nzFooter: null,
     })
