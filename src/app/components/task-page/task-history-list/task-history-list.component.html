@@ -1,7 +1,7 @@
 <div class="flex flex-col p-1">
   @for (history of taskHistories; track $index) {
-  <div class="bg-green-100 rounded-lg my-2 p-2">
-    {{ history.content }} vào lúc <b>{{ history.createdTime | date : "d 'tháng' M Y, h:mm a" }}</b>
+  <div class="bg-green-100 rounded-lg my-2 p-2 text-sm">
+    {{ history.content }} vào ngày <b>{{ history.createdTime | date : "d 'tháng' M Y, h:mm a" }}</b>
   </div>
   } @if (isLoading) {
   <br /><br /><br />
