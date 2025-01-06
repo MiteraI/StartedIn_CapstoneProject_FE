@@ -35,21 +35,21 @@
       </div>
     </div>
     <div
-      routerLink="/profile"
+      [routerLink]="['/profile']"
       class="m-2 py-2 w-auto cursor-pointer text-center rounded bg-blue-600 text-white hover:bg-blue-400"
     >
       Xem trang cá nhân
     </div>
     <hr class="mt-4 mx-2 border-gray-400" />
     <div
-      routerLink="/transactions"
+      [routerLink]="['/transactions']"
       class="m-2 w-auto cursor-pointer rounded p-2 text-sm hover:bg-gray-300"
     >
       Lịch sử giao dịch
     </div>
     <div
       *ngIf="isInvestor"
-      routerLink="/disbursements/history"
+      [routerLink]="['/disbursements/history']"
       class="m-2 w-auto cursor-pointer rounded p-2 text-sm hover:bg-gray-300"
     >
       Lịch sử giải ngân
