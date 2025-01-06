@@ -148,7 +148,7 @@ export class BuyAssetsPage implements OnInit, OnDestroy {
           .pipe(
             finalize(() => (this.isSubmitting = false)),
             catchError((error) => {
-              this.notification.error('Lỗi', 'Tải lên chứng từ thất bại')
+              this.notification.error('Lỗi', error.error || 'Tải lên chứng từ thất bại')
               return throwError(() => new Error(error.error))
             })
           )

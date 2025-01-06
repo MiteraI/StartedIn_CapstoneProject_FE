@@ -80,7 +80,7 @@ export class LeaderHistorySidebarComponent implements OnInit, OnDestroy, AfterVi
         takeUntil(this.destroy$),
         catchError(error => {
           this.isLoading = false;
-          this.notification.error('Lỗi', 'Không thể tải lịch sử chuyển giao!', { nzDuration: 2000 });
+          this.notification.error('Lỗi', error.error || 'Không thể tải lịch sử chuyển giao!', { nzDuration: 2000 });
           return throwError(() => error);
         })
       )

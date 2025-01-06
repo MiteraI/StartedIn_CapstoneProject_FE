@@ -78,7 +78,7 @@ export class ProjectDisbursementDetailPage implements OnInit {
           .pipe(
             catchError(error => {
               this.isLoading = false;
-              this.notification.error("Lỗi", "Xác nhận giải ngân thất bại!", { nzDuration: 2000 });
+              this.notification.error("Lỗi", error.error || "Xác nhận giải ngân thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )

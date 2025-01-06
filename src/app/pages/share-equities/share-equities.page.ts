@@ -64,7 +64,7 @@ export class ShareEquitiesPage implements OnInit {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 });
+          this.notification.error('Error', error.error || 'Failed to load share equities', { nzDuration: 2000 });
           return throwError(() => error);
         })
       )

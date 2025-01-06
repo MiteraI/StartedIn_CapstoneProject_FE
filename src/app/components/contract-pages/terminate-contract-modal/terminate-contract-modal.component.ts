@@ -76,7 +76,7 @@ export class TerminateContractModalComponent implements OnInit {
             this.modalRef.close(true);
           },
           error: (error) => {
-            this.notification.error('Lỗi', 'Không thể gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
+            this.notification.error('Lỗi', error.error || 'Không thể gửi yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
             this.isLoading = false;
           }
         });
@@ -101,7 +101,7 @@ export class TerminateContractModalComponent implements OnInit {
       )
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error || "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

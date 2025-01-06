@@ -107,7 +107,7 @@ export class SelfTransactionsPage implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error("Lỗi", "Lấy danh sách giao dịch thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Lấy danh sách giao dịch thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

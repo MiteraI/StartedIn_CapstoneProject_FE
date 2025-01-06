@@ -66,7 +66,7 @@ export class AdminProjectDetailPage implements OnInit {
           .verifyProject(this.project.id)
           .pipe(
             catchError((error) => {
-              this.notification.error('Lỗi', 'Xác nhận dự án thất bại!', { nzDuration: 2000 })
+              this.notification.error('Lỗi', error.error || 'Xác nhận dự án thất bại!', { nzDuration: 2000 })
               return throwError(() => new Error(error.error))
             })
           )

@@ -93,7 +93,7 @@ export class DisbursementFilterComponent implements OnInit {
       .getMembers(this.data.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Lấy danh sách nhà đầu tư thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Lấy danh sách nhà đầu tư thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -108,7 +108,7 @@ export class DisbursementFilterComponent implements OnInit {
       .getUserProjects()
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Lấy danh sách dự án thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Lấy danh sách dự án thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

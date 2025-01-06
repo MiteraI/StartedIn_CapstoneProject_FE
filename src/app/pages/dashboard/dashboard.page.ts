@@ -90,7 +90,7 @@ export class DashboardPage implements OnInit {
       .getDashboard(this.projectId)
       .pipe(
         catchError((error) => {
-          this.notification.error('Error', 'Failed to load share equities', { nzDuration: 2000 })
+          this.notification.error('Lỗi', error.error || 'Lấy thông tin dashboard thất bại', { nzDuration: 2000 })
           this.isLoading = false
           return throwError(() => error)
         })

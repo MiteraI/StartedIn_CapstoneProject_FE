@@ -48,7 +48,7 @@ export class CloseProjectModalComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể kiểm tra trạng thái đóng dự án', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể kiểm tra trạng thái đóng dự án', { nzDuration: 2000 });
         this.modalRef.close();
       }
     })

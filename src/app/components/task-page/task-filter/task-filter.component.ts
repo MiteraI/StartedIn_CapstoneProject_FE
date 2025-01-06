@@ -84,7 +84,7 @@ export class TaskFilterComponent implements OnInit {
       .getMembers(this.data.projectId)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', 'Lấy danh sách thành viên thất bại!', { nzDuration: 2000 })
+          this.notification.error('Lỗi', error.error || 'Lấy danh sách thành viên thất bại!', { nzDuration: 2000 })
           return throwError(() => new Error(error.error))
         })
       )
@@ -102,7 +102,7 @@ export class TaskFilterComponent implements OnInit {
       .getMilestones(this.data.projectId, this.milestonePage, this.milestoneSize)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', 'Lấy danh sách cột mốc thất bại!', { nzDuration: 2000 })
+          this.notification.error('Lỗi', error.error || 'Lấy danh sách cột mốc thất bại!', { nzDuration: 2000 })
           return throwError(() => new Error(error.error))
         })
       )

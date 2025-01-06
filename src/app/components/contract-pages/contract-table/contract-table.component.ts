@@ -95,7 +95,7 @@ export class ContractTableComponent  implements OnInit {
       .sendContract(contract.id, this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Gửi thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -111,7 +111,7 @@ export class ContractTableComponent  implements OnInit {
       .deleteContract(contract.id, this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Không thể xóa hợp đồng!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Không thể xóa hợp đồng!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -126,7 +126,7 @@ export class ContractTableComponent  implements OnInit {
       .downloadContract(contract.id, this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Tải hợp đồng thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Tải hợp đồng thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -140,7 +140,7 @@ export class ContractTableComponent  implements OnInit {
       .expireContract(contract.id, this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Không thể kết thúc hợp đồng!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Không thể kết thúc hợp đồng!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -204,7 +204,7 @@ export class ContractTableComponent  implements OnInit {
         this.contractService.cancelSign(this.projectId, contract.id)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Từ chối ký hợp đồng thất bại!", { nzDuration: 2000 });
+              this.notification.error("Lỗi", error.error || "Từ chối ký hợp đồng thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
@@ -221,7 +221,7 @@ export class ContractTableComponent  implements OnInit {
     this.contractService.cancelLiquidation(this.projectId, contract.id)
     .pipe(
       catchError(error => {
-        this.notification.error("Lỗi", "Huỷ thanh lý thất bại!", { nzDuration: 2000 });
+        this.notification.error("Lỗi", error.error || "Huỷ thanh lý thất bại!", { nzDuration: 2000 });
         return throwError(() => new Error(error.error));
       })
     )

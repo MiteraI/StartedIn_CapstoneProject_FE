@@ -92,7 +92,7 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
       .sendContract(this.contractId!, this.project.id)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', 'Gửi hợp đồng thất bại!', { nzDuration: 2000 });
+          this.notification.error('Lỗi', error.error || 'Gửi hợp đồng thất bại!', { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -109,7 +109,7 @@ export class LiquidationContractPage implements OnInit, OnDestroy {
       .downloadContract(this.contractId!, this.project.id)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', 'Tải hợp đồng thất bại!', { nzDuration: 2000 });
+          this.notification.error('Lỗi', error.error || 'Tải hợp đồng thất bại!', { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

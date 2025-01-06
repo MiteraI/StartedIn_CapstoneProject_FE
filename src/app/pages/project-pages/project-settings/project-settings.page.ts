@@ -79,7 +79,7 @@ export class ProjectSettingsPage implements OnInit {
         this.isSubmitting = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể cập nhật link cuộc họp mặc định!', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể cập nhật link cuộc họp mặc định!', { nzDuration: 2000 });
         this.isSubmitting = false;
       }
     });

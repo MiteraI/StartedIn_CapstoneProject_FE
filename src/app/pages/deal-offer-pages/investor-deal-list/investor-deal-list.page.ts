@@ -106,7 +106,7 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error("Lỗi", "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -162,7 +162,7 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
       .cancelDeal(offer.id)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Xóa thỏa thuận thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Xóa thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

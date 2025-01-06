@@ -87,7 +87,7 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
     this.isLoading = true;
     this.adminService
       .getProjectList(
-        this.pageIndex, 
+        this.pageIndex,
         this.pageSize,
         this.filter.projectName,
         this.filter.description,
@@ -96,7 +96,7 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
       )
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", "Lấy danh sách dự án thất bại!", { nzDuration: 2000 });
+          this.notification.error("Lỗi", error.error || "Lấy danh sách dự án thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -118,7 +118,7 @@ export class AdminProjectListPage implements OnInit, OnDestroy {
           .verifyProject(project.id)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Xác nhận dự án thất bại!", { nzDuration: 2000 });
+              this.notification.error("Lỗi", error.error || "Xác nhận dự án thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
