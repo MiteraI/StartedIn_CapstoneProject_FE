@@ -27,12 +27,14 @@
         <span class="text-gray-700 font-medium">Logo</span>
       </nz-form-label>
       <nz-form-control [nzSpan]="24">
-        <div class="flex flex-col md:flex-1 md:items-center md:justify-between gap-4">
-          <input type="file" (change)="onFileSelected($event)" class="border md:w-2/3 border-gray-300 rounded-lg px-4 py-2" />
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          <!-- File Input -->
+          <input type="file" (change)="onFileSelected($event)" class="border border-gray-300 rounded-lg py-2 px-4 text-sm w-full sm:w-auto" />
+          <!-- Logo Preview -->
           <img
             [src]="previewUrl || 'https://www.energyfit.com.mk/wp-content/plugins/ap_background/images/default/default_large.png'"
             alt="Logo Preview"
-            class="size-24 rounded-full border"
+            class="w-24 h-24 rounded-full border object-cover"
           />
         </div>
       </nz-form-control>
@@ -60,9 +62,7 @@
 
     <!-- Submit Button -->
     <div class="mt-6 text-center">
-      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400">
-        Tạo Dự Án
-      </button>
+      <button nz-button nzType="primary" type="submit" [disabled]="projectForm.invalid" nzSize="large" class="rounded-lg">Tạo Dự Án</button>
     </div>
   </form>
 </div>
