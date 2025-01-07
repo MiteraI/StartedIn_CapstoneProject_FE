@@ -1,6 +1,6 @@
 <app-view-title-bar viewName="Đăng ký phê duyệt dự án"></app-view-title-bar>
 <div class="max-w-7xl mx-auto p-4">
-  <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+  <div *ngIf="currentProject?.projectStatus === 1" class="bg-white rounded-lg shadow p-6 lg:col-span-2">
     <div class="flex justify-between items-center">
       <div>
         <div class="font-semibold text-lg">Yêu cầu duyệt dự án</div>
