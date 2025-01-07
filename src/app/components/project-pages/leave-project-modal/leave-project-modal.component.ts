@@ -61,7 +61,7 @@ export class LeaveProjectModalComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể kiểm tra trạng thái rời dự án', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể kiểm tra trạng thái rời dự án', { nzDuration: 2000 });
         this.modalRef.close();
       }
     })
@@ -76,7 +76,7 @@ export class LeaveProjectModalComponent implements OnInit {
           this.modalRef.close(true);
         },
         error: (error) => {
-          this.notification.error('Lỗi', 'Không thể gửi yêu cầu rời dự án', { nzDuration: 2000 });
+          this.notification.error('Lỗi', error.error || 'Không thể gửi yêu cầu rời dự án', { nzDuration: 2000 });
           this.isLoading = false;
         }
       });

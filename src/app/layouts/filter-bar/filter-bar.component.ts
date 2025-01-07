@@ -28,6 +28,7 @@ import { CommonModule } from '@angular/common'
 export class FilterBarComponent implements OnInit, OnDestroy {
   @Input({ required: true }) viewName: string = '';
   @Input() searchValue: string = '';
+  @Input() hideSearch: boolean = false;
   @Output() searchString = new EventEmitter<string>();
   @Output() filterMenuOpened = new EventEmitter<void>();
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;

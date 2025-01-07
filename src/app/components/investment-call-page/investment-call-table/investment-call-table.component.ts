@@ -70,7 +70,7 @@ export class InvestmentCallTableComponent {
         this.dealOfferService.acceptDeal(data.id, this.projectId)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Chấp nhận thỏa thuận thất bại!", { nzDuration: 2000 });
+              this.notification.error("Lỗi", error.error || "Chấp nhận thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )
@@ -93,7 +93,7 @@ export class InvestmentCallTableComponent {
         this.dealOfferService.rejectDeal(data.id, this.projectId)
           .pipe(
             catchError(error => {
-              this.notification.error("Lỗi", "Từ chối thỏa thuận thất bại!", { nzDuration: 2000 });
+              this.notification.error("Lỗi", error.error || "Từ chối thỏa thuận thất bại!", { nzDuration: 2000 });
               return throwError(() => new Error(error.error));
             })
           )

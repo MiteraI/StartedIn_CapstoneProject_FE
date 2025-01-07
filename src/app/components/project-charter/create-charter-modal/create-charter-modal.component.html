@@ -68,6 +68,6 @@
     </div>
   </div>
   <div class="flex">
-    <button nz-button nzSize="large" type="submit" nzType="primary" class="rounded-md ml-auto items-center" [disabled]="projectCharterForm.invalid">Tạo Tuyên Ngôn Dự Án</button>
+    <button [nzLoading]="isLoading" nz-button nzSize="large" type="submit" nzType="primary" class="rounded-md ml-auto items-center" [disabled]="projectCharterForm.invalid">Tạo Tuyên Ngôn Dự Án</button>
   </div>
 </form>

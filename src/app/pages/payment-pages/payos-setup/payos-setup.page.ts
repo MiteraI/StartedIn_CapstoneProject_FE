@@ -68,8 +68,8 @@ export class PayosSetupPage implements OnInit {
     this.projectService.getPayosInfo(this.projectId)
       .pipe(
         catchError(error => {
-          if (error.status !== 404 && error.status !== 401) {
-            this.notification.error('Lỗi', 'Không thể tải thông tin PayOS', { nzDuration: 2000 });
+          if (error.status !== 404 && error.status !== 401 && error.error !== 'Người dùng không thuộc dự án.') {
+            this.notification.error('Lỗi', error.error || 'Không thể tải thông tin PayOS', { nzDuration: 2000 });
           }
           return throwError(() => error);
         })
@@ -87,7 +87,7 @@ export class PayosSetupPage implements OnInit {
         .pipe(
           catchError(error => {
             this.isLoading = false;
-            this.notification.error('Lỗi', 'Cập nhật thông tin PayOS thất bại', { nzDuration: 2000 });
+            this.notification.error('Lỗi', error.error || 'Cập nhật thông tin PayOS thất bại', { nzDuration: 2000 });
             return throwError(() => error);
           })
         )

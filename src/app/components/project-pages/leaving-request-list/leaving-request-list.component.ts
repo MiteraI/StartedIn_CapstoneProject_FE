@@ -46,7 +46,8 @@ export class LeavingRequestListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể tải danh sách yêu cầu rời dự án', { nzDuration: 2000 });
+        if (error.error !== 'Người dùng không thuộc dự án.')
+          this.notification.error('Lỗi', error.error || 'Không thể tải danh sách yêu cầu rời dự án', { nzDuration: 2000 });
         this.isLoading = false;
       }
     });
@@ -66,8 +67,8 @@ export class LeavingRequestListComponent implements OnInit {
             this.notification.success('Thành công', 'Đã chấp nhận yêu cầu rời dự án', { nzDuration: 2000 });
             this.loadRequests();
           },
-          error: () => {
-            this.notification.error('Lỗi', 'Không thể chấp nhận yêu cầu rời dự án', { nzDuration: 2000 });
+          error: (error) => {
+            this.notification.error('Lỗi', error.error || 'Không thể chấp nhận yêu cầu rời dự án', { nzDuration: 2000 });
           }
         });
       }
@@ -89,8 +90,8 @@ export class LeavingRequestListComponent implements OnInit {
             this.notification.success('Thành công', 'Đã từ chối yêu cầu rời dự án');
             this.loadRequests();
           },
-          error: () => {
-            this.notification.error('Lỗi', 'Không thể từ chối yêu cầu rời dự án');
+          error: (error) => {
+            this.notification.error('Lỗi', error.error || 'Không thể từ chối yêu cầu rời dự án');
           }
         });
       }

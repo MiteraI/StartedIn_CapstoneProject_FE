@@ -101,7 +101,7 @@ export class CreateCharterModalComponent implements OnInit {
       },
       error: (error) => {
         this.messageService.error(error.error)
-        this.modal.closeAll()
+        this.isLoading = false
         console.error(error)
       },
     })

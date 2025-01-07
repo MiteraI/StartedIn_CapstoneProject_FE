@@ -76,7 +76,8 @@ export class InvestorDisbursementOverviewPage implements OnInit, OnDestroy {
           setTimeout(() => this.createDisbursementChart(), 0)
         },
         error: (error) => {
-          this.notification.error('Lỗi', error.error || 'Không thể tải tổng quan giải ngân', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Không thể tải tổng quan giải ngân', { nzDuration: 2000 });
           this.isLoadingOverall = false;
         }
       });
@@ -95,7 +96,8 @@ export class InvestorDisbursementOverviewPage implements OnInit, OnDestroy {
           setTimeout(() => this.initializeCharts(), 0);
         },
         error: (error) => {
-          this.notification.error('Lỗi', error.error || 'Không thể tải thông tin giải ngân', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Không thể tải thông tin giải ngân', { nzDuration: 2000 });
           this.isLoading = false;
         }
       });

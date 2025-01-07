@@ -100,8 +100,8 @@ export class MembersPage implements OnInit {
       .getLatest(this.projectId)
       .pipe(
         catchError(error => {
-          if (error.status !== 404 && error.status !== 401) {
-            this.notification.error('Lỗi', 'Không thể tải thông tin nhượng quyền nhóm trưởng!', { nzDuration: 2000 });
+          if (error.status !== 404 && error.status !== 401 && error.error !== 'Người dùng không thuộc dự án.') {
+            this.notification.error('Lỗi', error.error || 'Không thể tải thông tin nhượng quyền nhóm trưởng!', { nzDuration: 2000 });
           }
           this.isTransferLoading = false;
           return throwError(() => error);
@@ -119,7 +119,8 @@ export class MembersPage implements OnInit {
       .getMembers(this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error('Lỗi', 'Không thể tải danh sách thành viên!', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Không thể tải danh sách thành viên!', { nzDuration: 2000 });
           this.isMembersLoading = false;
           return throwError(() => error);
         })
@@ -136,7 +137,8 @@ export class MembersPage implements OnInit {
       .getEquities(this.projectId, formattedDate)
       .pipe(
         catchError(error => {
-          this.notification.error('Lỗi', 'Không thể tải thông tin cổ phần!', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Không thể tải thông tin cổ phần!', { nzDuration: 2000 });
           this.isMembersLoading = false;
           return throwError(() => error);
         })
@@ -259,7 +261,7 @@ export class MembersPage implements OnInit {
           .cancel(this.projectId, this.leaderTransfer!.id)
           .pipe(
             catchError(error => {
-              this.notification.error('Lỗi', 'Hủy chuyển giao thất bại!', { nzDuration: 2000 });
+              this.notification.error('Lỗi', error.error || 'Hủy chuyển giao thất bại!', { nzDuration: 2000 });
               return throwError(() => error);
             })
           )
