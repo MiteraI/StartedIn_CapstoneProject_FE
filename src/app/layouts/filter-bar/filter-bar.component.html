@@ -4,7 +4,7 @@
       {{ viewName }}
     </div>
     <div class="flex-grow flex space-x-2">
-      <div class="flex-grow flex items-center justify-between border rounded-sm space-x-4 px-4 bg-white bg-opacity-50">
+      <div *ngIf="!hideSearch" class="flex-grow flex items-center justify-between border rounded-sm space-x-4 px-4 bg-white bg-opacity-50">
         <input
           #searchInput
           type="text"
@@ -14,6 +14,7 @@
           class="border-0 focus:border-0 focus:outline-none focus:ring-0 w-full bg-transparent" />
         <mat-icon (click)="onSearchClick()" fontIcon="search" class="cursor-pointer"></mat-icon>
       </div>
+      <div *ngIf="hideSearch" class="flex-grow"></div>
       <button
         [matMenuTriggerFor]="filterMenu"
         [matMenuTriggerRestoreFocus]="false"
@@ -39,6 +40,7 @@
       <mat-icon (click)="closeSearchBarMobile()" fontIcon="close" class="ml-4"></mat-icon>
       <div class="mt-0.5">
         <input
+          *ngIf="!hideSearch"
           class="rounded-sm"
           #searchInput
           type="text"

@@ -60,7 +60,7 @@ export class ProfilePage implements OnInit {
           .editProfile(result.bio, result.phoneNumber)
           .pipe(
             catchError(error => {
-              this.notification.error('Lỗi', 'Không thể cập nhật thông tin. Vui lòng thử lại sau.');
+              this.notification.error('Lỗi', error.error || 'Không thể cập nhật thông tin. Vui lòng thử lại sau.');
               return throwError(() => new Error(error.error));
             })
           )
@@ -88,10 +88,7 @@ export class ProfilePage implements OnInit {
 
         uploadMethod.pipe(
           catchError(error => {
-            this.notification.error(
-              'Lỗi',
-              'Không thể cập nhật ảnh. Vui lòng thử lại sau.'
-            );
+            this.notification.error('Lỗi', error.error || 'Không thể cập nhật ảnh. Vui lòng thử lại sau.', { nzDuration: 2000 });
             return throwError(() => new Error(error));
           })
         ).subscribe(url => {

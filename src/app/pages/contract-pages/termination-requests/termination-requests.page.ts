@@ -79,7 +79,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể tải danh sách yêu cầu', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể tải danh sách yêu cầu', { nzDuration: 2000 });
         this.isLoading = false;
       }
     });
@@ -94,7 +94,7 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', 'Không thể tải danh sách yêu cầu', { nzDuration: 2000 });
+        this.notification.error('Lỗi', error.error || 'Không thể tải danh sách yêu cầu', { nzDuration: 2000 });
         this.isLoading = false;
       }
     });
@@ -166,8 +166,8 @@ export class TerminationRequestsPage implements OnInit, OnDestroy {
             this.notification.success('Thành công', 'Đã từ chối yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
             this.loadReceivedRequests();
           },
-          error: () => {
-            this.notification.error('Lỗi', 'Không thể từ chối yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
+          error: (error) => {
+            this.notification.error('Lỗi', error.error || 'Không thể từ chối yêu cầu kết thúc hợp đồng', { nzDuration: 2000 });
           }
         });
       }

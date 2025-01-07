@@ -23,17 +23,7 @@ import { catchError, throwError, finalize, takeUntil, Subject } from 'rxjs'
   templateUrl: './buy-assets.page.html',
   styleUrls: ['./buy-assets.page.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NzFormModule,
-    NzInputModule,
-    NzInputNumberModule,
-    NzDatePickerModule,
-    NzButtonModule,
-    VndCurrencyPipe,
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NzFormModule, NzInputModule, NzInputNumberModule, NzDatePickerModule, NzButtonModule, VndCurrencyPipe],
 })
 export class BuyAssetsPage implements OnInit, OnDestroy {
   assetForm!: FormGroup
@@ -147,7 +137,8 @@ export class BuyAssetsPage implements OnInit, OnDestroy {
       .createTransaction(this.projectId, transaction)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', 'Thêm tài sản thất bại')
+          this.notification.error('Lỗi', error.error)
+          this.isSubmitting = false
           return throwError(() => new Error(error.error))
         })
       )
@@ -157,7 +148,7 @@ export class BuyAssetsPage implements OnInit, OnDestroy {
           .pipe(
             finalize(() => (this.isSubmitting = false)),
             catchError((error) => {
-              this.notification.error('Lỗi', 'Tải lên chứng từ thất bại')
+              this.notification.error('Lỗi', error.error || 'Tải lên chứng từ thất bại')
               return throwError(() => new Error(error.error))
             })
           )

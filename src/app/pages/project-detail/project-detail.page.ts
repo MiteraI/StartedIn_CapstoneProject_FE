@@ -92,8 +92,8 @@ export class ProjectDetailPage implements OnInit {
     const content = this.projectDetailForm.value.projectDetailPost
 
     this.modal.create({
-      nzTitle: 'Preview Project Description',
-      nzContent: `<div>${content || 'No content to preview'}</div>`,
+      nzTitle: 'Xem trước miêu tả dự án',
+      nzContent: `<div>${content || 'Không có thông tin'}</div>`,
       nzWidth: '80%',
       nzFooter: null,
       nzClosable: true,

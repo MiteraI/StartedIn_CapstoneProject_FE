@@ -57,7 +57,7 @@ export class TransferLeaderModalComponent implements OnInit {
       .accept(this.data.projectId, this.data.requestId, this.transferForm.get('newLeaderId')?.value)
       .pipe(
         catchError(error => {
-          this.notification.error('Lỗi', 'Chuyển giao quyền nhóm trưởng thất bại!');
+          this.notification.error('Lỗi', error.error || 'Chuyển giao quyền nhóm trưởng thất bại!');
           this.isLoading = false;
           return throwError(() => new Error(error.error));
         })

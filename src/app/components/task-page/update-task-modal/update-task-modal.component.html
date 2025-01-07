@@ -97,7 +97,9 @@
           <nz-form-control>
             <div class="flex gap-2">
               <nz-input-number class="flex-grow" formControlName="manHour" [nzMin]="0" [nzPrecision]="0" [nzMax]="48" (ngModelChange)="handleInfoChanged()"></nz-input-number>
-              <button nz-button nzType="primary" (click)="openLogWorkModal()">{{ isAssignedToMe && !isParentTaskSimple ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}</button>
+              <button nz-button nzType="primary" (click)="openLogWorkModal()">
+                {{ isAssignedToMe && !isParentTaskSimple && initialStatus != statusEnum.DONE ? 'Ghi Nhận Giờ Làm' : 'Xem Giờ Làm' }}
+              </button>
             </div>
           </nz-form-control>
         </nz-form-item>
@@ -201,17 +203,21 @@
                 <th>Trạng thái</th>
                 <th>Ngày bắt đầu</th>
                 <th>Hạn chót</th>
-                <th>Người tạo</th>
+                <th>Hành Động</th>
               </tr>
             </thead>
             <tbody>
               @for (data of basicTable.data; track data.id) {
               <tr>
                 <td>{{ data.title }}</td>
-                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>
+                  <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-center">
+                    {{ taskStatusLabels[data.status] }}
+                  </nz-tag>
+                </td>
                 <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
-                <td>{{ data.createdBy }}</td>
+                <td><button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Xem</button></td>
               </tr>
               }
             </tbody>

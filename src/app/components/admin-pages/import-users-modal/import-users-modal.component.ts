@@ -73,7 +73,7 @@ export class ImportUsersModalComponent implements OnInit {
             })
             return throwError(() => new Error(error.error.message));
           }
-          this.notification.error('Lỗi', 'Import người dùng thất bại!');
+          this.notification.error('Lỗi', error.error || 'Import người dùng thất bại!');
           return throwError(() => new Error(error.error.message));
         }),
         finalize(() => this.isUploading = false)

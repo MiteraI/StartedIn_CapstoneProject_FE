@@ -56,8 +56,8 @@ export class LiquidationModalComponent implements OnInit {
     ];
 
     if (!file.type || !validFileTypes.includes(file.type)) {
-        this.notification.error('Lỗi', 'Chỉ chấp nhận file Word (.docx) hoặc PDF (.pdf)');
-        return false;
+      this.notification.error('Lỗi', 'Chỉ chấp nhận file Word (.docx) hoặc PDF (.pdf)');
+      return false;
     }
     this.fileList = [file];
     this.uploadForm.patchValue({ file });
@@ -78,7 +78,7 @@ export class LiquidationModalComponent implements OnInit {
       this.contractService.terminate(this.data.projectId, this.data.contractId, this.fileList[0] as any)
         .pipe(
           catchError(error => {
-            this.notification.error('Lỗi', 'Kết thúc hợp đồng thất bại!');
+            this.notification.error('Lỗi', error.error || 'Kết thúc hợp đồng thất bại!');
             this.isUploading = false;
             return throwError(() => new Error(error.error));
           })
@@ -91,7 +91,7 @@ export class LiquidationModalComponent implements OnInit {
       this.contractService.addLiquidationNote(this.data.projectId, this.data.contractId, this.fileList[0] as any)
         .pipe(
           catchError(error => {
-            this.notification.error('Lỗi', 'Tải lên biên bản thanh lý thất bại!');
+            this.notification.error('Lỗi', error.error || 'Tải lên biên bản thanh lý thất bại!');
             this.isUploading = false;
             return throwError(() => new Error(error.error));
           })

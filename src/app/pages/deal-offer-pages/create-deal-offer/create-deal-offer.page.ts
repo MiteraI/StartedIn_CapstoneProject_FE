@@ -100,7 +100,7 @@ export class CreateDealOfferPage implements OnInit {
         .postDealOffer(dealOffer)
         .pipe(
           catchError(error => {
-            this.notification.error("Lỗi", "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
+            this.notification.error("Lỗi", error.error || "Tạo thỏa thuận thất bại!", { nzDuration: 2000 });
             this.isLoading = false;
             return throwError(() => new Error(error.error));
           })

@@ -69,7 +69,7 @@ export class DisburseModalComponent {
         .getPaymentUrl(this.disbursement.id)
         .pipe(
           catchError(error => {
-            this.notification.error("Lỗi", "Lấy đường dẫn thanh toán thất bại!", { nzDuration: 2000 });
+            this.notification.error("Lỗi", error.error || "Lấy đường dẫn thanh toán thất bại!", { nzDuration: 2000 });
             return throwError(() => new Error(error.error));
           })
         )
@@ -81,7 +81,7 @@ export class DisburseModalComponent {
         .acceptDisbursement(this.disbursement.id, this.fileList as unknown as File[])
         .pipe(
           catchError(error => {
-            this.notification.error("Lỗi", "Tải lên tài liệu chứng minh thất bại!", { nzDuration: 2000 });
+            this.notification.error("Lỗi", error.error || "Tải lên tài liệu chứng minh thất bại!", { nzDuration: 2000 });
             return throwError(() => new Error(error.error));
           })
         )

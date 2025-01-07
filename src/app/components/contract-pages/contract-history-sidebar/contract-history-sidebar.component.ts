@@ -73,7 +73,8 @@ export class ContractHistorySidebarComponent implements OnInit, AfterViewInit, O
       .pipe(
         takeUntil(this.destroy$),
         catchError((error) => {
-          this.notification.error('Lỗi', 'Lấy lịch sử ký kết thất bại!', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Lấy lịch sử ký kết thất bại!', { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
