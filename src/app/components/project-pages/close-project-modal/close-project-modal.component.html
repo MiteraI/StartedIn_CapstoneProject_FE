@@ -24,7 +24,7 @@
       <div class="space-y-4 max-h-[50vh] overflow-y-auto">
         <p class="text-red-600 font-medium">Không thể đóng dự án do còn các vấn đề sau:</p>
 
-        <div
+        <!-- <div
           *ngIf="checkResult.currentBudget !== 0"
           class="flex items-center border rounded-md p-2 cursor-pointer hover:bg-slate-50"
           (click)="navigateToTransactions()"
@@ -32,7 +32,7 @@
           <mat-icon fontIcon="wallet"></mat-icon>
           <div class="ml-2 font-medium">Ngân sách còn lại:</div>
           <div class="ml-2">{{ checkResult.currentBudget | vndCurrency }}</div>
-        </div>
+        </div> -->
 
         <div *ngIf="checkResult.contracts.length" class="flex flex-wrap items-center border rounded-md p-2">
           <mat-icon fontIcon="history_edu"></mat-icon>

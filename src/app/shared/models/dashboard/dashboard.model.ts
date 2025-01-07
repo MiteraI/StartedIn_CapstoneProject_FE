@@ -17,6 +17,4 @@ export type DashboardModel = {
   totalTask: number;
   completedTasks: Task[];
   overdueTasks: Task[];
-  monthProfit: number;
-  totalProfit: number;
 }
