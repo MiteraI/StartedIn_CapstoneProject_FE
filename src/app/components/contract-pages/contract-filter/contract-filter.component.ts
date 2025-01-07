@@ -73,7 +73,8 @@ export class ContractFilterComponent implements OnInit {
       .getContractPartiesForProject(this.data.id)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", error.error || "Lấy danh sách bên liên quan thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error.error || "Lấy danh sách bên liên quan thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

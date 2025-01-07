@@ -56,8 +56,8 @@ export class LiquidationModalComponent implements OnInit {
     ];
 
     if (!file.type || !validFileTypes.includes(file.type)) {
-        this.notification.error('Lỗi', 'Chỉ chấp nhận file Word (.docx) hoặc PDF (.pdf)');
-        return false;
+      this.notification.error('Lỗi', 'Chỉ chấp nhận file Word (.docx) hoặc PDF (.pdf)');
+      return false;
     }
     this.fileList = [file];
     this.uploadForm.patchValue({ file });

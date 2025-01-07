@@ -66,7 +66,8 @@ export class MeetingFilterComponent implements OnInit {
       .getMilestones(this.projectId, this.milestonePage, this.milestoneSize)
       .pipe(
         catchError((error) => {
-          this.notification.error('Lỗi', error.error || 'Lấy danh sách cột mốc thất bại!', { nzDuration: 2000 })
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Lấy danh sách cột mốc thất bại!', { nzDuration: 2000 })
           return throwError(() => new Error(error.error))
         })
       )

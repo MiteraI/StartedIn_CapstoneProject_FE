@@ -83,9 +83,8 @@ export class InvestorExploreProjectsPage implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          console.log(error);
-
-          this.notification.error("Lỗi", error.error || "Lấy danh sách startup thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error.error || "Lấy danh sách startup thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

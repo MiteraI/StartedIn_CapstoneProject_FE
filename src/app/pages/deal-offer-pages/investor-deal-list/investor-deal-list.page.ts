@@ -106,7 +106,8 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error("Lỗi", error.error || "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error.error || "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

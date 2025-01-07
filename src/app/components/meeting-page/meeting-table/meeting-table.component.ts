@@ -197,7 +197,8 @@ export class MeetingTableComponent implements OnInit, OnChanges {
       .getTableData(this.projectId, this.listMeeting.page, this.listMeeting.size, this.filterResult)
       .pipe(
         catchError((error) => {
-          this.messageService.error('Lấy danh sách hợp đồng thất bại!')
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.messageService.error('Lấy danh sách hợp đồng thất bại!')
           return throwError(() => new Error(error.error))
         })
       )

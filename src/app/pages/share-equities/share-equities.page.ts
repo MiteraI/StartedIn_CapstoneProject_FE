@@ -64,7 +64,8 @@ export class ShareEquitiesPage implements OnInit {
       .pipe(
         catchError(error => {
           this.isLoading = false;
-          this.notification.error('Error', error.error || 'Failed to load share equities', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Error', error.error || 'Lấy thông tin cổ phần thất bại!', { nzDuration: 2000 });
           return throwError(() => error);
         })
       )

@@ -57,7 +57,8 @@ export class MembersModalComponent implements OnInit {
       .pipe(
         finalize(() => this.isLoading = false),
         catchError((error) => {
-          this.notification.error('Lỗi', error.error || 'Lấy danh sách lời mời đang chờ thất bại!', { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error('Lỗi', error.error || 'Lấy danh sách lời mời đang chờ thất bại!', { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

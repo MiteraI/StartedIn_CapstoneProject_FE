@@ -46,7 +46,8 @@ export class LeavingRequestListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.notification.error('Lỗi', error.error || 'Không thể tải danh sách yêu cầu rời dự án', { nzDuration: 2000 });
+        if (error.error !== 'Người dùng không thuộc dự án.')
+          this.notification.error('Lỗi', error.error || 'Không thể tải danh sách yêu cầu rời dự án', { nzDuration: 2000 });
         this.isLoading = false;
       }
     });

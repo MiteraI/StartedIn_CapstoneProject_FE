@@ -64,7 +64,8 @@ export class NewContractModalComponent implements OnInit {
       .getProjectDealList(this.projectId, 1, 100)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", error.error || "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error.error || "Lấy danh sách thỏa thuận thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
@@ -74,7 +75,8 @@ export class NewContractModalComponent implements OnInit {
       .getMembers(this.projectId)
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", error.error || "Lấy danh sách nhà đầu tư thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error.error || "Lấy danh sách nhà đầu tư thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )

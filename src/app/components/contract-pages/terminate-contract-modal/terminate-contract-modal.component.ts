@@ -101,7 +101,8 @@ export class TerminateContractModalComponent implements OnInit {
       )
       .pipe(
         catchError(error => {
-          this.notification.error("Lỗi", error || "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
+          if (error.error !== 'Người dùng không thuộc dự án.')
+            this.notification.error("Lỗi", error || "Lấy danh sách hợp đồng thất bại!", { nzDuration: 2000 });
           return throwError(() => new Error(error.error));
         })
       )
