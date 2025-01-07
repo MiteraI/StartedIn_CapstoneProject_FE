@@ -203,7 +203,7 @@
                 <th>Trạng thái</th>
                 <th>Ngày bắt đầu</th>
                 <th>Hạn chót</th>
-                <th>Người tạo</th>
+                <th>Hành Động</th>
               </tr>
             </thead>
             <tbody>
@@ -217,7 +217,7 @@
                 </td>
                 <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
-                <td>{{ data.createdBy }}</td>
+                <td><button nz-button nzType="primary" (click)="openUpdateTaskModal(data.id)">Xem</button></td>
               </tr>
               }
             </tbody>
