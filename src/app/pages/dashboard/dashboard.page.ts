@@ -207,14 +207,4 @@ export class DashboardPage implements OnInit {
       })
     })
   }
-
-  openRequestAppovalModal() {
-    this.modalService.create({
-      nzTitle: 'Yêu cầu phê duyệt',
-      nzContent: RequestApprovalModalComponent,
-      nzData: { projectId: this.projectId },
-      nzFooter: null,
-      nzWidth: 800,
-    })
-  }
 }
