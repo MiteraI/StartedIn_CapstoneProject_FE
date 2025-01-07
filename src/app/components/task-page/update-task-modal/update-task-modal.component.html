@@ -210,7 +210,11 @@
               @for (data of basicTable.data; track data.id) {
               <tr>
                 <td>{{ data.title }}</td>
-                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>
+                  <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-center">
+                    {{ taskStatusLabels[data.status] }}
+                  </nz-tag>
+                </td>
                 <td>{{ data.startDate === null ? 'Không Có Ngày bắt đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.createdBy }}</td>
