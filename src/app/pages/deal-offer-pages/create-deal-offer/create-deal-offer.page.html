@@ -20,7 +20,6 @@
   <!-- Deal Offer Form -->
   <form
     [formGroup]="dealOfferForm"
-    (ngSubmit)="onSubmit()"
     class="mx-auto my-4 md:px-4"
   >
     <div class="p-4 md:p-8 bg-white rounded-lg border">
@@ -140,7 +139,14 @@
       </div>
 
       <div class="flex justify-end mt-6 space-x-4">
-        <button nz-button nzType="primary" type="submit" [disabled]="!dealOfferForm.valid" [nzLoading]="isLoading">
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [disabled]="!dealOfferForm.valid || dealOfferForm.get('amount')?.value !== disbursementTotalAmount"
+          [nzLoading]="isLoading"
+          (click)="onSubmit()"
+        >
           Tạo
         </button>
       </div>
