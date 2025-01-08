@@ -57,10 +57,10 @@ export class UpdateCharterModalComponent implements OnInit {
       .edit(this.projectCharter?.projectId!, projectCharterFormValue)
       .pipe(
         tap((response) => {
-          this.messageService.success('Chỉnh sửa điều lệ dự án thành công')
+          this.messageService.success('Chỉnh sửa tuyên ngôn dự án thành công')
         }),
         catchError((error) => {
-          this.messageService.error('Chỉnh sửa điều lệ dự án thất bại, xin vui lòng thử lại trong giây lát')
+          this.messageService.error('Chỉnh sửa tuyên ngôn dự án thất bại, xin vui lòng thử lại trong giây lát')
           throw error
         })
       )
