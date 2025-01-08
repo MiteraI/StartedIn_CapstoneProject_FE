@@ -48,7 +48,7 @@ export class MilestoneFilterComponent implements OnInit {
     this.isPhaseLoading = true
     this.phaseService.getPhases(this.data.projectId).subscribe({
       error: (err: HttpErrorResponse) => {
-        if (err.status === 400 && err.error === 'Không tìm thấy điều lệ dự án.') {
+        if (err.status === 400 && err.error === 'Không tìm thấy tuyên ngôn dự án.') {
         } else {
           this.notification.error('Lỗi', err.error, { nzDuration: 2000 })
         }

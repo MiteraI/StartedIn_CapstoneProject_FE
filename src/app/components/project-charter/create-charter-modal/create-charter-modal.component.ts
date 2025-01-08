@@ -68,7 +68,7 @@ export class CreateCharterModalComponent implements OnInit {
 
   onSubmit() {
     this.modal.confirm({
-      nzTitle: '<i>Bạn có muốn tạo điều lệ này không?</i>',
+      nzTitle: '<i>Bạn có muốn tạo tuyên ngôn dự án này không?</i>',
       nzOnOk: () => this.createProjectCharter(),
       nzOnCancel: () => console.log('Cancel'),
     })
@@ -96,7 +96,7 @@ export class CreateCharterModalComponent implements OnInit {
 
     this.projectCharterService.create(this.projectId, projectCharterRequest).subscribe({
       next: (response) => {
-        this.messageService.success('Tạo điều lệ dự án thành công')
+        this.messageService.success('Tạo tuyên ngôn dự án thành công')
         this.modal.closeAll()
       },
       error: (error) => {

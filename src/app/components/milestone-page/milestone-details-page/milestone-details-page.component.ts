@@ -155,7 +155,7 @@ export class MilestoneDetailsPageComponent implements OnInit {
         },
         error: (error: HttpErrorResponse) => {
           this.isPhasesFetchLoading = false
-          if (error.status === 400 && error.error === 'Không tìm thấy điều lệ dự án.') {
+          if (error.status === 400 && error.error === 'Không tìm thấy tuyên ngôn dự án.') {
           } else if (error.status === 400) {
             this.antdNoti.openErrorNotification('', error.error)
           } else if (error.status === 500) {
