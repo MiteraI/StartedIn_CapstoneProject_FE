@@ -236,7 +236,7 @@ export class MeetingTableComponent implements OnInit, OnChanges {
   }
 
   isValidRole() {
-    if (this.role === TeamRole.LEADER || this.role === TeamRole.MENTOR) {
+    if (this.role === TeamRole.LEADER) {
       return true
     }
     return false
