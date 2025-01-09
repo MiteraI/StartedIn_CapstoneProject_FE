@@ -60,10 +60,15 @@ export class ProjectListPage implements OnInit, OnDestroy {
         switchMap(() => this.projectService.getUserProjects()),
         takeUntil(this.destroy$)
       )
-      .subscribe((userProjects) => {
-        this.userProjects = userProjects
-        this.updateProjectLists()
-      })
+      .subscribe(
+        (userProjects) => {
+          this.userProjects = userProjects
+          this.updateProjectLists()
+        },
+        (err) => {
+          this.loading = false
+        }
+      )
   }
 
   // Update participated and left projects
