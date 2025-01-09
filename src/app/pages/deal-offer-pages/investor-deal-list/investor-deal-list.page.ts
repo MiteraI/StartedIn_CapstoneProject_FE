@@ -157,6 +157,10 @@ export class InvestorDealListPage implements OnInit, OnDestroy {
     this.selectedOffers = [];
   }
 
+  goToExplorePage() {
+    this.router.navigate(['explore']);
+  }
+
   deleteOffer(offer: InvestorDealItem) {
     // Delete single offer (mobile view)
     this.dealOfferService
