@@ -50,7 +50,7 @@ export class AppComponent {
         this.hideHeader = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
         this.hideFooter = currentUrl.includes('/login') || currentUrl.includes('/register') || currentUrl.includes('/payment-fail') || currentUrl.includes('/payment-success')
         // workaround for now
-        this.inProjectDetails = /\/projects\//.test(currentUrl) || /\/explore/.test(currentUrl)
+        this.inProjectDetails = /\/projects\//.test(currentUrl)
       }
     })
 
