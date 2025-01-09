@@ -8,7 +8,7 @@ import { ProjectCreateModalComponent } from 'src/app/components/project-pages/pr
 import { AccountService } from 'src/app/core/auth/account.service'
 import { NzSpinModule } from 'ng-zorro-antd/spin'
 import { ProjectService } from 'src/app/services/project.service'
-import { Subject, switchMap, takeUntil } from 'rxjs'
+import { Subject, switchMap, takeUntil, tap } from 'rxjs'
 import { Authority } from 'src/app/shared/constants/authority.constants'
 import { ProjectModel } from 'src/app/shared/models/project/project.model'
 import { UserStatusInProject, UserStatusInProjectLabels } from 'src/app/shared/enums/user-in-project-status.enum'
@@ -28,6 +28,7 @@ export class ProjectListPage implements OnInit, OnDestroy {
   leftProjects: ProjectModel[] = []
   isInvestor = true
   isMentor = true
+  loading = false
   private destroy$ = new Subject<void>()
 
   constructor(
@@ -45,7 +46,6 @@ export class ProjectListPage implements OnInit, OnDestroy {
   ngOnInit() {
     // Load initial user projects from route data
     this.userProjects = this.route.snapshot.data['userProjects']
-    this.updateProjectLists()
 
     // Subscribe to account changes
     this.accountService.account$.pipe(takeUntil(this.destroy$)).subscribe((account) => {
@@ -56,19 +56,26 @@ export class ProjectListPage implements OnInit, OnDestroy {
     // Refresh projects when triggered
     this.projectService.refreshProject$
       .pipe(
+        tap(() => (this.loading = true)),
         switchMap(() => this.projectService.getUserProjects()),
         takeUntil(this.destroy$)
       )
-      .subscribe((userProjects) => {
-        this.userProjects = userProjects
-        this.updateProjectLists()
-      })
+      .subscribe(
+        (userProjects) => {
+          this.userProjects = userProjects
+          this.updateProjectLists()
+        },
+        (err) => {
+          this.loading = false
+        }
+      )
   }
 
   // Update participated and left projects
   private updateProjectLists() {
     this.participatedProjects = this.userProjects?.filter((project) => project.userStatusInProject === UserStatusInProject.ACTIVE) || []
     this.leftProjects = this.userProjects?.filter((project) => project.userStatusInProject === UserStatusInProject.LEFT) || []
+    this.loading = false
   }
 
   // Handle project click events

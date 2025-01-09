@@ -62,7 +62,7 @@
           <button
             *ngIf="projectOverview?.investmentCallResponseDto?.status === 1; else closeCall"
             class="w-full bg-green-600 text-white py-3 rounded-lg transition duration-75 hover:bg-green-700"
-            [routerLink]="['/projects', this.projectOverview!.id, 'create-deal']"
+            [routerLink]="['/project-deal', this.projectOverview!.id]"
           >
             Đầu tư ngay
           </button>

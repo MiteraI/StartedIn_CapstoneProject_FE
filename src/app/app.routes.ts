@@ -249,7 +249,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/deal-offer-pages/investor-deal-list/investor-deal-list.page').then((m) => m.InvestorDealListPage),
   },
   {
-    path: 'projects/:projectId/create-deal',
+    path: 'project-deal/:projectId',
     canActivate: [InvestorGuard],
     resolve: { projectOverview: ProjectOverviewDataResolver },
     loadComponent: () => import('./pages/deal-offer-pages/create-deal-offer/create-deal-offer.page').then((m) => m.CreateDealOfferPage),
