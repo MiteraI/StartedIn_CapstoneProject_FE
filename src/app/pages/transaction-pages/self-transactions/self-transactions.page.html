@@ -122,7 +122,7 @@
       <tr
         *ngFor="let transaction of transactions"
         class="border-b hover:bg-gray-50 cursor-pointer"
-        [routerLink]="[transaction.id]"
+        [routerLink]="['/projects', transaction.projectId, 'transactions', transaction.id]"
       >
         <td class="p-4 max-w-80">
           <div class="flex items-center h-full">
@@ -169,7 +169,7 @@
   <div class="md:hidden space-y-4">
     <div class="space-y-4">
       <div *ngFor="let transaction of transactions" class="bg-white rounded-lg shadow">
-        <a [routerLink]="[transaction.id]" class="block p-4">
+        <a [routerLink]="['/projects', transaction.projectId, 'transactions', transaction.id]" class="block p-4">
           <div class="flex items-start justify-between">
             <div class="flex-1">
               <div class="text-xl font-medium">{{ typeLabels[transaction.type] }}</div>
