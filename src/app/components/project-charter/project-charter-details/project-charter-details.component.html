@@ -7,9 +7,10 @@
       <nz-collapse-panel [nzHeader]="'Tuyên Ngôn Dự Án'" nzActive="true" class="bg-purple-200">
         @if (!isCharterExist) {
         <p>
-          Chưa có tuyên ngôn dự án
+          Chưa có tuyên ngôn dự án @if(isUser){
 
           <button nz-button nzType="link" (click)="toggleCreate()">Tạo Tuyên Ngôn Dự Án</button>
+          }
         </p>
         } @else {
         <div *ngIf="!isOverview" class="flex justify-end mb-6">
