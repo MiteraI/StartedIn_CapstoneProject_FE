@@ -90,6 +90,27 @@ export class ProjectDisbursementDetailPage implements OnInit {
     });
   }
 
+  rejectDisbursementForLeader() {
+      this.modalService.confirm({
+        nzTitle: 'Từ chối giải ngân',
+        nzContent: `Từ chối ${this.disbursement.investorName} đã giải ngân cho ${this.disbursement.title}?`,
+        nzOkText: 'Xác nhận',
+        nzOkType: 'primary',
+        nzCancelText: 'Hủy',
+        nzOnOk: () => {
+          this.disbursementService
+            .rejectDisbursementForLeader(this.disbursement.id, this.projectId)
+            .pipe(
+              catchError(error => {
+                this.notification.error("Lỗi", error.error || "Từ chối giải ngân thất bại!", { nzDuration: 2000 });
+                return throwError(() => new Error(error.error));
+              })
+            )
+            .subscribe(response => this.disbursement.disbursementStatus = DisbursementStatus.NOTVALID);
+        }
+      });
+    }
+
   navigateBack() {
     this.location.back();
   }
