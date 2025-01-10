@@ -1,5 +1,6 @@
 export type ApplicationApplyFile = {
-  id: string
+  applicationId: string
   fileName: string
-  url: string
+  fileUrl: string
+  id: string
 }
