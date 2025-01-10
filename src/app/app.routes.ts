@@ -324,4 +324,9 @@ export const routes: Routes = [
     canActivate: [AuthenticatedGuard],
     loadComponent: () => import('./pages/transaction-pages/self-transactions/self-transactions.page').then((m) => m.SelfTransactionsPage),
   },
+  {
+    path: 'transactions/:transactionId',
+    resolve: { transaction: TransactionDataResolver },
+    loadComponent: () => import('./pages/transaction-pages/transaction-details/transaction-details.page').then((m) => m.TransactionDetailsPage),
+  },
 ]
