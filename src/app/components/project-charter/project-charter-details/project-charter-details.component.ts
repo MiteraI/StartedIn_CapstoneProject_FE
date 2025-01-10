@@ -15,6 +15,8 @@ import { NzCollapseModule } from 'ng-zorro-antd/collapse'
 import { CreateCharterModalComponent } from '../create-charter-modal/create-charter-modal.component'
 import { UpdateCharterModalComponent } from '../update-charter-modal/update-charter-modal.component'
 import { Subject, takeUntil } from 'rxjs'
+import { AccountService } from 'src/app/core/auth/account.service'
+import { Authority } from 'src/app/shared/constants/authority.constants'
 @Component({
   selector: 'app-project-charter-details',
   templateUrl: './project-charter-details.component.html',
@@ -28,10 +30,17 @@ export class ProjectCharterDetailsComponent implements OnInit, OnDestroy {
   isEditable = true
   projectCharter: ProjectCharter | undefined
   $destroy = new Subject<void>()
+  isUser: boolean = false
 
   @Input() isOverview = false
   @Input({ required: true }) ProjectId: string = ''
-  constructor(private projectCharterService: ProjectCharterService, private route: ActivatedRoute, private modal: NzModalService, private messageService: NzMessageService) {}
+  constructor(
+    private projectCharterService: ProjectCharterService,
+    private route: ActivatedRoute,
+    private modal: NzModalService,
+    private messageService: NzMessageService,
+    private accountService: AccountService
+  ) {}
   ngOnDestroy(): void {
     this.$destroy.next()
     this.$destroy.complete()
@@ -40,6 +49,11 @@ export class ProjectCharterDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.isLoading = true
     this.getProjectCharter()
+    this.accountService.account$.pipe(takeUntil(this.$destroy)).subscribe((account) => {
+      if (account) {
+        this.isUser = account.authorities.includes(Authority.USER)
+      }
+    })
   }
 
   getProjectCharter() {
