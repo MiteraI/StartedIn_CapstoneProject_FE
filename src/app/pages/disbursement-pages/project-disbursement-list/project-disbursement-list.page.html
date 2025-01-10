@@ -90,7 +90,9 @@
               'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
               'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
               'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+              'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR,
+              'text-orange-700': disbursement.disbursementStatus === disbursementStatuses.NOTVALID,
+
             }">
               ● {{ statusLabels[disbursement.disbursementStatus] }}
             </span>
@@ -99,6 +101,9 @@
             <div *ngIf="disbursement.disbursementStatus === disbursementStatuses.ACCEPTED" class="space-x-2 h-6">
               <button (click)="$event.stopPropagation(); confirmDisbursement(disbursement)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="check"></mat-icon>
+              </button>
+              <button (click)="$event.stopPropagation(); rejectDisbursementForLeader(disbursement)" class="text-orange-700 hover:text-orange-700">
+                <mat-icon fontIcon="block"></mat-icon>
               </button>
             </div>
           </td>
@@ -138,6 +143,9 @@
                 <button (click)="$event.stopPropagation(); confirmDisbursement(disbursement)" class="text-green-500">
                   <mat-icon fontIcon="check"></mat-icon>
                 </button>
+                <button (click)="$event.stopPropagation(); rejectDisbursementForLeader(disbursement)" class="text-orange-700">
+                  <mat-icon fontIcon="block"></mat-icon>
+                </button>
               </div>
             </div>
             <div class="mt-2 flex justify-between items-end">
@@ -152,7 +160,8 @@
                   'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
                   'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
                   'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-                  'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+                  'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR,
+                  'text-orange-700': disbursement.disbursementStatus === disbursementStatuses.NOTVALID,
                 }">
                   ● {{ statusLabels[disbursement.disbursementStatus] }}
                 </span>

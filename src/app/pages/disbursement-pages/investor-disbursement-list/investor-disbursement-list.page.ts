@@ -172,7 +172,8 @@ export class InvestorDisbursementListPage implements OnInit, OnDestroy {
   canDisburse(disbursement: DisbursementItemModel): boolean {
     return disbursement.disbursementStatus === DisbursementStatus.PENDING
       || disbursement.disbursementStatus === DisbursementStatus.OVERDUE
-      || disbursement.disbursementStatus === DisbursementStatus.ERROR;
+      || disbursement.disbursementStatus === DisbursementStatus.ERROR
+      || disbursement.disbursementStatus === DisbursementStatus.NOTVALID
   }
 
   openDisburseModal(disbursement: DisbursementItemModel) {
