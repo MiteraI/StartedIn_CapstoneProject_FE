@@ -1,1 +1,1 @@
-export const EDITOR_KEY: string = 'udr1ucdb6ezw9pwxicqthw0l741159mvailir8438x0nobwx'
+export const EDITOR_KEY: string = 'gbbclodsil0inb6iugu2rn9fi76vkegxb9rw5gbttyjk1pef'

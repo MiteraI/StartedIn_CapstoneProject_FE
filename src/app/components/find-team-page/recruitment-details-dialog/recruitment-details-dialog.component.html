@@ -6,9 +6,10 @@
 <div class="flex flex-col h-full p-3 overflow-y-scroll">
   <div class="flex items-center my-2">
     <img [src]="post.logoUrl" alt="Recruitment Post Logo" class="w-8 mr-2 rounded-sm" />
-    <span>{{ post.projectName }}</span>
+    <span class="font-semibold text-purple-400">{{ post.projectName }}</span>
+    
   </div>
-  <span class="text-2xl font-semibold">{{ post.title }}</span>
+  <span class="text-2xl font-semibold text-purple-400">{{ post.title }}</span>
   <span class="text-sm my-2">Đăng ngày: {{ newestTime | date : "d 'tháng' M Y, h:mm a" }}</span>
   <div class="flex items-center my-2">
     <img [src]="post.leaderAvatarUrl" alt="Recruitment Post Logo" class="w-8 mr-2 rounded-sm" />

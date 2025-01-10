@@ -49,7 +49,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs'
     NzTableModule,
     NzIconModule,
     DateDisplayPipe,
-    NzTabsModule
+    NzTabsModule,
   ],
 })
 export class RecruitmentViewComponent implements OnInit, OnDestroy {
@@ -153,6 +153,7 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
       next: (res) => {
         this.antdNoti.openSuccessNotification('', 'Xóa tệp đính kèm thành công')
         this.recruitmentFileList = this.recruitmentFileList.filter((a) => a.id !== imageId)
+        this.triggerPostDetailsReload++
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 400) {
@@ -215,8 +216,14 @@ export class RecruitmentViewComponent implements OnInit, OnDestroy {
               next: (res) => {
                 //TODO: add loading
                 this.isCreateMode = false
+                this.recruitmentId = res.id
+                //Set time out 1000ms to trigger post details reload
+                setTimeout(() => {
+                  this.triggerPostDetailsReload++
+                }, 1000)
               },
             })
+            this.triggerPostDetailsReload++
           },
           error: (err) => {
             this.antdNoti.openErrorNotification('', 'Đã có lỗi xảy ra')
