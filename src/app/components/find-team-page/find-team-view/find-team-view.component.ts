@@ -53,10 +53,10 @@ export class FindTeamViewComponent implements OnInit, OnDestroy {
   }
 
   onPostSelected(postId: string) {
-    if (this.currentPostId === postId) {
-      return
-    }
     if (this.isDesktopView) {
+      if (this.currentPostId === postId) {
+        return
+      }
       this.currentPostId = postId
     } else {
       this.currentPostId = postId
