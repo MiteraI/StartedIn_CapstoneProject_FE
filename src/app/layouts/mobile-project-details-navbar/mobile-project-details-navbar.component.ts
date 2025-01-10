@@ -56,14 +56,16 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
     { linkName: 'assets', iconName: 'inventory', linkText: 'Tài Sản' },
     { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
     { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
+    { linkName: 'meeting', iconName: 'insert_invitation', linkText: 'Lịch Hẹn' },
   ]
 
   leaderSideNavLinks = [
     { linkName: 'tasks', iconName: 'assignment', linkText: 'Tác Vụ' },
     { linkName: 'disbursements', iconName: 'account_balance', linkText: 'Giải Ngân' },
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
-    { linkName: 'deals', iconName: 'handshake', linkText: 'Deals' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
+    { linkName: 'project-detail', iconName: 'description', linkText: 'Miêu Tả' },
+    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng Ký' }
   ]
 
   memberSideNavLinks = [
