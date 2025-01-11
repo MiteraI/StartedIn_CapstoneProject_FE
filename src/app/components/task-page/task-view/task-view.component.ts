@@ -30,6 +30,7 @@ interface TaskFilterOptions {
   startDate?: string
   endDate?: string
   priorityOrderMode?: boolean
+  isParentTask?: boolean
 }
 
 @Component({
@@ -111,7 +112,8 @@ export class TaskViewComponent implements OnInit, OnDestroy {
         this.filter.milestoneId,
         this.filter.startDate,
         this.filter.endDate,
-        this.filter.priorityOrderMode
+        this.filter.priorityOrderMode,
+        this.filter.isParentTask
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
