@@ -24,7 +24,13 @@
         <nz-form-item class="w-1/4">
           <nz-form-label>Giai đoạn</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
+            <nz-select
+              formControlName="phase"
+              nzPlaceHolder="Chọn giai đoạn"
+              (nzOpenChange)="handleOpenPhasesSelect()"
+              (nzScrollToBottom)="loadMorePhases()"
+              (ngModelChange)="handleInfoChanged()"
+            >
               <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
               @if (initialPhaseId) {
               <nz-option [nzValue]="initialPhaseId" [nzLabel]="initialPhase!.phaseName"></nz-option>
@@ -58,6 +64,7 @@
               formControlName="startDate"
               nzPlaceHolder="Chọn ngày bắt đầu cột mốc"
               (ngModelChange)="handleInfoChanged()"
+              [nzDisabledDate]="disableStartDate"
               nzFormat="dd/MM/yyyy"
             ></nz-date-picker>
           </nz-form-control>
@@ -71,6 +78,7 @@
               formControlName="endDate"
               nzPlaceHolder="Chọn ngày kết thúc cột mốc"
               (ngModelChange)="handleInfoChanged()"
+              [nzDisabledDate]="disableEndDate"
               nzFormat="dd/MM/yyyy"
             ></nz-date-picker>
           </nz-form-control>
@@ -100,7 +108,11 @@
               @for (data of basicTable.data; track data.id) {
               <tr (click)="naviagteToTaskView()" class="cursor-pointer">
                 <td>{{ data.title }}</td>
-                <td>{{ taskStatusLabels[data.status] }}</td>
+                <td>
+                  <nz-tag [nzColor]="getStatusColor(data.status)" [nzBordered]="false" class="text-center">
+                    {{ taskStatusLabels[data.status] }}
+                  </nz-tag>
+                </td>
                 <td>{{ data.startDate === null ? 'Không Có Ngày Bắt Đầu' : (data.startDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.endDate === null ? 'Không Có Hạn Chót' : (data.endDate | date : "d 'tháng' M, h:mm a") }}</td>
                 <td>{{ data.createdBy }}</td>
