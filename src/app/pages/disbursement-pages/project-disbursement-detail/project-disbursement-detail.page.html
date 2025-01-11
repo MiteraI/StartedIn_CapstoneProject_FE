@@ -29,7 +29,8 @@
             'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
             'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
             'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-            'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+            'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR,
+            'text-orange-700': disbursement.disbursementStatus === disbursementStatuses.NOTVALID
           }">
             ● {{ statusLabels[disbursement.disbursementStatus] }}
           </div>
@@ -106,17 +107,28 @@
       >
         Quay lại
       </button>
-
+    
       <!-- Action Buttons -->
-      <button
-        *ngIf="canConfirm()"
-        (click)="confirmDisbursement()"
-        class="text-white bg-green-500 hover:bg-green-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
-        [disabled]="isLoading"
-      >
-        <mat-icon fontIcon="check"></mat-icon>
-        <span>Xác nhận giải ngân</span>
-      </button>
+      <div class="flex space-x-2">
+        <button
+          *ngIf="canConfirm()"
+          (click)="confirmDisbursement()"
+          class="text-white bg-green-500 hover:bg-green-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
+          [disabled]="isLoading"
+        >
+          <mat-icon fontIcon="check"></mat-icon>
+          <span>Xác nhận giải ngân</span>
+        </button>
+        <button
+          *ngIf="canConfirm()"
+          (click)="rejectDisbursementForLeader()"
+          class="text-white bg-red-500 hover:bg-red-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
+          [disabled]="isLoading"
+        >
+          <mat-icon fontIcon="block"></mat-icon>
+          <span>Từ chối giải ngân</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
