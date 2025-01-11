@@ -17,7 +17,7 @@ import { MeetingService } from 'src/app/services/meeting.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { ProjectService } from 'src/app/services/project.service'
 import { UserService } from 'src/app/services/user.service'
-import { TeamRole } from 'src/app/shared/enums/team-role.enum'
+import { TeamRole, TeamRoleLabels } from 'src/app/shared/enums/team-role.enum'
 import { ContractListItemModel } from 'src/app/shared/models/contract/contract-list-item.model'
 import { Milestone } from 'src/app/shared/models/milestone/milestone.model'
 import { FullProfile } from 'src/app/shared/models/user/full-profile.model'
@@ -38,6 +38,8 @@ export class MeetingCreateModalComponent implements OnInit {
   currentUser: FullProfile | null = null
   users: TeamMemberModel[] = []
   fileList: NzUploadFile[] = []
+
+  TeamRoleLabels = TeamRoleLabels
 
   loadingMilestones = false
   loadingContracts = false
