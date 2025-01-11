@@ -57,7 +57,12 @@
       <nz-form-control>
         <nz-select formControlName="parties" [nzMode]="'multiple'" nzPlaceHolder="Chọn người thực hiện" [nzShowSearch]="true">
           @for (user of users; track $index) {
-          <nz-option [nzValue]="user.id" [nzLabel]="user.fullName"> </nz-option>
+          <nz-option [nzValue]="user.id" [nzLabel]="user.fullName" nzCustomContent>
+            <span class="font-medium">{{ user.fullName }}</span>
+            <span class="ml-2 text-xs opacity-50">{{ TeamRoleLabels[user.roleInTeam] }} </span>
+            <span class="text-xs opacity-50">-</span>
+            <span class="ml-1 text-xs opacity-50">{{ user.email }}</span>
+          </nz-option>
           }
         </nz-select>
       </nz-form-control>
@@ -94,7 +99,7 @@
           <nz-select [nzLoading]="loadingContracts" formControlName="contractId" class="rounded-lg" [nzDisabled]="nzModalData.appendMode" placeholder="Chọn cột mốc">
             <nz-option nzLabel="Không có" nzValue=""></nz-option>
             @for (contract of contracts; track $index) {
-            <nz-option nzLabel="{{ contract.contractName }}" nzValue="{{ contract.id }}"></nz-option>
+            <nz-option nzLabel="{{ contract.contractName }}" nzValue="{{ contract.id }}"> </nz-option>
             }
           </nz-select>
         </nz-form-control>
