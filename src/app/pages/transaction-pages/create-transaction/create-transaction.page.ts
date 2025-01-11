@@ -108,7 +108,7 @@ export class CreateTransactionPage implements OnInit {
         this.transactionService.uploadEvidence(response.id, this.projectId, this.selectedFile!).subscribe({
           next: () => {
             this.notification.success('Thành công', 'Tạo giao dịch thành công')
-            this.router.navigate(['../'], { relativeTo: this.route })
+            this.router.navigate(['/projects', this.projectId, 'transactions'])
           },
           error: (error) => {
             this.notification.error('Lỗi', error.error)
