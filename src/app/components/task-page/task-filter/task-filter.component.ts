@@ -55,6 +55,12 @@ export class TaskFilterComponent implements OnInit {
     { value: false, label: 'Ưu tiên thấp đến cao' },
   ]
 
+  isParentTaskModes = [
+    { value: null, label: 'Tất cả' },
+    { value: true, label: 'Chỉ task mẹ' },
+    { value: false, label: 'Chỉ task con' },
+  ]
+
   constructor(
     private projectService: ProjectService,
     private milestoneService: MilestoneService,
@@ -76,6 +82,7 @@ export class TaskFilterComponent implements OnInit {
       priorityOrderMode: [this.data.priorityOrderMode || null],
       startDate: [this.data.startDate || null],
       endDate: [this.data.endDate || null],
+      isParentTask: [this.data.isParentTask || null],
     })
   }
 

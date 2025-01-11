@@ -72,21 +72,22 @@
     </nz-form-control>
   </nz-form-item>
 
+  <nz-form-item>
+    <nz-form-label [nzSpan]="24">Hiển thị tác vụ mẹ hoặc con</nz-form-label>
+    <nz-form-control [nzSpan]="24">
+      <nz-select class="w-full" formControlName="isParentTask" nzPlaceHolder="Chọn cách hiển thị">
+        <nz-option *ngFor="let option of isParentTaskModes" [nzValue]="option.value" [nzLabel]="option.label"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
   <!-- Filter by created time to the last 2 weeks with date picker -->
   <nz-form-item>
     <nz-form-label [nzSpan]="24">Lọc theo thời gian tạo</nz-form-label>
     <nz-form-control [nzSpan]="24">
       <div class="flex gap-2">
-        <nz-date-picker
-          formControlName="startDate"
-          nzPlaceHolder="Từ ngày"
-          nzFormat="dd/MM/yyyy"
-        ></nz-date-picker>
-        <nz-date-picker
-          formControlName="endDate"
-          nzPlaceHolder="Đến ngày"
-          nzFormat="dd/MM/yyyy"
-        ></nz-date-picker>
+        <nz-date-picker formControlName="startDate" nzPlaceHolder="Từ ngày" nzFormat="dd/MM/yyyy"></nz-date-picker>
+        <nz-date-picker formControlName="endDate" nzPlaceHolder="Đến ngày" nzFormat="dd/MM/yyyy"></nz-date-picker>
       </div>
     </nz-form-control>
   </nz-form-item>
