@@ -88,6 +88,16 @@ export class UpdateMilestoneModalComponent implements OnInit {
     })
   }
 
+  disableStartDate = (startDate: Date): boolean => {
+    // disable start date before today
+    return startDate ? new Date(startDate) < new Date() : false
+  }
+
+  disableEndDate = (endDate: Date): boolean => {
+    // disable end date before start date
+    return endDate ? new Date(endDate) < new Date(this.milestoneForm.value.startDate) : false
+  }
+
   onSubmit() {
     if (this.milestoneForm.valid && this.isInfoChanged) {
       const milestone = {

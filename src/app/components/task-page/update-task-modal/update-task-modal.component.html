@@ -26,6 +26,7 @@
               (ngModelChange)="handleSelectMilestone($event)"
               (nzOpenChange)="handleOpenMilestoneSelect()"
               (nzScrollToBottom)="loadMoreMilestones()"
+              [nzDisabled]="!isParentTaskSimple"
               [nzShowSearch]="true"
             >
               <nz-option *ngIf="!initialParentTaskId" nzValue="" nzLabel="Không chọn"></nz-option>

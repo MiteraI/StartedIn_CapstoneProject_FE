@@ -32,6 +32,7 @@
               formControlName="startDate"
               nzPlaceHolder="Chọn ngày bắt đầu cột mốc"
               (ngModelChange)="handleInfoChanged()"
+              [nzDisabledDate]="disableStartDate"
               nzFormat="dd/MM/yyyy"
             ></nz-date-picker>
           </nz-form-control>
@@ -45,6 +46,7 @@
               formControlName="endDate"
               nzPlaceHolder="Chọn ngày kết thúc cột mốc"
               (ngModelChange)="handleInfoChanged()"
+              [nzDisabledDate]="disableEndDate"
               nzFormat="dd/MM/yyyy"
             ></nz-date-picker>
           </nz-form-control>
@@ -54,7 +56,13 @@
       <nz-form-item>
         <nz-form-label>Giai đoạn</nz-form-label>
         <nz-form-control>
-          <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
+          <nz-select
+            formControlName="phase"
+            nzPlaceHolder="Chọn giai đoạn"
+            (nzOpenChange)="handleOpenPhasesSelect()"
+            (nzScrollToBottom)="loadMorePhases()"
+            (ngModelChange)="handleInfoChanged()"
+          >
             <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
             @if (initialPhaseId) {
             <nz-option [nzValue]="initialPhaseId" [nzLabel]="initialPhase!.phaseName"></nz-option>

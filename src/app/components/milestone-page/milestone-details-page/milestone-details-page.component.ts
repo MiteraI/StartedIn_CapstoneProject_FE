@@ -17,7 +17,7 @@ import { RoleInTeamService } from 'src/app/core/auth/role-in-team.service'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { MilestoneService } from 'src/app/services/milestone.service'
 import { PhaseService } from 'src/app/services/phase.service'
-import { TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
+import { TaskStatus, TaskStatusColors, TaskStatusLabels } from 'src/app/shared/enums/task-status.enum'
 import { TeamRole } from 'src/app/shared/enums/team-role.enum'
 import { Phase } from 'src/app/shared/models/phase/phase.model'
 import { Task } from 'src/app/shared/models/task/task.model'
@@ -26,6 +26,7 @@ import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal'
 import { TaskService } from 'src/app/services/task.service'
 import { EDITOR_KEY } from 'src/app/shared/constants/editor-key.constants'
 import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
+import { NzTagModule } from 'ng-zorro-antd/tag'
 
 @Component({
   selector: 'app-milestone-details-page',
@@ -46,7 +47,8 @@ import { EditorComponent, EditorModule } from '@tinymce/tinymce-angular'
     MatIconModule,
     NzModalModule,
     RouterModule,
-    EditorModule
+    EditorModule,
+    NzTagModule,
   ],
 })
 export class MilestoneDetailsPageComponent implements OnInit {
@@ -70,12 +72,11 @@ export class MilestoneDetailsPageComponent implements OnInit {
   isFetchMilestoneDetailLoading = false
 
   editorKey = EDITOR_KEY
-    init: EditorComponent['init'] = {
-      plugins: 'lists link code help wordcount image',
-      toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
-      setup: () => {
-      },
-    }
+  init: EditorComponent['init'] = {
+    plugins: 'lists link code help wordcount image',
+    toolbar: 'undo redo | formatselect | bold italic | bullist numlist outdent indent | help',
+    setup: () => {},
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -138,6 +139,16 @@ export class MilestoneDetailsPageComponent implements OnInit {
     }
   }
 
+  disableStartDate = (startDate: Date): boolean => {
+    // disable start date before today
+    return startDate ? new Date(startDate) < new Date() : false
+  }
+
+  disableEndDate = (endDate: Date): boolean => {
+    // disable end date before start date
+    return endDate ? new Date(endDate) < new Date(this.milestoneForm.value.startDate) : false
+  }
+
   loadMorePhases() {
     this.fetchPhases()
   }
@@ -181,6 +192,10 @@ export class MilestoneDetailsPageComponent implements OnInit {
         }
       },
     })
+  }
+
+  getStatusColor(status: TaskStatus): string {
+    return TaskStatusColors[status]
   }
 
   back() {
