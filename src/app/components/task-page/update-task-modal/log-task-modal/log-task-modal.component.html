@@ -45,7 +45,7 @@
           <a [routerLink]="['/user', assignee.userId]" class="text-blue-600 font-medium hover:underline">
             {{ assignee.fullName }}
           </a>
-          <div class="text-xs text-gray-500">Đã cập nhật vào lúc {{ assignee.lastUpdatedTime | date : 'dd/MM/yyyy hh:mm' }}</div>
+          <div class="text-xs text-gray-500">Đã cập nhật vào lúc {{ assignee.lastUpdatedTime | date : 'dd/MM/yyyy HH:mm' }}</div>
         </div>
         <span class="text-gray-600">{{ assignee.actualManHour }} giờ</span>
       </div>
