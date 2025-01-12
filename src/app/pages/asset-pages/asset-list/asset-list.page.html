@@ -32,43 +32,44 @@
   <table *ngIf="!isLoading && assets.length > 0" class="w-full hidden md:table border">
     <thead>
       <tr class="border-b">
-        <th class="p-4 text-center">Tên tài sản</th>
-        <th class="p-4 text-center">Số seri</th>
-        <th class="p-4 text-center">Số lượng ban đầu</th>
-        <th class="p-4 text-center">Tồn kho</th>
-        <th class="p-4 text-center">Giá</th>
-        <th class="p-4 text-center">Ngày mua</th>
+        <th class="p-4 text-center">Thông tin tài sản</th>
+        <th class="p-4 text-center">Số lượng</th>
+        <th class="p-4 text-center">Đơn giá</th>
         <th class="p-4 text-center">Trạng thái</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let asset of assets" class="border-b hover:bg-gray-50 cursor-pointer">
-        <td class="p-4 text-center">
-          <div class="font-medium hover:font-bold">{{ asset.assetName }}</div>
+      <tr *ngFor="let asset of assets" class="border-b hover:bg-gray-50">
+        <td class="p-4">
+          <div class="flex flex-col">
+            <div class="font-medium text-lg">{{ asset.assetName }}</div>
+            <div class="text-sm text-gray-500">Số seri: {{ asset.serialNumber }}</div>
+            <div class="text-sm text-gray-500">
+              {{ asset.purchaseDate ? 'Ngày mua: ' + formatDate(asset.purchaseDate) : 'Không xác định' }}
+            </div>
+          </div>
         </td>
-        <td class="p-4 text-center">
-          <div class="text-gray-600">{{ asset.serialNumber }}</div>
-        </td>
-        <td class="p-4 text-center">
-          <div class="text-gray-600 flex justify-center">{{ asset.quantity }}</div>
-        </td>
-        <td class="p-4 text-center">
-          <div class="text-gray-600 flex justify-center">{{ asset.remainQuantity }}</div>
+        <td class="p-4">
+          <div class="flex flex-col items-center">
+            <div class="text-base">
+              <span class="font-medium">Ban đầu:</span> {{ asset.quantity }}
+            </div>
+            <div class="text-base">
+              <span class="font-medium">Còn lại:</span> {{ asset.remainQuantity }}
+            </div>
+          </div>
         </td>
         <td class="p-4 text-gray-600 text-center">{{ asset.price | vndCurrency }}</td>
-        <td class="p-4 text-gray-600 text-center">{{ asset.purchaseDate ? formatDate(asset.purchaseDate) : 'Không xác định' }}</td>
         <td class="p-4 text-center">
-          <span
-            [ngClass]="{
-              'text-green-500': asset.status === assetStatuses.AVAILABLE,
-              'text-red-500': asset.status === assetStatuses.UNAVAILABLE,
-              'text-yellow-500': asset.status === assetStatuses.INMANTAINANCE,
-              'text-purple-500': asset.status === assetStatuses.SOLD
-            }"
-          >
+          <div class="inline-flex items-center px-4 py-1 rounded-full text-sm" [ngClass]="{
+            'bg-green-100 text-green-700': asset.status === assetStatuses.AVAILABLE,
+            'bg-red-100 text-red-700': asset.status === assetStatuses.UNAVAILABLE,
+            'bg-yellow-100 text-yellow-700': asset.status === assetStatuses.INMANTAINANCE,
+            'bg-purple-100 text-purple-700': asset.status === assetStatuses.SOLD
+          }">
             ● {{ statusLabels[asset.status] }}
-          </span>
+          </div>
         </td>
         <td *ngIf="isLeader && asset.status !== assetStatuses.SOLD" class="p-4 space-x-2 h-6">
           <button
