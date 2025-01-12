@@ -14,7 +14,7 @@
         @if (!isAdmin)
         {
           <a
-            routerLink="/projects"
+            [routerLink]="['/projects']"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
@@ -22,21 +22,21 @@
           </a>
           @if (isInvestor) {
           <a
-            routerLink="/explore"
+            [routerLink]="['/explore']"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
             Khám phá
           </a>
           <a
-            routerLink="/disbursements/overview"
+            [routerLink]="['/disbursements/overview']"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
             Giải ngân
           </a>
           <a
-            routerLink="/deals"
+            [routerLink]="['/deals']"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
@@ -44,7 +44,7 @@
           </a>
           } @else {
           <a
-            routerLink="/team-explore"
+            [routerLink]="['/team-explore']"
             routerLinkActive="text-purple-600"
             class="text-gray-700 hover:text-purple-600 py-2 font-medium transition-colors"
           >
