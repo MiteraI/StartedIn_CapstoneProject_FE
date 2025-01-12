@@ -43,7 +43,7 @@ export class RecruitmentPostDetailsComponent implements OnInit, OnDestroy, OnCha
   constructor(private recruitmentService: RecruitmentService, private modalService: NzModalService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['reloadTrigger']) {
+    if (changes['reloadFromUpdate']) {
       this.fetchPostDetails(this.postDetails.id)
     }
   }

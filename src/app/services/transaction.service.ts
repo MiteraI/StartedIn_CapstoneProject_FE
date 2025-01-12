@@ -108,4 +108,12 @@ export class TransactionService {
       map(response => this.parseSearchResponse(response))
     );
   }
+
+  getSelfTransaction(id: string): Observable<TransactionModel> {
+    return this.http.get<TransactionModel>(
+      this.applicationConfigService.getEndpointFor(`/api/transactions/${id}`)
+    ).pipe(
+      map(transaction => this.parseNumericFields(transaction))
+    );
+  }
 }

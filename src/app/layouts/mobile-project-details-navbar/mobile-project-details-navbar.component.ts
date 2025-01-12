@@ -57,6 +57,7 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
     { linkName: 'contracts', iconName: 'history_edu', linkText: 'Hợp Đồng' },
     { linkName: 'equity', iconName: 'equalizer', linkText: 'Cổ Phần' },
     { linkName: 'meeting', iconName: 'insert_invitation', linkText: 'Lịch Hẹn' },
+    
   ]
 
   leaderSideNavLinks = [
@@ -65,7 +66,8 @@ export class MobileProjectDetailsNavbarComponent implements OnInit, OnDestroy {
     { linkName: 'investment-call', iconName: 'local_atm', linkText: 'Gọi Vốn' },
     { linkName: 'recruitment-post', iconName: 'plagiarism', linkText: 'Đăng Tuyển' },
     { linkName: 'project-detail', iconName: 'description', linkText: 'Miêu Tả' },
-    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng Ký' }
+    { linkName: 'project-approval-list', iconName: 'border_color', linkText: 'Đăng Ký' },
+    { linkName: 'members', iconName: 'group', linkText: 'Thành Viên' }
   ]
 
   memberSideNavLinks = [

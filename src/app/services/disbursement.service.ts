@@ -80,6 +80,16 @@ export class DisbursementService {
     );
   }
 
+  rejectDisbursementForLeader(id: string, projectId: string): Observable<string> {
+    return this.http.put<string>(
+      this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/disbursements/${id}/reject-for-leader`),
+      null,
+      { responseType: 'text' as 'json' }
+    );
+  }
+
+  
+
   getDisbursements(
     pageIndex: number,
     pageSize: number,

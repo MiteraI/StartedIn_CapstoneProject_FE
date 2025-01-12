@@ -250,6 +250,7 @@ export class AssetListPage implements OnInit, OnDestroy {
         assetId: asset.id,
         projectId: this.projectId,
         remainQuantity: asset.remainQuantity,
+        buyPrice: asset.price
       },
       nzFooter: null,
     })

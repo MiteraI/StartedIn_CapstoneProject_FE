@@ -6,12 +6,24 @@ import { TransactionService } from 'src/app/services/transaction.service';
 
 export const TransactionDataResolver: ResolveFn<TransactionModel | null> = (route, state) => {
   const transactionService = inject(TransactionService);
-  return transactionService
-    .getTransaction(route.paramMap.get('transactionId')!, route.parent?.paramMap.get('id')!)
-    .pipe(
-      first(),
-      catchError(error => {
-        return of(null);
-      })
-    )
+  const projectId = route.parent?.paramMap.get('id');
+  if (projectId) {
+    return transactionService
+      .getTransaction(route.paramMap.get('transactionId')!, projectId)
+      .pipe(
+        first(),
+        catchError(error => {
+          return of(null);
+        })
+      )
+  } else {
+    return transactionService
+      .getSelfTransaction(route.paramMap.get('transactionId')!)
+      .pipe(
+        first(),
+        catchError(error => {
+          return of(null);
+        })
+      )
+  }
 };

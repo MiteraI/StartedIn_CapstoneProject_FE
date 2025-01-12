@@ -3,8 +3,8 @@ import { Task } from "../task/task.model";
 
 export type DashboardModel = {
   currentBudget: number;
-  inAmount: number; // tiền vào trong tháng
-  outAmount: number; // tiền ra trong tháng
+  inAmount: number; // tiền thu trong tháng
+  outAmount: number; // tiền chi trong tháng
   remainingDisbursement: number;
   disbursedAmount: number;
   // % cổ phần của login user
