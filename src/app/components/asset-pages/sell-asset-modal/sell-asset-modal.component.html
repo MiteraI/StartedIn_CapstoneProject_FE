@@ -12,6 +12,9 @@
           [nzFormatter]="vndFormatter"
           [nzParser]="vndParser"
         ></nz-input-number>
+        <div class="mt-1 text-sm text-gray-500">
+          Giá mua: {{ nzModalData.buyPrice | vndCurrency }}
+        </div>
       </nz-form-control>
     </nz-form-item>
 

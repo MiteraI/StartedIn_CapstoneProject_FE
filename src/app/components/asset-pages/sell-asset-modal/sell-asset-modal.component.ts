@@ -18,6 +18,7 @@ interface IModalData {
   assetId: string;
   projectId: string;
   remainQuantity: number;
+  buyPrice?: number;
 }
 
 @Component({
@@ -32,7 +33,8 @@ interface IModalData {
     NzInputNumberModule,
     NzButtonModule,
     NzSelectModule,
-    CommonModule
+    CommonModule,
+    VndCurrencyPipe
   ]
 })
 export class SellAssetModalComponent {
