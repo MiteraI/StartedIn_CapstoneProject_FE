@@ -21,5 +21,6 @@ export class TransactionTypeModalComponent {
   onSelect(type: 'buy-assets' | 'create-transaction') {
     this.router.navigate(['/projects', this.projectId, type]);
     this.modal.close();
+    this.modal.destroy();
   }
 }

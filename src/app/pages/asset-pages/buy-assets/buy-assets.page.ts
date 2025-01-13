@@ -50,6 +50,7 @@ export class BuyAssetsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.roleService.role$.subscribe((role) => {
+      if (!role) return
       if (role !== TeamRole.LEADER) {
         this.router.navigate(['../'], { relativeTo: this.route })
         return
