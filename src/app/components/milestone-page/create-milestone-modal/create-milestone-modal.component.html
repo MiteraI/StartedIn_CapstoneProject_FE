@@ -3,7 +3,7 @@
     <form [formGroup]="milestoneForm" (ngSubmit)="onSubmit()" nz-form nzLayout="vertical" class="px-4">
       <!-- Title Field -->
       <nz-form-item>
-        <nz-form-label [nzRequired]="true">Tên Cột Mốc</nz-form-label>
+        <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Tên Cột Mốc</nz-form-label>
         <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
           <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" />
         </nz-form-control>
@@ -11,7 +11,7 @@
 
       <!-- Description Field -->
       <nz-form-item>
-        <nz-form-label [nzRequired]="true">Nội dung cột mốc</nz-form-label>
+        <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Nội dung cột mốc</nz-form-label>
         <nz-form-control>
           <editor [apiKey]="editorKey" [init]="init" formControlName="description"></editor>
         </nz-form-control>
@@ -20,7 +20,7 @@
       <!-- PhaseName Field (Date and Time Picker) and Choose Due Date -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Ngày Bắt Đầu</nz-form-label>
+          <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Ngày Bắt Đầu</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
             <nz-date-picker
               formControlName="startDate"
@@ -33,7 +33,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Ngày Kết Thúc</nz-form-label>
+          <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Ngày Kết Thúc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
             <nz-date-picker
               formControlName="endDate"
@@ -47,7 +47,7 @@
       </div>
 
       <nz-form-item>
-        <nz-form-label>Giai đoạn</nz-form-label>
+        <nz-form-label [ngStyle]="{ 'font-weight': 'bold' }">Giai đoạn</nz-form-label>
         <nz-form-control>
           <nz-select formControlName="phase" nzPlaceHolder="Chọn giai đoạn" (nzOpenChange)="handleOpenPhasesSelect()" (nzScrollToBottom)="loadMorePhases()">
             <nz-option nzValue="" nzLabel="Không Chọn"></nz-option>
@@ -65,7 +65,7 @@
 
       <nz-form-item>
         <div class="flex justify-between items-center w-full">
-          <p>Cuộc Họp</p>
+          <p style="font-weight: bold;">Cuộc Họp</p>
           <button nz-button nzType="primary" (click)="openCreateMeetingModal()" type="button" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
             <mat-icon fontIcon="add_icon"></mat-icon>
             Thêm Cuộc Họp
