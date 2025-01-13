@@ -57,7 +57,7 @@ export class ShareEquitiesPage implements OnInit {
   }
 
   private loadEquities() {
-    const formattedDate = format(this.selectedDate, 'yyyy-MM-dd');
+    const formattedDate = format(this.selectedDate, 'dd/MM/yyyy');
     this.isLoading = true;
     this.shareEquityService
       .getEquities(this.projectId, formattedDate)

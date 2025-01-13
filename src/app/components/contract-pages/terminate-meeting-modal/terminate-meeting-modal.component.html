@@ -80,6 +80,7 @@
       [disabled]="meetingForm.invalid"
       nz-button
       nzType="primary"
+      [nzLoading]="isLoading"
     >
       {{ data.request ? 'Chấp nhận' : 'OK' }}
     </button>

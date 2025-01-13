@@ -86,8 +86,8 @@ export class CreateCharterModalComponent implements OnInit {
     projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
       projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
         if (phase.startEndDate && phase.startEndDate.length === 2) {
-          phase.startDate = this.datePipe.transform(phase.startEndDate[0], 'yyyy-MM-dd') || ''
-          phase.endDate = this.datePipe.transform(phase.startEndDate[1], 'yyyy-MM-dd') || ''
+          phase.startDate = this.datePipe.transform(phase.startEndDate[0], 'dd/MM/yyyy') || ''
+          phase.endDate = this.datePipe.transform(phase.startEndDate[1], 'dd/MM/yyyy') || ''
         }
       })
     })

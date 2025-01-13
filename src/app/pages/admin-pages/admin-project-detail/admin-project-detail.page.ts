@@ -40,19 +40,30 @@ export class AdminProjectDetailPage implements OnInit {
   openRequestApprovalModal(approval: ProjectApprovalDetail | null): void {
     if (!approval) {
       // Log a warning or show a notification
-      console.warn('Approval data is null or undefined.');
-      this.notification.warning('Invalid Action', 'Approval details are missing.', { nzDuration: 3000 });
-      return;
+      console.warn('Approval data is null or undefined.')
+      this.notification.warning('Invalid Action', 'Approval details are missing.', { nzDuration: 3000 })
+      return
     }
 
     // Proceed with creating the modal
-    this.modalService.create({
+    const modalRef = this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',
       nzContent: AdminApprovalModalComponent,
       nzData: { approval },
       nzFooter: null,
       nzWidth: 800,
-    });
+    })
+
+    modalRef.afterClose.subscribe((result) => {
+      if (result) {
+        console.log('Modal result:', result)
+        if (result.approve) {
+          this.project.projectStatus = ProjectStatus.ACTIVE
+        }
+      } else {
+        console.log('Modal was closed without action.')
+      }
+    })
   }
 
   verifyProject() {

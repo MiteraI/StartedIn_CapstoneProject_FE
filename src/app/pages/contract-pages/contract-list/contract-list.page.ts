@@ -193,7 +193,7 @@ export class ContractListPage implements OnInit, OnDestroy {
     this.contractGroups = [];
     this.keys = [];
     this.contracts.forEach((contract) => {
-      const date = format(new Date(contract.lastUpdatedTime), 'yyyy-MM-dd');
+      const date = format(new Date(contract.lastUpdatedTime), 'dd/MM/yyyy');
       if (!this.keys.includes(date)) {
         this.keys.push(date);
         this.contractGroups.push([contract]);

@@ -107,26 +107,24 @@
       >
         Quay lại
       </button>
-    
+
       <!-- Action Buttons -->
-      <div class="flex space-x-2">
+      <div *ngIf="canConfirm()" class="flex justify-end">
         <button
-          *ngIf="canConfirm()"
+          (click)="rejectEvidence()"
+          class="text-red-500 hover:text-red-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
+          [disabled]="isLoading"
+        >
+          <mat-icon fontIcon="block"></mat-icon>
+          <span>Từ chối chứng từ</span>
+        </button>
+        <button
           (click)="confirmDisbursement()"
           class="text-white bg-green-500 hover:bg-green-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
           [disabled]="isLoading"
         >
           <mat-icon fontIcon="check"></mat-icon>
           <span>Xác nhận giải ngân</span>
-        </button>
-        <button
-          *ngIf="canConfirm()"
-          (click)="rejectDisbursementForLeader()"
-          class="text-white bg-red-500 hover:bg-red-700 transition-colors m-2 px-4 py-2 rounded-md flex items-center space-x-2"
-          [disabled]="isLoading"
-        >
-          <mat-icon fontIcon="block"></mat-icon>
-          <span>Từ chối giải ngân</span>
         </button>
       </div>
     </div>

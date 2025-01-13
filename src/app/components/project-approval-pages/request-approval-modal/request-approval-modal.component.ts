@@ -30,7 +30,7 @@ import { VndCurrencyPipe } from 'src/app/shared/pipes/vnd-currency.pipe'
     NzUploadModule,
     NzButtonModule,
     NzInputModule,
-    NzSkeletonModule, 
+    NzSkeletonModule,
     VndCurrencyPipe,
     NzFormModule,
     NzInputNumberModule,
@@ -78,12 +78,12 @@ export class RequestApprovalModalComponent implements OnInit {
     inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
   }
 
-  
+
 
   vndCurrencyPipe: VndCurrencyPipe = new VndCurrencyPipe()
   vndFormatter = (value: number) => this.vndCurrencyPipe.transform(value)
   vndParser = (value: string) => value.replace(/\D/g, '') // remove all non-digits
-  
+
   formatterPercent = (value: number): string => `${value} %`
   parserPercent = (value: string): string => value.replace(' %', '')
 
@@ -124,7 +124,7 @@ export class RequestApprovalModalComponent implements OnInit {
       this.uploading = true
       let endDate = this.approvalRequestForm.value.endDate
       if (endDate) {
-        endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd')
+        endDate = this.datePipe.transform(endDate, 'dd/MM/yyyy')
       }
       const formData = new FormData()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -135,7 +135,7 @@ export class RequestApprovalModalComponent implements OnInit {
       formData.append('ValuePerPercentage', this.approvalRequestForm.get('valuePerPercentage')?.value);
       formData.append('EquityShareCall', this.approvalRequestForm.get('equityShareCall')?.value);
       formData.append('EndDate', endDate || null);
-      
+
       this.projectApprovalService.requestApproval(this.projectId, formData).subscribe({
         next: (response) => {
           console.log(response)

@@ -137,9 +137,10 @@
           <div>
             <div class="mt-1">
               <span [ngClass]="{
-                'text-blue-500': offer.dealStatus === dealStatuses.WAITING,
-                'text-green-500': offer.dealStatus === dealStatuses.ACCEPTED,
-                'text-red-500': offer.dealStatus === dealStatuses.REJECTED
+                'text-yellow-500': offer.dealStatus === dealStatuses.WAITING,
+                'text-blue-500': offer.dealStatus === dealStatuses.ACCEPTED,
+                'text-red-500': offer.dealStatus === dealStatuses.REJECTED,
+                'text-green-500': offer.dealStatus === dealStatuses.CONTRACTCREATED
               }">
                 ● {{ statusLabels[offer.dealStatus] }}
               </span>

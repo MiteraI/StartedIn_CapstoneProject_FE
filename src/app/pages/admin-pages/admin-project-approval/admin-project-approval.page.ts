@@ -127,6 +127,10 @@ export class AdminProjectApprovalPage implements OnInit, OnDestroy {
       })
   }
 
+  maskApprovalId(id: string) {
+    return id.substring(0, 4) + '****' + id.substring(id.length - 4, id.length);
+  }
+
   openRequestAppovalModal(approval: ProjectApprovalDetail) {
     this.modalService.create({
       nzTitle: 'Yêu cầu phê duyệt',

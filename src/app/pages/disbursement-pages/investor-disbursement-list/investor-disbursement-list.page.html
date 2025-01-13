@@ -183,7 +183,8 @@
                 'text-red-500': disbursement.disbursementStatus === disbursementStatuses.REJECTED,
                 'text-green-500': disbursement.disbursementStatus === disbursementStatuses.FINISHED,
                 'text-yellow-500': disbursement.disbursementStatus === disbursementStatuses.OVERDUE,
-                'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR
+                'text-red-700': disbursement.disbursementStatus === disbursementStatuses.ERROR,
+                'text-orange-700': disbursement.disbursementStatus === disbursementStatuses.NOTVALID
               }">
                 ● {{ statusLabels[disbursement.disbursementStatus] }}
               </span>

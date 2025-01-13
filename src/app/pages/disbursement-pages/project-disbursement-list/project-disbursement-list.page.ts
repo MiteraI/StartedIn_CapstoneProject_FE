@@ -150,7 +150,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     this.disbursementGroups = [];
     this.keys = [];
     this.disbursements.forEach((disbursement) => {
-      const date = format(new Date(disbursement.startDate), 'yyyy-MM-dd');
+      const date = format(new Date(disbursement.startDate), 'dd/MM/yyyy');
       if (!this.keys.includes(date)) {
         this.keys.push(date);
         this.disbursementGroups.push([disbursement]);
@@ -193,7 +193,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     });
   }
 
-  rejectDisbursementForLeader(disbursement: DisbursementItemModel) {
+  rejectEvidence(disbursement: DisbursementItemModel) {
     this.modalService.confirm({
       nzTitle: 'Từ chối giải ngân',
       nzContent: `Từ chối ${disbursement.investorName} đã giải ngân cho ${disbursement.title}?`,
@@ -202,7 +202,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.disbursementService
-          .rejectDisbursementForLeader(disbursement.id, this.projectId)
+          .rejectEvidence(disbursement.id, this.projectId)
           .pipe(
             catchError(error => {
               this.notification.error("Lỗi", error.error || "Từ chối giải ngân thất bại!", { nzDuration: 2000 });

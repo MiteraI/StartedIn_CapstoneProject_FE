@@ -18,14 +18,14 @@
         <th class="p-4 text-left">Tên dự án</th>
         <th class="p-4 text-left">Nhóm trưởng</th>
         <th class="p-4 text-left">Ngày gửi</th>
-        <th class="p-4 text-left">Trạng thái</th>
+        <th class="p-4 text-left w-40">Trạng thái</th>
         <th class="p-4 text-left w-16"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let approval of pagedApprovals.data" class="border-b hover:bg-purple-50">
         <td class="p-4">
-          <div class="font-medium">{{ approval.id }}</div>
+          <div class="font-medium">{{ maskApprovalId(approval.id) }}</div>
         </td>
         <td class="p-4">
           <a (click)="navigateToProjectDetail(approval.projectId)" class="font-medium cursor-pointer hover:underline"> {{ approval.projectName || 'Không có dữ liệu' }} </a>
@@ -34,7 +34,7 @@
           <div class="font-medium">{{ approval.leaderName }}</div>
         </td>
         <td class="p-4">
-          <div class="font-medium">{{ approval.sentDate | date: 'HH:mm aa - dd/MM/yy' }}</div>
+          <div class="font-medium">{{ approval.sentDate | date: 'dd/MM/yyyy HH:mm' }}</div>
         </td>
         <td class="p-4">
           <span
