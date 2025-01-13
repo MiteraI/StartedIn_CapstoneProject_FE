@@ -139,7 +139,8 @@
               <span [ngClass]="{
                 'text-blue-500': offer.dealStatus === dealStatuses.WAITING,
                 'text-green-500': offer.dealStatus === dealStatuses.ACCEPTED,
-                'text-red-500': offer.dealStatus === dealStatuses.REJECTED
+                'text-red-500': offer.dealStatus === dealStatuses.REJECTED,
+                'text-green-500': offer.dealStatus === dealStatuses.CONTRACTCREATED
               }">
                 ● {{ statusLabels[offer.dealStatus] }}
               </span>
