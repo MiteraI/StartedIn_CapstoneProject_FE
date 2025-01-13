@@ -4,7 +4,7 @@
       <li *ngIf="isSameDay(event.appointmentTime, date)" (click)="onBadgeClick(event.id, $event)">
         <div class="rounded-md px-1 hover:bg-green-300 bg-green-100">
           <div class="font-semibold">{{ event.title }}</div>
-          <div>{{ event.appointmentTime | date : 'hh:mm a' }}</div>
+          <div>{{ event.appointmentTime | date : 'HH:mm a' }}</div>
         </div>
       </li>
     </ng-container>
@@ -14,7 +14,7 @@
       <li (click)="onBadgeClick(event.id, $event)">
         <div class="rounded-md px-1 hover:bg-green-300 bg-green-100 mb-1">
           <div class="font-semibold">{{ event.title }}</div>
-          <div>{{ event.appointmentTime | date : 'hh:mm a' }}</div>
+          <div>{{ event.appointmentTime | date : 'HH:mm a' }}</div>
         </div>
       </li>
     </ng-container>
