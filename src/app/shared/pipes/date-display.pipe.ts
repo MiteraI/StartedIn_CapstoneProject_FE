@@ -16,7 +16,7 @@ export class DateDisplayPipe implements PipeTransform {
       // If the date is today, show only the time in HH:mm format
       return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     } else {
-      // If the date is in the past, show it in YYYY-MM-DD format
+      // If the date is in the past, show it in dd/MM/yyyy format
       return date.toISOString().split('T')[0]
     }
   }

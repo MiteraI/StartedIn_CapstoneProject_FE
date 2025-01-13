@@ -680,8 +680,8 @@ export class UpdateTaskModalComponent implements OnInit {
               {
                 title: task.title,
                 description: task.description,
-                startDate: this.datePipe.transform(task.startDate, 'yyyy-MM-dd HH:00:00'),
-                endDate: this.datePipe.transform(task.endDate, 'yyyy-MM-dd HH:00:00'),
+                startDate: this.datePipe.transform(task.startDate, 'dd/MM/yyyy HH:00:00'),
+                endDate: this.datePipe.transform(task.endDate, 'dd/MM/yyyy HH:00:00'),
                 status: task.status,
                 manHour: task.expectedManHour,
                 parentTask: task.parentTask === null ? '' : task.parentTask.id,

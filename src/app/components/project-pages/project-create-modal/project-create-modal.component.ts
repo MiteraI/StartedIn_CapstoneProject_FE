@@ -80,8 +80,8 @@ export class ProjectCreateModalComponent {
       formData.append('LogoFile', this.selectedFile!)
 
       // Format the date
-      const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'yyyy-MM-dd')
-      const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'yyyy-MM-dd')
+      const formattedStartDate = this.datePipe.transform(this.projectForm.get('startDate')?.value, 'dd/MM/yyyy')
+      const formattedEndDate = this.datePipe.transform(this.projectForm.get('endDate')?.value, 'dd/MM/yyyy')
 
       console.log('formattedStartDate', formattedStartDate)
       if (formattedStartDate) {

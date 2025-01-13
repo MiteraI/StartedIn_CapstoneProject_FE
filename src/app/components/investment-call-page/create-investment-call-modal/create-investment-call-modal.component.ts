@@ -52,7 +52,7 @@ export class CreateInvestmentCallModalComponent {
 
   formatterPercent = (value: number): string => `${value} %`
   parserPercent = (value: string): string => value.replace(' %', '')
-  
+
   disabledEndDate = (current: Date): boolean => {
     const today = new Date(); // Lấy ngày hiện tại
     today.setHours(0, 0, 0, 0); // Đặt giờ, phút, giây về 0 để so sánh chính xác
@@ -66,7 +66,7 @@ export class CreateInvestmentCallModalComponent {
 
       let endDate = this.investmentCallForm.value.endDate
       if (endDate) {
-        endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd')
+        endDate = this.datePipe.transform(endDate, 'dd/MM/yyyy')
       }
 
       investmentCallData.endDate = endDate

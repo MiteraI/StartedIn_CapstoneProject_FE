@@ -132,7 +132,7 @@ export class MembersPage implements OnInit {
   }
 
   private loadEquities() {
-    const formattedDate = format(new Date(), 'yyyy-MM-dd');
+    const formattedDate = format(new Date(), 'dd/MM/yyyy');
     this.shareEquityService
       .getEquities(this.projectId, formattedDate)
       .pipe(

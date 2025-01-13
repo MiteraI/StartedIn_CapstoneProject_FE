@@ -150,7 +150,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     this.disbursementGroups = [];
     this.keys = [];
     this.disbursements.forEach((disbursement) => {
-      const date = format(new Date(disbursement.startDate), 'yyyy-MM-dd');
+      const date = format(new Date(disbursement.startDate), 'dd/MM/yyyy');
       if (!this.keys.includes(date)) {
         this.keys.push(date);
         this.disbursementGroups.push([disbursement]);
