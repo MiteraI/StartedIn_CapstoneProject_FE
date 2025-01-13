@@ -57,7 +57,7 @@
           </div>
           <div class="flex flex-col">
             <label class="text-gray-600 font-semibold text-sm p-2">NGÀY BẮT ĐẦU - KẾT THÚC</label>
-            <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="startEndDate" class="col-span-3"></nz-range-picker>
+            <nz-range-picker [nzDisabledDate]="disabledDate" formControlName="startEndDate" class="col-span-3" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div class="flex justify-end">
             <mat-icon (click)="showConfirmDelete(i)" class="text-right cursor-pointer text-red-500">delete</mat-icon>

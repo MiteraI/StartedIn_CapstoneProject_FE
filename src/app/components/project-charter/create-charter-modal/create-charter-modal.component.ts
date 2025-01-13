@@ -86,8 +86,8 @@ export class CreateCharterModalComponent implements OnInit {
     projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
       projectCharterRequest.listCreatePhaseDtos.forEach((phase) => {
         if (phase.startEndDate && phase.startEndDate.length === 2) {
-          phase.startDate = this.datePipe.transform(phase.startEndDate[0], 'dd/MM/yyyy') || ''
-          phase.endDate = this.datePipe.transform(phase.startEndDate[1], 'dd/MM/yyyy') || ''
+          phase.startDate = this.datePipe.transform(phase.startEndDate[0], 'yyyy-MM-dd') || ''
+          phase.endDate = this.datePipe.transform(phase.startEndDate[1], 'yyyy-MM-dd') || ''
         }
       })
     })
@@ -125,13 +125,26 @@ export class CreateCharterModalComponent implements OnInit {
 
   disabledDate = (current: Date): boolean => {
     if (!current) {
-      return false
+      return false;
     }
+  
     // Replace with your actual project object or reference
-    const startDate = this.currentProject?.startDate ? new Date(this.currentProject.startDate) : null
-    const endDate = this.currentProject?.endDate ? new Date(this.currentProject.endDate) : null
-    return (startDate !== null && current < startDate) || (endDate !== null && current > endDate)
-  }
+    const startDate = this.currentProject?.startDate ? new Date(this.currentProject.startDate) : null;
+    const endDate = this.currentProject?.endDate ? new Date(this.currentProject.endDate) : null;
+  
+    // Get today's date without the time part for comparison
+    const today = new Date();
+    const todayWithoutTime = today.toISOString().split('T')[0]; // Get today as "YYYY-MM-DD"
+    const currentWithoutTime = current.toISOString().split('T')[0]; // Get current date as "YYYY-MM-DD"
+  
+    // If the current date is today, do not disable it
+    if (currentWithoutTime === todayWithoutTime) {
+      return false;
+    }
+  
+    // Disable dates before the start date or after the end date
+    return (startDate !== null && current < startDate) || (endDate !== null && current > endDate);
+  };
 
   private getCurrentProject() {
     this.projectService.getProject(this.projectId).subscribe({
