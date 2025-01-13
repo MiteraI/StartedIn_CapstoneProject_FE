@@ -193,7 +193,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
     });
   }
 
-  rejectDisbursementForLeader(disbursement: DisbursementItemModel) {
+  rejectEvidence(disbursement: DisbursementItemModel) {
     this.modalService.confirm({
       nzTitle: 'Từ chối giải ngân',
       nzContent: `Từ chối ${disbursement.investorName} đã giải ngân cho ${disbursement.title}?`,
@@ -202,7 +202,7 @@ export class ProjectDisbursementListPage implements OnInit, OnDestroy {
       nzCancelText: 'Hủy',
       nzOnOk: () => {
         this.disbursementService
-          .rejectDisbursementForLeader(disbursement.id, this.projectId)
+          .rejectEvidence(disbursement.id, this.projectId)
           .pipe(
             catchError(error => {
               this.notification.error("Lỗi", error.error || "Từ chối giải ngân thất bại!", { nzDuration: 2000 });

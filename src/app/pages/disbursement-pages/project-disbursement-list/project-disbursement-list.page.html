@@ -102,7 +102,7 @@
               <button (click)="$event.stopPropagation(); confirmDisbursement(disbursement)" class="text-green-500 hover:text-green-700">
                 <mat-icon fontIcon="check"></mat-icon>
               </button>
-              <button (click)="$event.stopPropagation(); rejectDisbursementForLeader(disbursement)" class="text-orange-700 hover:text-orange-700">
+              <button (click)="$event.stopPropagation(); rejectEvidence(disbursement)" class="text-orange-700 hover:text-orange-700">
                 <mat-icon fontIcon="block"></mat-icon>
               </button>
             </div>
@@ -143,7 +143,7 @@
                 <button (click)="$event.stopPropagation(); confirmDisbursement(disbursement)" class="text-green-500">
                   <mat-icon fontIcon="check"></mat-icon>
                 </button>
-                <button (click)="$event.stopPropagation(); rejectDisbursementForLeader(disbursement)" class="text-orange-700">
+                <button (click)="$event.stopPropagation(); rejectEvidence(disbursement)" class="text-orange-700">
                   <mat-icon fontIcon="block"></mat-icon>
                 </button>
               </div>

@@ -38,6 +38,7 @@ interface IModalData {
 export class TerminateMeetingModalComponent implements OnInit {
   data: IModalData = inject(NZ_MODAL_DATA);
   meetingForm!: FormGroup;
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -82,15 +83,18 @@ export class TerminateMeetingModalComponent implements OnInit {
       this.meetingForm.patchValue({ meetingLink: sanitizedLink });
     }
 
+    this.isLoading = true;
     if (this.data.contractId) {
       this.contractService
         .createTerminateMeeting(this.data.projectId, this.data.contractId, this.meetingForm.value)
         .subscribe({
           next: () => {
+            this.isLoading = false;
             this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
             this.nzModalRef.close(true);
           },
           error: (error) => {
+            this.isLoading = false;
             this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
           },
         });
@@ -99,10 +103,12 @@ export class TerminateMeetingModalComponent implements OnInit {
         .accept(this.data.projectId, this.data.request.id, this.meetingForm.value)
         .subscribe({
           next: () => {
+            this.isLoading = true;
             this.notification.success('Thành công', 'Tạo cuộc họp thành công', { nzDuration: 2000 });
             this.nzModalRef.close(true);
           },
           error: (error) => {
+            this.isLoading = false;
             this.notification.error('Lỗi', error.error, { nzDuration: 2000 });
           },
         });
