@@ -124,7 +124,7 @@ export class RequestApprovalModalComponent implements OnInit {
       this.uploading = true
       let endDate = this.approvalRequestForm.value.endDate
       if (endDate) {
-        endDate = this.datePipe.transform(endDate, 'dd/MM/yyyy')
+        endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd')
       }
       const formData = new FormData()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

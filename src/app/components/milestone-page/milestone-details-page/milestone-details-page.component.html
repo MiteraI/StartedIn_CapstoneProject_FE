@@ -16,13 +16,13 @@
       <!-- Title Field -->
       <div class="flex justify-between">
         <nz-form-item class="w-1/4">
-          <nz-form-label [nzRequired]="true">Tên cột mốc</nz-form-label>
+          <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Tên cột mốc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập tên cột mốc'">
             <input nz-input formControlName="title" placeholder="Nhập tên cột mốc" (ngModelChange)="handleInfoChanged()" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item class="w-1/4">
-          <nz-form-label>Giai đoạn</nz-form-label>
+          <nz-form-label [ngStyle]="{ 'font-weight': 'bold' }">Giai đoạn</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="phase"
@@ -49,7 +49,7 @@
 
       <!-- Description Field -->
       <nz-form-item>
-        <nz-form-label [nzRequired]="true">Nội dụng</nz-form-label>
+        <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Nội dụng</nz-form-label>
         <nz-form-control>
           <editor [apiKey]="editorKey" [init]="init" formControlName="description" (onKeyUp)="handleInfoChanged()"></editor>
         </nz-form-control>
@@ -57,7 +57,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Ngày Bắt Đầu</nz-form-label>
+          <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Ngày Bắt Đầu</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày bắt đầu cột mốc'">
             <nz-date-picker
               class="w-full"
@@ -71,7 +71,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzRequired]="true">Ngày Kết Thúc</nz-form-label>
+          <nz-form-label [nzRequired]="true" [ngStyle]="{ 'font-weight': 'bold' }">Ngày Kết Thúc</nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng ngày kết thúc cột mốc'">
             <nz-date-picker
               class="w-full"
@@ -87,7 +87,7 @@
 
       <nz-form-item>
         <div class="flex justify-between items-center w-full">
-          <p>Tác Vụ Con</p>
+          <p style="font-weight: bold;">Tác Vụ Con</p>
           <button (click)="openCreateTaskModal()" nz-button nzType="primary" class="flex items-center space-x-2 w-fit cursor-pointer mb-2">
             <mat-icon fontIcon="add_icon"></mat-icon>
             Thêm Tác Vụ
