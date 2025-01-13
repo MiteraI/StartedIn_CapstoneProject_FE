@@ -300,7 +300,7 @@
                 formControlName="userId"
                 class="w-2/3 md:w-1/3"
               >
-                <nz-option *ngFor="let member of memberList" nzCustomContent [nzLabel]="member.fullName" [nzValue]="member.id">
+                <nz-option *ngFor="let member of getAvailableMembers(i)" nzCustomContent [nzLabel]="member.fullName" [nzValue]="member.id">
                   <span class="font-medium">{{ member.fullName }}</span>
                   <span class="ml-2 text-xs opacity-50">{{ member.email }}</span>
                 </nz-option>
@@ -339,6 +339,9 @@
 
         <div *ngIf="shareTotal > 100" class="text-red-500 mt-2">
           Tổng tỉ lệ cổ phần không được vượt quá 100%
+        </div>
+        <div *ngIf="sharesFormArray.errors?.['duplicateMembers']" class="text-red-500 mt-2">
+          Mỗi thành viên chỉ được chọn một lần
         </div>
       </div>
 

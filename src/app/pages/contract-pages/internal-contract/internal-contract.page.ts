@@ -175,15 +175,39 @@ export class InternalContractPage implements OnInit {
     return this.contractForm.get('shares') as FormArray
   }
 
+  getAvailableMembers(currentIndex: number): TeamMemberModel[] {
+    const selectedIds = this.sharesFormArray.controls
+      .map((control, index) => index !== currentIndex ? control.get('userId')?.value : null)
+      .filter(id => id !== null);
+
+    return this.memberList.filter(member => !selectedIds.includes(member.id));
+  }
+
   addShare(share?: ShareEquityCreateUpdateModel) {
     const shareForm = this.fb.group({
-      userId: [share?.userId || '', Validators.required],
+      userId: [share?.userId || '', [Validators.required]],
       initialFullName: [share?.fullName],
       percentage: [share?.percentage || 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-    })
+    });
 
-    this.sharesFormArray.push(shareForm)
-    this.updateTotalShares()
+    // Add validator for unique members
+    shareForm.get('userId')?.valueChanges.subscribe(() => {
+      this.validateUniqueMembers();
+    });
+
+    this.sharesFormArray.push(shareForm);
+    this.updateTotalShares();
+  }
+
+  private validateUniqueMembers() {
+    const userIds = this.sharesFormArray.controls.map(control => control.get('userId')?.value);
+    const hasDuplicates = userIds.some((id, index) => userIds.indexOf(id) !== index);
+
+    if (hasDuplicates) {
+      this.sharesFormArray.setErrors({ duplicateMembers: true });
+    } else {
+      this.sharesFormArray.setErrors(null);
+    }
   }
 
   removeShare(index: number) {
