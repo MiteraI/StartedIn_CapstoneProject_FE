@@ -67,10 +67,10 @@ export class AdminApprovalModalComponent implements OnInit {
     this.approvalService.rejectProjectRequest(this.approvalData.id, this.cancelReason).subscribe({
       next: () => {
         this.messageService.success('Hủy yêu cầu thành công')
-        this.cancelReason = { cancelReason: '' }  // Reset the reason
-        this.isModalVisible = false  // Close the popover
+        this.cancelReason = { cancelReason: '' } // Reset the reason
+        this.isModalVisible = false // Close the popover
         this.approvalService.refreshApproval$.next(true)
-        this.nzModalRef.close()
+        this.nzModalRef.close({ approve: false })
       },
       error: (error) => {
         console.error('Error:', error)
@@ -79,9 +79,9 @@ export class AdminApprovalModalComponent implements OnInit {
       },
     })
   }
-  
+
   closePopover() {
-    this.cancelReason = { cancelReason: '' }  // Reset the reason when closing
+    this.cancelReason = { cancelReason: '' } // Reset the reason when closing
     this.isModalVisible = false
   }
 
@@ -93,7 +93,7 @@ export class AdminApprovalModalComponent implements OnInit {
         this.isModalVisible = false
         this.approvalService.refreshApproval$.next(true)
         this.messageService.success('Duyệt yêu cầu thành công')
-        this.nzModalRef.close()
+        this.nzModalRef.close({ approve: true })
       },
       error: (error) => {
         console.error('Error:', error)
