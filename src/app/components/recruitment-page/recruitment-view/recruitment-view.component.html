@@ -226,43 +226,99 @@
         </form>
       </nz-tab>
       <nz-tab nzTitle="Danh Sách Đơn Nộp" (nzSelect)="onCollapseOpen()">
-        <div class="mx-8 mt-6">
-          <nz-table #nestedTable [nzData]="applicantList" nzSize="small" [nzShowPagination]="false">
+        <div class="p-4 h-[85vh] overflow-y-auto">
+          <nz-table
+            #applicantTable
+            [nzData]="applicantList"
+            [nzLoading]="isApplicantTableLoading"
+            [nzShowPagination]="false"
+            class="bg-white rounded-lg shadow"
+          >
             <thead>
-              <tr>
-                <th>Thông Tin</th>
-                <th><p class="text-center">Trạng Thái</p></th>
-                <th><p class="text-center">Thư Mục CV</p></th>
-                <th><p class="text-center">Hành Động</p></th>
+              <tr class="bg-gray-50">
+                <th class="w-8"></th>
+                <th>Thông tin ứng viên</th>
+                <th class="w-32 text-center">Trạng thái</th>
+                <th class="w-32 text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>
               @for (applicant of applicantList; track applicant.id) {
-              <tr>
-                <td>
-                  <span>Tên: {{ applicant.candidate.fullName }}</span>
-                  <p>Email: {{ applicant.candidate.email }}</p>
-                  <p class="text-right pt-2">Gửi vào: {{ applicant.createdTime | dateDisplay }}</p>
-                </td>
-                <td>
-                  <nz-tag class="w-full text-center" [nzColor]="getStatusColor(applicant.status)" style="padding: 1px 3px 1px 3px; font-size: 11px">
-                    {{ applicationStatus[applicant.status] }}
-                  </nz-tag>
-                </td>
-                <td>
-                  <div class="flex items-center justify-center">
-                    <button nz-button nzType="primary"><a [href]="applicant.cvFiles[0].fileUrl" [download]="applicant.cvFiles[0].fileUrl">Tải</a></button>
-                  </div>
-                </td>
-                <td>
-                  <div class="flex items-center justify-around">
-                    <button nz-button nzType="primary" (click)="acceptApplicant(applicant.id)" style="padding: 1px 3px 1px 3px; font-size: 12px">Chấp nhận</button>
-                    <button nz-button nzType="default" nzDanger (click)="rejectApplicant(applicant.id)" class="mt-1" style="padding: 1px 3px 1px 3px; font-size: 12px">
-                      Từ chối
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                <tr class="hover:bg-gray-50">
+                  <td [nzExpand]="expandSet.has(applicant.id)" [nzExpandIcon]="expandIcon"></td>
+
+                  <!-- Applicant Info -->
+                  <td>
+                    <div class="flex flex-col">
+                      <span class="font-medium">{{ applicant.candidate.fullName }}</span>
+                      <span class="text-sm text-gray-500">{{ applicant.candidate.email }}</span>
+                      <span class="text-xs text-gray-400 mt-1">Gửi vào: {{ applicant.createdTime | dateDisplay }}</span>
+                    </div>
+                  </td>
+
+                  <!-- Status -->
+                  <td class="text-center">
+                    <nz-tag [nzColor]="getStatusColor(applicant.status)" class="w-24 text-center">
+                      {{ applicationStatus[applicant.status] }}
+                    </nz-tag>
+                  </td>
+
+                  <!-- Actions -->
+                  <td>
+                    <div class="flex justify-center gap-2">
+                      <button
+                        nz-button
+                        nzType="primary"
+                        (click)="acceptApplicant(applicant.id)"
+                        class="flex items-center"
+                      >
+                        Chấp nhận
+                      </button>
+                      <button
+                        nz-button
+                        nzDanger
+                        (click)="rejectApplicant(applicant.id)"
+                        class="flex items-center"
+                      >
+                        Từ chối
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- Expanded CV Files Section -->
+                @if (applicant.cvFiles.length > 0) {
+                  <tr [nzExpand]="expandSet.has(applicant.id)">
+                    <td colspan="4" class="bg-gray-50 p-4">
+                      <div class="text-sm font-medium mb-2">CV đính kèm</div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @for (file of applicant.cvFiles; track file) {
+                          <div class="flex items-center justify-between p-3 bg-white rounded border">
+                            <span class="text-sm truncate">{{ file.fileName }}</span>
+                            <button
+                              nz-button
+                              nzType="link"
+                            >
+                              <a [href]="file.fileUrl" [download]="file.fileUrl" class="flex items-center">
+                                <mat-icon fontIcon="download"></mat-icon>
+                              </a>
+                            </button>
+                          </div>
+                        }
+                      </div>
+                    </td>
+                  </tr>
+                }
+
+                <ng-template #expandIcon>
+                  @if (applicant.cvFiles.length > 0) {
+                    @if (!expandSet.has(applicant.id)) {
+                      <span nz-icon nzType="plus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, true)"></span>
+                    } @else {
+                      <span nz-icon nzType="minus-circle" nzTheme="outline" (click)="onExpandChange(applicant.id, false)"></span>
+                    }
+                  }
+                </ng-template>
               }
             </tbody>
           </nz-table>
