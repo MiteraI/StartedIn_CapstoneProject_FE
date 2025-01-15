@@ -54,7 +54,7 @@ export class TaskService {
     const query =
       (title?.trim() ? `title=${title.trim()}&` : '') +
       (status ? `status=${status}&` : '') +
-      (late !== undefined ? `late=${late}&` : '') +
+      (late !== undefined ? `IsLate=${late}&` : '') +
       (assigneeId ? `assigneeId=${assigneeId}&` : '') +
       (milestoneId ? `milestoneId=${milestoneId}&` : '') +
       (startDate ? `startDate=${startDate}&` : '') +
