@@ -206,8 +206,8 @@ export class InvestmentContractPage implements OnInit {
         }
 
         const formValue = componentInstance.disbursementForm.value;
-        formValue.startDate = formValue.startDate.toISOString().substring(0, 10);
-        formValue.endDate = formValue.endDate.toISOString().substring(0, 10);
+        formValue.startDate = formValue.startDate.toISOString().split('T')[0];
+        formValue.endDate = formValue.endDate.toISOString().split('T')[0];
 
         if (isEdit) {
           this.disbursements = [

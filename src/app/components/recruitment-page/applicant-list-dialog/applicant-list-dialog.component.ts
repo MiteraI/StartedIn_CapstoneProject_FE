@@ -3,11 +3,11 @@ import { Component, inject, OnInit } from '@angular/core'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzDividerModule } from 'ng-zorro-antd/divider'
 import { NzIconModule } from 'ng-zorro-antd/icon'
-import { NZ_MODAL_DATA, NzModalModule } from 'ng-zorro-antd/modal'
+import { NZ_MODAL_DATA } from 'ng-zorro-antd/modal'
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm'
 import { NzTableModule } from 'ng-zorro-antd/table'
 import { NzTagModule } from 'ng-zorro-antd/tag'
-import { finalize, tap } from 'rxjs'
+import { finalize } from 'rxjs'
 import { AntdNotificationService } from 'src/app/core/util/antd-notification.service'
 import { RecruitInviteService } from 'src/app/services/recruit-invite.service'
 import { ApplicationStatus, ApplicationStatusColors, ApplicationStatusLabels } from 'src/app/shared/enums/application-status.enum'
@@ -23,7 +23,16 @@ interface IModalData {
   templateUrl: './applicant-list-dialog.component.html',
   styleUrls: ['./applicant-list-dialog.component.scss'],
   standalone: true,
-  imports: [NzTableModule, NzDividerModule, NzButtonModule, CommonModule, NzPopconfirmModule, NzTagModule, NzIconModule, DateDisplayPipe],
+  imports: [
+    NzTableModule,
+    NzDividerModule,
+    NzButtonModule,
+    CommonModule,
+    NzPopconfirmModule,
+    NzTagModule,
+    NzIconModule,
+    DateDisplayPipe
+  ],
 })
 export class ApplicantListDialogComponent implements OnInit {
   readonly nzModalData: IModalData = inject(NZ_MODAL_DATA)
