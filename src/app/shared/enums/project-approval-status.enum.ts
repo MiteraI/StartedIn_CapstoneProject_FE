@@ -5,7 +5,7 @@ export enum ProjectApprovalStatus {
 }
   
 export const ProjectApprovalStatusLabel: Record<ProjectApprovalStatus, string> = {
-    [ProjectApprovalStatus.PENDING]: 'Đang chờ phản hồi',
+    [ProjectApprovalStatus.PENDING]: 'Đang chờ',
     [ProjectApprovalStatus.ACCEPTED]: 'Đã chấp nhận',
     [ProjectApprovalStatus.REJECTED]: 'Đã từ chối',
 }
