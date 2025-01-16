@@ -26,6 +26,8 @@ import { createData, deleteData, updateData } from 'src/app/core/util/websocket.
 interface MilestoneFilterOptions {
   title?: string
   phaseId?: string
+  startDate?: string
+  endDate?: string
 }
 
 @Component({
@@ -161,7 +163,7 @@ export class MilestoneViewComponent implements OnInit, OnDestroy {
   private fetchMilestones(isDesktop: boolean) {
     this.isFetchAllMilestonesLoading = true
     this.milestoneService
-      .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId)
+      .getMilestones(this.projectId, this.page, this.size, this.filter.title, this.filter.phaseId, this.filter.startDate, this.filter.endDate)
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => (this.isFetchAllMilestonesLoading = false))
