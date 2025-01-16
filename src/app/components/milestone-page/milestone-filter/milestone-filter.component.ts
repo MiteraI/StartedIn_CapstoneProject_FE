@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule, DatePipe } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NzAvatarModule } from 'ng-zorro-antd/avatar'
 import { NzButtonModule } from 'ng-zorro-antd/button'
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox'
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker'
 import { NzFormModule } from 'ng-zorro-antd/form'
 import { NzInputModule } from 'ng-zorro-antd/input'
 import { NzNotificationService } from 'ng-zorro-antd/notification'
@@ -20,7 +21,8 @@ import { InitialsOnlyPipe } from 'src/app/shared/pipes/initials-only.pipe'
   templateUrl: './milestone-filter.component.html',
   styleUrls: ['./milestone-filter.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NzFormModule, NzInputModule, NzSelectModule, NzButtonModule, NzAvatarModule, NzCheckboxModule, InitialsOnlyPipe],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NzFormModule, NzInputModule, NzSelectModule, NzButtonModule, NzAvatarModule, NzCheckboxModule, NzDatePickerModule ,InitialsOnlyPipe],
+  providers: [DatePipe],
 })
 export class MilestoneFilterComponent implements OnInit {
   @Input() data: any
@@ -31,7 +33,7 @@ export class MilestoneFilterComponent implements OnInit {
   phases: Phase[] = []
   isPhaseLoading = false
 
-  constructor(private phaseService: PhaseService, private fb: FormBuilder, private menuState: MenuStateService, private notification: NzNotificationService) {}
+  constructor(private phaseService: PhaseService, private fb: FormBuilder, private menuState: MenuStateService, private datePipe: DatePipe, private notification: NzNotificationService) {}
 
   ngOnInit() {
     this.loadPhases()
@@ -39,6 +41,8 @@ export class MilestoneFilterComponent implements OnInit {
     this.filterForm = this.fb.group({
       title: [this.data.title || ''],
       phaseId: [this.data.phaseId || null],
+      startDate: [this.data.startDate || null],
+      endDate: [this.data.endDate || null]
     })
   }
 
@@ -77,9 +81,17 @@ export class MilestoneFilterComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filterApplied.emit(this.filterForm.value)
+    const filterData = this.filterForm.value
+    // if startDate is type string already then don't convert it to string
+    if (typeof filterData.startDate !== 'string') {
+      filterData.startDate = filterData.startDate ? this.datePipe.transform(filterData.startDate, 'yyyy-MM-dd') : null
+    }
+    filterData.endDate = filterData.endDate ? this.datePipe.transform(filterData.endDate, 'yyyy-MM-dd') : null
+    this.filterApplied.emit(filterData)
     this.menuState.closeMenu()
   }
+
+  
 
   updateForm(filterData: any) {
     if (this.filterForm) {
