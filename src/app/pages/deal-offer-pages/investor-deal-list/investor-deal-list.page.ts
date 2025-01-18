@@ -16,6 +16,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ViewModeConfigService } from 'src/app/core/config/view-mode-config.service';
 import { ScrollService } from 'src/app/core/util/scroll.service';
+import { ViewTitleBarComponent } from 'src/app/layouts/view-title-bar/view-title-bar.component';
 
 interface FilterOptions {
   projectName?: string;
@@ -35,7 +36,7 @@ interface FilterOptions {
     CommonModule,
     NzAvatarModule,
     NzModalModule,
-    FilterBarComponent,
+    ViewTitleBarComponent,
     VndCurrencyPipe,
     MatIconModule,
     NzPaginationModule,

@@ -1,9 +1,4 @@
-<app-filter-bar
-  viewName="Danh sách thỏa thuận đầu tư"
-  [searchValue]="filter.projectName ?? ''"
-  (searchString)="onSearch($event)"
-  (filterMenuOpened)="onFilterMenuOpened()"
-></app-filter-bar>
+<app-view-title-bar viewName="Danh sách thỏa thuận đầu tư"></app-view-title-bar>
 
 <div class="p-4 max-w-7xl mx-auto">
   <div *ngIf="!isLoading && dealOffers.length === 0" class="text-center text-gray-500 py-4">
