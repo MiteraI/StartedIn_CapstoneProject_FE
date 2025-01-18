@@ -38,7 +38,7 @@
       <nz-select
         class="w-full"
         nzShowSearch
-        formControlName="toId"
+        formControlName="fromId"
         nzPlaceHolder="Chọn người mua"
         [nzAllowClear]="true"
         (ngModelChange)="sellForm.patchValue({toName: ''})"
@@ -50,9 +50,9 @@
         ></nz-option>
       </nz-select>
       <input
-        *ngIf="!sellForm.get('toId')?.value"
+        *ngIf="!sellForm.get('fromId')?.value"
         nz-input
-        formControlName="toName"
+        formControlName="fromName"
         placeholder="Hoặc nhập tên người mua"
         class="mt-2"
       >

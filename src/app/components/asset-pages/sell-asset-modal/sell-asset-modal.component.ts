@@ -58,8 +58,8 @@ export class SellAssetModalComponent {
     this.sellForm = this.fb.group({
       sellPrice: [0, [Validators.required, Validators.min(0)]],
       sellQuantity: [1, [Validators.required, Validators.min(1), Validators.max(this.modalData.remainQuantity)]],
-      toId: [''],
-      toName: [''],
+      fromId: [''],
+      fromName: [''],
     });
 
     this.loadMembers();

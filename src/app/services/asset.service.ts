@@ -61,8 +61,8 @@ export class AssetService {
     const formData = new FormData();
     formData.append('sellPrice', sellModel.sellPrice.toString());
     formData.append('sellQuantity', sellModel.sellQuantity.toString());
-    if (sellModel.toId) formData.append('toId', sellModel.toId);
-    if (sellModel.toName) formData.append('toName', sellModel.toName);
+    if (sellModel.fromId) formData.append('fromId', sellModel.fromId);
+    if (sellModel.fromName) formData.append('fromName', sellModel.fromName);
     formData.append('evidenceFile', sellModel.evidenceFile);
     return this.http.post(
       this.applicationConfigService.getEndpointFor(`/api/projects/${projectId}/assets/${assetId}/sell`),

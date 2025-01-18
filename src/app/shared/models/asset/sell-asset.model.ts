@@ -1,7 +1,7 @@
 export type SellAssetModel = {
   sellPrice: number;
   sellQuantity: number;
-  toId?: string;
-  toName?: string;
+  fromId?: string;
+  fromName?: string;
   evidenceFile: File;
 }
